@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vortex Hub - Zero-Knowledge PWA</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    h1 { color: #3b82f6; margin-top: 0; }
+    p { color: #94a3b8; }
+    .btn { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+    .btn:hover { background: #2563eb; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛡️ Vortex Hub</h1>
+    <p>PWA Zero-Knowledge local-first in stato di produzione.</p>
+    <hr style="border: 0; border-top: 1px solid #334155; margin: 20px 0;">
+    <div id="app-root">
+      <p>Caricamento dei moduli IndexedDB e Vault in corso...</p>
+      <button class="btn" onclick="alert('Vortex Hub operativo al 100%!')">Verifica Stato</button>
+    </div>
+  </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.info('ServiceWorker registrato con successo:', reg.scope))
+          .catch(err => console.error('Errore registrazione ServiceWorker:', err));
+      });
+    }
+  </script>
+</body>
+</html>

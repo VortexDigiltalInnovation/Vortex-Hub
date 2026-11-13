@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-fOirxh0DfmZ1tZvK9Jc/UX/bxCg+Qe0jd48dm2BjFoQ='; style-src 'sha256-bF+7X5EjtAaLpkcA+w5tbu/dU2TlZtLR4VhGQNNVJ1Q='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-fwS8cVx2isZYW+eyr+GXitR+aOXB/ERc/q03BJtDaAE='; style-src 'sha256-32pEBlvDBToG82hS4+f/d7FGzi/8b9BsLJL5+LmvfiQ='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0f766e">
 <title>Unica</title>
@@ -94,6 +94,11 @@ input[type=range]{width:100%}
 
 .bub{max-width:88%;padding:8px 12px;border-radius:14px;margin:6px 0;line-height:1.4;background:var(--card,var(--bg));border:1px solid var(--line)}
 .bub.me{margin-left:auto;background:var(--pri,#4f46e5);color:#fff;border-color:transparent}
+.vt{width:100%;border-collapse:collapse;font-size:.92rem}.vt th{text-align:left;padding:6px 8px;border-bottom:2px solid var(--line);white-space:nowrap}.vt td{padding:8px;border-bottom:1px solid var(--line)}.vt tr[data-act]{cursor:pointer}.vt tr.sel,.row.sel,.vtile.sel{outline:2px solid var(--pri,#4f46e5);outline-offset:-2px}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}.vtile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:1px solid var(--line);border-radius:14px;background:var(--card,transparent);color:inherit;text-align:center;cursor:pointer}.vtile b{font-size:.82rem;word-break:break-word}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer}.sw[aria-pressed=true]{border-color:var(--fg,#111);box-shadow:0 0 0 2px var(--bg,#fff) inset}
+.emo{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:1.2rem;cursor:pointer}.emo[aria-pressed=true]{outline:2px solid var(--pri,#4f46e5)}
+.vchk{font-size:1.2rem;margin-right:4px}
 </style>
 </head>
 <body>
@@ -103,7 +108,7 @@ input[type=range]{width:100%}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '0.8.0';
+const APP_VERSION = '0.9.0';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -717,7 +722,7 @@ function openDetail(id) {
   if (it.type === 'login') b = kv('Utente', d.username, { copy: 1, item: id, f: 'username' }) + kv('Password', '', { secret: 1, copy: 1, id: 'sv', item: id, f: 'password' }) + (d.domain ? kv('Sito', d.domain) : '') + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
   else if (it.type === 'note') b = kv('Testo', '', { secret: 1, copy: 1, id: 'sv', item: id, f: 'text' });
   else b = kv('File', d.fname) + kv('Dimensione', fmtSize(d.size)) + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
-  const m = modal('<div class="gap"><span class="av ' + avCls(titleOf(it)) + '">' + h(titleOf(it).charAt(0).toUpperCase()) + '</span><h2 class="sp" style="margin:0">' + h(titleOf(it)) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+  const m = modal('<div class="gap">' + avHtml(it) + '<h2 class="sp" style="margin:0">' + h(titleOf(it)) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
     '<p class="sm mut">' + h(d.category || '') + (d.owner ? ' · ' + h(d.owner) : '') + ' · modificato ' + fmtDate(it.ts) + '</p><div class="card">' + b + '</div><div class="gap">' +
     (it.type === 'file' ? '<button class="btn pri" data-act="dlFile" data-id="' + h(id) + '">' + ic('dl') + ' Scarica</button>' : '') +
     linkBtns(it) + (it.type === 'login' && d.password ? '<button class="btn" data-act="chk1" data-id="' + h(id) + '">' + ic('shield') + ' Controlla violazioni</button>' : '') +
@@ -736,7 +741,7 @@ function openForm(id, type) {
     : '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '">' + (it ? '<p class="sm mut">File: ' + h(d.fname) + ' (' + fmtSize(d.size) + ')</p>' : '<label class="f" for="f_f">File (max ' + fmtSize(MAX_FILE) + ')</label><input class="in" id="f_f" type="file" required>');
   const m = modal('<h2>' + (it ? 'Modifica voce' : 'Nuova voce') + '</h2>' + (it ? '' : '<div class="seg" role="group" aria-label="Tipo">' + Object.keys(VT).map(k => '<button type="button" data-act="ftype" data-t="' + k + '" aria-pressed="' + (k === type) + '">' + VT[k][1] + '</button>').join('') + '</div>') +
     '<form data-form="item">' + body + '<label class="f" for="f_c">Categoria</label><select class="in" id="f_c">' + sel(vm.cats, d.category) + '</select><label class="f" for="f_o">Proprietario</label><select class="in" id="f_o">' + sel(vm.owners, d.owner) + '</select>' +
-    (type !== 'note' ? '<label class="f" for="f_n">Note</label><textarea class="in" id="f_n" rows="3">' + h(d.notes) + '</textarea>' : '') +
+    vxFields(d) + (type !== 'note' ? '<label class="f" for="f_n">Note</label><textarea class="in" id="f_n" rows="3">' + h(d.notes) + '</textarea>' : '') +
     '<label class="chk"><input type="checkbox" id="f_fav"' + (d.fav ? ' checked' : '') + '><span>Preferito</span></label><p class="sm bad" id="ferr" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true, noFocus: !!it });
   const p = m.q('#f_p'); if (p) { p.addEventListener('input', () => setMeter('fm', p.value)); setMeter('fm', p.value); }
 }
@@ -832,6 +837,7 @@ const FORMS = {
     if (type === 'login') Object.assign(d, { service: $('f_t').value.trim(), username: $('f_u').value.trim(), password: $('f_p').value, domain: $('f_d').value.trim() });
     else if (type === 'note') Object.assign(d, { title: $('f_t').value.trim(), text: $('f_x').value });
     else Object.assign(d, { title: $('f_t').value.trim(), fname: old.fname, size: old.size, mime: old.mime });
+    Object.assign(d, vxExtra());
     if (!(d.service || d.title)) return e.textContent = 'Inserisci un nome.';
     const nid = id || uid();
     try {
@@ -969,8 +975,8 @@ document.addEventListener('click', async e => {
 });
 
 /* ---------- blocco automatico ---------- */
-function lockAll() { document.querySelectorAll('.ov').forEach(o => o.remove()); dropAll(); U.q = ''; U.cat = ''; if (S.meta) go('lock'); }
-function lockProt(msg) { const was = S.protOpen; dropProt(); if (['vault'].includes(U.route)) go('home'); else if (U.route === 'home') render(); if (was && msg) toast(msg); }
+function lockAll() { document.querySelectorAll('.ov').forEach(o => o.remove()); U.selmode = false; U.sel = new Set(); dropAll(); U.q = ''; U.cat = ''; if (S.meta) go('lock'); }
+function lockProt(msg) { const was = S.protOpen; U.selmode = false; U.sel = new Set(); dropProt(); if (['vault'].includes(U.route)) go('home'); else if (U.route === 'home') render(); if (was && msg) toast(msg); }
 function idleCheck() {
   if (!S.kc && !S.kp) return; const idle = Date.now() - S.last;
   if (S.protOpen && idle > S.idleMin * 60000) lockProt('Area protetta bloccata per inattività');
@@ -1967,6 +1973,7 @@ function agendaHtml() {
 /* --- collegamenti: carte ↔ Vault ↔ conti --- */
 function linkBtns(it) {
   let s = ''; if (it.type !== 'login') return s;
+  s += '<button class="btn" data-act="vshare" data-id="' + h(it.id) + '">' + ic('up') + ' Condividi</button>';
   const dm = domOf(it.data.domain);
   if (dm) [...S.cards.values()].filter(c => sameDom(domOf(c.data.domain), dm)).slice(0, 2).forEach(c => { s += '<button class="btn" data-act="cardOpen" data-id="' + h(c.id) + '">' + ic('card') + ' Carta: ' + h(c.data.name) + '</button>'; });
   if (finLoaded()) FIN().bankAccounts.filter(a => a.vaultId === it.id).slice(0, 2).forEach(a => { s += '<button class="btn" data-act="goFin" data-t="acc">' + ic('chart') + ' Conto: ' + h(a.name) + '</button>'; });
@@ -2106,6 +2113,179 @@ Object.assign(ACT, {
   async snapRestore(t) { const s = await DB.get('snaps', t.dataset.id); if (s) await ACT.restore(s.json); },
   async snapLabel(t) { const s = await DB.get('snaps', t.dataset.id); if (!s) return; const v = await askText('Nome della copia', 'Le copie con nome non vengono mai eliminate dalla rotazione. Lascia vuoto per rimuovere il nome.'); if (v === undefined) return; s.label = v.trim().slice(0, 60); s.keep = !!s.label; await DB.put('snaps', s); SN.list = null; render(); },
   async snapDel(t) { if (!(await ask('Eliminare la copia?', 'Questa copia interna verrà eliminata.', { ok: 'Elimina', danger: true }))) return; await DB.del('snaps', t.dataset.id); SN.list = null; render(); },
+});
+
+/* ---------- Vault: viste, proprietari, aspetto personalizzato, selezione multipla, condivisione, ricerca vocale ---------- */
+const VCOL = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#8b5cf6', '#64748b'];
+const VEMO = ['🏦', '🛒', '📧', '🎮', '✈️', '🏥', '🏠', '🔧', '🎓', '📱', '💼', '🎬', '🚗', '⚡', '📦', '🔑'];
+const PHOTO_RE = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
+const vview = () => { const v = lsGet('unica_vview'); return ['cards', 'table', 'icons'].includes(v) ? v : 'cards'; };
+U.own = U.own || ''; U.selmode = false; U.sel = new Set();
+
+/* avatar */
+function avHtml(it, big) {
+  const d = it.data, t = titleOf(it), st = big ? ' style="width:64px;height:64px;font-size:1.6rem"' : '';
+  if (typeof d.photo === 'string' && PHOTO_RE.test(d.photo) && d.photo.length < 60000) return '<span class="av"' + st + '><img src="' + d.photo + '" alt="" style="width:100%;height:100%;border-radius:inherit;object-fit:cover"></span>';
+  const col = /^#[0-9a-f]{6}$/i.test(d.color || '') ? ' style="background:' + d.color + (big ? ';width:64px;height:64px;font-size:1.6rem' : '') + '"' : st;
+  return '<span class="av ' + (col.includes('background') ? '' : avCls(t)) + '"' + col + '>' + (VEMO.includes(d.icon) ? h(d.icon) : h(t.charAt(0).toUpperCase())) + '</span>';
+}
+
+/* stato della voce (password debole / ripetuta / vecchia) */
+function vstat() {
+  const lg = vitems().filter(i => i.type === 'login' && i.data.password), cnt = new Map(), o = new Map();
+  lg.forEach(i => cnt.set(i.data.password, (cnt.get(i.data.password) || 0) + 1));
+  lg.forEach(i => { const s = []; if (strength(i.data.password).lv === 0) s.push('debole'); if (cnt.get(i.data.password) > 1) s.push('ripetuta'); if (Date.now() - i.ts > 365 * MS_DAY) s.push('vecchia'); if (s.length) o.set(i.id, s); });
+  return o;
+}
+
+/* elenco filtrato */
+function vfiltered() {
+  const q = fold(U.q.trim());
+  const a = vitems().filter(i => (!U.cat || i.data.category === U.cat) && (!U.own || i.data.owner === U.own) && (!q || [i.data.service, i.data.title, i.data.username, i.data.domain, i.data.fname, i.data.category, i.data.owner].some(x => x && fold(x).includes(q))));
+  a.sort((x, y) => (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) || (U.sort === 'az' ? titleOf(x).localeCompare(titleOf(y), 'it') : y.ts - x.ts));
+  return a;
+}
+vlist = function () {
+  const a = vfiltered(), st = vstat(), view = vview(), sm = U.selmode;
+  if (!a.length) return '<div class="card c mut">' + (vitems().length ? 'Nessun risultato.' : 'Il Vault è vuoto. Aggiungi una voce con il pulsante + oppure importa il backup del vecchio Vault dalle Impostazioni.') + '</div>';
+  const act = i => sm ? 'data-act="vsel" data-id="' + h(i.id) + '"' : 'data-act="detail" data-id="' + h(i.id) + '"';
+  const chk = i => sm ? '<span class="vchk" aria-hidden="true">' + (U.sel.has(i.id) ? '☑' : '☐') + '</span>' : '';
+  const sel = i => sm && U.sel.has(i.id) ? ' sel' : '';
+  const badge = i => st.has(i.id) ? '<span class="tag bad" title="' + h(st.get(i.id).join(', ')) + '">' + h(st.get(i.id)[0]) + '</span>' : '';
+  if (view === 'table') return '<div style="overflow:auto"><table class="vt"><thead><tr>' + (sm ? '<th></th>' : '') + '<th>Voce</th><th>Utente</th><th>Categoria</th><th>Proprietario</th><th>Modificata</th></tr></thead><tbody>' +
+    a.map(i => '<tr class="' + sel(i).trim() + '" tabindex="0" role="button" ' + act(i) + '>' + (sm ? '<td>' + chk(i) + '</td>' : '') + '<td><b>' + (i.data.fav ? '★ ' : '') + h(titleOf(i)) + '</b> ' + badge(i) + '</td><td>' + h(i.data.username || '') + '</td><td>' + h(i.data.category || '') + '</td><td>' + h(i.data.owner || '') + '</td><td>' + fmtDate(i.ts) + '</td></tr>').join('') + '</tbody></table></div>';
+  if (view === 'icons') return '<div class="vgrid">' + a.map(i => '<button class="vtile' + sel(i) + '" ' + act(i) + '>' + chk(i) + avHtml(i, true) + '<b>' + h(titleOf(i)) + '</b>' + badge(i) + '</button>').join('') + '</div>';
+  return a.map(i => '<button class="row' + sel(i) + '" ' + act(i) + '>' + chk(i) + avHtml(i) + '<span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm mut">' + h(i.type === 'login' ? (i.data.username || i.data.domain || '') : i.type === 'file' ? (i.data.fname || '') : 'Nota cifrata') + (i.data.owner ? ' · ' + h(i.data.owner) : '') + '</span></span>' + (i.data.fav ? '<span class="ok" aria-label="Preferito">' + ic('star') + '</span>' : '') + badge(i) + '<span class="tag">' + VT[i.type][1] + '</span></button>').join('');
+};
+const vbar = () => {
+  if (!U.selmode) return '';
+  const n = U.sel.size;
+  return '<div class="card" role="toolbar" aria-label="Azioni sulla selezione"><div class="gap" style="flex-wrap:wrap"><b class="sp">' + n + (n === 1 ? ' selezionata' : ' selezionate') + '</b><button class="btn sm" data-act="vselAll">Tutte quelle visibili</button><button class="btn sm" data-act="vbCat"' + (n ? '' : ' disabled') + '>Categoria…</button><button class="btn sm" data-act="vbOwn"' + (n ? '' : ' disabled') + '>Proprietario…</button><button class="btn sm dan" data-act="vbDel"' + (n ? '' : ' disabled') + '>' + ic('trash') + ' Elimina</button></div></div>';
+};
+V.vault = () => {
+  if (!S.protOpen) return '';
+  const vm = vmeta(), SR = window.SpeechRecognition || window.webkitSpeechRecognition, view = vview();
+  const seg = (k, l) => '<button type="button" data-act="vview" data-v="' + k + '" aria-pressed="' + (view === k) + '">' + l + '</button>';
+  return hdr('Vault', '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button><button class="ib" data-act="audit" aria-label="Controllo password">' + ic('shield') + '</button><button class="ib" data-act="gen" aria-label="Generatore">' + ic('refresh') + '</button><button class="ib" data-act="newItem" aria-label="Nuova voce">' + ic('plus') + '</button>') +
+    '<main class="wrap"><div class="gap"><input class="in sp" id="vq" type="search" placeholder="Cerca…" aria-label="Cerca" value="' + h(U.q) + '">' + (SR ? '<button class="ib" data-act="vmic" aria-label="Ricerca vocale">' + ic('mic') + '</button>' : '') + '<select class="in" id="vs" style="width:auto" aria-label="Ordina"><option value="recent"' + (U.sort === 'recent' ? ' selected' : '') + '>Recenti</option><option value="az"' + (U.sort === 'az' ? ' selected' : '') + '>A–Z</option></select></div>' +
+    '<div class="gap" style="margin-top:8px;flex-wrap:wrap"><div class="seg" role="group" aria-label="Modalità di visualizzazione">' + seg('cards', 'Schede') + seg('table', 'Tabella') + seg('icons', 'Icone') + '</div><span class="sp"></span><button class="btn sm" data-act="vselMode" aria-pressed="' + U.selmode + '">' + (U.selmode ? 'Fine' : 'Seleziona') + '</button><button class="btn sm" data-act="vmeta">Categorie e proprietari</button><button class="btn sm" data-act="vimpCard">Importa credenziale cifrata</button></div>' +
+    '<div class="chips" style="margin-top:8px" aria-label="Filtro per categoria"><button class="chip" data-act="cat" data-c="" aria-pressed="' + (!U.cat) + '">Tutte</button>' + vm.cats.map(c => '<button class="chip" data-act="cat" data-c="' + h(c) + '" aria-pressed="' + (U.cat === c) + '">' + h(c) + '</button>').join('') + '</div>' +
+    (vm.owners.length > 1 ? '<div class="chips" style="margin-top:6px" aria-label="Filtro per proprietario"><button class="chip" data-act="vown" data-o="" aria-pressed="' + (!U.own) + '">Tutti</button>' + vm.owners.map(o => '<button class="chip" data-act="vown" data-o="' + h(o) + '" aria-pressed="' + (U.own === o) + '">' + h(o) + '</button>').join('') + '</div>' : '') +
+    '<div style="margin-top:8px">' + vbar() + '</div><div id="vlist">' + vlist() + '</div></main>';
+};
+
+/* campi "aspetto" nel modulo di una voce */
+function vxFields(d) {
+  return '<label class="f">Aspetto (facoltativo)</label><div class="gap" style="flex-wrap:wrap" role="group" aria-label="Colore">' + VCOL.map(c => '<button type="button" class="sw" data-act="vxcol" data-c="' + c + '" aria-label="Colore ' + c + '" aria-pressed="' + (d.color === c) + '" style="background:' + c + '"></button>').join('') + '</div>' +
+    '<div class="gap" style="flex-wrap:wrap;margin-top:6px" role="group" aria-label="Icona">' + VEMO.map(e => '<button type="button" class="emo" data-act="vxico" data-i="' + e + '" aria-pressed="' + (d.icon === e) + '">' + e + '</button>').join('') + '</div>' +
+    '<div class="gap" style="margin-top:6px"><button type="button" class="btn sm" data-act="vxphoto">Scegli una foto…</button><button type="button" class="btn sm" data-act="vxnophoto">Togli foto, icona e colore</button><span id="vx_prev" class="sm mut"></span></div>' +
+    '<input type="hidden" id="f_ic" value="' + h(d.icon || '') + '"><input type="hidden" id="f_co" value="' + h(d.color || '') + '"><input type="hidden" id="f_ph" value="' + h(PHOTO_RE.test(d.photo || '') ? d.photo : '') + '">';
+}
+const vxExtra = () => ({ icon: $('f_ic') && $('f_ic').value || undefined, color: $('f_co') && $('f_co').value || undefined, photo: $('f_ph') && $('f_ph').value || undefined });
+async function photoData(file) {
+  const bmp = await createImageBitmap(file), s = Math.min(bmp.width, bmp.height), c = document.createElement('canvas'); c.width = c.height = 128;
+  c.getContext('2d').drawImage(bmp, (bmp.width - s) / 2, (bmp.height - s) / 2, s, s, 0, 0, 128, 128);
+  return c.toDataURL('image/jpeg', 0.75);
+}
+
+/* ---- condivisione di una credenziale ---- */
+function shText(it, S, step) {
+  const d = it.data, L = ['Credenziali per ' + titleOf(it)];
+  const full = !(S.split && S.pass);
+  if (step === 2 && !full) return 'Password per ' + titleOf(it) + ': ' + d.password;
+  if (S.site && d.domain) L.push('Sito: ' + d.domain); if (S.user && d.username) L.push('Utente: ' + d.username);
+  if (S.pass && full) L.push('Password: ' + d.password); if (S.notes && d.notes) L.push('Note: ' + d.notes);
+  return L.join('\n');
+}
+const shCode = () => { const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', b = crypto.getRandomValues(new Uint8Array(12)), c = Array.from(b, x => A[x & 31]).join(''); return c.slice(0, 4) + '-' + c.slice(4, 8) + '-' + c.slice(8); };
+function openShare(id) {
+  const it = S.items.get(id); if (!it) return;
+  const st = { site: true, user: true, pass: false, notes: false, split: false, step: 1, file: null, code: '' };
+  const m = modal('<div id="shb"></div>');
+  const draw = () => {
+    const txt = shText(it, st, st.step), prev = txt.replace(/(Password[^:]*: ).*/g, '$1••••••••');
+    const chk = (k, l, dis) => '<label class="chk"><input type="checkbox" data-sh="tg" data-k="' + k + '"' + (st[k] ? ' checked' : '') + (dis ? ' disabled' : '') + '><span>' + l + '</span></label>';
+    const app = (k, l) => '<button type="button" class="btn sm" data-sh="send" data-how="' + k + '">' + l + '</button>';
+    m.q('#shb').innerHTML = '<div class="gap"><h2 class="sp" style="margin:0">Condividi «' + h(titleOf(it)) + '»</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+      '<p class="sm mut">Scegli cosa inviare. La password è esclusa per impostazione predefinita.</p>' + chk('site', 'Sito', !it.data.domain) + chk('user', 'Utente', !it.data.username) + chk('pass', 'Password', !it.data.password) + chk('notes', 'Note', !it.data.notes) +
+      (st.pass ? '<label class="chk"><input type="checkbox" data-sh="split"' + (st.split ? ' checked' : '') + '><span>Invia la password in un secondo messaggio</span></label>' : '') +
+      (st.split && st.pass ? '<div class="seg" role="group" aria-label="Messaggio"><button type="button" data-sh="step" data-n="1" aria-pressed="' + (st.step === 1) + '">Messaggio 1</button><button type="button" data-sh="step" data-n="2" aria-pressed="' + (st.step === 2) + '">Messaggio 2 (password)</button></div>' : '') +
+      '<div class="card sm mono" style="white-space:pre-wrap">' + h(prev) + '</div><div class="gap" style="flex-wrap:wrap">' + app('copy', 'Copia') + app('wa', 'WhatsApp') + app('tg', 'Telegram') + app('sms', 'SMS') + app('mail', 'Email') + app('sys', 'Altre app…') + '</div>' +
+      '<p class="sm mut">I messaggi passano da app esterne e restano nelle loro chat: per le password è più sicuro il file cifrato.</p>' +
+      '<h3>Modo più sicuro: file cifrato con codice monouso</h3>' + (st.file ? '<div class="card c"><div class="mono b" style="font-size:1.2rem">' + h(st.code) + '</div><p class="sm mut">Invia il file e comunica questo codice a parte (voce, altra chat).</p></div><div class="gap"><button type="button" class="btn pri" data-sh="sendfile">Invia il file…</button><button type="button" class="btn" data-sh="copycode">Copia il codice</button></div>' : '<button type="button" class="btn blk" data-sh="mkfile">Crea file cifrato</button>');
+  };
+  m.el.addEventListener('click', async e => {
+    const t = e.target.closest('[data-sh]'); if (!t) return; const a = t.dataset.sh;
+    if (a === 'tg') { st[t.dataset.k] = t.checked; if (t.dataset.k === 'pass' && !st.pass) { st.split = false; st.step = 1; } st.file = null; st.code = ''; return draw(); }
+    if (a === 'split') { st.split = t.checked; st.step = 1; return draw(); }
+    if (a === 'step') { st.step = +t.dataset.n; return draw(); }
+    if (a === 'send') {
+      const how = t.dataset.how, text = shText(it, st, st.step), enc = encodeURIComponent(text), withPass = st.pass && (!st.split || st.step === 2);
+      if (how === 'copy') copy(text, withPass ? 'Password' : 'Messaggio');
+      else if (how === 'wa') window.open('https://wa.me/?text=' + enc, '_blank', 'noopener');
+      else if (how === 'tg') window.open('https://t.me/share/url?url=&text=' + enc, '_blank', 'noopener');
+      else if (how === 'sms') location.href = 'sms:?&body=' + enc;
+      else if (how === 'mail') location.href = 'mailto:?subject=' + encodeURIComponent('Credenziali ' + titleOf(it)) + '&body=' + enc;
+      else if (navigator.share) { try { await navigator.share({ text }); } catch (x) { if (x && x.name === 'AbortError') return; } } else copy(text, withPass ? 'Password' : 'Messaggio');
+      if (how !== 'copy' && st.split && st.pass && st.step === 1) setTimeout(() => { st.step = 2; if (m.q('#shb')) { draw(); toast('Ora invia la password (messaggio 2).'); } }, 600);
+    }
+    if (a === 'mkfile') {
+      t.disabled = true; t.textContent = 'Cifro…'; await new Promise(r => setTimeout(r, 30));
+      try {
+        const d = it.data, card = { service: titleOf(it), domain: st.site ? d.domain || '' : '', username: st.user ? d.username || '' : '', password: st.pass ? d.password || '' : '', notes: st.notes ? d.notes || '' : '' };
+        const code = shCode(), salt = rnd(16), key = await kekPw(code.replace(/-/g, ''), salt, KDF_ITER);
+        const pl = { unicaCard: 1, iter: KDF_ITER, salt: b64e(salt), ...(await seal(key, te.encode(JSON.stringify({ v: 1, card })), 'unica-card')) };
+        const slug = titleOf(it).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'voce';
+        st.code = code; st.file = new File([JSON.stringify(pl)], 'Unica_credenziale_' + slug + '.json', { type: 'application/json' });
+      } catch (x) { toast('Non sono riuscito a creare il file.'); } draw();
+    }
+    if (a === 'sendfile') { const f = st.file; try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Credenziale cifrata' }); return; } } catch (x) { if (x && x.name === 'AbortError') return; } download(f.name, f); toast('File salvato: invialo e comunica il codice a parte.'); }
+    if (a === 'copycode') copy(st.code, 'Codice');
+  });
+  draw();
+}
+async function importSharedCard() {
+  const f = await pickFile('.json,application/json'); if (!f) return;
+  let pl; try { pl = JSON.parse(await f.text()); } catch (e) { return toast('File non valido'); }
+  if (!pl || (!pl.unicaCard && !pl.vaultCard)) return toast('Non è una credenziale condivisa');
+  const code = await askText('Credenziale condivisa', 'Inserisci il codice che ti ha dato il mittente (es. ABCD-EFGH-JKLM).'); if (!code) return;
+  const k = code.toUpperCase().replace(/[^A-Z0-9]/g, ''); let card;
+  try { toast('Decifro…'); if (pl.unicaCard) { const key = await kekPw(k, b64d(pl.salt), Math.min(+pl.iter || KDF_ITER, 2000000)); card = JSON.parse(td.decode(await unseal(key, pl, 'unica-card'))).card; } else { const r = await decryptVaultBackup(pl, k); card = r && r.card; } } catch (e) { return toast('Codice errato o file non valido.'); }
+  if (!card || typeof card !== 'object') return toast('File non valido');
+  const s = (v, n) => String(v == null ? '' : v).slice(0, n), item = { service: s(card.service, 80), category: vmeta().cats[0], owner: vmeta().owners[0], username: s(card.username, 200), password: s(card.password, 300), domain: s(card.domain, 120), notes: s(card.notes, 1000) };
+  if (!item.service) return toast('File non valido');
+  if (!(await ask('Aggiungere al Vault?', 'Aggiungere «' + item.service + '»? Controlla poi categoria e proprietario.', { ok: 'Aggiungi' }))) return;
+  await putItem(uid(), 'login', item); render(); toast('Credenziale aggiunta');
+}
+
+/* ---- gestione categorie / proprietari ---- */
+function metaModal() {
+  const vm = vmeta(), sec = (k, t, arr) => '<h3>' + t + '</h3>' + arr.map(x => '<div class="gap" style="align-items:center"><span class="sp">' + h(x) + '</span><button class="ib" data-act="metaRen" data-k="' + k + '" data-n="' + h(x) + '" aria-label="Rinomina ' + h(x) + '">' + ic('edit') + '</button><button class="ib" data-act="metaDel" data-k="' + k + '" data-n="' + h(x) + '" aria-label="Elimina ' + h(x) + '"' + (arr.length < 2 ? ' disabled' : '') + '>' + ic('trash') + '</button></div>').join('') + '<button class="btn sm" data-act="metaAdd" data-k="' + k + '">' + ic('plus') + ' Aggiungi</button>';
+  closeTop(); modal('<div class="gap"><h2 class="sp" style="margin:0">Categorie e proprietari</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' + sec('cats', 'Categorie', vm.cats) + sec('owners', 'Proprietari', vm.owners));
+}
+async function metaSave(m) { await putItem('vault-meta', 'vmeta', m, S.items.get('vault-meta')); }
+async function metaRewrite(k, from, to) { const f = k === 'cats' ? 'category' : 'owner'; for (const i of vitems()) if (i.data[f] === from) await putItem(i.id, i.type, { ...i.data, [f]: to }, i); }
+const pickOne = (title, arr) => new Promise(res => { const m = modal('<h2>' + h(title) + '</h2><select class="in" id="pk1">' + arr.map(x => '<option>' + h(x) + '</option>').join('') + '</select><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-r="0">Annulla</button><button class="btn pri" data-r="1">Applica</button></div>'); m.el.addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (b) { const v = m.q('#pk1').value; m.close(); res(b.dataset.r === '1' ? v : null); } }); });
+
+Object.assign(ACT, {
+  vshare: t => { closeTop(); openShare(t.dataset.id); },
+  vview: t => { lsSet('unica_vview', t.dataset.v); render(); },
+  vown: t => { U.own = t.dataset.o; render(); },
+  vselMode: () => { U.selmode = !U.selmode; U.sel = new Set(); render(); },
+  vsel: t => { const id = t.dataset.id; U.sel.has(id) ? U.sel.delete(id) : U.sel.add(id); render(); },
+  vselAll: () => { const a = vfiltered(); const all = a.length && a.every(i => U.sel.has(i.id)); a.forEach(i => all ? U.sel.delete(i.id) : U.sel.add(i.id)); render(); },
+  async vbDel() { const n = U.sel.size; if (!n || !(await ask('Eliminare ' + n + (n === 1 ? ' voce?' : ' voci?'), 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true }))) return; for (const id of [...U.sel]) await delItem(id); U.sel = new Set(); U.selmode = false; render(); toast(n + (n === 1 ? ' voce eliminata' : ' voci eliminate')); },
+  async vbCat() { const v = await pickOne('Sposta nella categoria', vmeta().cats); if (!v) return; for (const id of U.sel) { const i = S.items.get(id); if (i) await putItem(id, i.type, { ...i.data, category: v }, i); } toast('Categoria aggiornata'); render(); },
+  async vbOwn() { const v = await pickOne('Assegna al proprietario', vmeta().owners); if (!v) return; for (const id of U.sel) { const i = S.items.get(id); if (i) await putItem(id, i.type, { ...i.data, owner: v }, i); } toast('Proprietario aggiornato'); render(); },
+  vmeta: () => metaModal(), vimpCard: () => importSharedCard(),
+  async metaAdd(t) { const k = t.dataset.k, v = await askText(k === 'cats' ? 'Nuova categoria' : 'Nuovo proprietario', 'Nome:'); if (!v || !v.trim()) return; const m = JSON.parse(JSON.stringify(vmeta())), n = v.trim().slice(0, 40); if (m[k].some(x => fold(x) === fold(n))) return toast('Esiste già.'); m[k].push(n); await metaSave(m); metaModal(); render(); },
+  async metaRen(t) { const k = t.dataset.k, from = t.dataset.n, v = await askText('Rinomina', 'Nuovo nome per «' + from + '»:'); if (!v || !v.trim() || v.trim() === from) return; const n = v.trim().slice(0, 40), m = JSON.parse(JSON.stringify(vmeta())); if (m[k].some(x => x !== from && fold(x) === fold(n))) return toast('Esiste già.'); m[k] = m[k].map(x => x === from ? n : x); await metaSave(m); await metaRewrite(k, from, n); if (U.cat === from) U.cat = n; if (U.own === from) U.own = n; metaModal(); render(); },
+  async metaDel(t) { const k = t.dataset.k, from = t.dataset.n, m = JSON.parse(JSON.stringify(vmeta())); if (m[k].length < 2) return; const to = m[k].find(x => x !== from); if (!(await ask('Eliminare «' + from + '»?', 'Le voci collegate passeranno a «' + to + '».', { ok: 'Elimina', danger: true }))) return; m[k] = m[k].filter(x => x !== from); await metaSave(m); await metaRewrite(k, from, to); if (U.cat === from) U.cat = ''; if (U.own === from) U.own = ''; metaModal(); render(); },
+  vxcol: t => { $('f_co').value = $('f_co').value === t.dataset.c ? '' : t.dataset.c; document.querySelectorAll('[data-act=vxcol]').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === $('f_co').value)); },
+  vxico: t => { $('f_ic').value = $('f_ic').value === t.dataset.i ? '' : t.dataset.i; document.querySelectorAll('[data-act=vxico]').forEach(b => b.setAttribute('aria-pressed', b.dataset.i === $('f_ic').value)); },
+  async vxphoto() { const f = await pickFile('image/*'); if (!f) return; try { $('f_ph').value = await photoData(f); $('vx_prev').textContent = 'Foto scelta'; } catch (e) { toast('Immagine non valida'); } },
+  vxnophoto: () => { $('f_ph').value = ''; $('f_ic').value = ''; $('f_co').value = ''; document.querySelectorAll('[data-act=vxcol],[data-act=vxico]').forEach(b => b.setAttribute('aria-pressed', 'false')); $('vx_prev').textContent = 'Rimossi'; },
+  vmic() { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return; try { const r = new SR(); r.lang = 'it-IT'; r.interimResults = false; try { r.processLocally = true; } catch (e) { } r.onresult = e => { U.q = e.results[0][0].transcript.replace(/[.,;!?]+$/, ''); const q = $('vq'); if (q) q.value = U.q; const l = $('vlist'); if (l) l.innerHTML = vlist(); }; r.onerror = () => toast('Ricerca vocale non disponibile'); r.start(); toast('Parla ora…'); } catch (e) { toast('Ricerca vocale non disponibile'); } },
 });
 
 /* ---------- avvio ---------- */

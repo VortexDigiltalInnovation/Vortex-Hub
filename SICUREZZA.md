@@ -39,6 +39,8 @@ Revisione interna del codice e test automatici su Chromium. **Non è un audit in
 11. **Backup interni** (IndexedDB, solo cifrati): proteggono da errori e ripristini sbagliati, non dalla perdita o dal furto del dispositivo; l'eliminazione dell'account li cancella. Una copia vecchia si apre con la master password in vigore *quando fu creata* (o con il codice di recupero).
 12. **Assistente**: tutto locale, nessuna IA esterna. La dettatura vocale usa il riconoscimento del browser, che su alcuni browser elabora l'audio presso il fornitore; la lettura a voce usa solo voci locali. Le password non vengono mai lette né mostrate nei risultati di ricerca.
 
+13. **Condivisione di credenziali**: i messaggi di testo (WhatsApp, SMS, email…) restano nelle chat di terzi; per le password usa il file cifrato con codice monouso (PBKDF2 600.000 iterazioni + AES-GCM) e comunica il codice a parte. Il codice ha circa 60 bit: adatto a un uso una tantum, non come protezione di lungo periodo.
+
 ## Prima di usarla per davvero
 - Pubblica solo su HTTPS (serve per passkey, crittografia e service worker) con gli header di `_headers`.
 - Fai un backup, **poi** prova a ripristinarlo su un altro browser con "Verifica un file di backup" e con il ripristino reale.

@@ -3,7 +3,7 @@
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: no-referrer
-  Permissions-Policy: camera=(self), geolocation=(self), microphone=(), payment=(), usb=()
+  Permissions-Policy: camera=(self), geolocation=(self), microphone=(self), payment=(), usb=()
   Cross-Origin-Opener-Policy: same-origin-allow-popups
   Strict-Transport-Security: max-age=63072000; includeSubDomains
 /sw.js

@@ -1,0 +1,10 @@
+name = "unica-sync"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "SYNC"
+id = "INCOLLA_QUI_L_ID_DEL_NAMESPACE_KV"
+
+[vars]
+ALLOWED_ORIGIN = "https://IL-TUO-DOMINIO"   # l'indirizzo dove pubblichi Unica, senza barra finale

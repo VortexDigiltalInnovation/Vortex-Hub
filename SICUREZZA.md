@@ -29,11 +29,15 @@ Revisione interna del codice e test automatici su Chromium. **Non è un audit in
 2. **Cambio password**: i vecchi backup si aprono ancora con la vecchia password. Rifai il backup dopo ogni cambio.
 3. **Dispositivo compromesso** (malware, estensioni ostili, schermo condiviso): nessuna app web può difendersi.
 4. **Passkey senza PRF**: protegge solo l'accesso alle carte (chiave legata al dispositivo), non è una crittografia a sé.
-5. **Rotazione completa delle chiavi** (Kc/Kp) non c'è: oggi cambia solo la master password. Da fare con la sincronizzazione.
+5. **Rotazione completa delle chiavi** (Kc/Kp) non c'è: cambia solo la master password. Un dispositivo perso con i dati sbloccati resta un rischio finché non cambi anche le chiavi (funzione non ancora presente).
 6. **Google Drive** è opzionale e provato solo con risposte simulate; il file resta cifrato. Il token resta in memoria.
 7. **Link di condivisione carta** contiene nome e codice in chiaro nel frammento dell'URL (non va ai server, ma chi ha il link vede il codice).
 8. La CSP è in un meta tag: `frame-ancestors` e gli header veri vanno impostati dall'hosting (file `_headers` incluso per Netlify/Cloudflare Pages).
-9. Nessuna sincronizzazione tra dispositivi: i dati vivono solo sul dispositivo e nei backup.
+9. **Sincronizzazione** (facoltativa, Cloudflare Worker + KV): sul server arrivano solo dati già cifrati; il server non ha mai le chiavi. Chi possiede il *codice di collegamento* (indirizzo + id + token) può leggere i dati cifrati e anche cancellarli o riportarli a una versione precedente: non condividerlo e tieni backup regolari. Il merge è per elemento (versione più alta, poi data più recente); due modifiche simultanee allo stesso elemento: vince l'ultima. KV è eventualmente coerente (fino a ~1 minuto). Il token è salvato cifrato con la chiave delle carte. Chiunque conosca l'indirizzo del tuo Worker può creare spazi propri (uso del tuo piano gratuito): non diffonderlo.
+10. Non c'è ancora l'elenco/revoca dei singoli dispositivi: per escludere un dispositivo bisogna eliminare lo spazio dal server e riattivare la sincronizzazione (nuovo id e token).
+
+11. **Backup interni** (IndexedDB, solo cifrati): proteggono da errori e ripristini sbagliati, non dalla perdita o dal furto del dispositivo; l'eliminazione dell'account li cancella. Una copia vecchia si apre con la master password in vigore *quando fu creata* (o con il codice di recupero).
+12. **Assistente**: tutto locale, nessuna IA esterna. La dettatura vocale usa il riconoscimento del browser, che su alcuni browser elabora l'audio presso il fornitore; la lettura a voce usa solo voci locali. Le password non vengono mai lette né mostrate nei risultati di ricerca.
 
 ## Prima di usarla per davvero
 - Pubblica solo su HTTPS (serve per passkey, crittografia e service worker) con gli header di `_headers`.

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-NyA171mEaTCzrzSlHzxfcibsa/Pi99/Kb1mUyveCou4='; style-src 'sha256-wKmz0LtwW2Id/voBB1JRBrV6m/qUPJ5TDg4+8Bje1hk='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-fOirxh0DfmZ1tZvK9Jc/UX/bxCg+Qe0jd48dm2BjFoQ='; style-src 'sha256-bF+7X5EjtAaLpkcA+w5tbu/dU2TlZtLR4VhGQNNVJ1Q='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0f766e">
 <title>Unica</title>
@@ -91,6 +91,9 @@ input[type=range]{width:100%}
 .rc{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0}.rv{font-size:1.3rem;font-weight:700}
 .pbar.tgt{position:relative}
 .mcell{display:flex;flex-direction:column;gap:2px}.mcell span{font-size:.78rem;opacity:.75}
+
+.bub{max-width:88%;padding:8px 12px;border-radius:14px;margin:6px 0;line-height:1.4;background:var(--card,var(--bg));border:1px solid var(--line)}
+.bub.me{margin-left:auto;background:var(--pri,#4f46e5);color:#fff;border-color:transparent}
 </style>
 </head>
 <body>
@@ -100,7 +103,7 @@ input[type=range]{width:100%}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '0.6.0';
+const APP_VERSION = '0.8.0';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -153,8 +156,8 @@ const DB = {
   db: null,
   open() {
     return new Promise((res, rej) => {
-      const r = indexedDB.open('unica', 1);
-      r.onupgradeneeded = () => { const d = r.result; d.createObjectStore('meta'); d.createObjectStore('items', { keyPath: 'id' }); d.createObjectStore('blobs', { keyPath: 'id' }); d.createObjectStore('dev'); };
+      const r = indexedDB.open('unica', 2);
+      r.onupgradeneeded = () => { const d = r.result, has = n => d.objectStoreNames.contains(n); if (!has('meta')) d.createObjectStore('meta'); if (!has('items')) d.createObjectStore('items', { keyPath: 'id' }); if (!has('blobs')) d.createObjectStore('blobs', { keyPath: 'id' }); if (!has('dev')) d.createObjectStore('dev'); if (!has('snaps')) d.createObjectStore('snaps', { keyPath: 'id' }); };
       r.onsuccess = () => { DB.db = r.result; res(); };
       r.onerror = () => rej(r.error);
     });
@@ -324,7 +327,7 @@ function genPassword(o) {
 async function exportBackup() {
   const m = S.meta;
   const items = await DB.all('items'), blobs = await DB.all('blobs');
-  return { app: 'unica', format: 1, exported: new Date().toISOString(), meta: { v: m.v, created: m.created, kdf: m.kdf, wrapPw: m.wrapPw, wrapRec: m.wrapRec, recEnc: m.recEnc }, items, blobs };
+  return { app: 'unica', format: 1, exported: new Date().toISOString(), meta: { v: m.v, created: m.created, mts: m.mts || 0, kdf: m.kdf, wrapPw: m.wrapPw, wrapRec: m.wrapRec, recEnc: m.recEnc }, items, blobs };
 }
 function validBackup(b) {
   return b && b.app === 'unica' && b.format === 1 && b.meta && b.meta.kdf && b.meta.wrapPw && b.meta.wrapRec && Array.isArray(b.items) && Array.isArray(b.blobs);
@@ -526,6 +529,10 @@ const BC = (() => {
 const $ = id => document.getElementById(id);
 const h = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const P = {
+  search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12Z"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>',
+  cal: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
   lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
   eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
   eyeoff: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><path d="m3 3 18 18"/>',
@@ -614,7 +621,7 @@ const V = {}, POST = {};
 
 /* ---------- 1. Benvenuto ---------- */
 V.welcome = () => '<main class="center"><div class="logo">' + ic('shield') + '</div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Carte, conti e password in un’unica app personale, cifrata sul tuo dispositivo.</p><div class="stack" style="margin-top:12px"></div>' +
-  '<button class="btn pri blk" data-act="toCreate">Crea un nuovo account</button><div style="height:10px"></div><button class="btn blk" data-act="restore">Ripristina da un backup</button>' +
+  '<button class="btn pri blk" data-act="toCreate">Crea un nuovo account</button><div style="height:10px"></div><button class="btn blk" data-act="restore">Ripristina da un backup</button><div style="height:10px"></div><button class="btn blk" data-act="syLink">Ho già Unica su un altro dispositivo</button>' +
   '<p class="sm mut c" style="margin-top:18px">I dati restano sul tuo dispositivo e sono cifrati con AES-256-GCM. Nessun server vede le tue password.</p></main>';
 
 /* ---------- 2. Creazione account ---------- */
@@ -652,8 +659,8 @@ V.lock = () => '<main class="center"><div class="logo">' + ic('lock') + '</div><
   '<p class="c"><button class="btn sm" data-act="forgot" style="border:0">Password dimenticata? Usa il codice di recupero</button></p></main>';
 
 /* ---------- 7. Home ---------- */
-V.home = () => hdr(APP_NAME, '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button>') +
-  '<main class="wrap">' + bkBanner() + '<h2>Carte</h2><button class="tile" data-act="nav" data-r="cards"><span class="ti">' + ic('card') + '</span><span class="t"><b>Carte fedeltà</b><br><span class="sm mut">' + S.cards.size + ' ' + (S.cards.size === 1 ? 'carta' : 'carte') + ' · scanner, ricerca, condivisione</span></span></button>' +
+V.home = () => hdr(APP_NAME, '<button class="ib" data-act="palette" aria-label="Cerca ovunque">' + ic('search') + '</button><button class="ib" data-act="assist" aria-label="Assistente">' + ic('chat') + '</button><button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button>') +
+  '<main class="wrap">' + bkBanner() + agendaHtml() + '<h2>Carte</h2><button class="tile" data-act="nav" data-r="cards"><span class="ti">' + ic('card') + '</span><span class="t"><b>Carte fedeltà</b><br><span class="sm mut">' + S.cards.size + ' ' + (S.cards.size === 1 ? 'carta' : 'carte') + ' · scanner, ricerca, condivisione</span></span></button>' +
   '<h2 style="margin-top:20px">Area protetta ' + ic('lock') + '</h2><button class="tile" data-act="enterProt"><span class="ti">' + ic('lock') + '</span><span class="t"><b>Vault</b><br><span class="sm mut">Password, note e file cifrati</span></span></button>' +
   '<button class="tile" data-act="enterFin"><span class="ti">' + ic('chart') + '</span><span class="t"><b>Conti e dashboard</b><br><span class="sm mut">Patrimonio, spese, budget, report</span></span></button>' +
   '<p class="sm mut">L’area protetta chiede una verifica recente (impronta o master password) e si blocca da sola dopo ' + S.idleMin + ' min di inattività.</p></main>';
@@ -713,7 +720,7 @@ function openDetail(id) {
   const m = modal('<div class="gap"><span class="av ' + avCls(titleOf(it)) + '">' + h(titleOf(it).charAt(0).toUpperCase()) + '</span><h2 class="sp" style="margin:0">' + h(titleOf(it)) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
     '<p class="sm mut">' + h(d.category || '') + (d.owner ? ' · ' + h(d.owner) : '') + ' · modificato ' + fmtDate(it.ts) + '</p><div class="card">' + b + '</div><div class="gap">' +
     (it.type === 'file' ? '<button class="btn pri" data-act="dlFile" data-id="' + h(id) + '">' + ic('dl') + ' Scarica</button>' : '') +
-    (it.type === 'login' && d.password ? '<button class="btn" data-act="chk1" data-id="' + h(id) + '">' + ic('shield') + ' Controlla violazioni</button>' : '') +
+    linkBtns(it) + (it.type === 'login' && d.password ? '<button class="btn" data-act="chk1" data-id="' + h(id) + '">' + ic('shield') + ' Controlla violazioni</button>' : '') +
     '<button class="btn" data-act="edit" data-id="' + h(id) + '">' + ic('edit') + ' Modifica</button><button class="btn dan" data-act="del" data-id="' + h(id) + '">' + ic('trash') + ' Elimina</button></div><p class="sm mut" id="chk1r" role="status"></p>');
   return m;
 }
@@ -768,7 +775,7 @@ V.settings = () => hdr('Impostazioni') + '<main class="wrap">' +
   '<div class="stack" style="margin-top:14px">' + (pkSupported() ? (S.meta.pk ? '<div class="gap"><span class="sp">Passkey attiva' + (S.meta.pk.prf ? ' (impronta anche per l’area protetta)' : ' (solo per le carte: l’area protetta chiede la master password)') + '</span><button class="btn sm dan" data-act="pkOff">Rimuovi</button></div>' : '<button class="btn blk" data-act="pkOn2">' + ic('key') + ' Attiva la passkey</button>') : '<p class="sm mut">Passkey non disponibile in questo contesto (serve https o localhost).</p>') +
   '<button class="btn blk" data-act="chpw">Cambia master password</button><button class="btn blk" data-act="showRec">Mostra il codice di recupero</button><button class="btn blk" data-act="audit2">' + ic('shield') + ' Controlla password compromesse</button></div></div>' +
   '<div class="card"><h3>Backup</h3><p class="sm mut">File .enc cifrato con la tua master password e il tuo codice di recupero. Contiene tutto: carte, Vault e conti.</p>' + bkStatus() + '<div class="stack"><button class="btn blk" data-act="exp">' + ic('dl') + ' Esporta backup cifrato</button><button class="btn blk" data-act="restore">' + ic('up') + ' Ripristina da backup (sostituisce i dati)</button><button class="btn blk" data-act="impVault">' + ic('up') + ' Importa backup del vecchio Vault</button><button class="btn blk" data-act="impFin">' + ic('up') + ' Importa backup di Financial Dashboard</button><button class="btn blk" data-act="verifyBk">' + ic('shield') + ' Verifica un file di backup</button></div>' + driveCard() + '</div>' +
-  '<div class="card"><h3>Dispositivi</h3><p class="sm mut">L’elenco dei dispositivi e la revoca saranno disponibili con la sincronizzazione (fase 5). Per ora i dati vivono solo su questo dispositivo.</p></div>' +
+  snapCard() + syCard() +
   '<div class="card"><h3>Privacy</h3><p class="sm">I tuoi dati sono cifrati sul dispositivo con AES-256-GCM; le chiavi derivano dalla master password (PBKDF2, 600.000 iterazioni) e non lasciano mai il dispositivo. Non ci sono analytics né script di terze parti. L’unica connessione esterna è il controllo password compromesse, che invia solo i primi 5 caratteri dell’hash. Questa versione non ha un server; il backup su Google Drive è facoltativo e resta cifrato.</p></div>' +
   '<div class="card"><h3>Info</h3><p class="sm mut">' + APP_NAME + ' ' + APP_VERSION + ' — carte, Vault, conti e backup</p><div class="stack"><button class="btn blk" data-act="lockNow">' + ic('lock') + ' Blocca ora</button><button class="btn blk dan" data-act="wipeAll">' + ic('trash') + ' Elimina tutti i dati da questo dispositivo</button></div></div></main>';
 
@@ -778,7 +785,7 @@ async function commitAccount(p) {
   S.meta = p.meta; await DB.put('meta', p.meta, 'acct'); await setKeys(p.kc, p.kp); await ensureVMeta(); S.items = new Map(); S.cards = new Map(); S.protOpen = false; U.pending = null;
 }
 async function newPasswordFlow(M, pw) { // riavvolge la chiave con una nuova master password
-  const salt = rnd(16); S.meta.kdf = { salt: b64e(salt), iter: KDF_ITER }; S.meta.wrapPw = await seal(await kekPw(pw, salt, KDF_ITER), M, 'wrapPw'); await DB.put('meta', S.meta, 'acct');
+  const salt = rnd(16); S.meta.kdf = { salt: b64e(salt), iter: KDF_ITER }; S.meta.wrapPw = await seal(await kekPw(pw, salt, KDF_ITER), M, 'wrapPw'); S.meta.mts = Date.now(); await DB.put('meta', S.meta, 'acct');
 }
 async function validateNewPw(p1, p2, errEl) {
   if (p1.length < 12) return errEl.textContent = 'Servono almeno 12 caratteri.', false;
@@ -902,19 +909,21 @@ const ACT = {
   async exp() { const b = await exportBackup(); download('unica-backup-' + new Date().toISOString().slice(0, 10) + '.enc', new Blob([JSON.stringify(b)], { type: 'application/octet-stream' })); toast('Backup esportato'); },
   async restore(t) {
     let txt = typeof t === 'string' ? t : null;
+    if (txt === null) SY.pend = null;
     if (txt === null) { const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return; txt = await f.text(); }
     const bk = parseRestore(txt); if (!bk) return toast('Non è un backup di ' + APP_NAME);
     if (S.meta && !(await ask('Sostituire i dati?', 'Tutti i dati attuali su questo dispositivo saranno sostituiti da quelli del backup.', { ok: 'Sostituisci', danger: true }))) return;
     const m = modal('<h2>Ripristino</h2><p class="mut sm">Inserisci la master password del backup oppure le 24 parole del codice di recupero.</p><form data-form="x"><label class="f" for="rs">Master password o codice di recupero</label><textarea class="in" id="rs" rows="3" autocapitalize="off" spellcheck="false"></textarea><p class="sm bad" id="rse" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Ripristina</button></div></form>', { sticky: true });
     m.q('form').onsubmit = async ev => { ev.preventDefault(); const e = m.q('#rse'), b = m.q('button[type=submit]'), s = m.q('#rs').value; if (!s.trim()) return; busy(b, true, 'Verifica…'); await new Promise(r => setTimeout(r, 30));
       try {
+        if (S.meta && S.kcKey) await snapSave('Prima del ripristino');
         const saved = S.meta; S.meta = bk.meta; let M, viaRec = false;
         try { M = await (/\s/.test(s.trim()) && s.trim().split(/\s+/).length >= 20 ? (viaRec = true, unwrapWithRecovery(parseRecovery(s))) : unwrapWithPassword(s)); } catch (x) { S.meta = saved; throw new Error('Password o codice non corretti.'); }
         dropAll(); for (const st of ['items', 'blobs', 'dev']) await DB.clear(st); await DB.clear('meta');
         for (const r of bk.items) await DB.put('items', r); for (const r of bk.blobs) await DB.put('blobs', r);
         S.meta = { ...bk.meta }; await DB.put('meta', S.meta, 'acct'); m.close();
         if (viaRec) { const np = await newPw(); if (np) await newPasswordFlow(M, np); }
-        await applyM(M); await loadCards(); toast('Backup ripristinato'); if (pkSupported()) go('pkask'); else go('home');
+        await applyM(M); await loadCards(); await syAdopt(); toast('Backup ripristinato'); if (pkSupported()) go('pkask'); else go('home');
       } catch (x) { e.textContent = x.message; busy(b, false); } };
   },
   async impVault() {
@@ -937,7 +946,7 @@ const ACT = {
   },
   async wipeAll() {
     const t = await askText('Elimina tutti i dati', 'Cancella tutto da questo dispositivo, senza possibilità di recupero (a meno di un backup). Scrivi ELIMINA per confermare.', true); if (t !== 'ELIMINA') return;
-    dropAll(); for (const st of ['meta', 'items', 'blobs', 'dev']) await DB.clear(st); ['unica_idle', 'unica_gen'].forEach(k => localStorage.removeItem(k)); location.reload();
+    dropAll(); for (const st of ['meta', 'items', 'blobs', 'dev', 'snaps']) await DB.clear(st); ['unica_idle', 'unica_gen', 'unica_syon', 'unica_sylast', 'unica_sydirty', 'unica_snapat', 'unica_snapdirty', 'unica_lastbk'].forEach(k => localStorage.removeItem(k)); location.reload();
   },
 };
 function askText(title, msg, plain) {
@@ -961,7 +970,7 @@ document.addEventListener('click', async e => {
 
 /* ---------- blocco automatico ---------- */
 function lockAll() { document.querySelectorAll('.ov').forEach(o => o.remove()); dropAll(); U.q = ''; U.cat = ''; if (S.meta) go('lock'); }
-function lockProt(msg) { const was = S.protOpen; dropProt(); if (['vault'].includes(U.route)) go('home'); if (was && msg) toast(msg); }
+function lockProt(msg) { const was = S.protOpen; dropProt(); if (['vault'].includes(U.route)) go('home'); else if (U.route === 'home') render(); if (was && msg) toast(msg); }
 function idleCheck() {
   if (!S.kc && !S.kp) return; const idle = Date.now() - S.last;
   if (S.protOpen && idle > S.idleMin * 60000) lockProt('Area protetta bloccata per inattività');
@@ -1023,12 +1032,12 @@ POST.cards = () => {
 let wake = null;
 async function cardOpen(id) {
   const c = S.cards.get(id); if (!c) return; const d = c.data;
-  try { navigator.vibrate && navigator.vibrate(25); } catch (e) { }
+  buzz(25);
   try { if (navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); } catch (e) { }
   const m = modal('<div class="gap"><h2 class="sp" style="margin:0">' + h(d.name) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
     '<div class="cview"><canvas id="cvb" class="bc big" aria-label="Codice della carta ' + h(d.name) + '"></canvas><p class="mono b c" id="cvt">' + h(d.code) + '</p></div>' +
     (d.holder || d.notes || d.address || d.domain ? '<div class="card sm">' + (d.holder ? '<div><span class="mut">Intestatario:</span> ' + h(d.holder) + '</div>' : '') + (d.domain ? '<div><span class="mut">Sito:</span> ' + h(d.domain) + '</div>' : '') + (d.address ? '<div><span class="mut">Negozio:</span> ' + h(d.address) + '</div>' : '') + (d.notes ? '<div><span class="mut">Note:</span> ' + h(d.notes) + '</div>' : '') + '</div>' : '') +
-    '<div class="gap"><button class="btn" data-act="cardFav" data-id="' + h(id) + '">' + ic('star') + (d.fav ? ' Togli preferita' : ' Preferita') + '</button><button class="btn" data-act="cardShare" data-id="' + h(id) + '">' + ic('up') + ' Condividi</button><button class="btn" data-act="cardEdit" data-id="' + h(id) + '">' + ic('edit') + ' Modifica</button><button class="btn dan" data-act="cardDel" data-id="' + h(id) + '">' + ic('trash') + ' Elimina</button></div>',
+    (d.domain ? '<div class="gap"><button class="btn blk" data-act="cardVault" data-id="' + h(id) + '">' + ic('key') + ' Credenziali nel Vault</button></div>' : '') + '<div class="gap"><button class="btn" data-act="cardFav" data-id="' + h(id) + '">' + ic('star') + (d.fav ? ' Togli preferita' : ' Preferita') + '</button><button class="btn" data-act="cardShare" data-id="' + h(id) + '">' + ic('up') + ' Condividi</button><button class="btn" data-act="cardEdit" data-id="' + h(id) + '">' + ic('edit') + ' Modifica</button><button class="btn dan" data-act="cardDel" data-id="' + h(id) + '">' + ic('trash') + ' Elimina</button></div>',
     { onClose: () => { if (wake) { wake.release().catch(() => { }); wake = null; } } });
   const cv = m.q('#cvb'); try { BC.draw(cv, d, { width: Math.min(420, window.innerWidth - 56), height: 110, text: false }); } catch (e) { cv.replaceWith(Object.assign(document.createElement('p'), { className: 'alert d', textContent: 'Codice non rappresentabile: ' + e.message })); }
   putItem(id, 'card', { ...d, uses: (d.uses || 0) + 1, last: Date.now() }, c, 'c').catch(() => { });
@@ -1582,11 +1591,11 @@ Object.assign(FV, {
   acc() {
     const d = FIN();
     return '<div class="gap"><h2 class="sp">Conti bancari</h2><button class="btn sm pri" data-act="accNew">' + ic('plus') + ' Conto</button></div>' +
-      (d.bankAccounts.length ? d.bankAccounts.map((a, i) => '<button class="row" data-act="accEdit" data-i="' + i + '"><span class="av a0">' + ic('card') + '</span><span class="t"><b>' + h(a.name) + '</b><span class="sm mut">' + h([a.type, a.owner].filter(Boolean).join(' · ')) + '</span></span><b>' + h(eur(a.balance)) + '</b></button>').join('') + '<p class="c"><b>Totale: ' + h(eur(sum(d.bankAccounts, a => a.balance))) + '</b></p>' : '<div class="card c mut">Nessun conto. Aggiungine uno o importa il backup di Financial Dashboard.</div>');
+      (d.bankAccounts.length ? d.bankAccounts.map((a, i) => '<div class="gap" style="align-items:stretch"><button class="row sp" data-act="accEdit" data-i="' + i + '"><span class="av a0">' + ic('card') + '</span><span class="t"><b>' + h(a.name) + '</b><span class="sm mut">' + h([a.type, a.owner].filter(Boolean).join(' · ')) + '</span></span><b>' + h(eur(a.balance)) + '</b></button>' + (a.vaultId && S.items.has(a.vaultId) ? '<button class="ib" data-act="detail" data-id="' + h(a.vaultId) + '" aria-label="Apri le credenziali di ' + h(a.name) + ' nel Vault">' + ic('key') + '</button>' : '') + '</div>').join('') + '<p class="c"><b>Totale: ' + h(eur(sum(d.bankAccounts, a => a.balance))) + '</b></p>' : '<div class="card c mut">Nessun conto. Aggiungine uno o importa il backup di Financial Dashboard.</div>');
   },
   tit() {
     const d = FIN(); const tv = sum(d.assets, assetValue), tc = sum(d.assets, a => a.lots && a.lots.length ? assetCost(a) : (assetCost(a) || 0));
-    return '<div class="gap"><h2 class="sp">Titoli e ETF</h2><button class="btn sm pri" data-act="astEdit" data-i="-1">' + ic('plus') + ' Titolo</button></div>' +
+    return '<div class="gap"><h2 class="sp">Titoli e ETF</h2><button class="btn sm" data-act="quotes">Quote JSON</button><button class="btn sm pri" data-act="astEdit" data-i="-1">' + ic('plus') + ' Titolo</button></div>' +
       (d.assets.length ? d.assets.map((a, i) => { const v = assetValue(a), c = assetCost(a), g = c > 0 ? v - c : null; return '<button class="row" data-act="astEdit" data-i="' + i + '"><span class="av a3">' + h((a.ticker || a.name || '?').charAt(0)) + '</span><span class="t"><b>' + h(a.name) + (a.ticker ? ' [' + h(a.ticker) + ']' : '') + '</b><span class="sm mut">' + h(a.category) + (assetQty(a) ? ' · ' + assetQty(a).toLocaleString('it-IT', { maximumFractionDigits: 4 }) + ' quote @ ' + eur(assetPrice(a)) : '') + '</span>' + (g !== null ? '<span class="sm ' + (g >= 0 ? 'ok' : 'bad') + '">' + (g >= 0 ? '▲ ' : '▼ ') + h(eur(Math.abs(g))) + ' (' + pct(g / c * 100) + ')</span>' : '') + '</span><b>' + h(eur(v)) + '</b></button>'; }).join('') + '<p class="c"><b>Totale: ' + h(eur(tv)) + '</b></p>' : '<div class="card c mut">Nessun titolo registrato.</div>');
   },
   btp() {
@@ -1742,8 +1751,8 @@ Object.assign(ACT, {
 });
 /* accountForm aggiornato: tipo a scelta */
 function accForm(a) {
-  genForm({ title: U.ff.i != null ? 'Modifica conto' : 'Nuovo conto', fields: [{ id: 'n', label: 'Nome', req: 1, value: a.name }, { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...BA_TYPES, a.type].filter(Boolean))], value: a.type || BA_TYPES[0] }, { id: 'o', label: 'Intestatario', value: a.owner }, { id: 'b', label: 'Saldo (€)', type: 'number', value: a.balance }],
-    onSubmit() { const d = FIN(), rec = { ...a, name: gv('n').trim().slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), balance: num(gv('b')) }; if (!rec.name) throw new Error('Inserisci il nome.'); if (U.ff.i != null) d.bankAccounts[U.ff.i] = rec; else d.bankAccounts.push(rec); },
+  genForm({ title: U.ff.i != null ? 'Modifica conto' : 'Nuovo conto', fields: [{ id: 'n', label: 'Nome', req: 1, value: a.name }, { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...BA_TYPES, a.type].filter(Boolean))], value: a.type || BA_TYPES[0] }, { id: 'o', label: 'Intestatario', value: a.owner }, { id: 'b', label: 'Saldo (€)', type: 'number', value: a.balance }, { id: 'v', label: 'Credenziali nel Vault (facoltativo)', type: 'select', options: [['', '— nessuna —'], ...vitems().filter(i => i.type === 'login').map(i => [i.id, titleOf(i)])], value: a.vaultId || '' }],
+    onSubmit() { const d = FIN(), rec = { ...a, name: gv('n').trim().slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), balance: num(gv('b')), vaultId: gv('v') || undefined }; if (!rec.name) throw new Error('Inserisci il nome.'); if (U.ff.i != null) d.bankAccounts[U.ff.i] = rec; else d.bankAccounts.push(rec); },
     onDelete: U.ff.i != null ? () => { FIN().bankAccounts.splice(U.ff.i, 1); } : null });
 }
 /* assistente: ripartizione di un importo secondo i target */
@@ -1760,10 +1769,10 @@ const lsGet = k => { try { return localStorage.getItem(k) || ''; } catch (e) { r
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
 const bkAge = () => { const t = +lsGet(LB); return t ? Math.floor((Date.now() - t) / 864e5) : null; };
 const markBk = () => lsSet(LB, String(Date.now()));
-function bkStatus() { const a = bkAge(); return '<p class="sm ' + (a === null || a > 30 ? 'bad' : 'mut') + '">' + (a === null ? 'Nessun backup eseguito da questo dispositivo.' : 'Ultimo backup: ' + (a === 0 ? 'oggi' : a + (a === 1 ? ' giorno fa' : ' giorni fa')) + '.') + '</p>'; }
+function bkStatus() { const a = bkAge(); return '<p class="sm ' + (a === null || (bkDays() && a > bkDays()) ? 'bad' : 'mut') + '">' + (a === null ? 'Nessun backup eseguito da questo dispositivo.' : 'Ultimo backup: ' + (a === 0 ? 'oggi' : a + (a === 1 ? ' giorno fa' : ' giorni fa')) + '.') + '</p>'; }
 function bkBanner() {
   const a = bkAge(); if (!(S.cards.size || (S.items && S.items.size))) return '';
-  if (a !== null && a <= 30) return '';
+  if (!bkDays() || (a !== null && a <= bkDays())) return '';
   return '<button class="alert blk" style="text-align:left;width:100%;border:0" data-act="nav" data-r="settings">' + ic('shield') + ' ' + (a === null ? 'Non hai ancora fatto un backup: se perdi il telefono perdi i dati.' : 'Ultimo backup di ' + a + ' giorni fa. Aggiornalo.') + '</button>';
 }
 
@@ -1816,9 +1825,288 @@ Object.assign(ACT, {
   },
   async gSet() { const v = await askText('ID client Google', 'Incolla l’ID client OAuth (finisce con .apps.googleusercontent.com). Lascia vuoto per rimuoverlo.', true); if (v === undefined) return; const x = v.trim(); if (x && !/^[\w.-]+\.apps\.googleusercontent\.com$/.test(x)) return toast('ID client non valido.'); lsSet(GC, x); GTOK = null; render(); },
   async gSave() { try { toast('Salvataggio su Drive…'); await gSave(); toast('Backup salvato su Drive'); render(); } catch (e) { toast(e.message); } },
-  async gRestore() { try { const f = await gFind(); if (!f) return toast('Nessun backup su Drive.'); const txt = await (await gApi('files/' + f.id + '?alt=media')).text(); await ACT.restore(txt); } catch (e) { toast(e.message); } },
+  async gRestore() { SY.pend = null; try { const f = await gFind(); if (!f) return toast('Nessun backup su Drive.'); const txt = await (await gApi('files/' + f.id + '?alt=media')).text(); await ACT.restore(txt); } catch (e) { toast(e.message); } },
 });
 { const _exp = ACT.exp; ACT.exp = async function () { await _exp.apply(this, arguments); markBk(); if (U.route === 'settings') render(); }; }
+
+/* ---------- Sincronizzazione (Cloudflare Worker + KV): sul server arrivano solo dati già cifrati ---------- */
+const SY = { cfg: null, busy: false, first: false, err: '', failAt: 0, dirtyAt: 0, pend: null };
+const SYNC_EVERY = 300000, SY_URL = /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*\.workers\.dev$/i;
+const syDirty = () => { lsSet('unica_sydirty', '1'); lsSet('unica_snapdirty', '1'); SY.dirtyAt = Date.now(); };
+const syCode = c => 'US1.' + b64u(te.encode(JSON.stringify({ u: c.u, i: c.i, t: c.t })));
+function syParse(code) {
+  try { const m = /^US1\.([A-Za-z0-9_-]+)$/.exec(String(code).trim()); if (!m) return null; const o = JSON.parse(td.decode(unb64u(m[1])));
+    if (!SY_URL.test(o.u) || !/^[A-Za-z0-9_-]{22,64}$/.test(o.i) || !/^[A-Za-z0-9_-]{32,128}$/.test(o.t)) return null; return { u: o.u, i: o.i, t: o.t, rev: 0, mts: 0, last: 0 }; } catch (e) { return null; }
+}
+async function syLoad() {
+  if (SY.cfg || !S.kcKey) return SY.cfg;
+  const r = await DB.get('meta', 'sync'); if (r) { try { SY.cfg = JSON.parse(td.decode(await unseal(S.kcKey, r, 'sync'))); } catch (e) { } }
+  return SY.cfg;
+}
+async function sySave(c) { SY.cfg = c; await DB.put('meta', await seal(S.kcKey, te.encode(JSON.stringify(c)), 'sync'), 'sync'); lsSet('unica_syon', '1'); lsSet('unica_sylast', String(c.last || 0)); }
+async function syAdopt() {   // dopo "collega con codice" + ripristino: salva la configurazione cifrata
+  if (!SY.pend || !S.kcKey) return; const c = SY.pend; SY.pend = null; c.mts = S.meta.mts || 0; c.last = Date.now(); await sySave(c); lsSet('unica_sydirty', '');
+}
+const syReq = (c, method, body, rev) => fetch(c.u + '/s/' + c.i, { method, headers: { Authorization: 'Bearer ' + c.t, ...(body ? { 'Content-Type': 'application/json', 'x-rev': String(rev) } : {}) }, body, cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
+const syErr = r => new Error(r.status === 403 ? 'Token non valido per questo spazio.' : r.status === 413 ? 'Dati troppo grandi per il server (20 MB).' : 'Errore del server di sincronizzazione (' + r.status + ').');
+
+async function syMerge(rem) {
+  if (!validBackup(rem)) throw new Error('Dati remoti non validi.');
+  if (rem.meta.created !== S.meta.created) throw new Error('Questo spazio appartiene a un altro account Unica.');
+  const loc = new Map((await DB.all('items')).map(r => [r.id, r])); let ch = false;
+  for (const r of rem.items) {
+    if (!r || typeof r.id !== 'string' || !Number.isInteger(r.ver) || !Number.isFinite(r.ts) || typeof r.t !== 'string' || (r.t !== 'tomb' && (typeof r.iv !== 'string' || typeof r.ct !== 'string'))) continue;
+    const l = loc.get(r.id);
+    if (!l || r.ver > l.ver || (r.ver === l.ver && r.ts > l.ts)) { await DB.put('items', r); ch = true; if (r.t === 'tomb') await DB.del('blobs', r.id); }
+  }
+  const have = new Set((await DB.all('blobs')).map(b => b.id));
+  for (const b of rem.blobs) { if (b && typeof b.id === 'string' && !have.has(b.id)) { const it = await DB.get('items', b.id); if (it && it.t !== 'tomb') { await DB.put('blobs', b); ch = true; } } }
+  if ((rem.meta.mts || 0) > (S.meta.mts || 0)) { S.meta = { ...S.meta, kdf: rem.meta.kdf, wrapPw: rem.meta.wrapPw, wrapRec: rem.meta.wrapRec, recEnc: rem.meta.recEnc, mts: rem.meta.mts }; await DB.put('meta', S.meta, 'acct'); }
+  return ch;
+}
+async function sySync() {
+  if (SY.busy) return; const c = await syLoad(); if (!c || !S.kcKey) return; SY.busy = true; SY.err = '';
+  try {
+    for (let n = 0; n < 3; n++) {
+      const g = await syReq(c, 'GET'); let rev = 0, ch = false, exists = false;
+      if (g.status === 200) { exists = true; rev = +g.headers.get('x-rev') || 0; ch = await syMerge(await g.json()); } else if (g.status !== 404) throw syErr(g);
+      if (!exists || lsGet('unica_sydirty') === '1' || (S.meta.mts || 0) > (c.mts || 0)) {
+        const p = await syReq(c, 'PUT', JSON.stringify(await exportBackup()), rev);
+        if (p.status === 409) continue; if (!p.ok) throw syErr(p);
+        c.rev = +p.headers.get('x-rev') || rev + 1; c.mts = S.meta.mts || 0; lsSet('unica_sydirty', '');
+      } else c.rev = rev;
+      c.last = Date.now(); await sySave(c);
+      if (ch) { await loadCards(); if (S.kpKey) await loadItems(); if (!document.querySelector('.ov') && ['home', 'cards', 'vault', 'fin'].includes(U.route)) render(); }
+      break;
+    }
+  } catch (e) { SY.err = e.message || String(e); SY.failAt = Date.now(); }
+  finally { SY.busy = false; if (U.route === 'settings' && !document.querySelector('.ov')) render(); }
+}
+function syCard() {
+  const on = lsGet('unica_syon') === '1', last = +lsGet('unica_sylast');
+  return '<div class="card"><h3>Sincronizzazione (facoltativa)</h3><p class="sm mut">Tieni allineati più dispositivi tramite un tuo server gratuito (Cloudflare Worker, guida nella cartella <b>sync-server</b>). Il server riceve solo dati cifrati: non può leggerli.</p>' +
+    (on ? '<p class="sm ' + (SY.err ? 'bad' : 'mut') + '">' + (SY.busy ? 'Sincronizzo…' : SY.err ? h(SY.err) : last ? 'Ultima sincronizzazione: ' + new Date(last).toLocaleString('it-IT') : 'Attiva.') + '</p><div class="stack"><button class="btn blk" data-act="syNow">Sincronizza ora</button><button class="btn blk" data-act="syShow">Mostra il codice di collegamento</button><button class="btn blk" data-act="syOff">Disattiva su questo dispositivo</button><button class="btn blk dan" data-act="syWipe">Elimina i dati dal server</button></div>'
+      : '<div class="stack"><button class="btn blk" data-act="syOn">Attiva la sincronizzazione</button></div>') + '</div>';
+}
+async function syShowCode(c) {
+  const code = syCode(c);
+  const m = modal('<h2>Codice di collegamento</h2><p class="sm mut">Sull’altro dispositivo: schermata iniziale → «Ho già Unica su un altro dispositivo», poi incolla questo codice e inserisci la master password. Chi ha il codice può leggere (solo cifrati) e cancellare i dati sul server: non condividerlo.</p><textarea class="in" rows="5" readonly id="syc"></textarea><div class="gap"><span class="sp"></span><button class="btn" data-r="0">Chiudi</button><button class="btn pri" id="sycp">Copia</button></div>');
+  m.q('#syc').value = code; m.q('#sycp').onclick = () => copy(code, 'Codice'); m.el.addEventListener('click', e => { if (e.target.closest('[data-r]')) m.close(); });
+}
+Object.assign(ACT, {
+  async syOn() {
+    const u = await askText('Indirizzo del server', 'Incolla l’indirizzo del tuo Worker (es. https://unica-sync.nome.workers.dev).'); if (!u) return;
+    const url = u.trim().replace(/\/+$/, ''); if (!SY_URL.test(url)) return toast('Indirizzo non valido: deve finire con .workers.dev');
+    if (!(await ensureProt())) return;
+    const c = { u: url, i: b64u(rnd(16)), t: b64u(rnd(32)), rev: 0, mts: 0, last: 0 }; await sySave(c); lsSet('unica_sydirty', '1'); toast('Collego…'); await sySync();
+    if (SY.err) { const e = SY.err; await DB.del('meta', 'sync'); SY.cfg = null; lsSet('unica_syon', ''); SY.err = ''; toast(e); return render(); }
+    render(); await syShowCode(SY.cfg);
+  },
+  async syNow() { SY.err = ''; await sySync(); toast(SY.err || 'Sincronizzato'); },
+  async syShow() { if (!(await ensureProt())) return; const c = await syLoad(); if (c) await syShowCode(c); },
+  async syOff() { if (!(await ask('Disattivare?', 'Questo dispositivo smette di sincronizzare. I dati sul server restano.', { ok: 'Disattiva' }))) return; await DB.del('meta', 'sync'); SY.cfg = null; lsSet('unica_syon', ''); render(); toast('Sincronizzazione disattivata'); },
+  async syWipe() { if (!(await ask('Eliminare dal server?', 'Cancella i dati cifrati dal server e disattiva la sincronizzazione. Gli altri dispositivi tengono la loro copia locale.', { ok: 'Elimina', danger: true }))) return; const c = await syLoad(); try { if (c) { const r = await syReq(c, 'DELETE'); if (!r.ok) throw syErr(r); } await DB.del('meta', 'sync'); SY.cfg = null; lsSet('unica_syon', ''); render(); toast('Dati eliminati dal server'); } catch (e) { toast(e.message); } },
+  async syLink() {
+    const code = await askText('Collega con un codice', 'Incolla il codice di collegamento mostrato in Impostazioni → Sincronizzazione sull’altro dispositivo.'); if (!code) return;
+    const c = syParse(code); if (!c) return toast('Codice non valido');
+    try { toast('Scarico i dati…'); const r = await syReq(c, 'GET'); if (r.status === 404) return toast('Spazio vuoto: sull’altro dispositivo premi «Sincronizza ora».'); if (!r.ok) throw syErr(r); const txt = await r.text(); if (!parseRestore(txt)) return toast('Dati non validi'); SY.pend = c; await ACT.restore(txt); } catch (e) { toast(e.message); }
+  },
+});
+const _pi = putItem, _di = delItem, _pb = putBlob;
+putItem = async function () { const r = await _pi.apply(this, arguments); syDirty(); return r; };
+delItem = async function () { const r = await _di.apply(this, arguments); syDirty(); return r; };
+putBlob = async function () { const r = await _pb.apply(this, arguments); syDirty(); return r; };
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') SY.first = false; });
+setInterval(async () => {
+  if (!S.kcKey) { SY.cfg = null; SY.first = false; return; }
+  if (SY.busy || !navigator.onLine) return; const c = await syLoad(); if (!c) return;
+  if (SY.err && Date.now() - SY.failAt < 60000) return;
+  const due = !SY.first || (lsGet('unica_sydirty') === '1' && Date.now() - SY.dirtyAt > 3000) || Date.now() - (c.last || 0) > SYNC_EVERY;
+  if (due) { SY.first = true; await sySync(); }
+}, 4000);
+
+/* ---------- Integrazione tra le aree: promemoria, ricerca globale, assistente, backup interni, collegamenti ---------- */
+const MS_DAY = 864e5;
+const hap = () => lsGet('unica_hap') !== '0';
+function buzz(n) { if (hap()) try { navigator.vibrate && navigator.vibrate(n || 20); } catch (e) { } }
+{ const _t = toast; toast = function () { buzz(15); return _t.apply(this, arguments); }; }
+const bkDays = () => { const v = lsGet('unica_bkd'); return v === '' ? 30 : +v; };
+const domOf = s => String(s || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[\/?#:]/)[0];
+const sameDom = (a, b) => !!a && !!b && (a === b || a.endsWith('.' + b) || b.endsWith('.' + a));
+const finLoaded = () => S.protOpen && S.items.has('fin-db');
+
+/* --- promemoria (Home) --- */
+function agenda() {
+  const L = [], a = bkAge(), bd = bkDays();
+  if (bd && (a === null || a > bd) && (S.cards.size || S.items.size)) L.push({ i: 'shield', t: a === null ? 'Non hai ancora fatto un backup' : 'Ultimo backup di ' + a + ' giorni fa', go: 'settings', w: 1 });
+  if (lsGet('unica_syon') === '1' && SY.err) L.push({ i: 'refresh', t: 'Sincronizzazione: ' + SY.err, go: 'settings', w: 1 });
+  if (!S.protOpen) { L.push({ i: 'lock', t: 'Sblocca l’area protetta per vedere scadenze e sicurezza', act: 'agendaUnlock' }); return L; }
+  const lg = vitems().filter(i => i.type === 'login' && i.data.password);
+  if (lg.length) {
+    const cnt = new Map(); lg.forEach(i => cnt.set(i.data.password, (cnt.get(i.data.password) || 0) + 1));
+    const weak = lg.filter(i => strength(i.data.password).lv === 0).length, rep = lg.filter(i => cnt.get(i.data.password) > 1).length, old = lg.filter(i => Date.now() - i.ts > 365 * MS_DAY).length;
+    if (weak || rep) L.push({ i: 'key', t: [weak && weak + ' password deboli', rep && rep + ' ripetute'].filter(Boolean).join(', '), act: 'audit', w: 1 });
+    if (old) L.push({ i: 'key', t: old + (old === 1 ? ' password non cambiata' : ' password non cambiate') + ' da oltre un anno', act: 'audit' });
+  }
+  if (finLoaded()) {
+    const d = FIN(), now = Date.now(), lim = now + 60 * MS_DAY, ev = [];
+    d.btps.forEach(b => { const x = new Date(b.maturity); if (x >= now && x <= lim) ev.push({ d: x, t: 'Scade il BTP ' + b.name + ' il ' + x.toLocaleDateString('it-IT'), tab: 'btp' }); });
+    d.posteItems.forEach(p => { const x = new Date(p.maturity); if (x >= now && x <= lim) ev.push({ d: x, t: 'Scade ' + p.type + ' ' + p.name + ' il ' + x.toLocaleDateString('it-IT'), tab: 'poste' }); });
+    ev.sort((x, y) => x.d - y.d).slice(0, 3).forEach(e => L.push({ i: 'cal', t: e.t, tab: e.tab }));
+    const sp = spentBy(d, monthKey()), over = Object.keys(d.budgets).filter(c => num(d.budgets[c]) > 0 && (sp[c] || 0) > num(d.budgets[c]));
+    if (over.length) L.push({ i: 'warn', t: 'Budget del mese superato: ' + over.slice(0, 3).join(', '), tab: 'bud', w: 1 });
+  }
+  return L;
+}
+function agendaHtml() {
+  const L = agenda(); if (!L.length && S.protOpen) return '<div class="card"><h3>' + ic('cal') + ' Promemoria</h3><p class="sm mut">Tutto in ordine.</p></div>';
+  if (!L.length) return '';
+  return '<div class="card"><h3>' + ic('cal') + ' Promemoria</h3>' + L.map(x => '<button class="row" ' + (x.go ? 'data-act="nav" data-r="' + x.go + '"' : x.tab ? 'data-act="goFin" data-t="' + x.tab + '"' : 'data-act="' + x.act + '"') + '><span class="' + (x.w ? 'bad' : 'mut') + '">' + ic(x.i) + '</span><span class="t">' + h(x.t) + '</span></button>').join('') + '</div>';
+}
+
+/* --- collegamenti: carte ↔ Vault ↔ conti --- */
+function linkBtns(it) {
+  let s = ''; if (it.type !== 'login') return s;
+  const dm = domOf(it.data.domain);
+  if (dm) [...S.cards.values()].filter(c => sameDom(domOf(c.data.domain), dm)).slice(0, 2).forEach(c => { s += '<button class="btn" data-act="cardOpen" data-id="' + h(c.id) + '">' + ic('card') + ' Carta: ' + h(c.data.name) + '</button>'; });
+  if (finLoaded()) FIN().bankAccounts.filter(a => a.vaultId === it.id).slice(0, 2).forEach(a => { s += '<button class="btn" data-act="goFin" data-t="acc">' + ic('chart') + ' Conto: ' + h(a.name) + '</button>'; });
+  return s;
+}
+
+/* --- ricerca globale + comandi (Ctrl/Cmd+K) --- */
+function palResults(q) {
+  const t = fold(q.trim()), out = [], has = (...xs) => xs.some(x => fold(x).includes(t));
+  const row = (icon, title, sub, attrs) => '<button class="row" ' + attrs + '><span class="av a0">' + ic(icon) + '</span><span class="t"><b>' + h(title) + '</b>' + (sub ? '<span class="sm mut">' + h(sub) + '</span>' : '') + '</span></button>';
+  const add = (sec, rows) => { if (rows.length) out.push('<p class="sm mut" style="margin:10px 0 2px"><b>' + h(sec) + '</b></p>' + rows.join('')); };
+  const ACTS = [['Apri Carte', 'card', 'data-act="nav" data-r="cards"'], ['Apri Conti e dashboard', 'chart', 'data-act="enterFin"'], ['Apri Vault', 'lock', 'data-act="enterProt"'], ['Impostazioni', 'gear', 'data-act="nav" data-r="settings"'], ['Nuova carta', 'plus', 'data-act="newCard"'], ['Genera password', 'key', 'data-act="gen"'], ['Controllo password', 'shield', 'data-act="audit2"'], ['Esporta backup', 'dl', 'data-act="exp"'], ['Assistente', 'chat', 'data-act="assist"'], ['Blocca ora', 'lock', 'data-act="lockNow"']];
+  if (lsGet('unica_syon') === '1') ACTS.splice(8, 0, ['Sincronizza ora', 'refresh', 'data-act="syNow"']);
+  add('Azioni', ACTS.filter(a => !t || has(a[0])).slice(0, t ? 5 : 6).map(a => row(a[1], a[0], '', a[2])));
+  if (t.length < 2) return out.join('');
+  add('Carte', [...S.cards.values()].filter(c => has(c.data.name, c.data.domain, c.data.holder)).slice(0, 5).map(c => row('card', c.data.name, c.data.domain || c.data.holder || '', 'data-act="cardOpen" data-id="' + h(c.id) + '"')));
+  if (!S.protOpen) { out.push('<button class="row" data-act="palUnlock"><span class="av a0">' + ic('lock') + '</span><span class="t"><b>Cerca anche nel Vault e nei Conti</b><span class="sm mut">Richiede lo sblocco dell’area protetta</span></span></button>'); return out.join(''); }
+  add('Vault', vitems().filter(i => has(i.data.service, i.data.title, i.data.username, i.data.domain, i.data.category, i.data.fname)).slice(0, 6).map(i => row(VT[i.type][0], titleOf(i), i.data.username || i.data.category || '', 'data-act="detail" data-id="' + h(i.id) + '"')));
+  if (finLoaded()) {
+    const d = FIN(), R = [];
+    d.bankAccounts.filter(a => has(a.name, a.type, a.owner)).slice(0, 4).forEach(a => R.push(row('card', a.name, 'Conto · ' + eur(a.balance), 'data-act="goFin" data-t="acc"')));
+    d.assets.filter(a => has(a.name, a.ticker)).slice(0, 4).forEach(a => R.push(row('chart', a.name, 'Titolo' + (a.ticker ? ' · ' + a.ticker : ''), 'data-act="goFin" data-t="tit"')));
+    d.btps.filter(b => has(b.name, b.ticker)).slice(0, 3).forEach(b => R.push(row('chart', b.name, 'BTP', 'data-act="goFin" data-t="btp"')));
+    d.posteItems.filter(p => has(p.name, p.type)).slice(0, 3).forEach(p => R.push(row('chart', p.name, 'Poste · ' + p.type, 'data-act="goFin" data-t="poste"')));
+    d.expenses.filter(e => has(e.description || e.desc, e.category)).sort((x, y) => String(y.date).localeCompare(String(x.date))).slice(0, 5).forEach(e => R.push(row('file', e.description || e.desc || 'Spesa', e.date + ' · ' + eur(e.amount), 'data-act="goFin" data-t="exp"')));
+    add('Conti', R);
+  }
+  return out.join('');
+}
+function openPalette(q0) {
+  const m = modal('<div class="gap"><input class="in sp" id="pq" type="search" placeholder="Cerca carte, Vault, conti, azioni…" aria-label="Cerca ovunque" autocomplete="off" spellcheck="false"><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><div id="pr" style="max-height:60vh;overflow:auto"></div><p class="sm mut">Le password non compaiono mai nei risultati. Scorciatoia: Ctrl/Cmd+K.</p>');
+  const inp = m.q('#pq'), res = m.q('#pr'), upd = () => { U.palq = inp.value; res.innerHTML = palResults(inp.value); };
+  inp.value = q0 || ''; inp.addEventListener('input', upd); upd();
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { const b = res.querySelector('button.row'); if (b) b.click(); } });
+  m.el.addEventListener('click', e => { if (e.target.closest('#pr [data-act]')) m.close(); });
+  inp.focus();
+}
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && String(e.key).toLowerCase() === 'k') { e.preventDefault(); if (document.getElementById('pq')) return closeTop(); if (S.kcKey && !document.querySelector('.ov')) openPalette(); }
+});
+
+/* --- assistente globale (testo + dettatura + lettura a voce, tutto locale) --- */
+const AS = { log: [], last: '' };
+function assist(q) {
+  const t = fold(q), R = (text, btn) => ({ t: text, btn });
+  const ws = t.split(/[^a-z0-9]+/).filter(w => w.length > 3);
+  const hit = arr => arr.find(x => { const n = fold(x.k); return n.length > 2 && (t.includes(n) || ws.some(w => n.includes(w))); });
+  if (/backup|copia di sicurezza/.test(t)) { const a = bkAge(); return R(a === null ? 'Non hai ancora fatto un backup da questo dispositivo.' : 'L’ultimo backup è di ' + (a === 0 ? 'oggi' : a + ' giorni fa') + '.', { l: 'Vai al backup', a: 'data-act="nav" data-r="settings"' }); }
+  if (/sincron/.test(t)) return R(lsGet('unica_syon') !== '1' ? 'La sincronizzazione non è attiva (Impostazioni → Sincronizzazione).' : SY.err ? 'Errore di sincronizzazione: ' + SY.err : 'Sincronizzazione attiva. Ultima: ' + (+lsGet('unica_sylast') ? new Date(+lsGet('unica_sylast')).toLocaleString('it-IT') : 'mai') + '.');
+  if (/scadenz|promemoria|cosa devo|agenda|da fare/.test(t)) { const L = agenda(); return R(L.length ? L.map(x => '• ' + x.t).join('\n') : 'Non ci sono promemoria.'); }
+  if (/quante carte|numero.*carte|quante tessere/.test(t)) return R('Hai ' + S.cards.size + ' carte fedeltà.');
+  if (/\b(carta|tessera|fedelta|mostra|apri|codice)\b/.test(t) && !/spes|budget|patrimonio/.test(t)) {
+    const c = hit([...S.cards.values()].map(c => ({ k: c.data.name, c })));
+    if (c) return R('Ecco «' + c.c.data.name + '».', { l: 'Mostra la carta', a: 'data-act="cardOpen" data-id="' + h(c.c.id) + '"' });
+    if (/carta|tessera|fedelta/.test(t)) return R('Non trovo quella carta. Ne hai ' + S.cards.size + (S.cards.size ? ': ' + [...S.cards.values()].slice(0, 5).map(c => c.data.name).join(', ') + (S.cards.size > 5 ? '…' : '.') : '.'));
+  }
+  const wantsVault = /password|vault|credenzial|accesso|login|nota|note|account/.test(t), wantsFin = /spes|budget|patrimonio|invest|btp|titol|etf|conto|conti|saldo|\bpac\b|poste|resta|rimane|ribilanc|stipendio|quanto ho|ultime/.test(t);
+  if ((wantsVault || wantsFin) && !S.protOpen) return R('Per questo serve l’area protetta: sbloccala e ti rispondo.', { l: 'Sblocca', a: 'data-act="asUnlock"' });
+  if (wantsVault) {
+    const lg = vitems().filter(i => i.type === 'login' && i.data.password);
+    if (/debol|ripetut|vecchi|sicurezza|violaz|quante/.test(t)) { const cnt = new Map(); lg.forEach(i => cnt.set(i.data.password, (cnt.get(i.data.password) || 0) + 1)); return R('Nel Vault ci sono ' + vitems().length + ' voci (' + lg.length + ' accessi). Password deboli: ' + lg.filter(i => strength(i.data.password).lv === 0).length + '; ripetute: ' + lg.filter(i => cnt.get(i.data.password) > 1).length + '; non cambiate da oltre un anno: ' + lg.filter(i => Date.now() - i.ts > 365 * MS_DAY).length + '.', { l: 'Controllo password', a: 'data-act="audit"' }); }
+    const v = hit(vitems().map(i => ({ k: titleOf(i), i })));
+    if (v) return R('Ho trovato «' + titleOf(v.i) + '»' + (v.i.data.username ? ' (utente ' + v.i.data.username + ')' : '') + '. Le password non le leggo ad alta voce.', { l: 'Apri', a: 'data-act="detail" data-id="' + h(v.i.id) + '"' });
+    return R('Nel Vault ci sono ' + vitems().length + ' voci. Chiedimi di una voce per nome o delle password deboli.');
+  }
+  if (wantsFin) { if (!finLoaded()) return R('Non ci sono ancora dati finanziari.'); return R(answer(q)); }
+  return R('Non ho capito. Prova: «mostra la carta Coop», «quando ho fatto l’ultimo backup?», «quante password deboli ho?», «quanto ho speso in alimentari?», «che scadenze ho?».', { l: 'Cerca ovunque', a: 'data-act="palette"' });
+}
+function asPush(q) { AS.last = q; AS.log.push({ w: 'me', t: q }); const r = assist(q); AS.log.push({ w: 'ai', t: r.t, btn: r.btn }); asDraw(); if ($('atts') && $('atts').checked) say(r.t); }
+function say(text) { try { const s = window.speechSynthesis; if (!s) return; const v = s.getVoices().find(v => /^it/i.test(v.lang) && v.localService); if (!v) return; s.cancel(); const u = new SpeechSynthesisUtterance(text.replace(/[•]/g, '')); u.lang = 'it-IT'; u.voice = v; s.speak(u); } catch (e) { } }
+function asDraw() {
+  const el = $('alog'); if (!el) return;
+  el.innerHTML = AS.log.map(x => '<div class="bub ' + x.w + '">' + h(x.t).replace(/\n/g, '<br>') + (x.btn ? '<div style="margin-top:6px"><button class="btn sm" ' + x.btn.a + '>' + h(x.btn.l) + '</button></div>' : '') + '</div>').join('') || '<p class="sm mut">Chiedimi di una carta, del Vault, dei conti, dei backup o delle scadenze.</p>';
+  el.scrollTop = el.scrollHeight;
+}
+function openAssistant() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const m = modal('<div class="gap"><h2 class="sp" style="margin:0">Assistente</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><div id="alog" role="log" aria-live="polite" style="max-height:44vh;overflow:auto;margin:8px 0"></div><form data-form="x" class="gap"><input class="in sp" id="aqi" placeholder="Scrivi una domanda…" aria-label="Domanda" autocomplete="off"><button type="button" class="ib" id="amic" aria-label="Detta la domanda"' + (SR ? '' : ' hidden') + '>' + ic('mic') + '</button><button class="btn pri">Invia</button></form><label class="sm"><input type="checkbox" id="atts"' + (lsGet('unica_tts') === '1' ? ' checked' : '') + '> Leggi le risposte ad alta voce (voce locale)</label><p class="sm mut">Risponde con i dati locali, senza IA esterne. La dettatura usa il riconoscimento vocale del browser: su alcuni browser l’audio può essere elaborato dal fornitore del browser.</p>', { onClose: () => { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) { } } });
+  m.q('form').onsubmit = ev => { ev.preventDefault(); const i = m.q('#aqi'), q = i.value.trim(); if (!q) return; i.value = ''; asPush(q); };
+  m.q('#atts').onchange = e => { lsSet('unica_tts', e.target.checked ? '1' : '0'); if (!e.target.checked) try { window.speechSynthesis.cancel(); } catch (x) { } };
+  if (SR) m.q('#amic').onclick = () => { try { const r = new SR(); r.lang = 'it-IT'; r.interimResults = false; try { r.processLocally = true; } catch (e) { } r.onresult = e => { m.q('#aqi').value = e.results[0][0].transcript; m.q('form').requestSubmit(); }; r.onerror = () => toast('Dettatura non disponibile'); r.start(); toast('Parla ora…'); } catch (e) { toast('Dettatura non disponibile'); } };
+  asDraw(); m.q('#aqi').focus();
+}
+
+/* --- backup interni con rotazione --- */
+const SN = { list: null, loading: false };
+const snapKeep = () => +lsGet('unica_snapn') || 7;
+const snapList = async () => (await DB.all('snaps')).sort((a, b) => b.ts - a.ts);
+async function snapSave(label, auto) {
+  try {
+    const bk = await exportBackup(), json = JSON.stringify(bk); if (json.length > 25e6) return false;
+    const ts = Date.now(); await DB.put('snaps', { id: 's' + ts, ts, label: label || '', auto: !!auto, keep: false, n: bk.items.filter(i => i.t !== 'tomb').length, size: json.length, json });
+    lsSet('unica_snapat', String(ts)); lsSet('unica_snapdirty', '');
+    const rot = (await snapList()).filter(s => !s.keep); for (const s of rot.slice(snapKeep())) await DB.del('snaps', s.id);
+    SN.list = null; return true;
+  } catch (e) { return false; }
+}
+function snapCard() {
+  if (SN.list === null && !SN.loading) { SN.loading = true; snapList().then(l => { SN.list = l.map(({ json, ...r }) => r); SN.loading = false; if (U.route === 'settings' && !document.querySelector('.ov')) render(); }).catch(() => { SN.list = []; SN.loading = false; }); }
+  const L = SN.list || [], opt = (k, vals, def) => vals.map(v => '<option value="' + v[0] + '"' + (String(lsGet('unica_' + k) || def) === String(v[0]) ? ' selected' : '') + '>' + v[1] + '</option>').join('');
+  return '<div class="card"><h3>Backup interni e promemoria</h3><p class="sm mut">Copie cifrate automatiche (al massimo una al giorno, solo se qualcosa è cambiato) e una copia prima di ogni ripristino. Restano sul dispositivo: per sicurezza vera esporta anche un file. Per ripristinare serve la master password (o il codice di recupero) valida per quella copia.</p>' +
+    (L.length ? L.map(s => '<div class="gap" style="align-items:center;margin:6px 0"><span class="t sp"><b>' + h(new Date(s.ts).toLocaleString('it-IT')) + '</b>' + (s.label ? ' · ' + h(s.label) : s.auto ? ' · automatica' : '') + (s.keep ? ' ' + ic('star') : '') + '<br><span class="sm mut">' + s.n + ' elementi · ' + fmtSize(s.size) + '</span></span><button class="btn sm" data-act="snapRestore" data-id="' + h(s.id) + '">Ripristina</button><button class="ib" data-act="snapLabel" data-id="' + h(s.id) + '" aria-label="Dai un nome e non eliminare mai">' + ic('star') + '</button><button class="ib" data-act="snapDel" data-id="' + h(s.id) + '" aria-label="Elimina la copia">' + ic('trash') + '</button></div>').join('') : '<p class="sm mut">Nessuna copia ancora.</p>') +
+    '<div class="stack"><button class="btn blk" data-act="snapNow">Crea una copia ora</button></div>' +
+    '<label class="f" for="snk">Copie automatiche da conservare (le copie con nome restano sempre)</label><select class="in" id="snk" data-hub="snapn">' + opt('snapn', [[3, '3'], [5, '5'], [7, '7'], [10, '10'], [20, '20']], 7) + '</select>' +
+    '<label class="f" for="bkd">Promemoria backup su file</label><select class="in" id="bkd" data-hub="bkd">' + opt('bkd', [[0, 'Mai'], [7, 'Dopo 7 giorni'], [14, 'Dopo 14 giorni'], [30, 'Dopo 30 giorni'], [60, 'Dopo 60 giorni']], 30) + '</select>' +
+    '<label class="f" for="hap">Vibrazione (dove supportata)</label><select class="in" id="hap" data-hub="hap">' + opt('hap', [[1, 'Attiva'], [0, 'Disattivata']], 1) + '</select></div>';
+}
+document.addEventListener('change', e => { const k = e.target && e.target.dataset && e.target.dataset.hub; if (k) { lsSet('unica_' + k, e.target.value); if (k === 'bkd') toast('Salvato'); } });
+setInterval(() => { if (S.kcKey && lsGet('unica_snapdirty') === '1' && Date.now() - (+lsGet('unica_snapat') || 0) > MS_DAY) snapSave('', true); }, 60000);
+
+/* --- quote JSON ({"TICKER": prezzo}) per titoli e BTP --- */
+async function importQuotes() {
+  if (!(await openProt())) return; await ensureFin();
+  const f = await pickFile('.json,application/json'); if (!f) return;
+  let q; try { q = JSON.parse(await f.text()); } catch (e) { return toast('File JSON non valido'); }
+  if (!q || typeof q !== 'object' || Array.isArray(q)) return toast('Formato non valido: serve {"TICKER": prezzo}');
+  const Q = new Map(); Object.keys(q).forEach(k => { const v = parseFloat(q[k]); if (isFinite(v) && v > 0) Q.set(String(k).trim().toUpperCase(), v); });
+  const d = FIN(); let n = 0;
+  d.assets.forEach(a => { const k = String(a.ticker || a.name || '').trim().toUpperCase(); if (Q.has(k)) { a.lastPrice = Q.get(k); n++; } });
+  d.btps.forEach(b => { const k = String(b.ticker || b.name || '').trim().toUpperCase(); if (Q.has(k)) { b.currentPrice = Q.get(k); n++; } });
+  await finSave(); toast('Aggiornati ' + n + ' prezzi'); render();
+}
+
+Object.assign(ACT, {
+  palette: () => openPalette(), assist: () => openAssistant(),
+  async palUnlock() { if (await openProt()) openPalette(U.palq); },
+  async asUnlock() { if (await openProt()) { if (AS.last) asPush(AS.last); } },
+  async agendaUnlock() { if (await openProt()) render(); },
+  async goFin(t) { U.fin.tab = t.dataset.t || 'ov'; closeTop(); await ACT.enterFin(); },
+  async cardVault(t) {
+    const c = S.cards.get(t.dataset.id); if (!c) return; closeTop(); if (!(await openProt())) return;
+    const dm = domOf(c.data.domain), hits = vitems().filter(i => i.type === 'login' && sameDom(domOf(i.data.domain), dm));
+    if (hits.length === 1) openDetail(hits[0].id); else if (hits.length) openPalette(dm); else toast('Nessuna credenziale per ' + dm + ' nel Vault.');
+  },
+  quotes: () => importQuotes(),
+  async snapNow() { toast(await snapSave('', false) ? 'Copia creata' : 'Copia non riuscita'); SN.list = null; render(); },
+  async snapRestore(t) { const s = await DB.get('snaps', t.dataset.id); if (s) await ACT.restore(s.json); },
+  async snapLabel(t) { const s = await DB.get('snaps', t.dataset.id); if (!s) return; const v = await askText('Nome della copia', 'Le copie con nome non vengono mai eliminate dalla rotazione. Lascia vuoto per rimuovere il nome.'); if (v === undefined) return; s.label = v.trim().slice(0, 60); s.keep = !!s.label; await DB.put('snaps', s); SN.list = null; render(); },
+  async snapDel(t) { if (!(await ask('Eliminare la copia?', 'Questa copia interna verrà eliminata.', { ok: 'Elimina', danger: true }))) return; await DB.del('snaps', t.dataset.id); SN.list = null; render(); },
+});
 
 /* ---------- avvio ---------- */
 (async function boot() {

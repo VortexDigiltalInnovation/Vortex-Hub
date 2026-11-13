@@ -1,41 +1,1522 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vortex Hub - Zero-Knowledge PWA</title>
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0f172a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
-    .container { max-width: 800px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-    h1 { color: #3b82f6; margin-top: 0; }
-    p { color: #94a3b8; }
-    .btn { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; }
-    .btn:hover { background: #2563eb; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-bDKxGzizKh6p5NaR+/EcfycTVdQh2NTGfp2/1FTFE+8='; style-src 'sha256-SLO7DDpeb50726KIl/Ro9FlCfhn2AdjNDGEvVfO8Lt8='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0f766e">
+<title>Unica</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>:root{--fs:16px;--ic:22px;--bg:#f4f6f8;--card:#fff;--ink:#14202b;--mut:#5b6b7a;--line:#dde3e9;--pri:#0f766e;--pri2:#0b5c56;--onpri:#fff;--acc:#e8f4f2;--dan:#b42318;--dan-bg:#fdecea;--ok:#157347;--warn:#a15c00;--warn-bg:#fff4e0;--sh:0 1px 2px rgba(15,30,45,.06),0 4px 14px rgba(15,30,45,.06)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d141a;--card:#17212a;--ink:#e9eef2;--mut:#9aabb9;--line:#2a3743;--pri:#2dd4bf;--pri2:#5eead4;--onpri:#062a27;--acc:#12302d;--dan:#ff8f84;--dan-bg:#3a1b19;--ok:#6ddc9c;--warn:#ffc266;--warn-bg:#3a2c12;--sh:0 1px 2px rgba(0,0,0,.4)}}
+:root[data-theme=dark]{--bg:#0d141a;--card:#17212a;--ink:#e9eef2;--mut:#9aabb9;--line:#2a3743;--pri:#2dd4bf;--pri2:#5eead4;--onpri:#062a27;--acc:#12302d;--dan:#ff8f84;--dan-bg:#3a1b19;--ok:#6ddc9c;--warn:#ffc266;--warn-bg:#3a2c12;--sh:0 1px 2px rgba(0,0,0,.4)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:var(--fs)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45;min-height:100vh;min-height:100dvh}
+button,input,select,textarea{font:inherit;color:inherit}
+h1{font-size:1.5rem;margin:.2em 0 .4em;line-height:1.2}h2{font-size:1.2rem;margin:.2em 0 .5em}h3{font-size:1rem;margin:0 0 .3em}
+p{margin:.4em 0}.mut{color:var(--mut)}.sm{font-size:.85rem}.c{text-align:center}.b{font-weight:700}.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.ic{width:var(--ic);height:var(--ic);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:middle}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 96px}
+.center{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;max-width:460px;margin:0 auto;padding:24px 16px}
+.logo{width:64px;height:64px;border-radius:18px;background:var(--pri);color:var(--onpri);display:grid;place-items:center;margin:0 auto 12px;box-shadow:var(--sh)}
+.logo .ic{width:34px;height:34px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--sh);margin:0 0 12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 18px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;text-decoration:none}
+.btn:hover{border-color:var(--pri)}.btn:focus-visible,.row:focus-visible,.tab:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:var(--onpri)}.btn.pri:hover{background:var(--pri2)}
+.btn.dan{color:var(--dan);border-color:var(--dan)}.btn.blk{display:flex;width:100%}.btn.sm{min-height:38px;padding:6px 12px;font-size:.9rem}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.ib{width:42px;height:42px;display:inline-grid;place-items:center;border-radius:10px;border:0;background:transparent;cursor:pointer}.ib:hover{background:var(--acc)}
+.stack>*+*{margin-top:10px}.gap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sp{flex:1}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+.in{width:100%;min-height:46px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:max(16px,1rem)}
+textarea.in{min-height:90px;resize:vertical}
+.pw{display:flex;gap:6px}.pw .in{flex:1;min-width:0}
+.meter{height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin:8px 0 4px}.meter i{display:block;height:100%;width:0;transition:width .2s}
+.m0 i{background:var(--dan)}.m1 i{background:#d97706}.m2 i{background:#65a30d}.m3 i{background:var(--ok)}
+.hdr{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.hdr h1{font-size:1.15rem;margin:0;flex:1}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom)}
+.nav .in2{display:flex;width:100%;max-width:720px}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;background:none;border:0;cursor:pointer;color:var(--mut);font-size:.75rem;font-weight:600}
+.tab[aria-current=page]{color:var(--pri)}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--line);margin:0 0 8px;cursor:pointer}
+.row:hover{border-color:var(--pri)}.row .t{flex:1;min-width:0}.row .t b,.row .t span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.av{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
+.tile{display:flex;gap:14px;align-items:center;padding:16px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--sh);margin:0 0 12px;width:100%;text-align:left;cursor:pointer}
+.tile .ti{width:48px;height:48px;border-radius:14px;background:var(--acc);color:var(--pri);display:grid;place-items:center;flex:none}
+.tile[disabled]{opacity:.6;cursor:default}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--acc);color:var(--pri)}
+.tag.w{background:var(--warn-bg);color:var(--warn)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}.chip{flex:none;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:.85rem;font-weight:600}.chip[aria-pressed=true]{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+.alert{padding:12px;border-radius:12px;background:var(--warn-bg);color:var(--warn);font-size:.92rem;margin:10px 0}.alert.d{background:var(--dan-bg);color:var(--dan)}.alert.o{background:var(--acc);color:var(--ink)}
+.ov{position:fixed;inset:0;z-index:50;background:rgba(5,12,18,.6);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:92vh;max-height:92dvh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom))}
+@media(min-width:600px){.ov{align-items:center}.sheet{border-radius:20px}}
+.kv{padding:10px 0;border-bottom:1px solid var(--line)}.kv:last-child{border:0}.kv .k{font-size:.8rem;color:var(--mut);font-weight:600}.kv .v{display:flex;gap:6px;align-items:center;word-break:break-all}.kv .v span{flex:1}
+.words{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.w1{padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:.95rem}.w1 small{color:var(--mut);margin-right:4px}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:99;max-width:90vw;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s}.toast.on{opacity:1}
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}.seg button{flex:1;padding:10px;border:0;background:var(--card);cursor:pointer;font-weight:600}.seg button[aria-pressed=true]{background:var(--pri);color:var(--onpri)}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:10px 0}.chk input{width:22px;height:22px;margin-top:2px;flex:none}
+.ok{color:var(--ok)}.bad{color:var(--dan)}
+.spin{display:inline-block;width:18px;height:18px;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spin{animation-duration:2s}.meter i,.toast{transition:none}}
+.sr{position:absolute;left:-9999px}
+input[type=range]{width:100%}
+.a0{background:#0f766e}.a1{background:#7c3aed}.a2{background:#c2410c}.a3{background:#1d4ed8}.a4{background:#be185d}.a5{background:#4d7c0f}.a6{background:#b45309}.a7{background:#475569}
+
+.mt{margin-top:10px}.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.ccard{color:#fff;border:0;border-radius:16px;padding:12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:104px;box-shadow:var(--sh)}.ccard:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.ccard .cn{display:flex;align-items:center;gap:6px}.ccard .cn b{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ccard .tag{align-self:flex-start;background:#fff;color:#14202b}
+.clogo{width:24px;height:24px;border-radius:6px;background:#fff;object-fit:contain}
+.bc{display:block;max-width:100%;height:auto;background:#fff;border-radius:8px}.bc.mini{width:100%;padding:3px 6px;margin-top:auto}.bc.big{margin:0 auto}
+.cview{background:#fff;color:#000;border-radius:16px;padding:16px;margin:12px 0}.cview .bc{width:100%}
+.vidbox{position:relative;background:#000;border-radius:14px;overflow:hidden;aspect-ratio:4/3;margin:10px 0}.vidbox video{width:100%;height:100%;object-fit:cover}.vidline{position:absolute;left:8%;right:8%;top:50%;height:2px;background:#f43f5e;box-shadow:0 0 8px #f43f5e}
+.sw{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}.sw[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 3px #fff}
+
+.big{font-size:2rem;font-weight:800;margin:.1em 0}.chart{width:100%;height:auto;display:block}
+.legend{list-style:none;margin:0;padding:0;font-size:.85rem}.legend li{display:flex;gap:6px;align-items:center;padding:2px 0}.legend li span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.pbar{height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin:6px 0}.pbar i{display:block;height:100%;background:var(--pri)}.pbar.over i{background:var(--dan)}
+.t .pbar{width:100%}#printArea{display:none}
+@media print{body>*:not(#printArea){display:none!important}#printArea{display:block;color:#000;background:#fff;font-family:system-ui,sans-serif}#printArea table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:11pt}#printArea th,#printArea td{border-bottom:1px solid #bbb;padding:4px 6px;text-align:left}#printArea h1{font-size:20pt}#printArea h2{font-size:13pt;margin:14px 0 4px}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>🛡️ Vortex Hub</h1>
-    <p>PWA Zero-Knowledge local-first in stato di produzione.</p>
-    <hr style="border: 0; border-top: 1px solid #334155; margin: 20px 0;">
-    <div id="app-root">
-      <p>Caricamento dei moduli IndexedDB e Vault in corso...</p>
-      <button class="btn" onclick="alert('Vortex Hub operativo al 100%!')">Verifica Stato</button>
-    </div>
-  </div>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => console.info('ServiceWorker registrato con successo:', reg.scope))
-          .catch(err => console.error('Errore registrazione ServiceWorker:', err));
-      });
+<div id="app"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<noscript>Unica richiede JavaScript.</noscript>
+<script>'use strict';
+/* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
+const APP_NAME = 'Unica';
+const APP_VERSION = '0.3.0';
+const KDF_ITER = 600000;
+const MAX_FILE = 15 * 1024 * 1024;
+const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
+const APP_IDLE_MS = 15 * 60000;     // blocco dell'intera app per inattività
+const CLIP_MS = 30000;              // pulizia appunti dopo la copia di una password
+
+const te = new TextEncoder(), td = new TextDecoder();
+const b64e = u8 => { u8 = u8 instanceof Uint8Array ? u8 : new Uint8Array(u8); let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+const b64d = t => Uint8Array.from(atob(t), c => c.charCodeAt(0));
+const rnd = n => crypto.getRandomValues(new Uint8Array(n));
+const cat = (...a) => { const o = new Uint8Array(a.reduce((n, x) => n + x.length, 0)); let p = 0; a.forEach(x => { o.set(x, p); p += x.length; }); return o; };
+const uid = () => b64e(rnd(12)).replace(/[+/=]/g, c => ({ '+': '-', '/': '_', '=': '' }[c]));
+
+/* --- chiavi --- */
+async function kekPw(pw, salt, iter) {
+  const m = await crypto.subtle.importKey('raw', te.encode(String(pw).normalize('NFKC')), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: iter }, m, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function kekHkdf(raw, info) {
+  const m = await crypto.subtle.importKey('raw', raw, 'HKDF', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'HKDF', hash: 'SHA-256', salt: new Uint8Array(32), info: te.encode(info) }, m, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+const dataKey = raw => crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);
+function gcmParams(iv, aad) { const p = { name: 'AES-GCM', iv }; if (aad) p.additionalData = te.encode(aad); return p; }
+async function seal(key, bytes, aad) { const iv = rnd(12); const ct = new Uint8Array(await crypto.subtle.encrypt(gcmParams(iv, aad), key, bytes)); return { iv: b64e(iv), ct: b64e(ct) }; }
+async function unseal(key, o, aad) { return new Uint8Array(await crypto.subtle.decrypt(gcmParams(b64d(o.iv), aad), key, b64d(o.ct))); }
+
+/* --- codice di recupero: 24 parole (11 bit ciascuna = 264 bit) --- */
+const SYL = ['ba', 'ce', 'di', 'fo', 'gu', 'la', 'me', 'ni', 'po', 'ra', 'si', 'to', 'vu'];
+const wordOf = i => SYL[Math.floor(i / 169)] + SYL[Math.floor(i / 13) % 13] + SYL[i % 13];
+const WORDS = Array.from({ length: 2048 }, (_, i) => wordOf(i));
+const WIDX = new Map(WORDS.map((w, i) => [w, i]));
+function newRecovery() {
+  const out = [], lim = 65536 - (65536 % 2048); // 65536 e' multiplo di 2048: nessun bias
+  const r = new Uint16Array(24); crypto.getRandomValues(r);
+  r.forEach(v => out.push(WORDS[v % 2048])); void lim; return out;
+}
+function recoveryBytes(words) { const o = new Uint8Array(words.length * 2); words.forEach((w, i) => { const x = WIDX.get(w); o[i * 2] = x >> 8; o[i * 2 + 1] = x & 255; }); return o; }
+function parseRecovery(text) {
+  const w = String(text).toLowerCase().split(/[^a-z]+/).filter(Boolean);
+  if (w.length !== 24) throw new Error('Il codice di recupero ha 24 parole (ne hai inserite ' + w.length + ').');
+  const bad = w.findIndex(x => !WIDX.has(x));
+  if (bad >= 0) throw new Error('La parola n. ' + (bad + 1) + ' non è valida.');
+  return w;
+}
+const kekRec = words => kekHkdf(recoveryBytes(words), 'unica-recovery-v1');
+
+/* --- database locale (IndexedDB): solo dati cifrati e metadati minimi --- */
+const DB = {
+  db: null,
+  open() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open('unica', 1);
+      r.onupgradeneeded = () => { const d = r.result; d.createObjectStore('meta'); d.createObjectStore('items', { keyPath: 'id' }); d.createObjectStore('blobs', { keyPath: 'id' }); d.createObjectStore('dev'); };
+      r.onsuccess = () => { DB.db = r.result; res(); };
+      r.onerror = () => rej(r.error);
+    });
+  },
+  tx(store, mode, fn) { return new Promise((res, rej) => { const t = DB.db.transaction(store, mode); const s = t.objectStore(store); let out; const rq = fn(s); if (rq) rq.onsuccess = () => { out = rq.result; }; t.oncomplete = () => res(out); t.onerror = t.onabort = () => rej(t.error); }); },
+  get: (s, k) => DB.tx(s, 'readonly', st => st.get(k)),
+  put: (s, v, k) => DB.tx(s, 'readwrite', st => k === undefined ? st.put(v) : st.put(v, k)),
+  del: (s, k) => DB.tx(s, 'readwrite', st => st.delete(k)),
+  all: s => DB.tx(s, 'readonly', st => st.getAll()),
+  clear: s => DB.tx(s, 'readwrite', st => st.clear()),
+};
+
+/* --- sessione in memoria --- */
+const S = {
+  meta: null,            // metadati dell'account (chiavi avvolte)
+  kc: null, kcKey: null, // chiave "carte" (livello 1)
+  kp: null, kpKey: null, // chiave "area protetta" (livello 2)
+  verifiedAt: 0, protOpen: false, last: Date.now(),
+  items: new Map(),      // elementi decifrati (solo con area protetta aperta)
+  cards: new Map(),      // carte fedeltà decifrate (livello 1)
+  idleMin: parseInt(localStorage.getItem('unica_idle') || '5', 10),
+};
+function wipe(u8) { if (u8 && u8.fill) u8.fill(0); }
+async function setKeys(kc, kp) {
+  S.kc = kc; S.kcKey = kc ? await dataKey(kc) : null;
+  if (kp) { S.kp = kp; S.kpKey = await dataKey(kp); S.verifiedAt = Date.now(); }
+}
+function dropProt() { wipe(S.kp); S.kp = null; S.kpKey = null; S.protOpen = false; S.items = new Map(); S.verifiedAt = 0; }
+function dropAll() { dropProt(); S.cards = new Map(); wipe(S.kc); S.kc = null; S.kcKey = null; }
+
+/* --- limite tentativi con attesa crescente --- */
+async function rlLeft() { const r = await DB.get('meta', 'rl'); return r && r.until > Date.now() ? r.until - Date.now() : 0; }
+async function rlFail() { const r = (await DB.get('meta', 'rl')) || { n: 0 }; r.n++; r.until = r.n >= 3 ? Date.now() + Math.min(300000, 1000 * Math.pow(2, r.n - 3)) : 0; await DB.put('meta', r, 'rl'); }
+async function rlOk() { await DB.del('meta', 'rl'); }
+
+/* --- sblocco con master password / codice di recupero --- */
+async function unwrapWithPassword(pw) {
+  const m = S.meta;
+  const kek = await kekPw(pw, b64d(m.kdf.salt), m.kdf.iter);
+  return unseal(kek, m.wrapPw, 'wrapPw');       // lancia errore se errata
+}
+async function unwrapWithRecovery(words) { return unseal(await kekRec(words), S.meta.wrapRec, 'wrapRec'); }
+async function applyM(M, full) { await setKeys(M.slice(0, 32), M.slice(32)); wipe(M); }
+
+/* --- elementi cifrati --- */
+const aadOf = (id, type, ver) => id + '|' + type + '|' + ver;
+async function putItem(id, type, data, prev, k) {
+  k = k || 'p'; const key = k === 'c' ? S.kcKey : S.kpKey; if (!key) throw new Error('Chiave non disponibile');
+  const ver = (prev ? prev.ver : 0) + 1;
+  const rec = { id, type: 'x', t: type, k, ver, ts: Date.now(), ...(await seal(key, te.encode(JSON.stringify(data)), aadOf(id, type, ver))) };
+  await DB.put('items', rec);
+  (k === 'c' ? S.cards : S.items).set(id, { id, type, ver, ts: rec.ts, data });
+  return rec;
+}
+async function delItem(id, k) {
+  k = k || 'p'; const map = k === 'c' ? S.cards : S.items, prev = map.get(id);
+  await DB.put('items', { id, type: 'tomb', t: 'tomb', k, ver: (prev ? prev.ver : 0) + 1, ts: Date.now() });   // lapide per la futura sincronizzazione
+  map.delete(id);
+  if (k === 'p') await DB.del('blobs', id);
+}
+async function loadItems() {
+  S.items = new Map();
+  for (const r of await DB.all('items')) {
+    if (r.t === 'tomb' || (r.k || 'p') !== 'p') continue;
+    try { const d = JSON.parse(td.decode(await unseal(S.kpKey, r, aadOf(r.id, r.t, r.ver)))); S.items.set(r.id, { id: r.id, type: r.t, ver: r.ver, ts: r.ts, data: d }); }
+    catch (e) { console.warn('Elemento non decifrabile', r.id); }
+  }
+}
+async function loadCards() {
+  S.cards = new Map(); if (!S.kcKey) return;
+  for (const r of await DB.all('items')) {
+    if (r.t === 'tomb' || r.k !== 'c') continue;
+    try { const d = JSON.parse(td.decode(await unseal(S.kcKey, r, aadOf(r.id, r.t, r.ver)))); S.cards.set(r.id, { id: r.id, type: r.t, ver: r.ver, ts: r.ts, data: d }); }
+    catch (e) { console.warn('Carta non decifrabile', r.id); }
+  }
+}
+async function putBlob(id, bytes) { const o = await seal(S.kpKey, bytes, 'blob|' + id); await DB.put('blobs', { id, ...o }); }
+async function getBlob(id) { const r = await DB.get('blobs', id); if (!r) throw new Error('File mancante'); return unseal(S.kpKey, r, 'blob|' + id); }
+
+/* --- creazione account --- */
+async function buildAccount(pw) {
+  const kc = rnd(32), kp = rnd(32), M = cat(kc, kp), salt = rnd(16);
+  const words = newRecovery();
+  const kp_ = await dataKey(kp);
+  const meta = {
+    v: 1, created: Date.now(), kdf: { salt: b64e(salt), iter: KDF_ITER },
+    wrapPw: await seal(await kekPw(pw, salt, KDF_ITER), M, 'wrapPw'),
+    wrapRec: await seal(await kekRec(words), M, 'wrapRec'),
+    recEnc: await seal(kp_, te.encode(words.join(' ')), 'recEnc'),
+  };
+  return { meta, kc, kp, words };
+}
+
+/* --- passkey (WebAuthn + estensione PRF) --- */
+const pkSupported = () => !!(window.PublicKeyCredential && navigator.credentials && window.isSecureContext);
+async function pkCreate() {
+  const salt = rnd(32);
+  const cred = await navigator.credentials.create({ publicKey: {
+    rp: { name: APP_NAME, id: location.hostname }, user: { id: rnd(16), name: 'utente@unica', displayName: 'Utente ' + APP_NAME },
+    challenge: rnd(32), pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+    authenticatorSelection: { userVerification: 'required', residentKey: 'preferred' }, timeout: 120000,
+    extensions: { prf: { eval: { first: salt } } } } });
+  if (!cred) throw new Error('Registrazione annullata');
+  const ext = cred.getClientExtensionResults ? cred.getClientExtensionResults() : {};
+  let prf = ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null;
+  const id = new Uint8Array(cred.rawId);
+  if (!prf && ext.prf && ext.prf.enabled !== false) { const r = await pkAssert({ id: b64e(id), salt: b64e(salt) }); prf = r && r.prf; }
+  return { id: b64e(id), salt: b64e(salt), prf };
+}
+async function pkAssert(pk) {
+  pk = pk || S.meta.pk;
+  const a = await navigator.credentials.get({ publicKey: { challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: b64d(pk.id) }], userVerification: 'required', timeout: 120000,
+    extensions: { prf: { eval: { first: b64d(pk.salt) } } } } });
+  if (!a) return null;
+  const ext = a.getClientExtensionResults ? a.getClientExtensionResults() : {};
+  return { prf: ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null };
+}
+async function enablePasskey() {
+  const M = cat(S.kc, S.kp);
+  const r = await pkCreate();
+  const devKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  await DB.put('dev', devKey, 'k');
+  S.meta.pk = { id: r.id, salt: r.salt, prf: !!r.prf };
+  S.meta.wrapDev = await seal(devKey, S.kc, 'wrapDev');
+  if (r.prf) S.meta.wrapPk = await seal(await kekHkdf(r.prf, 'unica-pk-v1'), M, 'wrapPk'); else delete S.meta.wrapPk;
+  wipe(M);
+  await DB.put('meta', S.meta, 'acct');
+  return !!r.prf;
+}
+async function disablePasskey() { delete S.meta.pk; delete S.meta.wrapPk; delete S.meta.wrapDev; await DB.del('dev', 'k'); await DB.put('meta', S.meta, 'acct'); }
+
+/* --- sicurezza password --- */
+function strength(p) {
+  if (!p) return { lv: 0, bits: 0, label: '—' };
+  let pool = 0; if (/[a-z]/.test(p)) pool += 26; if (/[A-Z]/.test(p)) pool += 26; if (/\d/.test(p)) pool += 10; if (/[^A-Za-z0-9]/.test(p)) pool += 33;
+  let bits = p.length * Math.log2(pool || 1);
+  if (/(.)\1{2,}/.test(p)) bits -= 10; if (/(0123|1234|2345|abcd|qwer|asdf|pass|admin|ciao|amore)/i.test(p)) bits -= 18;
+  if (new Set(p).size < p.length / 2) bits -= 12; bits = Math.max(0, bits);
+  const lv = bits < 40 ? 0 : bits < 60 ? 1 : bits < 80 ? 2 : 3;
+  return { lv, bits, label: ['Debole', 'Discreta', 'Buona', 'Ottima'][lv] };
+}
+async function sha1hex(s) { return [...new Uint8Array(await crypto.subtle.digest('SHA-1', te.encode(s)))].map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase(); }
+/* k-anonymity: dal dispositivo escono solo i primi 5 caratteri dell'hash SHA-1. Ritorna il numero di violazioni, o null se non verificabile. */
+async function pwnedCount(p) {
+  try {
+    const h = await sha1hex(p);
+    const r = await fetch('https://api.pwnedpasswords.com/range/' + h.slice(0, 5), { headers: { 'Add-Padding': 'true' }, cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
+    if (!r.ok) return null;
+    for (const line of (await r.text()).split('\n')) { const [suf, n] = line.trim().split(':'); if (suf === h.slice(5)) return parseInt(n, 10) || 0; }
+    return 0;
+  } catch (e) { return null; }
+}
+function genPassword(o) {
+  const sets = []; const amb = /[Il1O0o]/g;
+  const L = 'abcdefghijklmnopqrstuvwxyz', U = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', D = '0123456789', Y = '!@#$%^&*()-_=+[]{};:,.?/';
+  const f = s => o.amb ? s.replace(amb, '') : s;
+  if (o.lower) sets.push(f(L)); if (o.upper) sets.push(f(U)); if (o.digits) sets.push(f(D)); if (o.symbols) sets.push(Y);
+  if (!sets.length) sets.push(f(L));
+  const all = sets.join(''), n = Math.max(sets.length, o.len);
+  const pick = s => { const lim = 4294967296 - (4294967296 % s.length); let x; do { x = crypto.getRandomValues(new Uint32Array(1))[0]; } while (x >= lim); return s[x % s.length]; };
+  const out = sets.map(pick); while (out.length < n) out.push(pick(all));
+  for (let i = out.length - 1; i > 0; i--) { const j = (() => { const lim = 4294967296 - (4294967296 % (i + 1)); let x; do { x = crypto.getRandomValues(new Uint32Array(1))[0]; } while (x >= lim); return x % (i + 1); })(); [out[i], out[j]] = [out[j], out[i]]; }
+  return out.join('');
+}
+
+/* --- backup cifrato unificato (.enc) --- */
+async function exportBackup() {
+  const m = S.meta;
+  const items = await DB.all('items'), blobs = await DB.all('blobs');
+  return { app: 'unica', format: 1, exported: new Date().toISOString(), meta: { v: m.v, created: m.created, kdf: m.kdf, wrapPw: m.wrapPw, wrapRec: m.wrapRec, recEnc: m.recEnc }, items, blobs };
+}
+function validBackup(b) {
+  return b && b.app === 'unica' && b.format === 1 && b.meta && b.meta.kdf && b.meta.wrapPw && b.meta.wrapRec && Array.isArray(b.items) && Array.isArray(b.blobs);
+}
+
+/* --- importazione di un backup .enc del Vault (formato AES-GCM/PBKDF2 della v4.x) --- */
+async function decryptVaultBackup(payload, password) {
+  if (!payload || !Array.isArray(payload.salt) || !Array.isArray(payload.iv) || !Array.isArray(payload.ciphertext)) throw new Error('Non è un backup del Vault.');
+  const its = Number.isInteger(payload.iterations) ? [payload.iterations] : [600000, 100000];   // Financial Dashboard non scrive il campo: 600.000
+  if (its.some(i => i < 100000 || i > 5000000)) throw new Error('Parametri di cifratura non validi.');
+  let buf = null;
+  for (const iter of its) {
+    try { buf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: new Uint8Array(payload.iv) }, await kekPw(password, new Uint8Array(payload.salt), iter), new Uint8Array(payload.ciphertext)); break; } catch (e) { }
+  }
+  if (!buf) throw new Error('Password errata o file danneggiato.');
+  return JSON.parse(td.decode(buf));
+}
+
+/* ================= Codici: encoder EAN/Code128/Code39/QR e lettore 1D (nessuna libreria esterna) ================= */
+const BC = (() => {
+  const L = ['0001101', '0011001', '0010011', '0111101', '0100011', '0110001', '0101111', '0111011', '0110111', '0001011'];
+  const comp = s => s.replace(/[01]/g, c => c === '0' ? '1' : '0');
+  const R = L.map(comp), G = R.map(s => s.split('').reverse().join(''));
+  const PAR = ['LLLLLL', 'LLGLGG', 'LLGGLG', 'LLGGGL', 'LGLLGG', 'LGGLLG', 'LGGGLL', 'LGLGLG', 'LGLGGL', 'LGGLGL'];
+  const C128 = '212222,222122,222221,121223,121322,131222,122213,122312,132212,221213,221312,231212,112232,122132,122231,113222,123122,123221,223211,221132,221231,213212,223112,312131,311222,321122,321221,312212,322112,322211,212123,212321,232121,111323,131123,131321,112313,132113,132311,211313,231113,231311,112133,112331,132131,113123,113321,133121,313121,211331,231131,213113,213311,213131,311123,311321,331121,312113,312311,332111,314111,221411,431111,111224,111422,121124,121421,141122,141221,112214,112412,122114,122411,142112,142211,241211,221114,413111,241112,134111,111242,121142,121241,114212,124112,124211,411212,421112,421211,212141,214121,412121,111143,111341,131141,114113,114311,411113,411311,113141,114131,311141,411131,211412,211214,211232,2331112'.split(',');
+  const C39 = { '0': 'nnnwwnwnn', '1': 'wnnwnnnnw', '2': 'nnwwnnnnw', '3': 'wnwwnnnnn', '4': 'nnnwwnnnw', '5': 'wnnwwnnnn', '6': 'nnwwwnnnn', '7': 'nnnwnnwnw', '8': 'wnnwnnwnn', '9': 'nnwwnnwnn', A: 'wnnnnwnnw', B: 'nnwnnwnnw', C: 'wnwnnwnnn', D: 'nnnnwwnnw', E: 'wnnnwwnnn', F: 'nnwnwwnnn', G: 'nnnnnwwnw', H: 'wnnnnwwnn', I: 'nnwnnwwnn', J: 'nnnnwwwnn', K: 'wnnnnnnww', L: 'nnwnnnnww', M: 'wnwnnnnwn', N: 'nnnnwnnww', O: 'wnnnwnnwn', P: 'nnwnwnnwn', Q: 'nnnnnnwww', R: 'wnnnnnwwn', S: 'nnwnnnwwn', T: 'nnnnwnwwn', U: 'wwnnnnnnw', V: 'nwwnnnnnw', W: 'wwwnnnnnn', X: 'nwnnwnnnw', Y: 'wwnnwnnnn', Z: 'nwwnwnnnn', '-': 'nwnnnnwnw', '.': 'wwnnnnwnn', ' ': 'nwwnnnwnn', '*': 'nwnnwnwnn', $: 'nwnwnwnnn', '/': 'nwnwnnnwn', '+': 'nwnnnwnwn', '%': 'nnnwnwnwn' };
+
+  const eanCheck = d => { const n = d.length; let s = 0; for (let i = 0; i < n - 1; i++) { const v = +d[i]; s += (n === 13 ? (i % 2 ? 3 : 1) : (i % 2 ? 1 : 3)) * v; } return (10 - s % 10) % 10; };
+  const eanValid = d => /^\d{8}$|^\d{13}$/.test(d) && eanCheck(d) === +d[d.length - 1];
+
+  function ean13(d) { const p = PAR[+d[0]]; let s = '101'; for (let i = 1; i <= 6; i++) s += (p[i - 1] === 'L' ? L : G)[+d[i]]; s += '01010'; for (let i = 7; i <= 12; i++) s += R[+d[i]]; return s + '101'; }
+  function ean8(d) { let s = '101'; for (let i = 0; i < 4; i++) s += L[+d[i]]; s += '01010'; for (let i = 4; i < 8; i++) s += R[+d[i]]; return s + '101'; }
+  function widthsToBits(w) { let s = '', bar = true; for (const c of w) { s += (bar ? '1' : '0').repeat(+c); bar = !bar; } return s; }
+  function code128(txt) {
+    const allDig = /^\d+$/.test(txt) && txt.length % 2 === 0 && txt.length >= 4; const v = [];
+    if (allDig) { v.push(105); for (let i = 0; i < txt.length; i += 2) v.push(+txt.slice(i, i + 2)); }
+    else { v.push(104); for (const ch of txt) { const c = ch.charCodeAt(0); if (c < 32 || c > 126) throw new Error('Carattere non supportato da CODE-128'); v.push(c - 32); } }
+    let sum = v[0]; for (let i = 1; i < v.length; i++) sum += v[i] * i; v.push(sum % 103); v.push(106);
+    return v.map(x => widthsToBits(C128[x])).join('');
+  }
+  function code39(txt) {
+    const t = String(txt).toUpperCase(); if (!/^[0-9A-Z\-. $/+%]+$/.test(t)) throw new Error('Carattere non supportato da CODE-39');
+    return ('*' + t + '*').split('').map(ch => C39[ch].split('').map((x, k) => (k % 2 === 0 ? '1' : '0').repeat(x === 'w' ? 3 : 1)).join('')).join('0');
+  }
+  function bars(type, code) {
+    if (type === 'EAN13') { if (!/^\d{13}$/.test(code)) throw new Error('EAN-13 richiede 13 cifre'); return ean13(code); }
+    if (type === 'EAN8') { if (!/^\d{8}$/.test(code)) throw new Error('EAN-8 richiede 8 cifre'); return ean8(code); }
+    if (type === 'CODE39') return code39(code);
+    return code128(code);
+  }
+
+  /* ---------- QR (byte mode, livello di correzione L, versioni 1-10) ---------- */
+  const QDATA = [0, 19, 34, 55, 80, 108, 136, 156, 194, 232, 274], QEC = [0, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18], QBL = [0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4];
+  const QALIGN = [[], [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34], [6, 22, 38], [6, 24, 42], [6, 26, 46], [6, 28, 50]];
+  const EXP = new Uint8Array(512), LOG = new Uint8Array(256);
+  (() => { let x = 1; for (let i = 0; i < 255; i++) { EXP[i] = x; LOG[x] = i; x <<= 1; if (x & 256) x ^= 0x11d; } for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255]; })();
+  const gmul = (a, b) => a && b ? EXP[LOG[a] + LOG[b]] : 0;
+  function rsGen(n) { let g = [1]; for (let i = 0; i < n; i++) { const ng = new Array(g.length + 1).fill(0); for (let j = 0; j < g.length; j++) { ng[j] ^= g[j]; ng[j + 1] ^= gmul(g[j], EXP[i]); } g = ng; } return g; }
+  function rsRem(data, n) { const g = rsGen(n), r = new Array(n).fill(0); for (const d of data) { const f = d ^ r.shift(); r.push(0); if (f) for (let i = 0; i < n; i++) r[i] ^= gmul(g[i + 1], f); } return r; }
+  function qr(text) {
+    const bytes = [...new TextEncoder().encode(text)];
+    let ver = 1; const cap = v => Math.floor((QDATA[v] * 8 - 4 - (v < 10 ? 8 : 16)) / 8);
+    while (ver <= 10 && bytes.length > cap(ver)) ver++;
+    if (ver > 10) throw new Error('Testo troppo lungo per il QR (max 271 byte)');
+    const bits = []; const put = (v, n) => { for (let i = n - 1; i >= 0; i--) bits.push((v >>> i) & 1); };
+    put(4, 4); put(bytes.length, ver < 10 ? 8 : 16); bytes.forEach(b => put(b, 8));
+    const total = QDATA[ver] * 8; for (let i = 0; i < 4 && bits.length < total; i++) bits.push(0); while (bits.length % 8) bits.push(0);
+    const cw = []; for (let i = 0; i < bits.length; i += 8) cw.push(parseInt(bits.slice(i, i + 8).join(''), 2));
+    for (let p = 0; cw.length < QDATA[ver]; p++) cw.push(p % 2 ? 0x11 : 0xEC);
+    const nb = QBL[ver], short = Math.floor(QDATA[ver] / nb), nlong = QDATA[ver] % nb, blocks = []; let pos = 0;
+    for (let b = 0; b < nb; b++) { const len = short + (b >= nb - nlong ? 1 : 0); const d = cw.slice(pos, pos + len); pos += len; blocks.push({ d, e: rsRem(d, QEC[ver]) }); }
+    const out = []; const maxd = short + (nlong ? 1 : 0);
+    for (let i = 0; i < maxd; i++) blocks.forEach(b => { if (i < b.d.length) out.push(b.d[i]); });
+    for (let i = 0; i < QEC[ver]; i++) blocks.forEach(b => out.push(b.e[i]));
+    const size = 17 + 4 * ver, m = Array.from({ length: size }, () => new Array(size).fill(false)), fn = Array.from({ length: size }, () => new Array(size).fill(false));
+    const set = (x, y, d) => { m[y][x] = d; fn[y][x] = true; };
+    const finder = (cx, cy) => { for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) { const x = cx + dx, y = cy + dy; if (x < 0 || y < 0 || x >= size || y >= size) continue; const d = Math.max(Math.abs(dx), Math.abs(dy)); set(x, y, d !== 2 && d !== 4); } };
+    finder(3, 3); finder(size - 4, 3); finder(3, size - 4);
+    for (let i = 0; i < size; i++) { if (!fn[6][i]) set(i, 6, i % 2 === 0); if (!fn[i][6]) set(6, i, i % 2 === 0); }
+    const al = QALIGN[ver];
+    for (const cy of al) for (const cx of al) { if ((cx === 6 && cy === 6) || (cx === 6 && cy === size - 7) || (cx === size - 7 && cy === 6)) continue; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) set(cx + dx, cy + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1); }
+    const fmt = mask => {
+      const data = (1 << 3) | mask; let rem = data; for (let i = 0; i < 10; i++) rem = (rem << 1) ^ ((rem >>> 9) * 0x537);
+      const b = ((data << 10) | rem) ^ 0x5412, bit = i => ((b >>> i) & 1) !== 0;
+      for (let i = 0; i <= 5; i++) set(8, i, bit(i)); set(8, 7, bit(6)); set(8, 8, bit(7)); set(7, 8, bit(8)); for (let i = 9; i < 15; i++) set(14 - i, 8, bit(i));
+      for (let i = 0; i < 8; i++) set(size - 1 - i, 8, bit(i)); for (let i = 8; i < 15; i++) set(8, size - 15 + i, bit(i)); set(8, size - 8, true);
+    };
+    fmt(0);
+    if (ver >= 7) { let rem = ver; for (let i = 0; i < 12; i++) rem = (rem << 1) ^ ((rem >>> 11) * 0x1F25); const b = (ver << 12) | rem; for (let i = 0; i < 18; i++) { const bt = ((b >>> i) & 1) !== 0, a = size - 11 + i % 3, c = Math.floor(i / 3); set(a, c, bt); set(c, a, bt); } }
+    let i = 0; const nbits = out.length * 8;
+    for (let right = size - 1; right >= 1; right -= 2) { if (right === 6) right = 5; for (let v = 0; v < size; v++) for (let j = 0; j < 2; j++) { const x = right - j, up = ((right + 1) & 2) === 0, y = up ? size - 1 - v : v; if (!fn[y][x] && i < nbits) { m[y][x] = ((out[i >> 3] >>> (7 - (i & 7))) & 1) !== 0; i++; } } }
+    const MASK = [(x, y) => (x + y) % 2 === 0, (x, y) => y % 2 === 0, (x, y) => x % 3 === 0, (x, y) => (x + y) % 3 === 0, (x, y) => (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0, (x, y) => x * y % 2 + x * y % 3 === 0, (x, y) => (x * y % 2 + x * y % 3) % 2 === 0, (x, y) => ((x + y) % 2 + x * y % 3) % 2 === 0];
+    const apply = k => { for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) if (!fn[y][x] && MASK[k](x, y)) m[y][x] = !m[y][x]; };
+    const penalty = () => {
+      let p = 0;
+      for (let a = 0; a < size; a++) for (const row of [true, false]) { let run = 1; for (let b = 1; b < size; b++) { const cur = row ? m[a][b] : m[b][a], prev = row ? m[a][b - 1] : m[b - 1][a]; if (cur === prev) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else run = 1; } }
+      for (let y = 0; y < size - 1; y++) for (let x = 0; x < size - 1; x++) if (m[y][x] === m[y][x + 1] && m[y][x] === m[y + 1][x] && m[y][x] === m[y + 1][x + 1]) p += 3;
+      let dark = 0; m.forEach(r => r.forEach(v => { if (v) dark++; })); p += Math.floor(Math.abs(dark * 20 - size * size * 10) / (size * size)) * 10; return p;
+    };
+    let best = 0, bp = Infinity; for (let k = 0; k < 8; k++) { apply(k); fmt(k); const p = penalty(); if (p < bp) { bp = p; best = k; } apply(k); }
+    apply(best); fmt(best); return m;
+  }
+
+  /* ---------- Disegno su canvas ---------- */
+  function draw(canvas, card, o) {
+    o = o || {}; const type = card.type, code = card.code, target = o.width || 320, ctx = canvas.getContext('2d');
+    if (type === 'QR') {
+      const m = qr(code), q = 4, mod = Math.max(2, Math.floor(target / (m.length + 2 * q)) || 2), n = (m.length + 2 * q) * mod;
+      canvas.width = n; canvas.height = n; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, n, n); ctx.fillStyle = '#000';
+      m.forEach((r, y) => r.forEach((v, x) => { if (v) ctx.fillRect((x + q) * mod, (y + q) * mod, mod, mod); })); return;
     }
-  </script>
+    const bits = bars(type, code), q = 10, mod = Math.max(2, Math.floor(target / (bits.length + 2 * q))), w = (bits.length + 2 * q) * mod;
+    const bh = o.height || 90, th = o.text ? 26 : 0; canvas.width = w; canvas.height = bh + th + 6;
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#000';
+    for (let i = 0; i < bits.length; i++) if (bits[i] === '1') ctx.fillRect((i + q) * mod, 3, mod, bh);
+    if (o.text) { ctx.font = '600 ' + Math.max(14, Math.min(22, mod * 6)) + 'px ui-monospace,Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.fillText(code, w / 2, bh + 22); }
+  }
+
+  /* ---------- Lettore 1D (EAN-13/EAN-8/Code128) da una riga di pixel ---------- */
+  const runsOf = bits => { const r = bits.match(/(0+|1+)/g).map(s => s.length); return r; };
+  const EANL = L.map(s => runsOf(s)), EANG = G.map(s => runsOf(s)), EANR = R.map(s => runsOf(s)), C128R = C128.map(s => s.split('').map(Number));
+  function match(runs, pos, n, tab, total) {
+    let t = 0; for (let k = 0; k < n; k++) t += runs[pos + k]; if (t <= 0) return null;
+    let best = -1, be = 1e9; const f = total / t;
+    for (let i = 0; i < tab.length; i++) { const p = tab[i]; if (p.length !== n) continue; let e = 0; for (let k = 0; k < n; k++) { const d = runs[pos + k] * f - p[k]; e += d * d; } if (e < be) { be = e; best = i; } }
+    return best < 0 ? null : { i: best, e: be };
+  }
+  function decodeEAN(r) {
+    for (const n of [13, 8]) {
+      const need = n === 13 ? 59 : 43;
+      for (let s = 0; s + need <= r.length; s += 2) {
+        const g = [r[s], r[s + 1], r[s + 2]], u = (g[0] + g[1] + g[2]) / 3; if (u < 1 || Math.max(...g) / Math.min(...g) > 2.0) continue;
+        if (s > 0 && r[s - 1] < 5 * u) continue;
+        let p = s + 3, digits = [], par = '', bad = false;
+        const half = n === 13 ? 6 : 4;
+        for (let k = 0; k < half && !bad; k++) {
+          const a = match(r, p, 4, EANL, 7), b = n === 13 ? match(r, p, 4, EANG, 7) : null;
+          if (!a || (a.e > 1.0 && (!b || b.e > 1.0))) { bad = true; break; }
+          if (b && b.e < a.e) { digits.push(b.i); par += 'G'; } else { digits.push(a.i); par += 'L'; } p += 4;
+        }
+        if (bad) continue; p += 5;
+        for (let k = 0; k < half && !bad; k++) { const a = match(r, p, 4, EANR, 7); if (!a || a.e > 1.0) { bad = true; break; } digits.push(a.i); p += 4; }
+        if (bad) continue;
+        { const e = [r[p], r[p + 1], r[p + 2]]; if (e.some(x => x < 0.5 * u || x > 2 * u)) continue; if (p + 3 < r.length && r[p + 3] < 4 * u) continue; }
+        let code;
+        if (n === 13) { const f = PAR.indexOf(par); if (f < 0) continue; code = f + digits.join(''); } else code = digits.join('');
+        if (eanValid(code)) return { code, type: n === 13 ? 'EAN13' : 'EAN8' };
+      }
+    }
+    return null;
+  }
+  function decode128(r) {
+    for (let s = 0; s + 6 + 6 + 7 <= r.length; s += 2) {
+      const st = match(r, s, 6, C128R.slice(0, 106).map(x => x.length === 6 ? x : [0]), 11); if (!st || st.e > 1.0 || st.i < 103) continue;
+      { const u = (r[s] + r[s + 1] + r[s + 2] + r[s + 3] + r[s + 4] + r[s + 5]) / 11; if (s > 0 && r[s - 1] < 5 * u) continue; }
+      const vals = [st.i]; let p = s + 6, ok = false;
+      while (p + 6 <= r.length) {
+        if (p + 7 <= r.length && vals.length >= 3) { const sp = match(r, p, 7, [C128R[106]], 13); if (sp && sp.e < 2) { const u = r.slice(p, p + 7).reduce((a, b) => a + b, 0) / 13; if (p + 7 >= r.length || r[p + 7] >= 4 * u) { ok = true; break; } } }
+        const m = match(r, p, 6, C128R.slice(0, 106), 11); if (!m || m.e > 1.2) break; vals.push(m.i); p += 6;
+      }
+      if (!ok) continue;
+      const chk = vals.pop(); let sum = vals[0]; for (let i = 1; i < vals.length; i++) sum += vals[i] * i; if (sum % 103 !== chk) continue;
+      let set = vals[0] === 105 ? 'C' : vals[0] === 104 ? 'B' : 'A', out = '', shift = null, bad = false;
+      for (let i = 1; i < vals.length; i++) { const v = vals[i];
+        if (set === 'C' && v < 100) out += String(v).padStart(2, '0');
+        else if (v === 99) set = 'C'; else if (v === 100) set = 'B'; else if (v === 101) set = 'A'; else if (v === 102) { /* FNC1 */ } else if (v >= 103) { bad = true; break; }
+        else if (v < 96) out += String.fromCharCode(set === 'A' ? (v < 64 ? v + 32 : v - 64) : v + 32); else { /* FNC/shift ignorati */ } }
+      if (!bad && out) return { code: out, type: 'CODE128' };
+    }
+    return null;
+  }
+  function decodeRow(row) {
+    const w = row.length, sm = new Float32Array(w); for (let i = 0; i < w; i++) sm[i] = (row[Math.max(0, i - 1)] + row[i] + row[Math.min(w - 1, i + 1)]) / 3;
+    const win = Math.max(12, w >> 4), bits = new Array(w);
+    for (let i = 0; i < w; i++) { let lo = 255, hi = 0; for (let k = Math.max(0, i - win); k <= Math.min(w - 1, i + win); k++) { const v = sm[k]; if (v < lo) lo = v; if (v > hi) hi = v; } bits[i] = hi - lo > 40 && sm[i] < (lo + hi) / 2 ? '1' : '0'; }
+    const s = bits.join(''); let t = s.replace(/^0+/, ''); if (t.length < 40) return null; if (t.endsWith('1')) t += '0';
+    const r = runsOf(t);   // inizia con una barra e termina con uno spazio
+    const back = r.slice(0, -1).reverse();   // lettura al contrario: parte dall'ultima barra
+    return decodeEAN(r) || decodeEAN(back) || decode128(r) || decode128(back) || null;
+  }
+  /* Cerca un codice in un'immagine (ImageData): prova più righe attorno al centro */
+  function decodeImage(img) {
+    const { data, width: w, height: h } = img;
+    const rows = [0.5, 0.45, 0.55, 0.4, 0.6, 0.35, 0.65, 0.3, 0.7, 0.25, 0.75, 0.2, 0.8];
+    for (const f of rows) { const y = Math.min(h - 1, Math.floor(h * f)), row = new Uint8Array(w); for (let x = 0; x < w; x++) { const i = (y * w + x) * 4; row[x] = (data[i] * 299 + data[i + 1] * 587 + data[i + 2] * 114) / 1000; } const r = decodeRow(row); if (r) return r; }
+    return null;
+  }
+  /* ---------- Rilevamento del tipo ---------- */
+  function detectType(code) {
+    if (/^\d{13}$/.test(code)) return 'EAN13';
+    if (/^\d{8}$/.test(code) && eanValid(code)) return 'EAN8';
+    if (/^https?:\/\//i.test(code) || code.length > 40 || /[^\x20-\x7e]/.test(code)) return 'QR';
+    return 'CODE128';
+  }
+  return { bars, qr, draw, decodeRow, decodeImage, detectType, eanValid, eanCheck };
+})();
+
+/* ================= Unica – interfaccia ================= */
+const $ = id => document.getElementById(id);
+const h = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const P = {
+  lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+  eyeoff: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><path d="m3 3 18 18"/>',
+  copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>', back: '<path d="m15 18-6-6 6-6"/>',
+  gear: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  key: '<path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/><circle cx="7.5" cy="15.5" r="5.5"/>',
+  file: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/>',
+  note: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+  star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  trash: '<path d="M3 6h18M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+  edit: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  dl: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  up: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  warn: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/>',
+  pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  scan: '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/>',
+  chart: '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
+};
+const ic = n => '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + (P[n] || '') + '</svg>';
+const U = { route: 'boot', q: '', cat: '', sort: 'recent', pending: null, form: null };
+let toastT;
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 3200); }
+const fmtSize = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+const fmtDate = ts => new Date(ts).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' });
+
+/* --- modali --- */
+function modal(html, opts) {
+  opts = opts || {};
+  const ov = document.createElement('div'); ov.className = 'ov';
+  ov.innerHTML = '<div class="sheet" role="dialog" aria-modal="true">' + html + '</div>';
+  document.body.appendChild(ov);
+  const close = () => { ov.remove(); if (opts.onClose) opts.onClose(); };
+  ov.addEventListener('click', e => { if (e.target === ov && !opts.sticky) close(); });
+  ov._close = close;
+  const first = ov.querySelector('input,textarea,select,button.pri'); if (first && !opts.noFocus) setTimeout(() => first.focus(), 30);
+  return { el: ov, close, q: s => ov.querySelector(s) };
+}
+const closeTop = () => { const all = document.querySelectorAll('.ov'); if (all.length) all[all.length - 1]._close(); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTop(); });
+function ask(title, msg, o) {
+  o = o || {};
+  return new Promise(res => {
+    const m = modal('<h2>' + h(title) + '</h2><p class="' + (o.html ? '' : 'mut') + '">' + (o.html ? msg : h(msg)) + '</p><div class="gap"><span class="sp"></span><button class="btn" data-r="0">' + h(o.cancel || 'Annulla') + '</button><button class="btn ' + (o.danger ? 'dan' : 'pri') + '" data-r="1">' + h(o.ok || 'OK') + '</button></div>', { sticky: true });
+    m.el.addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (b) { m.close(); res(b.dataset.r === '1'); } });
+  });
+}
+function pwField(id, label, auto) {
+  return '<label class="f" for="' + id + '">' + h(label) + '</label><div class="pw"><input class="in" id="' + id + '" type="password" autocomplete="' + (auto || 'current-password') + '" autocapitalize="off" spellcheck="false"><button type="button" class="btn" data-act="eye" data-for="' + id + '" aria-label="Mostra o nascondi">' + ic('eye') + '</button></div>';
+}
+function meterHtml(id) { return '<div class="meter m0" id="' + id + '" role="img" aria-label="Robustezza"><i></i></div><p class="sm mut" id="' + id + 'L"></p>'; }
+function setMeter(id, pw) {
+  const s = strength(pw), m = $(id); if (!m) return;
+  m.className = 'meter m' + s.lv; m.firstChild.style.width = pw ? Math.max(8, Math.min(100, s.bits)) + '%' : '0';
+  $(id + 'L').textContent = pw ? 'Robustezza: ' + s.label : '';
+}
+async function pickFile(accept) { return new Promise(res => { const i = document.createElement('input'); i.type = 'file'; if (accept) i.accept = accept; i.onchange = () => res(i.files[0] || null); i.oncancel = () => res(null); i.click(); }); }
+function download(name, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); }
+function copy(text, label) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    toast(label + ' copiato' + (label === 'Password' ? ' (appunti puliti tra 30 s)' : ''));
+    if (label === 'Password') { clearTimeout(copy.t); copy.t = setTimeout(() => navigator.clipboard.writeText('').catch(() => {}), CLIP_MS); }
+  }).catch(() => toast('Copia non riuscita'));
+}
+const busy = (b, on, txt) => { if (!b) return; if (on) { b.dataset.t = b.innerHTML; b.disabled = true; b.innerHTML = '<span class="spin"></span> ' + (txt || 'Attendere…'); } else { b.disabled = false; if (b.dataset.t) b.innerHTML = b.dataset.t; } };
+
+/* --- navigazione --- */
+function go(r) { U.route = r; render(); window.scrollTo(0, 0); }
+const nav = () => '<nav class="nav" aria-label="Principale"><div class="in2">' +
+  [['home', 'home', 'Home'], ['cards', 'card', 'Carte'], ['fin', 'chart', 'Conti'], ['vault', 'lock', 'Vault'], ['settings', 'gear', 'Impostazioni']].map(t => '<button class="tab" data-act="nav" data-r="' + t[0] + '"' + (U.route === t[0] ? ' aria-current="page"' : '') + '>' + ic(t[1]) + t[2] + '</button>').join('') + '</div></nav>';
+const hdr = (t, right) => '<header class="hdr"><h1>' + h(t) + '</h1>' + (right || '') + '</header>';
+
+function render() {
+  const app = $('app'); const r = U.route; const v = V[r];
+  app.innerHTML = v ? v() : '';
+  if (POST[r]) POST[r]();
+  if (['home', 'cards', 'fin', 'vault', 'settings'].includes(r)) app.insertAdjacentHTML('beforeend', nav());
+}
+const V = {}, POST = {};
+
+/* ---------- 1. Benvenuto ---------- */
+V.welcome = () => '<main class="center"><div class="logo">' + ic('shield') + '</div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Carte, conti e password in un’unica app personale, cifrata sul tuo dispositivo.</p><div class="stack" style="margin-top:12px"></div>' +
+  '<button class="btn pri blk" data-act="toCreate">Crea un nuovo account</button><div style="height:10px"></div><button class="btn blk" data-act="restore">Ripristina da un backup</button>' +
+  '<p class="sm mut c" style="margin-top:18px">I dati restano sul tuo dispositivo e sono cifrati con AES-256-GCM. Nessun server vede le tue password.</p></main>';
+
+/* ---------- 2. Creazione account ---------- */
+V.create = () => '<main class="center"><button class="btn sm" data-act="toWelcome" style="align-self:flex-start">' + ic('back') + ' Indietro</button><h1>Crea la master password</h1><p class="mut">È la chiave di tutto. Scegline una lunga (almeno 12 caratteri) che non usi altrove.</p>' +
+  '<form data-form="create">' + pwField('cp1', 'Master password', 'new-password') + meterHtml('cm') + pwField('cp2', 'Ripeti la password', 'new-password') +
+  '<div class="alert">Se perdi la master password <b>e</b> il codice di recupero, i dati non si possono recuperare: nessuno può farlo per te.</div>' +
+  '<p class="sm mut" id="cerr" role="alert"></p><button class="btn pri blk" type="submit">Continua</button></form></main>';
+POST.create = () => { $('cp1').addEventListener('input', e => setMeter('cm', e.target.value)); };
+
+/* ---------- 3. Codice di recupero ---------- */
+V.recovery = () => {
+  const p = U.pending; const a = 3, b = 17;
+  return '<main class="center" style="max-width:560px"><h1>Codice di recupero</h1><p class="mut">Scrivi queste 24 parole su carta e conservale offline. Servono se dimentichi la master password. <b>Vengono mostrate ora; potrai rivederle in Impostazioni dopo aver verificato l’identità.</b></p>' +
+    '<div class="words" aria-label="24 parole del codice di recupero">' + p.words.map((w, i) => '<div class="w1"><small>' + (i + 1) + '</small><b class="mono">' + w + '</b></div>').join('') + '</div>' +
+    '<form data-form="recovery"><label class="f" for="rw1">Conferma: scrivi la parola n. ' + a + '</label><input class="in" id="rw1" autocapitalize="off" autocomplete="off" spellcheck="false">' +
+    '<label class="f" for="rw2">e la parola n. ' + b + '</label><input class="in" id="rw2" autocapitalize="off" autocomplete="off" spellcheck="false">' +
+    '<label class="chk"><input type="checkbox" id="rck"><span>Ho salvato il codice di recupero in un posto sicuro, offline.</span></label><p class="sm bad" id="rerr" role="alert"></p><button class="btn pri blk" type="submit">Ho salvato il codice</button></form></main>';
+};
+
+/* ---------- 4. Passkey ---------- */
+V.pkask = () => '<main class="center"><div class="logo">' + ic('key') + '</div><h1 class="c">Sblocco rapido</h1><p class="c mut">Attiva una passkey per entrare con impronta o Face ID, senza digitare la master password. È facoltativa, ma consigliata.</p>' +
+  '<p class="sm mut c" id="pknote"></p><button class="btn pri blk" data-act="pkOn">Attiva la passkey</button><div style="height:10px"></div><button class="btn blk" data-act="toMigrate">Più tardi</button></main>';
+
+/* ---------- 5. Migrazione guidata ---------- */
+V.migrate = () => '<main class="center"><h1>Porta qui i tuoi dati</h1><p class="mut">Importa una app alla volta. I dati vengono cifrati subito.</p>' +
+  '<button class="tile" data-act="impVault"><span class="ti">' + ic('lock') + '</span><span class="t"><b>Vault</b><br><span class="sm mut">Backup cifrato .enc del Vault</span></span></button>' +
+  '<button class="tile" data-act="impFin"><span class="ti">' + ic('chart') + '</span><span class="t"><b>Financial Dashboard</b><br><span class="sm mut">Backup cifrato .enc</span></span></button>' +
+  '<button class="tile" data-act="impFidelity"><span class="ti">' + ic('card') + '</span><span class="t"><b>Fidelity Wallet</b><br><span class="sm mut">File JSON dei backup</span></span></button>' +
+  '<button class="btn pri blk" data-act="toHome">Continua</button></main>';
+
+/* ---------- 6. Sblocco ---------- */
+V.lock = () => '<main class="center"><div class="logo">' + ic('lock') + '</div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Sblocca per continuare</p>' +
+  (S.meta.pk ? '<button class="btn pri blk" data-act="pkUnlock">' + ic('key') + ' Sblocca con impronta / Face ID</button><p class="sm mut c">oppure con la master password:</p>' : '') +
+  '<form data-form="unlock">' + pwField('up', 'Master password') + '<p class="sm bad" id="uerr" role="alert"></p><button class="btn ' + (S.meta.pk ? '' : 'pri') + ' blk" type="submit">Sblocca</button></form>' +
+  '<p class="c"><button class="btn sm" data-act="forgot" style="border:0">Password dimenticata? Usa il codice di recupero</button></p></main>';
+
+/* ---------- 7. Home ---------- */
+V.home = () => hdr(APP_NAME, '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button>') +
+  '<main class="wrap"><h2>Carte</h2><button class="tile" data-act="nav" data-r="cards"><span class="ti">' + ic('card') + '</span><span class="t"><b>Carte fedeltà</b><br><span class="sm mut">' + S.cards.size + ' ' + (S.cards.size === 1 ? 'carta' : 'carte') + ' · scanner, ricerca, condivisione</span></span></button>' +
+  '<h2 style="margin-top:20px">Area protetta ' + ic('lock') + '</h2><button class="tile" data-act="enterProt"><span class="ti">' + ic('lock') + '</span><span class="t"><b>Vault</b><br><span class="sm mut">Password, note e file cifrati</span></span></button>' +
+  '<button class="tile" data-act="enterFin"><span class="ti">' + ic('chart') + '</span><span class="t"><b>Conti e dashboard</b><br><span class="sm mut">Patrimonio, spese, budget, report</span></span></button>' +
+  '<p class="sm mut">L’area protetta chiede una verifica recente (impronta o master password) e si blocca da sola dopo ' + S.idleMin + ' min di inattività.</p></main>';
+
+/* ---------- Verifica per area protetta ---------- */
+function ensureProt() {
+  if (S.kp && (S.protOpen || Date.now() - S.verifiedAt < PROT_FRESH_MS)) return Promise.resolve(true);
+  return new Promise(res => {
+    const bio = S.meta.wrapPk;
+    const m = modal('<h2>' + ic('lock') + ' Area protetta</h2><p class="mut">Conferma la tua identità per continuare.</p>' + (bio ? '<button class="btn pri blk" data-act="pkVerify">' + ic('key') + ' Impronta / Face ID</button><p class="sm mut c">oppure</p>' : '') +
+      '<form data-form="verify">' + pwField('vp', 'Master password') + '<p class="sm bad" id="verr" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Verifica</button></div></form>', { sticky: true, onClose: () => res(!!S.kp) });
+    U.verify = { m, done: () => { m.close(); } };
+  });
+}
+async function openProt() { if (!(await ensureProt())) return false; if (!S.items.size) await loadItems(); await ensureVMeta(); S.protOpen = true; return true; }
+async function ensureVMeta() { if (!S.items.has('vault-meta')) await putItem('vault-meta', 'vmeta', { cats: ['Banche', 'Ufficio', 'Personale', 'Siti/Altri'], owners: ['Utente 1', 'Utente 2', 'Condiviso'] }); }
+
+/* ---------- Vault ---------- */
+const VT = { login: ['key', 'Accesso'], note: ['note', 'Nota'], file: ['file', 'File'] };
+const vmeta = () => S.items.get('vault-meta').data;
+const vitems = () => [...S.items.values()].filter(i => VT[i.type]);
+const titleOf = i => i.data.service || i.data.title || 'Senza nome';
+const avCls = s => 'a' + ([...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 8);
+function vlist() {
+  const q = U.q.trim().toLowerCase();
+  let a = vitems().filter(i => (!U.cat || i.data.category === U.cat) && (!q || [i.data.service, i.data.title, i.data.username, i.data.domain, i.data.fname].some(x => x && String(x).toLowerCase().includes(q))));
+  a.sort((x, y) => (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) || (U.sort === 'az' ? titleOf(x).localeCompare(titleOf(y), 'it') : y.ts - x.ts));
+  if (!a.length) return '<div class="card c mut">' + (vitems().length ? 'Nessun risultato.' : 'Il Vault è vuoto. Aggiungi una voce con il pulsante + oppure importa il backup del vecchio Vault dalle Impostazioni.') + '</div>';
+  return a.map(i => '<button class="row" data-act="detail" data-id="' + h(i.id) + '"><span class="av ' + avCls(titleOf(i)) + '">' + h(titleOf(i).charAt(0).toUpperCase()) + '</span><span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm mut">' + h(i.type === 'login' ? (i.data.username || i.data.domain || '') : i.type === 'file' ? i.data.fname + ' · ' + fmtSize(i.data.size) : 'Nota') + '</span></span>' +
+    (i.data.fav ? '<span class="ok" aria-label="Preferito">' + ic('star') + '</span>' : '') + '<span class="tag">' + VT[i.type][1] + '</span></button>').join('');
+}
+V.vault = () => {
+  if (!S.protOpen) return '';
+  const cats = vmeta().cats;
+  return hdr('Vault', '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button><button class="ib" data-act="audit" aria-label="Controllo password">' + ic('shield') + '</button><button class="ib" data-act="gen" aria-label="Generatore">' + ic('refresh') + '</button><button class="ib" data-act="newItem" aria-label="Nuova voce">' + ic('plus') + '</button>') +
+    '<main class="wrap"><div class="gap"><input class="in sp" id="vq" type="search" placeholder="Cerca…" aria-label="Cerca" value="' + h(U.q) + '"><select class="in" id="vs" style="width:auto" aria-label="Ordina"><option value="recent"' + (U.sort === 'recent' ? ' selected' : '') + '>Recenti</option><option value="az"' + (U.sort === 'az' ? ' selected' : '') + '>A–Z</option></select></div>' +
+    '<div class="chips" style="margin-top:8px"><button class="chip" data-act="cat" data-c="" aria-pressed="' + (!U.cat) + '">Tutte</button>' + cats.map(c => '<button class="chip" data-act="cat" data-c="' + h(c) + '" aria-pressed="' + (U.cat === c) + '">' + h(c) + '</button>').join('') + '</div><div id="vlist">' + vlist() + '</div></main>';
+};
+POST.vault = () => {
+  const q = $('vq'); if (!q) return;
+  q.addEventListener('input', () => { U.q = q.value; $('vlist').innerHTML = vlist(); });
+  $('vs').addEventListener('change', e => { U.sort = e.target.value; $('vlist').innerHTML = vlist(); });
+};
+
+function kv(k, v, o) {
+  o = o || {};
+  return '<div class="kv"><div class="k">' + h(k) + '</div><div class="v"><span' + (o.id ? ' id="' + o.id + '"' : '') + '>' + (o.secret ? '••••••••' : h(v)) + '</span>' +
+    (o.secret ? '<button class="ib" data-act="reveal" data-t="' + o.id + '" data-id="' + o.item + '" data-f="' + o.f + '" aria-label="Mostra o nascondi ' + h(k) + '">' + ic('eye') + '</button>' : '') +
+    (o.copy ? '<button class="ib" data-act="cp" data-id="' + o.item + '" data-f="' + o.f + '" data-l="' + h(k) + '" aria-label="Copia ' + h(k) + '">' + ic('copy') + '</button>' : '') + '</div></div>';
+}
+function openDetail(id) {
+  const it = S.items.get(id); if (!it) return; const d = it.data;
+  let b = '';
+  if (it.type === 'login') b = kv('Utente', d.username, { copy: 1, item: id, f: 'username' }) + kv('Password', '', { secret: 1, copy: 1, id: 'sv', item: id, f: 'password' }) + (d.domain ? kv('Sito', d.domain) : '') + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
+  else if (it.type === 'note') b = kv('Testo', '', { secret: 1, copy: 1, id: 'sv', item: id, f: 'text' });
+  else b = kv('File', d.fname) + kv('Dimensione', fmtSize(d.size)) + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
+  const m = modal('<div class="gap"><span class="av ' + avCls(titleOf(it)) + '">' + h(titleOf(it).charAt(0).toUpperCase()) + '</span><h2 class="sp" style="margin:0">' + h(titleOf(it)) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+    '<p class="sm mut">' + h(d.category || '') + (d.owner ? ' · ' + h(d.owner) : '') + ' · modificato ' + fmtDate(it.ts) + '</p><div class="card">' + b + '</div><div class="gap">' +
+    (it.type === 'file' ? '<button class="btn pri" data-act="dlFile" data-id="' + h(id) + '">' + ic('dl') + ' Scarica</button>' : '') +
+    (it.type === 'login' && d.password ? '<button class="btn" data-act="chk1" data-id="' + h(id) + '">' + ic('shield') + ' Controlla violazioni</button>' : '') +
+    '<button class="btn" data-act="edit" data-id="' + h(id) + '">' + ic('edit') + ' Modifica</button><button class="btn dan" data-act="del" data-id="' + h(id) + '">' + ic('trash') + ' Elimina</button></div><p class="sm mut" id="chk1r" role="status"></p>');
+  return m;
+}
+function openForm(id, type) {
+  const it = id ? S.items.get(id) : null; type = it ? it.type : (type || 'login'); const d = it ? it.data : {};
+  U.form = { id, type };
+  const vm = vmeta(), sel = (arr, v) => arr.map(x => '<option' + (x === v ? ' selected' : '') + '>' + h(x) + '</option>').join('');
+  const body = type === 'login'
+    ? '<label class="f" for="f_t">Servizio</label><input class="in" id="f_t" required value="' + h(d.service) + '" autocomplete="off"><label class="f" for="f_u">Utente / email</label><input class="in" id="f_u" value="' + h(d.username) + '" autocomplete="off" autocapitalize="off">' +
+      '<label class="f" for="f_p">Password</label><div class="pw"><input class="in mono" id="f_p" type="password" value="' + h(d.password) + '" autocomplete="new-password" autocapitalize="off" spellcheck="false"><button type="button" class="btn" data-act="eye" data-for="f_p" aria-label="Mostra o nascondi">' + ic('eye') + '</button><button type="button" class="btn" data-act="genfor" aria-label="Genera password">' + ic('refresh') + '</button></div>' + meterHtml('fm') +
+      '<label class="f" for="f_d">Sito web</label><input class="in" id="f_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off">'
+    : type === 'note' ? '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '"><label class="f" for="f_x">Testo</label><textarea class="in" id="f_x" rows="6">' + h(d.text) + '</textarea>'
+    : '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '">' + (it ? '<p class="sm mut">File: ' + h(d.fname) + ' (' + fmtSize(d.size) + ')</p>' : '<label class="f" for="f_f">File (max ' + fmtSize(MAX_FILE) + ')</label><input class="in" id="f_f" type="file" required>');
+  const m = modal('<h2>' + (it ? 'Modifica voce' : 'Nuova voce') + '</h2>' + (it ? '' : '<div class="seg" role="group" aria-label="Tipo">' + Object.keys(VT).map(k => '<button type="button" data-act="ftype" data-t="' + k + '" aria-pressed="' + (k === type) + '">' + VT[k][1] + '</button>').join('') + '</div>') +
+    '<form data-form="item">' + body + '<label class="f" for="f_c">Categoria</label><select class="in" id="f_c">' + sel(vm.cats, d.category) + '</select><label class="f" for="f_o">Proprietario</label><select class="in" id="f_o">' + sel(vm.owners, d.owner) + '</select>' +
+    (type !== 'note' ? '<label class="f" for="f_n">Note</label><textarea class="in" id="f_n" rows="3">' + h(d.notes) + '</textarea>' : '') +
+    '<label class="chk"><input type="checkbox" id="f_fav"' + (d.fav ? ' checked' : '') + '><span>Preferito</span></label><p class="sm bad" id="ferr" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true, noFocus: !!it });
+  const p = m.q('#f_p'); if (p) { p.addEventListener('input', () => setMeter('fm', p.value)); setMeter('fm', p.value); }
+}
+function openGen(cb) {
+  const o = JSON.parse(localStorage.getItem('unica_gen') || 'null') || { len: 20, lower: true, upper: true, digits: true, symbols: true, amb: true };
+  const m = modal('<h2>Generatore di password</h2><div class="card"><div class="mono b" id="go" style="word-break:break-all;font-size:1.1rem" aria-live="polite"></div></div>' + meterHtml('gm') +
+    '<label class="f" for="gl">Lunghezza: <span id="glv"></span></label><input type="range" id="gl" min="8" max="64" value="' + o.len + '">' +
+    [['lower', 'Minuscole'], ['upper', 'Maiuscole'], ['digits', 'Numeri'], ['symbols', 'Simboli'], ['amb', 'Evita caratteri ambigui (I l 1 O 0)']].map(x => '<label class="chk"><input type="checkbox" data-g="' + x[0] + '"' + (o[x[0]] ? ' checked' : '') + '><span>' + x[1] + '</span></label>').join('') +
+    '<div class="gap"><button class="btn" id="gr">' + ic('refresh') + ' Rigenera</button><button class="btn" id="gc">' + ic('copy') + ' Copia</button><span class="sp"></span>' + (cb ? '<button class="btn pri" id="gu">Usa</button>' : '<button class="btn pri" data-act="close">Chiudi</button>') + '</div>');
+  const upd = () => { o.len = +m.q('#gl').value; m.el.querySelectorAll('[data-g]').forEach(c => o[c.dataset.g] = c.checked); localStorage.setItem('unica_gen', JSON.stringify(o)); m.q('#glv').textContent = o.len; m.q('#go').textContent = genPassword(o); setMeter('gm', m.q('#go').textContent); };
+  m.el.addEventListener('input', upd); m.q('#gr').onclick = upd; m.q('#gc').onclick = () => copy(m.q('#go').textContent, 'Password');
+  if (cb) m.q('#gu').onclick = () => { cb(m.q('#go').textContent); m.close(); }; upd();
+}
+async function audit() {
+  const logins = vitems().filter(i => i.type === 'login' && i.data.password);
+  const m = modal('<h2>Controllo password</h2><p class="mut sm">Verifica deboli, ripetute e compromesse. Per le violazioni esce dal dispositivo solo il prefisso di 5 caratteri dell’hash (k-anonymity).</p><div id="ar"><span class="spin"></span> Analisi di ' + logins.length + ' password…</div><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div>');
+  const dup = new Map(); logins.forEach(i => { const k = i.data.password; dup.set(k, (dup.get(k) || []).concat(i)); });
+  const res = []; let offline = false;
+  for (const i of logins) {
+    const s = strength(i.data.password), n = offline ? null : await pwnedCount(i.data.password); if (n === null) offline = true;
+    const issues = []; if (s.lv === 0) issues.push('debole'); if (dup.get(i.data.password).length > 1) issues.push('ripetuta'); if (n > 0) issues.push('compromessa (' + n.toLocaleString('it-IT') + ' violazioni)');
+    if (issues.length) res.push('<button class="row" data-act="detail" data-id="' + h(i.id) + '"><span class="bad">' + ic('warn') + '</span><span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm bad">' + h(issues.join(', ')) + '</span></span></button>');
+  }
+  const el = m.q('#ar'); if (!el) return;
+  el.innerHTML = (offline ? '<div class="alert">Controllo violazioni non eseguito (nessuna connessione): vengono mostrati solo i controlli locali.</div>' : '') + (res.length ? '<p class="b">' + res.length + ' da sistemare:</p>' + res.join('') : '<div class="alert o">' + ic('check') + ' Nessun problema trovato su ' + logins.length + ' password.</div>');
+}
+
+/* ---------- Impostazioni ---------- */
+const seg = (name, cur, opts) => '<div class="seg" role="group">' + opts.map(o => '<button data-act="pref" data-k="' + name + '" data-v="' + o[0] + '" aria-pressed="' + (String(cur) === String(o[0])) + '">' + o[1] + '</button>').join('') + '</div>';
+V.settings = () => hdr('Impostazioni') + '<main class="wrap">' +
+  '<div class="card"><h3>Aspetto</h3><p class="sm mut">Dimensione del testo</p>' + seg('fs', localStorage.getItem('unica_fs') || 16, [[14, 'Piccolo'], [16, 'Medio'], [19, 'Grande'], [22, 'Molto grande']]) +
+  '<p class="sm mut" style="margin-top:12px">Dimensione delle icone</p>' + seg('ic', localStorage.getItem('unica_ic') || 22, [[18, 'Piccole'], [22, 'Medie'], [28, 'Grandi'], [34, 'Molto grandi']]) +
+  '<p class="sm mut" style="margin-top:12px">Tema</p>' + seg('theme', localStorage.getItem('unica_theme') || 'auto', [['auto', 'Auto'], ['light', 'Chiaro'], ['dark', 'Scuro']]) + '</div>' +
+  '<div class="card"><h3>Carte</h3><div class="stack"><button class="btn blk" data-act="impFidelity">' + ic('up') + ' Importa il JSON di Fidelity Wallet</button><label class="chk"><input type="checkbox" data-act="nearToggle"' + (nearOn() ? ' checked' : '') + '><span>Consenti la ricerca dei negozi vicini (invia a OpenStreetMap solo un’area di ~100 m e i nomi dei negozi)</span></label></div></div>' +
+  '<div class="card"><h3>Sicurezza</h3><p class="sm mut">Blocco automatico dell’area protetta dopo</p>' + seg('idle', S.idleMin, [[1, '1 min'], [5, '5 min'], [15, '15 min']]) +
+  '<div class="stack" style="margin-top:14px">' + (pkSupported() ? (S.meta.pk ? '<div class="gap"><span class="sp">Passkey attiva' + (S.meta.pk.prf ? ' (impronta anche per l’area protetta)' : ' (solo per le carte: l’area protetta chiede la master password)') + '</span><button class="btn sm dan" data-act="pkOff">Rimuovi</button></div>' : '<button class="btn blk" data-act="pkOn2">' + ic('key') + ' Attiva la passkey</button>') : '<p class="sm mut">Passkey non disponibile in questo contesto (serve https o localhost).</p>') +
+  '<button class="btn blk" data-act="chpw">Cambia master password</button><button class="btn blk" data-act="showRec">Mostra il codice di recupero</button><button class="btn blk" data-act="audit2">' + ic('shield') + ' Controlla password compromesse</button></div></div>' +
+  '<div class="card"><h3>Backup</h3><p class="sm mut">File .enc cifrato con la tua master password e il tuo codice di recupero. Contiene tutto il Vault.</p><div class="stack"><button class="btn blk" data-act="exp">' + ic('dl') + ' Esporta backup cifrato</button><button class="btn blk" data-act="restore">' + ic('up') + ' Ripristina da backup (sostituisce i dati)</button><button class="btn blk" data-act="impVault">' + ic('up') + ' Importa backup del vecchio Vault</button><button class="btn blk" data-act="impFin">' + ic('up') + ' Importa backup di Financial Dashboard</button></div><p class="sm mut">Google Drive: in arrivo con il backup unificato (fase 6).</p></div>' +
+  '<div class="card"><h3>Dispositivi</h3><p class="sm mut">L’elenco dei dispositivi e la revoca saranno disponibili con la sincronizzazione (fase 5). Per ora i dati vivono solo su questo dispositivo.</p></div>' +
+  '<div class="card"><h3>Privacy</h3><p class="sm">I tuoi dati sono cifrati sul dispositivo con AES-256-GCM; le chiavi derivano dalla master password (PBKDF2, 600.000 iterazioni) e non lasciano mai il dispositivo. Non ci sono analytics né script di terze parti. L’unica connessione esterna è il controllo password compromesse, che invia solo i primi 5 caratteri dell’hash. Questa versione non ha ancora un server.</p></div>' +
+  '<div class="card"><h3>Info</h3><p class="sm mut">' + APP_NAME + ' ' + APP_VERSION + ' — fasi 1-4 (fondamenta, Vault, carte, conti)</p><div class="stack"><button class="btn blk" data-act="lockNow">' + ic('lock') + ' Blocca ora</button><button class="btn blk dan" data-act="wipeAll">' + ic('trash') + ' Elimina tutti i dati da questo dispositivo</button></div></div></main>';
+
+/* ---------- logica ---------- */
+const afterUnlock = async () => { S.last = Date.now(); await loadCards(); go('home'); if (U.incoming) setTimeout(offerIncoming, 300); };
+async function commitAccount(p) {
+  S.meta = p.meta; await DB.put('meta', p.meta, 'acct'); await setKeys(p.kc, p.kp); await ensureVMeta(); S.items = new Map(); S.cards = new Map(); S.protOpen = false; U.pending = null;
+}
+async function newPasswordFlow(M, pw) { // riavvolge la chiave con una nuova master password
+  const salt = rnd(16); S.meta.kdf = { salt: b64e(salt), iter: KDF_ITER }; S.meta.wrapPw = await seal(await kekPw(pw, salt, KDF_ITER), M, 'wrapPw'); await DB.put('meta', S.meta, 'acct');
+}
+async function validateNewPw(p1, p2, errEl) {
+  if (p1.length < 12) return errEl.textContent = 'Servono almeno 12 caratteri.', false;
+  if (p1 !== p2) return errEl.textContent = 'Le due password non coincidono.', false;
+  if (strength(p1).lv < 1) return errEl.textContent = 'Password troppo debole: usa più caratteri o una frase lunga.', false;
+  errEl.textContent = 'Controllo password compromesse…'; const n = await pwnedCount(p1); errEl.textContent = '';
+  if (n > 0 && !(await ask('Password compromessa', 'Questa password compare in ' + n.toLocaleString('it-IT') + ' violazioni note. Ti consigliamo di sceglierne un’altra.', { ok: 'Usala comunque', cancel: 'Cambia', danger: true }))) return false;
+  if (n === null) toast('Controllo violazioni non eseguito (offline)');
+  return true;
+}
+function parseRestore(text) { try { const b = JSON.parse(text); return validBackup(b) ? b : null; } catch (e) { return null; } }
+
+const FORMS = {
+  async create(f) {
+    const e = $('cerr'), b = f.querySelector('button[type=submit]'); e.textContent = ''; e.className = 'sm bad';
+    const p1 = $('cp1').value, p2 = $('cp2').value;
+    if (!(await validateNewPw(p1, p2, e))) return;
+    busy(b, true, 'Creo le chiavi…'); await new Promise(r => setTimeout(r, 30));
+    try { U.pending = await buildAccount(p1); go('recovery'); } catch (x) { e.textContent = 'Errore: ' + x.message; } busy(b, false);
+  },
+  async recovery() {
+    const p = U.pending, e = $('rerr');
+    if ($('rw1').value.trim().toLowerCase() !== p.words[2] || $('rw2').value.trim().toLowerCase() !== p.words[16]) return e.textContent = 'Le parole non corrispondono: controlla di aver scritto il codice.';
+    if (!$('rck').checked) return e.textContent = 'Conferma di aver salvato il codice.';
+    await commitAccount(p); go(pkSupported() ? 'pkask' : 'migrate');
+  },
+  async unlock(f) {
+    const e = $('uerr'), b = f.querySelector('button[type=submit]'), pw = $('up').value; if (!pw) return;
+    const left = await rlLeft(); if (left) return e.textContent = 'Troppi tentativi. Riprova tra ' + Math.ceil(left / 1000) + ' s.';
+    busy(b, true, 'Verifica…'); await new Promise(r => setTimeout(r, 30));
+    try { const M = await unwrapWithPassword(pw); await rlOk(); await applyM(M); await afterUnlock(); }
+    catch (x) { await rlFail(); const l = await rlLeft(); e.textContent = 'Password errata.' + (l ? ' Attendi ' + Math.ceil(l / 1000) + ' s prima di riprovare.' : ''); busy(b, false); $('up').value = ''; $('up').focus(); }
+  },
+  async verify(f) {
+    const e = $('verr'), b = f.querySelector('button[type=submit]'), pw = $('vp').value; if (!pw) return;
+    const left = await rlLeft(); if (left) return e.textContent = 'Troppi tentativi. Riprova tra ' + Math.ceil(left / 1000) + ' s.';
+    busy(b, true, 'Verifica…'); await new Promise(r => setTimeout(r, 30));
+    try { const M = await unwrapWithPassword(pw); await rlOk(); await applyM(M); U.verify.done(); }
+    catch (x) { await rlFail(); e.textContent = 'Password errata.'; busy(b, false); }
+  },
+  async item(f) {
+    const { id, type } = U.form, e = $('ferr'), prev = id ? S.items.get(id) : null, old = prev ? prev.data : {};
+    const d = { category: $('f_c').value, owner: $('f_o').value, fav: $('f_fav').checked, notes: $('f_n') ? $('f_n').value : '' };
+    if (type === 'login') Object.assign(d, { service: $('f_t').value.trim(), username: $('f_u').value.trim(), password: $('f_p').value, domain: $('f_d').value.trim() });
+    else if (type === 'note') Object.assign(d, { title: $('f_t').value.trim(), text: $('f_x').value });
+    else Object.assign(d, { title: $('f_t').value.trim(), fname: old.fname, size: old.size, mime: old.mime });
+    if (!(d.service || d.title)) return e.textContent = 'Inserisci un nome.';
+    const nid = id || uid();
+    try {
+      if (type === 'file' && !id) {
+        const file = $('f_f').files[0]; if (!file) return e.textContent = 'Scegli un file.'; if (file.size > MAX_FILE) return e.textContent = 'File troppo grande (max ' + fmtSize(MAX_FILE) + ').';
+        Object.assign(d, { fname: file.name, size: file.size, mime: file.type || 'application/octet-stream' }); await putBlob(nid, new Uint8Array(await file.arrayBuffer()));
+      }
+      await putItem(nid, type, d, prev); closeTop(); if (id) closeTop(); render(); toast('Salvato');
+    } catch (x) { e.textContent = 'Errore: ' + x.message; }
+  },
+};
+document.addEventListener('submit', e => { e.preventDefault(); const f = FORMS[e.target.dataset.form]; if (f) f(e.target); });
+
+const ACT = {
+  nav: t => go(t.dataset.r === 'vault' ? (S.protOpen ? 'vault' : (ACT.enterProt(), U.route)) : t.dataset.r === 'fin' ? (S.protOpen && S.items.has('fin-db') ? 'fin' : (ACT.enterFin(), U.route)) : t.dataset.r),
+  toWelcome: () => go('welcome'), toCreate: () => go('create'), toMigrate: () => go('migrate'), toHome: () => go('home'),
+  close: () => closeTop(),
+  eye: t => { const i = $(t.dataset.for); i.type = i.type === 'password' ? 'text' : 'password'; },
+  async enterProt() { if (await openProt()) go('vault'); },
+  lockNow: () => lockAll(),
+  async pkOn(t) {
+    busy(t, true, 'In attesa…');
+    try { const prf = await enablePasskey(); toast(prf ? 'Passkey attiva' : 'Passkey attiva (solo per le carte su questo dispositivo)'); go('migrate'); } catch (e) { toast('Passkey non attivata: ' + (e.name === 'NotAllowedError' ? 'operazione annullata' : e.message)); busy(t, false); }
+  },
+  async pkOn2() { if (!(await ensureProt())) return; try { const prf = await enablePasskey(); toast(prf ? 'Passkey attiva' : 'Passkey attiva (limitata alle carte)'); render(); } catch (e) { toast('Passkey non attivata'); } },
+  async pkOff() { if (await ask('Rimuovere la passkey?', 'Dovrai usare la master password per sbloccare.', { ok: 'Rimuovi', danger: true })) { await disablePasskey(); render(); } },
+  async pkUnlock() {
+    try { const r = await pkAssert(); if (!r) return;
+      if (r.prf && S.meta.wrapPk) { const M = await unseal(await kekHkdf(r.prf, 'unica-pk-v1'), S.meta.wrapPk, 'wrapPk'); await applyM(M); }
+      else { const dk = await DB.get('dev', 'k'); await setKeys(await unseal(dk, S.meta.wrapDev, 'wrapDev'), null); }
+      await afterUnlock(); } catch (e) { toast('Sblocco annullato'); }
+  },
+  async pkVerify() {
+    try { const r = await pkAssert(); if (!r || !r.prf) return toast('Usa la master password'); const M = await unseal(await kekHkdf(r.prf, 'unica-pk-v1'), S.meta.wrapPk, 'wrapPk'); await applyM(M); U.verify.done(); } catch (e) { toast('Verifica annullata'); }
+  },
+  async forgot() {
+    const m = modal('<h2>Recupero con il codice</h2><p class="mut sm">Inserisci le 24 parole e scegli una nuova master password. I dati restano intatti.</p><form data-form="x"><label class="f" for="fw">Codice di recupero</label><textarea class="in mono" id="fw" rows="4" autocapitalize="off" spellcheck="false"></textarea>' + pwField('fn1', 'Nuova master password', 'new-password') + meterHtml('fnm') + pwField('fn2', 'Ripeti', 'new-password') + '<p class="sm bad" id="ferr2" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Recupera</button></div></form>', { sticky: true });
+    m.q('#fn1').addEventListener('input', e => setMeter('fnm', e.target.value));
+    m.q('form').onsubmit = async ev => { ev.preventDefault(); const e = m.q('#ferr2'), b = m.q('button[type=submit]'); e.textContent = '';
+      try { const w = parseRecovery(m.q('#fw').value); if (!(await validateNewPw(m.q('#fn1').value, m.q('#fn2').value, e))) return; busy(b, true, 'Recupero…');
+        const M = await unwrapWithRecovery(w).catch(() => { throw new Error('Codice di recupero non corretto.'); }); await newPasswordFlow(M, m.q('#fn1').value); await applyM(M); m.close(); toast('Nuova master password impostata'); afterUnlock();
+      } catch (x) { e.textContent = x.message; busy(b, false); } };
+  },
+  async chpw() {
+    if (!(await ensureProt())) return;
+    const m = modal('<h2>Cambia master password</h2><form data-form="x">' + pwField('o1', 'Password attuale') + pwField('n1', 'Nuova password', 'new-password') + meterHtml('nm') + pwField('n2', 'Ripeti la nuova', 'new-password') + '<p class="sm bad" id="cerr3" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Cambia</button></div></form>', { sticky: true });
+    m.q('#n1').addEventListener('input', e => setMeter('nm', e.target.value));
+    m.q('form').onsubmit = async ev => { ev.preventDefault(); const e = m.q('#cerr3'), b = m.q('button[type=submit]'); e.textContent = '';
+      try { busy(b, true, 'Verifica…'); const M = await unwrapWithPassword(m.q('#o1').value).catch(() => { throw new Error('Password attuale errata.'); }); busy(b, false);
+        if (!(await validateNewPw(m.q('#n1').value, m.q('#n2').value, e))) return; busy(b, true, 'Ricifro…'); await newPasswordFlow(M, m.q('#n1').value); wipe(M); m.close(); toast('Master password cambiata. Il codice di recupero resta valido.');
+      } catch (x) { e.textContent = x.message; busy(b, false); } };
+  },
+  async showRec() {
+    if (!(await ensureProt())) return;
+    const w = td.decode(await unseal(S.kpKey, S.meta.recEnc, 'recEnc')).split(' ');
+    modal('<h2>Codice di recupero</h2><p class="mut sm">Non fotografarlo e non salvarlo in cloud. Conservalo su carta.</p><div class="words">' + w.map((x, i) => '<div class="w1"><small>' + (i + 1) + '</small><b class="mono">' + x + '</b></div>').join('') + '</div><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn pri" data-act="close">Chiudi</button></div>');
+  },
+  pref(t) {
+    const k = t.dataset.k, v = t.dataset.v;
+    if (k === 'idle') { S.idleMin = +v; localStorage.setItem('unica_idle', v); } else { localStorage.setItem('unica_' + k, v); applyPrefs(); }
+    render();
+  },
+  audit: () => audit(), async audit2() { if (await openProt()) audit(); },
+  gen: () => openGen(), genfor: () => openGen(pw => { $('f_p').value = pw; $('f_p').type = 'text'; setMeter('fm', pw); }),
+  newItem: () => openForm(null, 'login'),
+  ftype: t => { closeTop(); openForm(null, t.dataset.t); },
+  cat: t => { U.cat = t.dataset.c; render(); },
+  detail: t => openDetail(t.dataset.id),
+  edit: t => { openForm(t.dataset.id); },
+  async del(t) { if (await ask('Eliminare la voce?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { await delItem(t.dataset.id); closeTop(); render(); toast('Voce eliminata'); } },
+  reveal(t) { const el = $(t.dataset.t); const it = S.items.get(t.dataset.id); if (el.dataset.on) { el.textContent = '••••••••'; delete el.dataset.on; el.className = ''; } else { el.textContent = it.data[t.dataset.f] || '—'; el.dataset.on = 1; el.className = t.dataset.f === 'password' ? 'mono' : ''; el.style.whiteSpace = 'pre-wrap'; } },
+  cp(t) { const it = S.items.get(t.dataset.id); copy(it.data[t.dataset.f], t.dataset.l); },
+  async dlFile(t) { try { const it = S.items.get(t.dataset.id); download(it.data.fname, new Blob([await getBlob(it.id)], { type: it.data.mime })); } catch (e) { toast('Errore: ' + e.message); } },
+  async chk1(t) { const el = $('chk1r'); el.textContent = 'Controllo…'; const n = await pwnedCount(S.items.get(t.dataset.id).data.password); el.textContent = n === null ? 'Controllo non riuscito (offline?).' : n === 0 ? 'Nessuna violazione nota per questa password.' : 'Attenzione: password comparsa in ' + n.toLocaleString('it-IT') + ' violazioni. Cambiala.'; },
+  async exp() { const b = await exportBackup(); download('unica-backup-' + new Date().toISOString().slice(0, 10) + '.enc', new Blob([JSON.stringify(b)], { type: 'application/octet-stream' })); toast('Backup esportato'); },
+  async restore() {
+    const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return;
+    const bk = parseRestore(await f.text()); if (!bk) return toast('Non è un backup di ' + APP_NAME);
+    if (S.meta && !(await ask('Sostituire i dati?', 'Tutti i dati attuali su questo dispositivo saranno sostituiti da quelli del backup.', { ok: 'Sostituisci', danger: true }))) return;
+    const m = modal('<h2>Ripristino</h2><p class="mut sm">Inserisci la master password del backup oppure le 24 parole del codice di recupero.</p><form data-form="x"><label class="f" for="rs">Master password o codice di recupero</label><textarea class="in" id="rs" rows="3" autocapitalize="off" spellcheck="false"></textarea><p class="sm bad" id="rse" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Ripristina</button></div></form>', { sticky: true });
+    m.q('form').onsubmit = async ev => { ev.preventDefault(); const e = m.q('#rse'), b = m.q('button[type=submit]'), s = m.q('#rs').value; if (!s.trim()) return; busy(b, true, 'Verifica…'); await new Promise(r => setTimeout(r, 30));
+      try {
+        const saved = S.meta; S.meta = bk.meta; let M, viaRec = false;
+        try { M = await (/\s/.test(s.trim()) && s.trim().split(/\s+/).length >= 20 ? (viaRec = true, unwrapWithRecovery(parseRecovery(s))) : unwrapWithPassword(s)); } catch (x) { S.meta = saved; throw new Error('Password o codice non corretti.'); }
+        dropAll(); for (const st of ['items', 'blobs', 'dev']) await DB.clear(st); await DB.clear('meta');
+        for (const r of bk.items) await DB.put('items', r); for (const r of bk.blobs) await DB.put('blobs', r);
+        S.meta = { ...bk.meta }; await DB.put('meta', S.meta, 'acct'); m.close();
+        if (viaRec) { const np = await newPw(); if (np) await newPasswordFlow(M, np); }
+        await applyM(M); await loadCards(); toast('Backup ripristinato'); if (pkSupported()) go('pkask'); else go('home');
+      } catch (x) { e.textContent = x.message; busy(b, false); } };
+  },
+  async impVault() {
+    if (!(await openProt())) return;
+    const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return;
+    let payload; try { payload = JSON.parse(await f.text()); } catch (e) { return toast('File non valido'); }
+    const pw = await askText('Password del backup', 'Inserisci la password con cui hai cifrato il backup del Vault (di solito la sua password master).'); if (!pw) return;
+    const t = toast('Decifro…'); let data;
+    try { data = await decryptVaultBackup(payload, pw); } catch (e) { return toast(e.message); }
+    const creds = Array.isArray(data) ? data : Array.isArray(data.credentials) ? data.credentials : null; if (!creds) return toast('Formato del Vault non riconosciuto');
+    const key = c => [c.service, c.username, c.domain].map(x => String(x || '').trim().toLowerCase()).join('|');
+    const have = new Set(vitems().filter(i => i.type === 'login').map(i => key(i.data))); const add = creds.filter(c => c && (c.service || c.username) && !have.has(key(c)));
+    if (!(await ask('Importare dal Vault?', 'Trovate ' + creds.length + ' voci: ' + add.length + ' da importare, ' + (creds.length - add.length) + ' già presenti.', { ok: 'Importa' }))) return;
+    const vm = vmeta(); const cs = v => String(v == null ? '' : v);
+    const cats = new Set(vm.cats), owners = new Set(vm.owners); (Array.isArray(data.categories) ? data.categories : []).forEach(c => cats.add(cs(c))); (Array.isArray(data.owners) ? data.owners : []).forEach(o => owners.add(cs(o)));
+    add.forEach(c => { if (c.category) cats.add(cs(c.category)); if (c.owner) owners.add(cs(c.owner)); });
+    await putItem('vault-meta', 'vmeta', { cats: [...cats], owners: [...owners] }, S.items.get('vault-meta'));
+    for (const c of add) await putItem(uid(), 'login', { service: cs(c.service).slice(0, 200), username: cs(c.username), password: cs(c.password), domain: cs(c.domain), notes: cs(c.notes), category: cs(c.category) || [...cats][0], owner: cs(c.owner) || [...owners][0], fav: false });
+    toast('Importate ' + add.length + ' voci'); if (U.route === 'migrate') return; render();
+  },
+  async wipeAll() {
+    const t = await askText('Elimina tutti i dati', 'Cancella tutto da questo dispositivo, senza possibilità di recupero (a meno di un backup). Scrivi ELIMINA per confermare.', true); if (t !== 'ELIMINA') return;
+    dropAll(); for (const st of ['meta', 'items', 'blobs', 'dev']) await DB.clear(st); ['unica_idle', 'unica_gen'].forEach(k => localStorage.removeItem(k)); location.reload();
+  },
+};
+function askText(title, msg, plain) {
+  return new Promise(res => {
+    const m = modal('<h2>' + h(title) + '</h2><p class="mut sm">' + h(msg) + '</p><form data-form="x">' + (plain ? '<input class="in" id="at" autocomplete="off" autocapitalize="off">' : pwField('at', 'Password')) + '<div class="gap" style="margin-top:12px"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">OK</button></div></form>', { sticky: true, onClose: () => res(null) });
+    m.q('form').onsubmit = ev => { ev.preventDefault(); const v = m.q('#at').value; m.el._close = () => m.el.remove(); m.el.remove(); res(v); };
+  });
+}
+function newPw() {
+  return new Promise(res => {
+    const m = modal('<h2>Nuova master password</h2><p class="mut sm">Hai usato il codice di recupero: scegli una nuova master password.</p><form data-form="x">' + pwField('r1', 'Nuova password', 'new-password') + meterHtml('rm') + pwField('r2', 'Ripeti', 'new-password') + '<p class="sm bad" id="re" role="alert"></p><div class="gap"><span class="sp"></span><button class="btn pri" type="submit">Imposta</button></div></form>', { sticky: true });
+    m.q('#r1').addEventListener('input', e => setMeter('rm', e.target.value));
+    m.q('form').onsubmit = async ev => { ev.preventDefault(); if (await validateNewPw(m.q('#r1').value, m.q('#r2').value, m.q('#re'))) { const v = m.q('#r1').value; m.el.remove(); res(v); } };
+  });
+}
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const a = ACT[t.dataset.act]; if (!a) return;
+  try { await a(t, e); } catch (x) { console.error(x); toast('Errore: ' + x.message); }
+});
+
+/* ---------- blocco automatico ---------- */
+function lockAll() { document.querySelectorAll('.ov').forEach(o => o.remove()); dropAll(); U.q = ''; U.cat = ''; if (S.meta) go('lock'); }
+function lockProt(msg) { const was = S.protOpen; dropProt(); if (['vault'].includes(U.route)) go('home'); if (was && msg) toast(msg); }
+function idleCheck() {
+  if (!S.kc && !S.kp) return; const idle = Date.now() - S.last;
+  if (S.protOpen && idle > S.idleMin * 60000) lockProt('Area protetta bloccata per inattività');
+  if (!S.protOpen && S.kp && Date.now() - S.verifiedAt > PROT_FRESH_MS) { wipe(S.kp); S.kp = null; S.kpKey = null; }
+  if (idle > APP_IDLE_MS) lockAll();
+}
+['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(ev => document.addEventListener(ev, () => { S.last = Date.now(); }, { passive: true, capture: true }));
+setInterval(idleCheck, 5000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') idleCheck(); });
+
+/* ---------- preferenze e avvio ---------- */
+function applyPrefs() {
+  const r = document.documentElement, g = k => localStorage.getItem('unica_' + k);
+  r.style.setProperty('--fs', (g('fs') || 16) + 'px'); r.style.setProperty('--ic', (g('ic') || 22) + 'px');
+  if (g('theme') && g('theme') !== 'auto') r.setAttribute('data-theme', g('theme')); else r.removeAttribute('data-theme');
+}
+
+/* ================= Carte fedeltà (chiave di livello 1: disponibili dopo lo sblocco rapido) ================= */
+const CCOL = ['#0f766e', '#7c3aed', '#c2410c', '#1d4ed8', '#be185d', '#4d7c0f', '#b45309', '#475569'];
+const CTYPES = { EAN13: 'EAN-13', EAN8: 'EAN-8', CODE128: 'CODE-128', CODE39: 'CODE-39', QR: 'QR code' };
+const cardsArr = () => [...S.cards.values()].filter(c => c.type === 'card');
+const cSort = () => localStorage.getItem('unica_csort') || 'recent';
+const nearOn = () => localStorage.getItem('unica_near') === '1';
+const hex = c => /^#[0-9a-f]{6}$/i.test(c) ? c : CCOL[0];
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+const cleanCode = s => String(s || '').trim();
+
+function sortedCards() {
+  const q = norm(U.cq || ''), mode = cSort(), near = U.near || new Set();
+  let a = cardsArr().filter(c => !q || norm(c.data.name).includes(q) || (c.data.code || '').includes(U.cq.trim()));
+  const key = c => mode === 'used' ? (c.data.uses || 0) : mode === 'added' ? -(c.data.added || 0) : (c.data.last || c.data.added || 0);
+  a.sort((x, y) => (near.has(y.id) ? 1 : 0) - (near.has(x.id) ? 1 : 0) || (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) ||
+    (mode === 'az' ? x.data.name.localeCompare(y.data.name, 'it') : key(y) - key(x)));
+  return a;
+}
+function cardTile(c) {
+  const d = c.data, near = U.near && U.near.has(c.id);
+  return '<button class="ccard" data-act="cardOpen" data-id="' + h(c.id) + '" style="background:' + hex(d.color) + '"><span class="cn">' + (d.logo ? '<img src="' + h(d.logo) + '" alt="" class="clogo">' : '') + '<b>' + h(d.name) + '</b>' + (d.fav ? '<span aria-label="Preferita">' + ic('star') + '</span>' : '') + '</span>' +
+    (near ? '<span class="tag">Qui vicino</span>' : '') + '<canvas class="bc mini" data-id="' + h(c.id) + '" aria-hidden="true"></canvas></button>';
+}
+function cardsList() {
+  const a = sortedCards();
+  if (!a.length) return '<div class="card c mut">' + (cardsArr().length ? 'Nessun risultato.' : 'Nessuna carta. Tocca + per aggiungerne una, oppure ' + ic('search') + ' per scansionarla. Puoi anche importare il JSON di Fidelity Wallet dalle Impostazioni.') + '</div>';
+  return '<div class="cgrid">' + a.map(cardTile).join('') + '</div>';
+}
+function drawMinis() {
+  document.querySelectorAll('canvas.mini').forEach(cv => { const c = S.cards.get(cv.dataset.id); if (!c) return; try { BC.draw(cv, c.data, { width: 260, height: 38 }); } catch (e) { cv.remove(); } });
+}
+V.cards = () => hdr('Carte', '<button class="ib" data-act="near" aria-label="Carte dei negozi vicini">' + ic('pin') + '</button><button class="ib" data-act="scan" aria-label="Scansiona una carta">' + ic('scan') + '</button><button class="ib" data-act="newCard" aria-label="Nuova carta">' + ic('plus') + '</button>') +
+  '<main class="wrap"><div class="gap"><input class="in sp" id="cq" type="search" placeholder="Cerca una carta…" aria-label="Cerca" value="' + h(U.cq || '') + '"><select class="in" id="cs" style="width:auto" aria-label="Ordina">' +
+  [['recent', 'Recenti'], ['used', 'Più usate'], ['added', 'Come aggiunte'], ['az', 'A–Z']].map(o => '<option value="' + o[0] + '"' + (cSort() === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></div><div id="clist" class="mt">' + cardsList() + '</div></main>';
+POST.cards = () => {
+  const q = $('cq'); drawMinis();
+  q.addEventListener('input', () => { U.cq = q.value; $('clist').innerHTML = cardsList(); drawMinis(); });
+  $('cs').addEventListener('change', e => { localStorage.setItem('unica_csort', e.target.value); $('clist').innerHTML = cardsList(); drawMinis(); });
+};
+
+/* --- apertura carta --- */
+let wake = null;
+async function cardOpen(id) {
+  const c = S.cards.get(id); if (!c) return; const d = c.data;
+  try { navigator.vibrate && navigator.vibrate(25); } catch (e) { }
+  try { if (navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); } catch (e) { }
+  const m = modal('<div class="gap"><h2 class="sp" style="margin:0">' + h(d.name) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+    '<div class="cview"><canvas id="cvb" class="bc big" aria-label="Codice della carta ' + h(d.name) + '"></canvas><p class="mono b c" id="cvt">' + h(d.code) + '</p></div>' +
+    (d.holder || d.notes || d.address || d.domain ? '<div class="card sm">' + (d.holder ? '<div><span class="mut">Intestatario:</span> ' + h(d.holder) + '</div>' : '') + (d.domain ? '<div><span class="mut">Sito:</span> ' + h(d.domain) + '</div>' : '') + (d.address ? '<div><span class="mut">Negozio:</span> ' + h(d.address) + '</div>' : '') + (d.notes ? '<div><span class="mut">Note:</span> ' + h(d.notes) + '</div>' : '') + '</div>' : '') +
+    '<div class="gap"><button class="btn" data-act="cardFav" data-id="' + h(id) + '">' + ic('star') + (d.fav ? ' Togli preferita' : ' Preferita') + '</button><button class="btn" data-act="cardShare" data-id="' + h(id) + '">' + ic('up') + ' Condividi</button><button class="btn" data-act="cardEdit" data-id="' + h(id) + '">' + ic('edit') + ' Modifica</button><button class="btn dan" data-act="cardDel" data-id="' + h(id) + '">' + ic('trash') + ' Elimina</button></div>',
+    { onClose: () => { if (wake) { wake.release().catch(() => { }); wake = null; } } });
+  const cv = m.q('#cvb'); try { BC.draw(cv, d, { width: Math.min(420, window.innerWidth - 56), height: 110, text: false }); } catch (e) { cv.replaceWith(Object.assign(document.createElement('p'), { className: 'alert d', textContent: 'Codice non rappresentabile: ' + e.message })); }
+  putItem(id, 'card', { ...d, uses: (d.uses || 0) + 1, last: Date.now() }, c, 'c').catch(() => { });
+}
+
+/* --- modulo carta --- */
+function openCardForm(id, pre) {
+  const it = id ? S.cards.get(id) : null, d = it ? it.data : (pre || {}); U.cform = { id, typeTouched: !!(it || (pre && pre.type)) };
+  const m = modal('<h2>' + (it ? 'Modifica carta' : 'Nuova carta') + '</h2><form data-form="card"><label class="f" for="c_n">Nome del negozio</label><input class="in" id="c_n" required value="' + h(d.name) + '" autocomplete="off">' +
+    '<label class="f" for="c_c">Codice</label><div class="pw"><input class="in mono" id="c_c" required value="' + h(d.code) + '" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text"><button type="button" class="btn" data-act="scanfor" aria-label="Scansiona il codice">' + ic('scan') + '</button></div>' +
+    '<label class="f" for="c_t">Tipo di codice</label><select class="in" id="c_t">' + Object.keys(CTYPES).map(k => '<option value="' + k + '"' + (k === (d.type || 'CODE128') ? ' selected' : '') + '>' + CTYPES[k] + '</option>').join('') + '</select>' +
+    '<p class="sm mut" id="c_hint" role="status"></p>' +
+    '<label class="f">Colore</label><div class="gap" id="c_cols">' + CCOL.map(c => '<button type="button" class="sw" data-act="swatch" data-c="' + c + '" style="background:' + c + '" aria-label="Colore ' + c + '" aria-pressed="' + (hex(d.color) === c) + '"></button>').join('') + '</div>' +
+    '<label class="f" for="c_h">Intestatario (facoltativo)</label><input class="in" id="c_h" value="' + h(d.holder) + '" autocomplete="off">' +
+    '<label class="f" for="c_d">Sito web (facoltativo)</label><div class="pw"><input class="in" id="c_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off"><button type="button" class="btn" data-act="findSite">Cerca</button></div>' +
+    '<label class="f" for="c_o">Note</label><textarea class="in" id="c_o" rows="2">' + h(d.notes) + '</textarea>' +
+    '<p class="sm bad" id="c_err" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true, noFocus: !!it || !!d.code });
+  m.el.dataset.color = hex(d.color);
+  const code = m.q('#c_c'), type = m.q('#c_t');
+  const hint = () => { const c = cleanCode(code.value), t = type.value; let msg = '';
+    try { BC.bars(t === 'QR' ? 'CODE128' : t, t === 'QR' ? 'x' : c); } catch (e) { if (c) msg = '⚠ ' + e.message + ': scegli un altro tipo.'; }
+    if (t === 'EAN13' && /^\d{13}$/.test(c) && !BC.eanValid(c)) msg = '⚠ La cifra di controllo dell’EAN-13 non torna (dovrebbe essere ' + BC.eanCheck(c) + '). Controlla il codice.';
+    m.q('#c_hint').textContent = msg; };
+  code.addEventListener('input', () => { if (!U.cform.typeTouched) type.value = BC.detectType(cleanCode(code.value)); hint(); });
+  type.addEventListener('change', () => { U.cform.typeTouched = true; hint(); }); hint();
+}
+FORMS.card = async () => {
+  const { id } = U.cform, e = $('c_err'), prev = id ? S.cards.get(id) : null, old = prev ? prev.data : {};
+  const name = $('c_n').value.trim(), code = cleanCode($('c_c').value); let type = $('c_t').value;
+  if (!name || !code) return e.textContent = 'Nome e codice sono obbligatori.';
+  try { type === 'QR' ? BC.qr(code) : BC.bars(type, code); } catch (x) { return e.textContent = x.message; }
+  if (type === 'EAN13' && !BC.eanValid(code) && !(await ask('Cifra di controllo errata', 'L’EAN-13 ha una cifra di controllo che non torna: la carta potrebbe non essere letta alla cassa. Salvare comunque?', { ok: 'Salva comunque' }))) return;
+  const dup = cardsArr().find(c => c.id !== id && c.data.code === code);
+  if (dup && !(await ask('Codice già presente', 'Esiste già la carta «' + dup.data.name + '» con lo stesso codice. Salvare comunque?', { ok: 'Salva' }))) return;
+  const col = (document.querySelector('#c_cols [aria-pressed=true]') || {}).dataset;
+  const d = { ...old, name, code, type, color: col ? col.c : CCOL[0], holder: $('c_h').value.trim(), domain: $('c_d').value.trim().replace(/^https?:\/\//i, '').replace(/\/.*$/, ''), notes: $('c_o').value, added: old.added || Date.now(), uses: old.uses || 0 };
+  await putItem(id || uid(), 'card', d, prev, 'c'); closeTop(); if (id) closeTop(); render(); toast('Carta salvata');
+};
+
+/* --- scanner (BarcodeDetector nativo, altrimenti lettore 1D integrato) --- */
+const NATIVE = { ean_13: 'EAN13', ean_8: 'EAN8', upc_a: 'EAN13', code_128: 'CODE128', code_39: 'CODE39', qr_code: 'QR' };
+function mapNative(r) {
+  const t = NATIVE[r.format]; let code = r.rawValue;
+  if (r.format === 'upc_a' && code.length === 12) code = '0' + code;
+  return { code, type: t || BC.detectType(code), unsupported: !t };
+}
+async function detectNative(src) {
+  if (!('BarcodeDetector' in window)) return null;
+  try { if (!detectNative.d) detectNative.d = new BarcodeDetector({ formats: Object.keys(NATIVE) }); const r = await detectNative.d.detect(src); return r[0] ? mapNative(r[0]) : null; } catch (e) { return null; }
+}
+function openScanner(cb) {
+  let stream = null, alive = true, busyF = false;
+  const m = modal('<div class="gap"><h2 class="sp" style="margin:0">Scansiona</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><div class="vidbox"><video id="sv" playsinline muted></video><div class="vidline"></div></div><p class="sm mut c" id="smsg" role="status">Inquadra il codice a barre o il QR della carta.</p>' +
+    '<div class="gap"><button class="btn" id="sf">' + ic('file') + ' Da immagine</button><button class="btn" id="sm">Scrivi il codice</button></div>', { sticky: true, onClose: () => { alive = false; if (stream) stream.getTracks().forEach(t => t.stop()); } });
+  const done = r => { if (!alive) return; alive = false; try { navigator.vibrate && navigator.vibrate(60); } catch (e) { } m.close(); cb(r); };
+  const msg = t => { const el = m.q('#smsg'); if (el) el.textContent = t; };
+  m.q('#sm').onclick = () => { m.close(); cb(null); };
+  m.q('#sf').onclick = async () => {
+    const f = await pickFile('image/*'); if (!f) return; msg('Analizzo l’immagine…');
+    try { const bmp = await createImageBitmap(f), cv = document.createElement('canvas'), sc = Math.min(1, 1600 / bmp.width); cv.width = Math.round(bmp.width * sc); cv.height = Math.round(bmp.height * sc);
+      const cx = cv.getContext('2d', { willReadFrequently: true }); cx.drawImage(bmp, 0, 0, cv.width, cv.height);
+      const r = (await detectNative(cv)) || BC.decodeImage(cx.getImageData(0, 0, cv.width, cv.height)); if (r) done(r); else msg('Nessun codice riconosciuto. Riprova con un’immagine più nitida o scrivi il codice.'); } catch (e) { msg('Immagine non leggibile.'); }
+  };
+  (async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return msg('Fotocamera non disponibile qui: usa “Da immagine” o scrivi il codice.');
+    try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 } }, audio: false }); } catch (e) { return msg('Accesso alla fotocamera negato: usa “Da immagine” o scrivi il codice.'); }
+    if (!alive) { stream.getTracks().forEach(t => t.stop()); return; }
+    const v = m.q('#sv'); v.srcObject = stream; await v.play().catch(() => { });
+    const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+    const loop = async () => {
+      if (!alive) return; if (!busyF && v.videoWidth) { busyF = true;
+        try { let r = await detectNative(v); if (!r) { const sc = Math.min(1, 960 / v.videoWidth); cv.width = Math.round(v.videoWidth * sc); cv.height = Math.round(v.videoHeight * sc); cx.drawImage(v, 0, 0, cv.width, cv.height); r = BC.decodeImage(cx.getImageData(0, 0, cv.width, cv.height)); } if (r) return done(r); } catch (e) { }
+        busyF = false; }
+      setTimeout(loop, 180);
+    };
+    msg(('BarcodeDetector' in window) ? 'Inquadra il codice a barre o il QR della carta.' : 'Inquadra il codice a barre (su questo browser i QR si leggono da immagine o a mano).'); loop();
+  })();
+}
+function afterScan(r) {
+  if (!r) return openCardForm(null, {});
+  if (r.unsupported) toast('Formato non standard: salvato come ' + CTYPES[r.type]);
+  const ex = cardsArr().find(c => c.data.code === r.code);
+  if (ex) { toast('Carta già presente: ' + ex.data.name); return cardOpen(ex.id); }
+  openCardForm(null, { code: r.code, type: r.type });
+}
+
+/* --- condivisione --- */
+const b64u = u8 => b64e(u8).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const unb64u = t => b64d(t.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((t.length + 3) % 4));
+function shareLink(d) { const o = { n: d.name, c: d.code, t: d.type, k: d.color }; if (d.holder) o.h = d.holder; if (d.domain) o.d = d.domain; return location.origin + location.pathname + '#c=' + b64u(te.encode(JSON.stringify(o))); }
+function parseShared(hash) {
+  try { const o = JSON.parse(td.decode(unb64u(hash.slice(3)))); if (typeof o.n !== 'string' || typeof o.c !== 'string' || !o.n || !o.c || o.n.length > 100 || o.c.length > 300) return null;
+    return { name: o.n, code: o.c, type: CTYPES[o.t] ? o.t : BC.detectType(o.c), color: hex(o.k), holder: String(o.h || '').slice(0, 100), domain: String(o.d || '').slice(0, 100) }; } catch (e) { return null; }
+}
+async function offerIncoming() {
+  const p = U.incoming; if (!p) return; U.incoming = null;
+  if (!(await ask('Carta condivisa', 'Aggiungere «' + p.name + '» (' + p.code + ') alle tue carte?', { ok: 'Aggiungi' }))) return;
+  await putItem(uid(), 'card', { ...p, notes: '', added: Date.now(), uses: 0 }, null, 'c'); toast('Carta aggiunta'); if (U.route === 'cards') render(); else go('cards');
+}
+async function cardShare(id) {
+  const d = S.cards.get(id).data, link = shareLink(d);
+  const m = modal('<h2>Condividi «' + h(d.name) + '»</h2><p class="mut sm">Il link contiene nome e codice della carta e si apre in Unica: chi lo riceve può aggiungerla. Non viene inviato a nessun server, ma chiunque abbia il link vede il codice.</p><div class="c"><canvas id="shq" class="bc big"></canvas></div><div class="gap" style="margin-top:12px"><button class="btn pri" id="shs">' + ic('up') + ' Condividi con…</button><button class="btn" id="shc">' + ic('copy') + ' Copia link</button><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div>');
+  try { BC.draw(m.q('#shq'), { type: 'QR', code: link }, { width: 280 }); } catch (e) { m.q('#shq').replaceWith(Object.assign(document.createElement('p'), { className: 'sm mut', textContent: 'Link troppo lungo per un QR: usa Condividi o Copia.' })); }
+  m.q('#shc').onclick = () => copy(link, 'Link');
+  m.q('#shs').onclick = async () => { if (navigator.share) { try { await navigator.share({ title: 'Carta ' + d.name, text: 'Carta fedeltà ' + d.name, url: link }); } catch (e) { } } else copy(link, 'Link'); };
+}
+
+/* --- ricerca sito (Wikidata, solo il nome del brand) e negozi vicini (OpenStreetMap, opzionale) --- */
+async function findSite() {
+  const name = $('c_n').value.trim(); if (name.length < 2) return toast('Scrivi prima il nome del negozio');
+  toast('Cerco il sito…');
+  try {
+    const j = await (await fetch('https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbsearchentities&language=it&limit=5&search=' + encodeURIComponent(name), { credentials: 'omit', referrerPolicy: 'no-referrer' })).json();
+    const ids = (j.search || []).map(x => x.id).join('|'); if (!ids) return toast('Nessun sito trovato');
+    const e = await (await fetch('https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbgetentities&props=claims&ids=' + ids, { credentials: 'omit', referrerPolicy: 'no-referrer' })).json();
+    const urls = []; Object.values(e.entities || {}).forEach(en => ((en.claims || {}).P856 || []).forEach(c => { const v = c.mainsnak && c.mainsnak.datavalue && c.mainsnak.datavalue.value; if (typeof v === 'string' && /^https?:\/\//i.test(v)) urls.push(v); }));
+    const hosts = urls.map(u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (x) { return null; } }).filter(Boolean);
+    const pick = hosts.find(x => x.endsWith('.it')) || hosts[0]; if (!pick) return toast('Nessun sito trovato'); $('c_d').value = pick; toast('Sito: ' + pick);
+  } catch (e) { toast('Ricerca non riuscita (offline?)'); }
+}
+async function nearStores() {
+  if (!nearOn()) { if (await ask('Negozi vicini', 'Per trovare le tue carte dei negozi qui intorno, Unica usa la tua posizione (approssimata a ~100 m) e invia a OpenStreetMap solo quell’area e i nomi dei negozi. Attivare questa funzione?', { ok: 'Attiva' })) localStorage.setItem('unica_near', '1'); else return; }
+  if (!navigator.geolocation) return toast('Posizione non disponibile');
+  toast('Cerco i negozi vicini…');
+  const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 })).catch(() => null);
+  if (!pos) return toast('Posizione non disponibile o negata');
+  const lat = pos.coords.latitude.toFixed(3), lng = pos.coords.longitude.toFixed(3);
+  const q = '[out:json][timeout:15];(nwr["shop"](around:200,' + lat + ',' + lng + ');nwr["amenity"~"^(fuel|pharmacy|restaurant|cafe|fast_food)$"](around:200,' + lat + ',' + lng + '););out tags 60;';
+  let els = null;
+  for (const url of ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']) {
+    try { const r = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(q), headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, credentials: 'omit', referrerPolicy: 'no-referrer' }); if (r.ok) { els = (await r.json()).elements || []; break; } } catch (e) { }
+  }
+  if (!els) return toast('Servizio mappe non raggiungibile');
+  const names = els.flatMap(e => [e.tags && e.tags.name, e.tags && e.tags.brand, e.tags && e.tags.operator]).filter(Boolean).map(norm);
+  U.near = new Set(cardsArr().filter(c => { const n = norm(c.data.name); return n.length >= 3 && names.some(x => (' ' + x + ' ').includes(' ' + n + ' ')); }).map(c => c.id));
+  toast(U.near.size ? 'Trovate ' + U.near.size + ' carte qui vicino' : 'Nessuna tua carta nei negozi vicini'); if (U.route === 'cards') render();
+}
+
+/* --- importazione da Fidelity Wallet (JSON) --- */
+async function importFidelity() {
+  const f = await pickFile('.json,application/json'); if (!f) return;
+  let arr; try { arr = JSON.parse(await f.text()); } catch (e) { return toast('File non valido'); }
+  if (!Array.isArray(arr)) return toast('Non è un backup di Fidelity Wallet');
+  const have = new Set(cardsArr().map(c => c.data.code + '|' + norm(c.data.name))), s = (v, n) => String(v == null ? '' : v).slice(0, n);
+  let n = 0, skip = 0;
+  for (const x of arr) {
+    if (!x || typeof x !== 'object' || !x.name || x.code == null || x.code === '') { skip++; continue; }
+    const code = s(x.code, 300).trim(), name = s(x.name, 100).trim(); if (have.has(code + '|' + norm(name))) { skip++; continue; }
+    let type = CTYPES[x.type] ? x.type : BC.detectType(code);
+    const ok = t => { try { t === 'QR' ? BC.qr(code) : BC.bars(t, code); return true; } catch (e) { return false; } };
+    if (!ok(type)) type = ok('CODE128') ? 'CODE128' : ok('QR') ? 'QR' : null;
+    if (!type) { skip++; continue; }
+    const d = { name, code, type, color: hex(x.color), holder: s(x.holder, 100), domain: s(x.domain, 100), address: s(x.address, 200), notes: '', fav: !!x.favorite, added: Date.now() - (arr.length - n), uses: 0 };
+    if (typeof x.logo === 'string' && /^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(x.logo) && x.logo.length < 80000) d.logo = x.logo;
+    await putItem(uid(), 'card', d, null, 'c'); have.add(code + '|' + norm(name)); n++;
+  }
+  toast('Importate ' + n + ' carte' + (skip ? ' (' + skip + ' saltate)' : '')); if (U.route === 'cards') render();
+  return n;
+}
+
+/* --- azioni --- */
+Object.assign(ACT, {
+  cardOpen: t => cardOpen(t.dataset.id), newCard: () => openCardForm(null, {}),
+  scan: () => openScanner(afterScan), scanfor: () => openScanner(r => { if (r) { $('c_c').value = r.code; $('c_t').value = r.type; U.cform.typeTouched = true; $('c_c').dispatchEvent(new Event('input')); $('c_t').value = r.type; } }),
+  swatch: t => { t.parentNode.querySelectorAll('.sw').forEach(b => b.setAttribute('aria-pressed', b === t)); },
+  findSite: () => findSite(), near: () => nearStores(),
+  cardEdit: t => openCardForm(t.dataset.id), cardShare: t => cardShare(t.dataset.id),
+  async cardFav(t) { const c = S.cards.get(t.dataset.id); await putItem(c.id, 'card', { ...c.data, fav: !c.data.fav }, c, 'c'); closeTop(); render(); },
+  async cardDel(t) { if (await ask('Eliminare la carta?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { await delItem(t.dataset.id, 'c'); closeTop(); render(); toast('Carta eliminata'); } },
+  impFidelity: async () => { await importFidelity(); },
+  nearToggle: t => { localStorage.setItem('unica_near', nearOn() ? '0' : '1'); render(); },
+});
+
+/* ================= Conti e dashboard (area protetta) =================
+   L'intero archivio finanziario è UN elemento cifrato ("fin-db") con la stessa struttura di Financial Dashboard v3.x:
+   così l'import del vecchio backup .enc conserva tutti i dati, anche quelli dei moduli non ancora riportati (BTP, PAC, Poste...). */
+const DEF_BUDGETS = { 'Alimentari & Supermercato': 500, 'Utenze & Casa': 300, 'Trasporti & Carburante': 200, 'Svago & Ristoranti': 250, 'Salute & Persona': 150, 'Varie / Altro': 200 };
+const FIN_ARR = ['assets', 'btps', 'cashflows', 'pacItems', 'posteItems', 'bankAccounts', 'expenses', 'history', 'wealthEvents', 'priceAlerts'];
+const EUR = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' });
+const eur = n => EUR.format(+n || 0);
+const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : 0; };
+const MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+const monthKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+const monthLabel = k => { const [y, m] = k.split('-'); return MESI[+m - 1].charAt(0).toUpperCase() + MESI[+m - 1].slice(1) + ' ' + y; };
+const shiftMonth = (k, n) => { const [y, m] = k.split('-').map(Number); return monthKey(new Date(y, m - 1 + n, 1)); };
+const PAL = ['#0f766e', '#7c3aed', '#c2410c', '#1d4ed8', '#be185d', '#4d7c0f', '#b45309', '#475569', '#0891b2', '#a21caf'];
+const INC_CAT = 'Stipendio / Entrata';
+U.fin = { tab: 'ov', month: monthKey(), cat: '' };
+
+const FIN = () => S.items.get('fin-db').data;
+function normFin(d) {
+  FIN_ARR.forEach(k => { if (!Array.isArray(d[k])) d[k] = []; });
+  if (!d.budgets || typeof d.budgets !== 'object' || Array.isArray(d.budgets) || !Object.keys(d.budgets).length) d.budgets = { ...DEF_BUDGETS };
+  if (!d.targets || typeof d.targets !== 'object') d.targets = { obbligazionario: 70, azionario: 20, liquidita: 10 };
+  if (!d.wealthSettings || typeof d.wealthSettings !== 'object') d.wealthSettings = {};
+  return d;
+}
+async function ensureFin() {
+  await ensureVMeta();
+  if (!S.items.has('fin-db')) await putItem('fin-db', 'findb', normFin({}));
+  normFin(FIN());
+}
+async function finSave() { checkAlerts(); snapshot(); await putItem('fin-db', 'findb', FIN(), S.items.get('fin-db')); }
+
+/* --- calcoli (stessi criteri di Financial Dashboard) --- */
+function assetValue(a) {
+  const q = a.lots && a.lots.length ? a.lots.reduce((s, l) => s + num(l.quantity), 0) : num(a.quantity);
+  const price = num(a.lastPrice) || (q > 0 ? num(a.value) / q : num(a.value));
+  return q > 0 ? q * price : num(a.value);
+}
+function btpValue(b) {
+  const nom = b.lots && b.lots.length ? b.lots.reduce((s, l) => s + num(l.nominal), 0) : num(b.nominal);
+  return nom * (num(b.currentPrice) || num(b.buyPrice) || 100) / 100;
+}
+function breakdown(d) {
+  return [['Conti e liquidità', d.bankAccounts.reduce((s, x) => s + num(x.balance), 0)], ['Azioni / ETF', d.assets.reduce((s, x) => s + assetValue(x), 0)], ['BTP e obbligazioni', d.btps.reduce((s, x) => s + btpValue(x), 0)], ['Poste', d.posteItems.reduce((s, x) => s + num(x.capital), 0)], ['PAC', d.pacItems.reduce((s, x) => s + num(x.currentVal), 0)]];
+}
+const grand = d => breakdown(d).reduce((s, x) => s + x[1], 0);
+function snapshot() { const d = FIN(), k = monthKey(), t = grand(d), i = d.history.findIndex(x => x.date === k); if (i >= 0) d.history[i].total = t; else { d.history.push({ date: k, total: t }); d.history.sort((a, b) => String(a.date).localeCompare(String(b.date))); } }
+const monthExp = (d, m) => d.expenses.map((e, i) => ({ ...e, i })).filter(e => String(e.date || '').startsWith(m));
+function spentBy(d, m) { const o = {}; monthExp(d, m).forEach(e => { o[e.category] = (o[e.category] || 0) + num(e.amount); }); return o; }
+const allMonths = d => [...new Set([monthKey(), ...d.expenses.map(e => String(e.date || '').slice(0, 7)).filter(x => /^\d{4}-\d{2}$/.test(x))])].sort().reverse();
+
+/* --- grafici SVG --- */
+function donut(items) {
+  const tot = items.reduce((s, x) => s + x.v, 0); if (!tot) return '<p class="mut sm c">Nessun dato per il grafico.</p>';
+  let off = 0; const R = 15.9155, arcs = items.map((x, i) => { const p = x.v / tot * 100, a = '<circle cx="21" cy="21" r="' + R + '" fill="none" stroke="' + PAL[i % PAL.length] + '" stroke-width="6" stroke-dasharray="' + p + ' ' + (100 - p) + '" stroke-dashoffset="' + (25 - off) + '"/>'; off += p; return a; }).join('');
+  return '<div class="gap"><svg viewBox="0 0 42 42" width="140" height="140" role="img" aria-label="Spese per categoria">' + arcs + '<text x="21" y="22.5" text-anchor="middle" font-size="4.4" font-weight="700" fill="currentColor">' + h(eur(tot)) + '</text></svg><ul class="legend sp">' +
+    items.map((x, i) => '<li><i class="dot" style="background:' + PAL[i % PAL.length] + '"></i><span>' + h(x.l) + '</span><b>' + Math.round(x.v / tot * 100) + '%</b></li>').join('') + '</ul></div>';
+}
+function lineChart(pts) {
+  if (pts.length < 2) return '<p class="mut sm c">Servono almeno due mesi di storico per il grafico.</p>';
+  const W = 300, H = 110, P = 8, ys = pts.map(p => p.y), lo = Math.min(...ys), hi = Math.max(...ys), sp = hi - lo || 1;
+  const xy = pts.map((p, i) => [P + i * (W - 2 * P) / (pts.length - 1), H - P - (p.y - lo) / sp * (H - 2 * P)]);
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="chart" role="img" aria-label="Andamento del patrimonio"><polyline fill="none" stroke="#0f766e" stroke-width="2.5" stroke-linejoin="round" points="' + xy.map(p => p.join(',')).join(' ') + '"/>' + xy.map(p => '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.8" fill="#0f766e"/>').join('') + '</svg><div class="gap sm mut"><span>' + h(monthLabel(pts[0].x)) + ' · ' + h(eur(pts[0].y)) + '</span><span class="sp"></span><span>' + h(monthLabel(pts[pts.length - 1].x)) + ' · ' + h(eur(pts[pts.length - 1].y)) + '</span></div>';
+}
+const bar = (p, cls) => '<div class="pbar ' + (cls || '') + '" role="progressbar" aria-valuenow="' + Math.round(p) + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + Math.min(100, Math.max(0, p)) + '%"></i></div>';
+
+/* --- avvisi di prezzo --- */
+const keyOf = x => String((x && (x.ticker || x.name)) || '').trim().toUpperCase();
+function assetPrice(a) { const lp = num(a.lastPrice); if (lp > 0) return lp; const q = a.lots && a.lots.length ? a.lots.reduce((t, l) => t + num(l.quantity), 0) : num(a.quantity), v = num(a.value); return q > 0 && v > 0 ? v / q : null; }
+function btpPrice(b) { const c = num(b.currentPrice); if (c > 0) return c; const p = num(b.buyPrice); return p > 0 ? p : null; }
+function ownedItems() {
+  const d = FIN(), o = [];
+  d.assets.forEach((a, i) => { const p = assetPrice(a); if (p !== null) o.push({ kind: 'asset', idx: i, ref: keyOf(a), label: a.name + (a.ticker ? ' [' + a.ticker + ']' : ''), price: p }); });
+  d.btps.forEach((b, i) => { const p = btpPrice(b); if (p !== null) o.push({ kind: 'btp', idx: i, ref: keyOf(b), label: b.name, price: p }); });
+  return o;
+}
+function checkAlerts() {
+  const hits = [], items = ownedItems();
+  FIN().priceAlerts.forEach(al => { if (al.status !== 'active') return; const it = items.find(o => o.kind === al.kind && o.ref === al.ref); if (!it) return;
+    if (al.dir === 'up' ? it.price >= al.target : it.price <= al.target) { al.status = 'hit'; al.hitAt = new Date().toISOString(); al.hitPrice = it.price; hits.push({ al, it }); } });
+  if (hits.length) { try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) { } toast('Avviso di prezzo: ' + hits.map(x => x.it.label + ' ' + eur(x.it.price)).join(', ')); }
+}
+
+/* --- categorie e CSV --- */
+const KW = [
+  ['Alimentari & Supermercato', ['CONAD', 'LIDL', 'ESSELUNGA', 'COOP', 'SPESA', 'SUPERMERCATO', 'MD', 'EUROSPIN', 'CARREFOUR', 'PAM', 'IPER', 'TIGOTA', 'ALDI']],
+  ['Utenze & Casa', ['ENEL', 'HERA', 'ACEA', 'ENI', 'GAS', 'LUCE', 'ACQUA', 'AFFITTO', 'MUTUO', 'CONDOMINIO', 'TELECOM', 'VODAFONE', 'WIND', 'FASTWEB', 'ILIAD']],
+  ['Trasporti & Carburante', ['AUTOGRILL', 'Q8', 'IP', 'TAMOIL', 'BENZINA', 'AUTOSTRADE', 'TELEPASS', 'PARCHEGGIO', 'TRENITALIA', 'ITALO', 'ATM', 'AUTOBUS']],
+  ['Svago & Ristoranti', ['RISTORANTE', 'PIZZERIA', 'BAR', 'PIZZA', 'MCDONALD', 'DELIVEROO', 'JUSTEAT', 'NETFLIX', 'SPOTIFY', 'AMAZON', 'PRIME', 'APPLE', 'GOOGLE', 'CINEMA', 'HOTEL', 'BOOKING']],
+  ['Salute & Persona', ['FARMACIA', 'MEDICO', 'OSPEDALE', 'VISITA', 'PARAFARMACIA', 'DENTISTA', 'HEALTH']]];
+const hasWord = (up, w) => new RegExp('(^|[^A-Z0-9])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^A-Z0-9]|$)').test(up);
+function categorize(desc) {
+  const up = String(desc || '').toUpperCase(), d = FIN();
+  if (['STIPENDIO', 'EMOLUMENTI', 'BONIFICO DA', 'ACCREDITO', 'RIMBORSO'].some(w => up.includes(w))) return { cat: INC_CAT, income: true };
+  for (const c of Object.keys(d.budgets)) if (up.includes(c.toUpperCase())) return { cat: c };
+  for (const [c, ws] of KW) if (ws.some(w => hasWord(up, w))) return { cat: c };
+  return { cat: 'Varie / Altro' };
+}
+const BANKS = { generic: ['Standard / Generico', ';', 0, 1, 2], intesa: ['Intesa Sanpaolo', ';', 0, 2, 5], unicredit: ['UniCredit', ',', 1, 3, 4], mediolanum: ['Banca Mediolanum', ';', 0, 2, 3], fideuram: ['Fideuram', ';', 0, 3, 4], directa: ['Directa SIM', ';', 0, 1, 2] };
+function parseAmount(raw) { let r = String(raw || '').replace(/[€\s]/g, ''); if (r.includes('.') && r.includes(',')) r = r.indexOf('.') < r.indexOf(',') ? r.replace(/\./g, '').replace(',', '.') : r.replace(/,/g, ''); else if (r.includes(',')) r = r.replace(',', '.'); const n = parseFloat(r); return isFinite(n) ? n : NaN; }
+function parseDate(s) { s = String(s || '').trim(); let m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s); if (m) return m[1] + '-' + m[2] + '-' + m[3]; m = /(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/.exec(s); if (m) return (m[3].length === 2 ? '20' + m[3] : m[3]) + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0'); return ''; }
+function importCsv(text, bank) {
+  const d = FIN(), [, delim, di, ds, am] = BANKS[bank] || BANKS.generic; let n = 0, inc = 0, bad = 0;
+  text.split(/\r?\n/).forEach(line => {
+    line = line.trim(); if (!line || line.startsWith('#')) return; const low = line.toLowerCase(); if (/data valuta|operazione|descrizione|importo/.test(low) && !/\d{2}[\/.\-]\d{2}/.test(low)) return;
+    const p = line.split(delim).map(c => c.replace(/^["']|["']$/g, '').trim()); if (p.length <= Math.max(di, ds, am)) return;
+    const date = parseDate(p[di]), amount = parseAmount(p[am]); if (!date || isNaN(amount)) { bad++; return; }
+    const desc = (p[ds] || 'Movimento bancario').slice(0, 200), c = categorize(desc);
+    if (c.income || amount > 0) { inc++; return; }
+    if (d.budgets[c.cat] === undefined) d.budgets[c.cat] = 150;
+    d.expenses.unshift({ date, desc, category: c.cat, amount: Math.abs(amount) }); n++;
+  });
+  return { n, inc, bad };
+}
+
+/* --- viste --- */
+const FTABS = [['ov', 'Panoramica'], ['acc', 'Conti'], ['exp', 'Spese'], ['bud', 'Budget'], ['alr', 'Avvisi']];
+V.fin = () => {
+  if (!S.protOpen || !S.items.has('fin-db')) return '';
+  const f = U.fin; let body = '';
+  const tabs = '<div class="chips" role="tablist">' + FTABS.map(t => '<button class="chip" role="tab" data-act="ftab" data-t="' + t[0] + '" aria-pressed="' + (f.tab === t[0]) + '">' + t[1] + '</button>').join('') + '</div>';
+  body = FV[f.tab]();
+  return hdr('Conti', '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button><button class="ib" data-act="finReport" aria-label="Report">' + ic('dl') + '</button>') + '<main class="wrap">' + tabs + body + '</main>';
+};
+const monthPicker = () => '<select class="in" id="fmon" aria-label="Mese" style="width:auto">' + allMonths(FIN()).map(m => '<option value="' + m + '"' + (m === U.fin.month ? ' selected' : '') + '>' + monthLabel(m) + '</option>').join('') + '</select>';
+const FV = {
+  ov() {
+    const d = FIN(), br = breakdown(d), tot = br.reduce((s, x) => s + x[1], 0), hist = d.history.filter(x => /^\d{4}-\d{2}$/.test(x.date)).slice(-12);
+    const prev = d.history.filter(x => x.date < monthKey()).slice(-1)[0], delta = prev ? tot - num(prev.total) : null;
+    const m = monthKey(), sp = spentBy(d, m), spent = Object.values(sp).reduce((a, b) => a + b, 0), bud = Object.values(d.budgets).reduce((a, b) => a + num(b), 0);
+    const alerts = d.priceAlerts.filter(a => a.status === 'hit' && !a.seen);
+    return (alerts.length ? '<div class="alert">' + ic('warn') + ' ' + alerts.length + ' avviso/i di prezzo raggiunto/i. <button class="btn sm" data-act="ftab" data-t="alr">Vedi</button></div>' : '') +
+      '<div class="card"><p class="sm mut" style="margin:0">Patrimonio totale</p><p class="big">' + h(eur(tot)) + '</p>' + (delta !== null ? '<p class="sm ' + (delta >= 0 ? 'ok' : 'bad') + '">' + (delta >= 0 ? '▲ ' : '▼ ') + h(eur(Math.abs(delta))) + ' rispetto a ' + h(monthLabel(prev.date)) + '</p>' : '') + lineChart(hist.map(x => ({ x: x.date, y: num(x.total) }))) + '</div>' +
+      '<div class="card"><h3>Composizione</h3>' + (br.filter(x => x[1] !== 0).map(x => '<div class="kv"><div class="gap"><span class="sp">' + h(x[0]) + '</span><b>' + h(eur(x[1])) + '</b><span class="mut sm">' + (tot ? Math.round(x[1] / tot * 100) : 0) + '%</span></div>' + bar(tot ? x[1] / tot * 100 : 0) + '</div>').join('') || '<p class="mut sm">Aggiungi i tuoi conti nella scheda Conti.</p>') + '</div>' +
+      '<div class="card"><h3>Spese di ' + h(monthLabel(m)) + '</h3><p><b>' + h(eur(spent)) + '</b> <span class="mut sm">su ' + h(eur(bud)) + ' di budget</span></p>' + bar(bud ? spent / bud * 100 : 0, spent > bud ? 'over' : '') + '</div>' +
+      '<div class="card"><h3>Chiedi ai tuoi dati</h3><p class="sm mut">Assistente locale: risponde solo con i tuoi numeri, sul dispositivo. Es.: «quanto ho speso in alimentari a ottobre?», «quanto resta del budget?», «patrimonio».</p><form data-form="ask" class="pw"><input class="in" id="aq" aria-label="Domanda" autocomplete="off"><button class="btn pri" type="submit">Chiedi</button></form><div id="aa" class="mt" role="status" aria-live="polite"></div></div>';
+  },
+  acc() {
+    const d = FIN();
+    return '<div class="gap"><h2 class="sp">Conti bancari</h2><button class="btn sm pri" data-act="accNew">' + ic('plus') + ' Conto</button></div>' +
+      (d.bankAccounts.length ? d.bankAccounts.map((a, i) => '<button class="row" data-act="accEdit" data-i="' + i + '"><span class="av a0">' + ic('card') + '</span><span class="t"><b>' + h(a.name) + '</b><span class="sm mut">' + h([a.type, a.owner].filter(Boolean).join(' · ')) + '</span></span><b>' + h(eur(a.balance)) + '</b></button>').join('') : '<div class="card c mut">Nessun conto. Aggiungine uno o importa il backup di Financial Dashboard.</div>') +
+      '<h2 style="margin-top:18px">Investimenti</h2><p class="sm mut">Tocca una voce per aggiornare il prezzo (serve anche agli avvisi). Aggiunta e modifica complete di BTP, PAC e Poste arrivano nella prossima versione: i dati importati sono già conservati.</p>' +
+      d.assets.map((a, i) => '<button class="row" data-act="priceEdit" data-k="asset" data-i="' + i + '"><span class="av a3">' + h((a.ticker || a.name || '?').charAt(0)) + '</span><span class="t"><b>' + h(a.name) + '</b><span class="sm mut">' + h(a.ticker || a.category || '') + ' · prezzo ' + h(assetPrice(a) ? eur(assetPrice(a)) : '—') + '</span></span><b>' + h(eur(assetValue(a))) + '</b></button>').join('') +
+      d.btps.map((b, i) => '<button class="row" data-act="priceEdit" data-k="btp" data-i="' + i + '"><span class="av a5">B</span><span class="t"><b>' + h(b.name) + '</b><span class="sm mut">BTP · corso ' + h(btpPrice(b) ? btpPrice(b).toFixed(2) : '—') + '</span></span><b>' + h(eur(btpValue(b))) + '</b></button>').join('') +
+      d.posteItems.map(p => '<div class="row"><span class="av a6">P</span><span class="t"><b>' + h(p.name) + '</b><span class="sm mut">' + h(p.type || 'Poste') + '</span></span><b>' + h(eur(p.capital)) + '</b></div>').join('') +
+      d.pacItems.map(p => '<div class="row"><span class="av a1">P</span><span class="t"><b>' + h(p.name || 'PAC') + '</b><span class="sm mut">PAC</span></span><b>' + h(eur(p.currentVal)) + '</b></div>').join('');
+  },
+  exp() {
+    const d = FIN(), m = U.fin.month; let ex = monthExp(d, m); const sp = spentBy(d, m), total = Object.values(sp).reduce((a, b) => a + b, 0);
+    if (U.fin.cat) ex = ex.filter(e => e.category === U.fin.cat);
+    return '<div class="gap">' + monthPicker() + '<span class="sp"></span><button class="btn sm" data-act="csvImp">' + ic('up') + ' CSV</button><button class="btn sm pri" data-act="expNew">' + ic('plus') + ' Spesa</button></div>' +
+      '<div class="card mt"><p style="margin:0"><b>' + h(eur(total)) + '</b> <span class="mut sm">spesi in ' + h(monthLabel(m)) + '</span></p>' + donut(Object.entries(sp).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).map(x => ({ l: x[0], v: x[1] }))) + '</div>' +
+      '<div class="chips"><button class="chip" data-act="fcat" data-c="" aria-pressed="' + (!U.fin.cat) + '">Tutte</button>' + Object.keys(sp).map(c => '<button class="chip" data-act="fcat" data-c="' + h(c) + '" aria-pressed="' + (U.fin.cat === c) + '">' + h(c) + '</button>').join('') + '</div>' +
+      (ex.length ? ex.sort((a, b) => String(b.date).localeCompare(String(a.date))).map(e => '<button class="row" data-act="expEdit" data-i="' + e.i + '"><span class="t"><b>' + h(e.desc) + '</b><span class="sm mut">' + h(e.date) + ' · ' + h(e.category) + '</span></span><b>' + h(eur(e.amount)) + '</b></button>').join('') : '<div class="card c mut">Nessuna spesa in questo mese.</div>');
+  },
+  bud() {
+    const d = FIN(), m = U.fin.month, sp = spentBy(d, m), cats = [...new Set([...Object.keys(d.budgets), ...Object.keys(sp)])].filter(c => c !== INC_CAT);
+    return '<div class="gap">' + monthPicker() + '<span class="sp"></span><button class="btn sm pri" data-act="catNew">' + ic('plus') + ' Categoria</button></div><div class="mt">' +
+      cats.map(c => { const b = num(d.budgets[c]), s = sp[c] || 0, p = b ? s / b * 100 : (s ? 100 : 0); return '<button class="row" data-act="catEdit" data-c="' + h(c) + '"><span class="t"><b>' + h(c) + '</b>' + bar(p, s > b ? 'over' : '') + '<span class="sm ' + (s > b ? 'bad' : 'mut') + '">' + h(eur(s)) + ' / ' + h(eur(b)) + (s > b ? ' · sforato di ' + h(eur(s - b)) : ' · restano ' + h(eur(b - s))) + '</span></span></button>'; }).join('') + '</div>';
+  },
+  alr() {
+    const d = FIN(), items = ownedItems();
+    return '<div class="gap"><h2 class="sp">Avvisi di prezzo</h2><button class="btn sm pri" data-act="alrNew"' + (items.length ? '' : ' disabled') + '>' + ic('plus') + ' Avviso</button></div><p class="sm mut">Scattano quando aggiorni il prezzo di un titolo o BTP posseduto e superi (o scendi sotto) la soglia.</p>' +
+      (d.priceAlerts.length ? d.priceAlerts.map(a => { const it = items.find(o => o.kind === a.kind && o.ref === a.ref); return '<div class="row"><span class="av ' + (a.status === 'hit' ? 'a2' : 'a0') + '">' + ic('warn') + '</span><span class="t"><b>' + h(a.label) + '</b><span class="sm ' + (a.status === 'hit' ? 'bad' : 'mut') + '">' + (a.dir === 'up' ? 'sale a ' : 'scende a ') + h(eur(a.target)) + (a.status === 'hit' ? ' · raggiunto a ' + h(eur(a.hitPrice)) : it ? ' · ora ' + h(eur(it.price)) : ' · titolo non trovato') + '</span></span>' + (a.status === 'hit' ? '<button class="btn sm" data-act="alrRearm" data-id="' + h(a.id) + '">Riattiva</button>' : '') + '<button class="ib" data-act="alrDel" data-id="' + h(a.id) + '" aria-label="Elimina avviso">' + ic('trash') + '</button></div>'; }).join('') : '<div class="card c mut">Nessun avviso.</div>');
+  },
+};
+POST.fin = () => {
+  const mo = $('fmon'); if (mo) mo.addEventListener('change', () => { U.fin.month = mo.value; U.fin.cat = ''; render(); });
+  if (U.fin.tab === 'alr') { let ch = false; FIN().priceAlerts.forEach(a => { if (a.status === 'hit' && !a.seen) { a.seen = true; ch = true; } }); if (ch) finSave(); }
+};
+
+/* --- assistente locale (regole, nessuna IA generativa) --- */
+const fold = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+function answer(q) {
+  const d = FIN(), t = fold(q), now = new Date(); let m = monthKey();
+  const mi = MESI.findIndex(x => t.includes(x)); if (mi >= 0) { let y = now.getFullYear(); const y4 = /\b(20\d{2})\b/.exec(t); if (y4) y = +y4[1]; else if (mi > now.getMonth()) y--; m = y + '-' + String(mi + 1).padStart(2, '0'); }
+  else if (/mese scorso|mese precedente/.test(t)) m = shiftMonth(m, -1);
+  const cats = Object.keys(d.budgets), cat = cats.find(c => fold(c).split(/[^a-z]+/).filter(w => w.length > 3).some(w => t.includes(w.slice(0, 6))));
+  const sp = spentBy(d, m);
+  if (/patrimonio|quanto valgo|quanto ho in totale/.test(t)) return 'Il tuo patrimonio totale è ' + eur(grand(d)) + '. ' + breakdown(d).filter(x => x[1]).map(x => x[0] + ': ' + eur(x[1])).join('; ') + '.';
+  if (/budget|rimane|restano|resta/.test(t)) { if (cat) return 'In ' + monthLabel(m) + ' per «' + cat + '» hai speso ' + eur(sp[cat] || 0) + ' su ' + eur(d.budgets[cat]) + ': ' + ((sp[cat] || 0) > num(d.budgets[cat]) ? 'sforato di ' + eur((sp[cat] || 0) - num(d.budgets[cat])) : 'restano ' + eur(num(d.budgets[cat]) - (sp[cat] || 0))) + '.'; const b = Object.values(d.budgets).reduce((a, x) => a + num(x), 0), s = Object.values(sp).reduce((a, x) => a + x, 0); return 'Budget di ' + monthLabel(m) + ': spesi ' + eur(s) + ' su ' + eur(b) + ', ' + (s > b ? 'sforato di ' + eur(s - b) : 'restano ' + eur(b - s)) + '.'; }
+  if (/maggior|piu cara|piu alta|piu grande/.test(t)) { const e = monthExp(d, m).sort((a, b) => num(b.amount) - num(a.amount))[0]; return e ? 'La spesa più alta di ' + monthLabel(m) + ' è «' + e.desc + '»: ' + eur(e.amount) + ' (' + e.date + ').' : 'Nessuna spesa in ' + monthLabel(m) + '.'; }
+  if (/ultim[ae]/.test(t)) { const e = d.expenses.slice().sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 5); return e.length ? 'Ultime spese: ' + e.map(x => x.date + ' ' + x.desc + ' ' + eur(x.amount)).join(' · ') : 'Non ci sono spese registrate.'; }
+  if (/spes|spend|speso|costat/.test(t)) { const list = monthExp(d, m).filter(e => !cat || e.category === cat), s = list.reduce((a, e) => a + num(e.amount), 0); return 'In ' + monthLabel(m) + (cat ? ' per «' + cat + '»' : '') + ' hai speso ' + eur(s) + ' (' + list.length + ' movimenti).'; }
+  return 'Non ho capito. Prova: «quanto ho speso in alimentari a ottobre?», «quanto resta del budget?», «spesa più alta», «ultime spese», «patrimonio».';
+}
+
+/* --- report: XLSX (writer proprio) e PDF (stampa) --- */
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = t[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }; })();
+function zipStore(files) {
+  const parts = [], cd = []; let off = 0; const u16 = n => [n & 255, n >> 8 & 255], u32 = n => [n & 255, n >> 8 & 255, n >> 16 & 255, n >>> 24 & 255];
+  for (const [name, str] of files) {
+    const nb = te.encode(name), db = te.encode(str), crc = CRC(db);
+    const lh = new Uint8Array([0x50, 0x4b, 3, 4, 20, 0, 0, 8, 0, 0, 0, 0, 0x21, 0, ...u32(crc), ...u32(db.length), ...u32(db.length), ...u16(nb.length), 0, 0]);
+    parts.push(lh, nb, db);
+    cd.push(new Uint8Array([0x50, 0x4b, 1, 2, 20, 0, 20, 0, 0, 8, 0, 0, 0, 0, 0x21, 0, ...u32(crc), ...u32(db.length), ...u32(db.length), ...u16(nb.length), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...u32(off)]), nb);
+    off += lh.length + nb.length + db.length;
+  }
+  const cdl = cd.reduce((s, x) => s + x.length, 0), end = new Uint8Array([0x50, 0x4b, 5, 6, 0, 0, 0, 0, ...u16(files.length), ...u16(files.length), ...u32(cdl), ...u32(off), 0, 0]);
+  return new Blob([...parts, ...cd, end], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+const xe = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, '');
+const colName = i => String.fromCharCode(65 + i);
+function sheetXml(rows) {
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>' + rows.map((r, ri) => '<row r="' + (ri + 1) + '">' + r.map((v, ci) => typeof v === 'number' && isFinite(v) ? '<c r="' + colName(ci) + (ri + 1) + '"><v>' + v + '</v></c>' : '<c r="' + colName(ci) + (ri + 1) + '" t="inlineStr"><is><t>' + xe(v == null ? '' : v) + '</t></is></c>').join('') + '</row>').join('') + '</sheetData></worksheet>';
+}
+function buildXlsx() {
+  const d = FIN(), m = monthKey(), sp = spentBy(d, m);
+  const sheets = [
+    ['Riepilogo', [['Patrimonio al ' + new Date().toLocaleDateString('it-IT'), ''], ...breakdown(d).map(x => [x[0], Math.round(x[1] * 100) / 100]), ['Totale', Math.round(grand(d) * 100) / 100]]],
+    ['Conti', [['Nome', 'Tipo', 'Intestatario', 'Saldo'], ...d.bankAccounts.map(a => [a.name, a.type, a.owner, num(a.balance)])]],
+    ['Investimenti', [['Nome', 'Ticker', 'Categoria', 'Valore'], ...d.assets.map(a => [a.name, a.ticker, a.category, Math.round(assetValue(a) * 100) / 100]), ...d.btps.map(b => [b.name, b.ticker, 'BTP', Math.round(btpValue(b) * 100) / 100]), ...d.posteItems.map(p => [p.name, '', 'Poste', num(p.capital)]), ...d.pacItems.map(p => [p.name, '', 'PAC', num(p.currentVal)])]],
+    ['Spese', [['Data', 'Descrizione', 'Categoria', 'Importo'], ...d.expenses.slice().sort((a, b) => String(b.date).localeCompare(String(a.date))).map(e => [e.date, e.desc, e.category, num(e.amount)])]],
+    ['Budget ' + m, [['Categoria', 'Budget', 'Speso', 'Residuo'], ...Object.keys(d.budgets).map(c => [c, num(d.budgets[c]), Math.round((sp[c] || 0) * 100) / 100, Math.round((num(d.budgets[c]) - (sp[c] || 0)) * 100) / 100])]],
+  ];
+  const files = [
+    ['[Content_Types].xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' + sheets.map((s, i) => '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('') + '</Types>'],
+    ['_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+    ['xl/workbook.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' + sheets.map((s, i) => '<sheet name="' + xe(s[0].slice(0, 31)) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>').join('') + '</sheets></workbook>'],
+    ['xl/_rels/workbook.xml.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + sheets.map((s, i) => '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>').join('') + '</Relationships>'],
+    ...sheets.map((s, i) => ['xl/worksheets/sheet' + (i + 1) + '.xml', sheetXml(s[1])]),
+  ];
+  return zipStore(files);
+}
+function printReport() {
+  const d = FIN(), m = U.fin.month, sp = spentBy(d, m), tot = grand(d);
+  const tbl = (head, rows) => '<table><thead><tr>' + head.map(x => '<th>' + h(x) + '</th>').join('') + '</tr></thead><tbody>' + rows.map(r => '<tr>' + r.map(x => '<td>' + h(x) + '</td>').join('') + '</tr>').join('') + '</tbody></table>';
+  let el = $('printArea'); if (!el) { el = document.createElement('div'); el.id = 'printArea'; document.body.appendChild(el); }
+  el.innerHTML = '<h1>Report finanziario</h1><p>Generato il ' + h(new Date().toLocaleDateString('it-IT')) + ' · ' + h(APP_NAME) + '</p><h2>Patrimonio: ' + h(eur(tot)) + '</h2>' + tbl(['Voce', 'Valore'], breakdown(d).map(x => [x[0], eur(x[1])])) +
+    '<h2>Conti</h2>' + tbl(['Conto', 'Tipo', 'Saldo'], d.bankAccounts.map(a => [a.name, a.type || '', eur(a.balance)])) +
+    '<h2>Budget ' + h(monthLabel(m)) + '</h2>' + tbl(['Categoria', 'Budget', 'Speso', 'Residuo'], Object.keys(d.budgets).map(c => [c, eur(d.budgets[c]), eur(sp[c] || 0), eur(num(d.budgets[c]) - (sp[c] || 0))])) +
+    '<h2>Spese di ' + h(monthLabel(m)) + '</h2>' + tbl(['Data', 'Descrizione', 'Categoria', 'Importo'], monthExp(d, m).map(e => [e.date, e.desc, e.category, eur(e.amount)]));
+  window.print();
+}
+
+/* --- moduli e azioni --- */
+const catOpts = (sel) => Object.keys(FIN().budgets).map(c => '<option' + (c === sel ? ' selected' : '') + '>' + h(c) + '</option>').join('');
+function expForm(i) {
+  const e = i != null ? FIN().expenses[i] : { date: new Date().toISOString().slice(0, 10), desc: '', category: 'Varie / Altro', amount: '' }; U.ff = { i };
+  modal('<h2>' + (i != null ? 'Modifica spesa' : 'Nuova spesa') + '</h2><form data-form="finexp"><label class="f" for="e_d">Data</label><input class="in" type="date" id="e_d" required value="' + h(e.date) + '"><label class="f" for="e_s">Descrizione</label><input class="in" id="e_s" required value="' + h(e.desc) + '" autocomplete="off"><label class="f" for="e_c">Categoria</label><select class="in" id="e_c">' + catOpts(e.category) + '</select><label class="f" for="e_a">Importo (€)</label><input class="in" id="e_a" type="number" step="0.01" min="0" required inputmode="decimal" value="' + h(e.amount) + '"><p class="sm bad" id="e_err" role="alert"></p><div class="gap">' + (i != null ? '<button type="button" class="btn dan" data-act="expDel">' + ic('trash') + '</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true });
+}
+Object.assign(FORMS, {
+  async finexp() {
+    const e = { date: $('e_d').value, desc: $('e_s').value.trim().slice(0, 200), category: $('e_c').value, amount: Math.abs(num($('e_a').value)) };
+    if (!e.date || !e.desc || !e.amount) return $('e_err').textContent = 'Compila data, descrizione e importo.';
+    const d = FIN(); if (U.ff.i != null) d.expenses[U.ff.i] = e; else d.expenses.unshift(e); await finSave(); closeTop(); render(); toast('Spesa salvata');
+  },
+  async finacc() {
+    const a = { name: $('a_n').value.trim().slice(0, 100), type: $('a_t').value.trim().slice(0, 60), owner: $('a_o').value.trim().slice(0, 60), balance: num($('a_b').value) }; if (!a.name) return;
+    const d = FIN(); if (U.ff.i != null) d.bankAccounts[U.ff.i] = { ...d.bankAccounts[U.ff.i], ...a }; else d.bankAccounts.push(a); await finSave(); closeTop(); render(); toast('Conto salvato');
+  },
+  async finprice() {
+    const d = FIN(), { k, i } = U.ff, p = num($('p_v').value); if (p <= 0) return;
+    if (k === 'asset') { const a = d.assets[i], q = a.lots && a.lots.length ? a.lots.reduce((s, l) => s + num(l.quantity), 0) : num(a.quantity); a.lastPrice = p; if (q > 0) a.value = q * p; } else d.btps[i].currentPrice = p;
+    await finSave(); closeTop(); render();
+  },
+  async fincat() {
+    const d = FIN(), name = $('k_n').value.trim().slice(0, 60), bud = Math.max(0, num($('k_b').value)), old = U.ff.c; if (!name) return;
+    if (Object.keys(d.budgets).some(c => c.toLowerCase() === name.toLowerCase() && c !== old)) return $('k_err').textContent = 'Esiste già una categoria con questo nome.';
+    if (old && old !== name) { const nb = {}; Object.keys(d.budgets).forEach(c => { nb[c === old ? name : c] = c === old ? bud : d.budgets[c]; }); d.budgets = nb; d.expenses.forEach(e => { if (e.category === old) e.category = name; }); } else d.budgets[name] = bud;
+    await finSave(); closeTop(); render();
+  },
+  async finalr() {
+    const items = ownedItems(), it = items[+$('l_i').value], target = num($('l_t').value); if (!it || target <= 0) return $('l_err').textContent = 'Scegli un titolo e una soglia valida.';
+    FIN().priceAlerts.push({ id: uid(), kind: it.kind, ref: it.ref, label: it.label, dir: $('l_d').value, target, created: new Date().toISOString(), status: 'active' }); await finSave(); closeTop(); render();
+  },
+  ask() { const q = $('aq').value.trim(); if (q) $('aa').innerHTML = '<div class="alert o">' + h(answer(q)) + '</div>'; },
+});
+Object.assign(ACT, {
+  ftab: t => { U.fin.tab = t.dataset.t; render(); }, fcat: t => { U.fin.cat = t.dataset.c; render(); },
+  async enterFin() { if (!(await openProt())) return; await ensureFin(); snapshot(); go('fin'); },
+  expNew: () => expForm(null), expEdit: t => expForm(+t.dataset.i),
+  async expDel() { if (await ask('Eliminare la spesa?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { FIN().expenses.splice(U.ff.i, 1); await finSave(); closeTop(); render(); } },
+  accNew: () => { U.ff = { i: null }; accForm({}); }, accEdit: t => { U.ff = { i: +t.dataset.i }; accForm(FIN().bankAccounts[+t.dataset.i]); },
+  async accDel() { if (await ask('Eliminare il conto?', 'Il saldo non verrà più contato nel patrimonio.', { ok: 'Elimina', danger: true })) { FIN().bankAccounts.splice(U.ff.i, 1); await finSave(); closeTop(); render(); } },
+  priceEdit: t => { const k = t.dataset.k, i = +t.dataset.i, it = k === 'asset' ? FIN().assets[i] : FIN().btps[i]; U.ff = { k, i }; modal('<h2>' + h(it.name) + '</h2><form data-form="finprice"><label class="f" for="p_v">' + (k === 'asset' ? 'Prezzo unitario (€)' : 'Corso (% del nominale)') + '</label><input class="in" id="p_v" type="number" step="0.0001" min="0" required inputmode="decimal" value="' + h((k === 'asset' ? assetPrice(it) : btpPrice(it)) || '') + '"><div class="gap" style="margin-top:12px"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Aggiorna</button></div></form>', { sticky: true }); },
+  catNew: () => catForm(null), catEdit: t => catForm(t.dataset.c),
+  async catDel() { const d = FIN(), c = U.ff.c, n = d.expenses.filter(e => e.category === c).length; if (c === 'Varie / Altro') return toast('Questa categoria non si può eliminare'); if (await ask('Eliminare «' + c + '»?', n ? n + ' spese verranno spostate in «Varie / Altro».' : 'Nessuna spesa collegata.', { ok: 'Elimina', danger: true })) { d.expenses.forEach(e => { if (e.category === c) e.category = 'Varie / Altro'; }); delete d.budgets[c]; if (d.budgets['Varie / Altro'] === undefined) d.budgets['Varie / Altro'] = 200; await finSave(); closeTop(); render(); } },
+  alrNew: () => { const items = ownedItems(); modal('<h2>Nuovo avviso</h2><form data-form="finalr"><label class="f" for="l_i">Titolo</label><select class="in" id="l_i">' + items.map((o, i) => '<option value="' + i + '">' + h(o.label) + ' (' + h(eur(o.price)) + ')</option>').join('') + '</select><label class="f" for="l_d">Avvisami quando</label><select class="in" id="l_d"><option value="up">sale a</option><option value="down">scende a</option></select><label class="f" for="l_t">Soglia (€)</label><input class="in" id="l_t" type="number" step="0.0001" min="0" required inputmode="decimal"><p class="sm bad" id="l_err" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Crea</button></div></form>', { sticky: true }); },
+  async alrDel(t) { const d = FIN(); d.priceAlerts = d.priceAlerts.filter(a => a.id !== t.dataset.id); await finSave(); render(); },
+  async alrRearm(t) { const a = FIN().priceAlerts.find(x => x.id === t.dataset.id); if (a) { a.status = 'active'; delete a.hitAt; delete a.hitPrice; await finSave(); render(); } },
+  async csvImp() {
+    const f = await pickFile('.csv,text/csv,text/plain'); if (!f) return;
+    const m = modal('<h2>Importa estratto conto</h2><p class="mut sm">Scegli il formato della tua banca. Le entrate vengono ignorate; le uscite diventano spese, categorizzate per parole chiave.</p><label class="f" for="b_k">Banca</label><select class="in" id="b_k">' + Object.keys(BANKS).map(k => '<option value="' + k + '">' + BANKS[k][0] + '</option>').join('') + '</select><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-act="close">Annulla</button><button class="btn pri" id="b_go">Importa</button></div>', { sticky: true });
+    m.q('#b_go').onclick = async () => { const r = importCsv(await f.text(), m.q('#b_k').value); await finSave(); m.close(); render(); toast('Importate ' + r.n + ' spese (' + r.inc + ' entrate ignorate' + (r.bad ? ', ' + r.bad + ' righe non lette' : '') + ')'); };
+  },
+  finReport: () => modal('<h2>Report</h2><div class="stack"><button class="btn pri blk" id="r_x">' + ic('dl') + ' Scarica Excel (.xlsx)</button><button class="btn blk" id="r_p">' + ic('file') + ' PDF (stampa o salva come PDF)</button></div><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div>'),
+  async impFin() {
+    if (!(await openProt())) return;
+    const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return;
+    let payload; try { payload = JSON.parse(await f.text()); } catch (e) { return toast('File non valido'); }
+    const pw = await askText('Password del backup', 'Inserisci la master password di Financial Dashboard con cui hai cifrato il backup.'); if (!pw) return;
+    toast('Decifro…'); let data; try { data = await decryptVaultBackup(payload, pw); } catch (e) { return toast(e.message); }
+    if (!data || typeof data !== 'object' || Array.isArray(data) || !(Array.isArray(data.expenses) || Array.isArray(data.bankAccounts) || Array.isArray(data.assets))) return toast('Formato di Financial Dashboard non riconosciuto');
+    await ensureFin(); const cur = FIN(), has = cur.expenses.length + cur.bankAccounts.length + cur.assets.length + cur.btps.length > 0;
+    if (!(await ask('Importare Financial Dashboard?', 'Trovati ' + (data.bankAccounts || []).length + ' conti, ' + (data.assets || []).length + ' titoli, ' + (data.btps || []).length + ' BTP e ' + (data.expenses || []).length + ' spese.' + (has ? ' I dati finanziari attuali verranno sostituiti.' : ''), { ok: 'Importa', danger: has }))) return;
+    const clean = JSON.parse(JSON.stringify(data)); normFin(clean);
+    await putItem('fin-db', 'findb', clean, S.items.get('fin-db')); snapshot(); await finSave(); toast('Dati finanziari importati'); if (U.route === 'fin') render();
+  },
+});
+function accForm(a) {
+  modal('<h2>' + (U.ff.i != null ? 'Modifica conto' : 'Nuovo conto') + '</h2><form data-form="finacc"><label class="f" for="a_n">Nome</label><input class="in" id="a_n" required value="' + h(a.name) + '" autocomplete="off"><label class="f" for="a_t">Tipo (es. Conto corrente)</label><input class="in" id="a_t" value="' + h(a.type) + '" autocomplete="off"><label class="f" for="a_o">Intestatario</label><input class="in" id="a_o" value="' + h(a.owner) + '" autocomplete="off"><label class="f" for="a_b">Saldo (€)</label><input class="in" id="a_b" type="number" step="0.01" inputmode="decimal" value="' + h(a.balance) + '"><div class="gap" style="margin-top:12px">' + (U.ff.i != null ? '<button type="button" class="btn dan" data-act="accDel">' + ic('trash') + '</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true });
+}
+function catForm(c) {
+  U.ff = { c }; const b = c ? FIN().budgets[c] : '';
+  modal('<h2>' + (c ? 'Modifica categoria' : 'Nuova categoria') + '</h2><form data-form="fincat"><label class="f" for="k_n">Nome</label><input class="in" id="k_n" required value="' + h(c || '') + '" autocomplete="off"><label class="f" for="k_b">Budget mensile (€)</label><input class="in" id="k_b" type="number" step="1" min="0" inputmode="decimal" value="' + h(b) + '"><p class="sm bad" id="k_err" role="alert"></p><div class="gap">' + (c ? '<button type="button" class="btn dan" data-act="catDel">' + ic('trash') + '</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true });
+}
+/* pulsanti del modale Report (collegati dopo l'apertura) */
+document.addEventListener('click', e => {
+  if (e.target.closest('#r_x')) { download('report-finanziario-' + new Date().toISOString().slice(0, 10) + '.xlsx', buildXlsx()); closeTop(); }
+  else if (e.target.closest('#r_p')) { closeTop(); setTimeout(printReport, 150); }
+});
+
+/* ---------- avvio ---------- */
+(async function boot() {
+  try { applyPrefs(); } catch (e) { }
+  try {
+    if (location.hash.startsWith('#c=')) { U.incoming = parseShared(location.hash); history.replaceState(null, '', location.pathname + location.search); }
+    await DB.open(); S.meta = await DB.get('meta', 'acct') || null;
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(() => {});
+    go(S.meta ? 'lock' : 'welcome');
+  } catch (e) { $('app').innerHTML = '<main class="center"><h1>Archivio non disponibile</h1><p class="mut">Il browser non permette di salvare dati (navigazione privata?). ' + h(e.message) + '</p></main>'; }
+})();
+</script>
 </body>
 </html>

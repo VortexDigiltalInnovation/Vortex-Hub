@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-bDKxGzizKh6p5NaR+/EcfycTVdQh2NTGfp2/1FTFE+8='; style-src 'sha256-SLO7DDpeb50726KIl/Ro9FlCfhn2AdjNDGEvVfO8Lt8='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-NyA171mEaTCzrzSlHzxfcibsa/Pi99/Kb1mUyveCou4='; style-src 'sha256-wKmz0LtwW2Id/voBB1JRBrV6m/qUPJ5TDg4+8Bje1hk='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0f766e">
 <title>Unica</title>
@@ -84,6 +84,13 @@ input[type=range]{width:100%}
 .pbar{height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin:6px 0}.pbar i{display:block;height:100%;background:var(--pri)}.pbar.over i{background:var(--dan)}
 .t .pbar{width:100%}#printArea{display:none}
 @media print{body>*:not(#printArea){display:none!important}#printArea{display:block;color:#000;background:#fff;font-family:system-ui,sans-serif}#printArea table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:11pt}#printArea th,#printArea td{border-bottom:1px solid #bbb;padding:4px 6px;text-align:left}#printArea h1{font-size:20pt}#printArea h2{font-size:13pt;margin:14px 0 4px}}
+
+.lot{display:flex;gap:6px;align-items:center;margin:4px 0}.lot input{min-width:0;flex:1}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:8px 0}
+.mcell{background:var(--card,var(--bg));border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.rc{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0}.rv{font-size:1.3rem;font-weight:700}
+.pbar.tgt{position:relative}
+.mcell{display:flex;flex-direction:column;gap:2px}.mcell span{font-size:.78rem;opacity:.75}
 </style>
 </head>
 <body>
@@ -93,7 +100,7 @@ input[type=range]{width:100%}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '0.3.0';
+const APP_VERSION = '0.6.0';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -175,7 +182,7 @@ async function setKeys(kc, kp) {
   S.kc = kc; S.kcKey = kc ? await dataKey(kc) : null;
   if (kp) { S.kp = kp; S.kpKey = await dataKey(kp); S.verifiedAt = Date.now(); }
 }
-function dropProt() { wipe(S.kp); S.kp = null; S.kpKey = null; S.protOpen = false; S.items = new Map(); S.verifiedAt = 0; }
+function dropProt() { const pa = document.getElementById('printArea'); if (pa) pa.remove(); wipe(S.kp); S.kp = null; S.kpKey = null; S.protOpen = false; S.items = new Map(); S.verifiedAt = 0; }
 function dropAll() { dropProt(); S.cards = new Map(); wipe(S.kc); S.kc = null; S.kcKey = null; }
 
 /* --- limite tentativi con attesa crescente --- */
@@ -646,7 +653,7 @@ V.lock = () => '<main class="center"><div class="logo">' + ic('lock') + '</div><
 
 /* ---------- 7. Home ---------- */
 V.home = () => hdr(APP_NAME, '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button>') +
-  '<main class="wrap"><h2>Carte</h2><button class="tile" data-act="nav" data-r="cards"><span class="ti">' + ic('card') + '</span><span class="t"><b>Carte fedeltà</b><br><span class="sm mut">' + S.cards.size + ' ' + (S.cards.size === 1 ? 'carta' : 'carte') + ' · scanner, ricerca, condivisione</span></span></button>' +
+  '<main class="wrap">' + bkBanner() + '<h2>Carte</h2><button class="tile" data-act="nav" data-r="cards"><span class="ti">' + ic('card') + '</span><span class="t"><b>Carte fedeltà</b><br><span class="sm mut">' + S.cards.size + ' ' + (S.cards.size === 1 ? 'carta' : 'carte') + ' · scanner, ricerca, condivisione</span></span></button>' +
   '<h2 style="margin-top:20px">Area protetta ' + ic('lock') + '</h2><button class="tile" data-act="enterProt"><span class="ti">' + ic('lock') + '</span><span class="t"><b>Vault</b><br><span class="sm mut">Password, note e file cifrati</span></span></button>' +
   '<button class="tile" data-act="enterFin"><span class="ti">' + ic('chart') + '</span><span class="t"><b>Conti e dashboard</b><br><span class="sm mut">Patrimonio, spese, budget, report</span></span></button>' +
   '<p class="sm mut">L’area protetta chiede una verifica recente (impronta o master password) e si blocca da sola dopo ' + S.idleMin + ' min di inattività.</p></main>';
@@ -760,10 +767,10 @@ V.settings = () => hdr('Impostazioni') + '<main class="wrap">' +
   '<div class="card"><h3>Sicurezza</h3><p class="sm mut">Blocco automatico dell’area protetta dopo</p>' + seg('idle', S.idleMin, [[1, '1 min'], [5, '5 min'], [15, '15 min']]) +
   '<div class="stack" style="margin-top:14px">' + (pkSupported() ? (S.meta.pk ? '<div class="gap"><span class="sp">Passkey attiva' + (S.meta.pk.prf ? ' (impronta anche per l’area protetta)' : ' (solo per le carte: l’area protetta chiede la master password)') + '</span><button class="btn sm dan" data-act="pkOff">Rimuovi</button></div>' : '<button class="btn blk" data-act="pkOn2">' + ic('key') + ' Attiva la passkey</button>') : '<p class="sm mut">Passkey non disponibile in questo contesto (serve https o localhost).</p>') +
   '<button class="btn blk" data-act="chpw">Cambia master password</button><button class="btn blk" data-act="showRec">Mostra il codice di recupero</button><button class="btn blk" data-act="audit2">' + ic('shield') + ' Controlla password compromesse</button></div></div>' +
-  '<div class="card"><h3>Backup</h3><p class="sm mut">File .enc cifrato con la tua master password e il tuo codice di recupero. Contiene tutto il Vault.</p><div class="stack"><button class="btn blk" data-act="exp">' + ic('dl') + ' Esporta backup cifrato</button><button class="btn blk" data-act="restore">' + ic('up') + ' Ripristina da backup (sostituisce i dati)</button><button class="btn blk" data-act="impVault">' + ic('up') + ' Importa backup del vecchio Vault</button><button class="btn blk" data-act="impFin">' + ic('up') + ' Importa backup di Financial Dashboard</button></div><p class="sm mut">Google Drive: in arrivo con il backup unificato (fase 6).</p></div>' +
+  '<div class="card"><h3>Backup</h3><p class="sm mut">File .enc cifrato con la tua master password e il tuo codice di recupero. Contiene tutto: carte, Vault e conti.</p>' + bkStatus() + '<div class="stack"><button class="btn blk" data-act="exp">' + ic('dl') + ' Esporta backup cifrato</button><button class="btn blk" data-act="restore">' + ic('up') + ' Ripristina da backup (sostituisce i dati)</button><button class="btn blk" data-act="impVault">' + ic('up') + ' Importa backup del vecchio Vault</button><button class="btn blk" data-act="impFin">' + ic('up') + ' Importa backup di Financial Dashboard</button><button class="btn blk" data-act="verifyBk">' + ic('shield') + ' Verifica un file di backup</button></div>' + driveCard() + '</div>' +
   '<div class="card"><h3>Dispositivi</h3><p class="sm mut">L’elenco dei dispositivi e la revoca saranno disponibili con la sincronizzazione (fase 5). Per ora i dati vivono solo su questo dispositivo.</p></div>' +
-  '<div class="card"><h3>Privacy</h3><p class="sm">I tuoi dati sono cifrati sul dispositivo con AES-256-GCM; le chiavi derivano dalla master password (PBKDF2, 600.000 iterazioni) e non lasciano mai il dispositivo. Non ci sono analytics né script di terze parti. L’unica connessione esterna è il controllo password compromesse, che invia solo i primi 5 caratteri dell’hash. Questa versione non ha ancora un server.</p></div>' +
-  '<div class="card"><h3>Info</h3><p class="sm mut">' + APP_NAME + ' ' + APP_VERSION + ' — fasi 1-4 (fondamenta, Vault, carte, conti)</p><div class="stack"><button class="btn blk" data-act="lockNow">' + ic('lock') + ' Blocca ora</button><button class="btn blk dan" data-act="wipeAll">' + ic('trash') + ' Elimina tutti i dati da questo dispositivo</button></div></div></main>';
+  '<div class="card"><h3>Privacy</h3><p class="sm">I tuoi dati sono cifrati sul dispositivo con AES-256-GCM; le chiavi derivano dalla master password (PBKDF2, 600.000 iterazioni) e non lasciano mai il dispositivo. Non ci sono analytics né script di terze parti. L’unica connessione esterna è il controllo password compromesse, che invia solo i primi 5 caratteri dell’hash. Questa versione non ha un server; il backup su Google Drive è facoltativo e resta cifrato.</p></div>' +
+  '<div class="card"><h3>Info</h3><p class="sm mut">' + APP_NAME + ' ' + APP_VERSION + ' — carte, Vault, conti e backup</p><div class="stack"><button class="btn blk" data-act="lockNow">' + ic('lock') + ' Blocca ora</button><button class="btn blk dan" data-act="wipeAll">' + ic('trash') + ' Elimina tutti i dati da questo dispositivo</button></div></div></main>';
 
 /* ---------- logica ---------- */
 const afterUnlock = async () => { S.last = Date.now(); await loadCards(); go('home'); if (U.incoming) setTimeout(offerIncoming, 300); };
@@ -893,9 +900,10 @@ const ACT = {
   async dlFile(t) { try { const it = S.items.get(t.dataset.id); download(it.data.fname, new Blob([await getBlob(it.id)], { type: it.data.mime })); } catch (e) { toast('Errore: ' + e.message); } },
   async chk1(t) { const el = $('chk1r'); el.textContent = 'Controllo…'; const n = await pwnedCount(S.items.get(t.dataset.id).data.password); el.textContent = n === null ? 'Controllo non riuscito (offline?).' : n === 0 ? 'Nessuna violazione nota per questa password.' : 'Attenzione: password comparsa in ' + n.toLocaleString('it-IT') + ' violazioni. Cambiala.'; },
   async exp() { const b = await exportBackup(); download('unica-backup-' + new Date().toISOString().slice(0, 10) + '.enc', new Blob([JSON.stringify(b)], { type: 'application/octet-stream' })); toast('Backup esportato'); },
-  async restore() {
-    const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return;
-    const bk = parseRestore(await f.text()); if (!bk) return toast('Non è un backup di ' + APP_NAME);
+  async restore(t) {
+    let txt = typeof t === 'string' ? t : null;
+    if (txt === null) { const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return; txt = await f.text(); }
+    const bk = parseRestore(txt); if (!bk) return toast('Non è un backup di ' + APP_NAME);
     if (S.meta && !(await ask('Sostituire i dati?', 'Tutti i dati attuali su questo dispositivo saranno sostituiti da quelli del backup.', { ok: 'Sostituisci', danger: true }))) return;
     const m = modal('<h2>Ripristino</h2><p class="mut sm">Inserisci la master password del backup oppure le 24 parole del codice di recupero.</p><form data-form="x"><label class="f" for="rs">Master password o codice di recupero</label><textarea class="in" id="rs" rows="3" autocapitalize="off" spellcheck="false"></textarea><p class="sm bad" id="rse" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Ripristina</button></div></form>', { sticky: true });
     m.q('form').onsubmit = async ev => { ev.preventDefault(); const e = m.q('#rse'), b = m.q('button[type=submit]'), s = m.q('#rs').value; if (!s.trim()) return; busy(b, true, 'Verifica…'); await new Promise(r => setTimeout(r, 30));
@@ -1372,6 +1380,7 @@ function answer(q) {
   else if (/mese scorso|mese precedente/.test(t)) m = shiftMonth(m, -1);
   const cats = Object.keys(d.budgets), cat = cats.find(c => fold(c).split(/[^a-z]+/).filter(w => w.length > 3).some(w => t.includes(w.slice(0, 6))));
   const sp = spentBy(d, m);
+  if (typeof simAnswer === 'function') { const sa = simAnswer(q); if (sa) return sa; }
   if (/patrimonio|quanto valgo|quanto ho in totale/.test(t)) return 'Il tuo patrimonio totale è ' + eur(grand(d)) + '. ' + breakdown(d).filter(x => x[1]).map(x => x[0] + ': ' + eur(x[1])).join('; ') + '.';
   if (/budget|rimane|restano|resta/.test(t)) { if (cat) return 'In ' + monthLabel(m) + ' per «' + cat + '» hai speso ' + eur(sp[cat] || 0) + ' su ' + eur(d.budgets[cat]) + ': ' + ((sp[cat] || 0) > num(d.budgets[cat]) ? 'sforato di ' + eur((sp[cat] || 0) - num(d.budgets[cat])) : 'restano ' + eur(num(d.budgets[cat]) - (sp[cat] || 0))) + '.'; const b = Object.values(d.budgets).reduce((a, x) => a + num(x), 0), s = Object.values(sp).reduce((a, x) => a + x, 0); return 'Budget di ' + monthLabel(m) + ': spesi ' + eur(s) + ' su ' + eur(b) + ', ' + (s > b ? 'sforato di ' + eur(s - b) : 'restano ' + eur(b - s)) + '.'; }
   if (/maggior|piu cara|piu alta|piu grande/.test(t)) { const e = monthExp(d, m).sort((a, b) => num(b.amount) - num(a.amount))[0]; return e ? 'La spesa più alta di ' + monthLabel(m) + ' è «' + e.desc + '»: ' + eur(e.amount) + ' (' + e.date + ').' : 'Nessuna spesa in ' + monthLabel(m) + '.'; }
@@ -1420,7 +1429,7 @@ function buildXlsx() {
 function printReport() {
   const d = FIN(), m = U.fin.month, sp = spentBy(d, m), tot = grand(d);
   const tbl = (head, rows) => '<table><thead><tr>' + head.map(x => '<th>' + h(x) + '</th>').join('') + '</tr></thead><tbody>' + rows.map(r => '<tr>' + r.map(x => '<td>' + h(x) + '</td>').join('') + '</tr>').join('') + '</tbody></table>';
-  let el = $('printArea'); if (!el) { el = document.createElement('div'); el.id = 'printArea'; document.body.appendChild(el); }
+  let el = $('printArea'); if (!el) { el = document.createElement('div'); el.id = 'printArea'; document.body.appendChild(el); } window.addEventListener('afterprint', () => { const x = document.getElementById('printArea'); if (x) x.remove(); }, { once: true });
   el.innerHTML = '<h1>Report finanziario</h1><p>Generato il ' + h(new Date().toLocaleDateString('it-IT')) + ' · ' + h(APP_NAME) + '</p><h2>Patrimonio: ' + h(eur(tot)) + '</h2>' + tbl(['Voce', 'Valore'], breakdown(d).map(x => [x[0], eur(x[1])])) +
     '<h2>Conti</h2>' + tbl(['Conto', 'Tipo', 'Saldo'], d.bankAccounts.map(a => [a.name, a.type || '', eur(a.balance)])) +
     '<h2>Budget ' + h(monthLabel(m)) + '</h2>' + tbl(['Categoria', 'Budget', 'Speso', 'Residuo'], Object.keys(d.budgets).map(c => [c, eur(d.budgets[c]), eur(sp[c] || 0), eur(num(d.budgets[c]) - (sp[c] || 0))])) +
@@ -1506,8 +1515,314 @@ document.addEventListener('click', e => {
   else if (e.target.closest('#r_p')) { closeTop(); setTimeout(printReport, 150); }
 });
 
+/* ================= Conti – schede complete: Titoli, BTP, Poste, PAC, Ribilanciamento, Flussi, Simulazione, Piano ================= */
+const ASSET_CATS = ['Azionario / ETF', 'Obbligazionario / BTP', 'Immobili / Fisico', 'Altro'];
+const POSTE_TYPES = ['Conto Deposito Vincolato', 'Buono Postale Fruttifero (BPF)', 'Libretto Postale'];
+const BA_TYPES = ['Conto Corrente Operativo', 'Fondo Emergenza / Riserva', 'Liquidità Broker / Trading'];
+const MON = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
+const todayISO = () => new Date().toISOString().slice(0, 10);
+const daysTo = s => Math.ceil((new Date(s) - new Date()) / 864e5);
+const sum = (a, f) => a.reduce((s, x) => s + (num(f(x))), 0);
+const pct = n => n.toLocaleString('it-IT', { maximumFractionDigits: 1 }) + '%';
+
+/* --- calcoli --- */
+const assetQty = a => a.lots && a.lots.length ? sum(a.lots, l => l.quantity) : num(a.quantity);
+const assetCost = a => a.lots && a.lots.length ? sum(a.lots, l => num(l.quantity) * num(l.buyPrice)) : num(a.quantity) * num(a.buyPrice);
+const btpNominal = b => b.lots && b.lots.length ? sum(b.lots, l => l.nominal) : num(b.nominal);
+const btpInvested = b => b.lots && b.lots.length ? sum(b.lots, l => num(l.nominal) * (num(l.buyPrice) || 100) / 100) : num(b.nominal) * (num(b.buyPrice) || 100) / 100;
+function btpTir(nominal, invested, couponRate, maturity, frequency) {
+  const years = (new Date(maturity) - new Date()) / 31557600000;
+  if (!(nominal > 0) || !(invested > 0) || !(years > 0)) return null;
+  const freq = Math.max(1, parseInt(frequency) || 2), periods = Math.max(1, Math.ceil(years * freq)), coupon = nominal * num(couponRate) / 100 / freq * 0.875, redemption = nominal - Math.max(0, nominal - invested) * 0.125;
+  const pv = r => { let t = 0; for (let k = 1; k <= periods; k++) t += (coupon + (k === periods ? redemption : 0)) / Math.pow(1 + r / freq, k); return t; };
+  let lo = -0.9, hi = 1; for (let i = 0; i < 100; i++) { const mid = (lo + hi) / 2; if (pv(mid) > invested) lo = mid; else hi = mid; }
+  return ((lo + hi) / 2) * 100;
+}
+function modDuration(c, years, f, price) {
+  if (!isFinite(years) || years <= 0) return 0; const n = Math.max(1, Math.ceil(years * f)), cp = 100 * c / f, y = c / f; let pv = 0, w = 0;
+  for (let k = 1; k <= n; k++) { const v = (cp + (k === n ? 100 : 0)) / Math.pow(1 + y, k); pv += v; w += k / f * v; }
+  return Math.max(0, (pv > 0 ? w / pv : years) / (1 + Math.max(-0.99, c) / f));
+}
+const posteNet = p => num(p.capital) + num(p.capital) * num(p.rate) / 100 * (String(p.type).includes('Buono Postale') ? 0.875 : 0.74);
+function classTotals(d) {
+  const has = (v, t) => String(v || '').toLowerCase().includes(t.toLowerCase());
+  const obbl = sum(d.btps, btpValue) + sum(d.assets.filter(a => has(a.category, 'Obbligazionario')), assetValue) + sum(d.posteItems.filter(p => has(p.type, 'Buono Postale') || has(p.type, 'Conto Deposito')), p => p.capital);
+  const az = sum(d.pacItems, p => p.currentVal) + sum(d.assets.filter(a => has(a.category, 'Azionario') || has(a.category, 'ETF')), assetValue);
+  const liq = sum(d.bankAccounts, b => b.balance) + sum(d.assets.filter(a => has(a.category, 'Liquidità')), assetValue);
+  const tot = grand(d);
+  return { obbl, az, liq, other: Math.max(0, tot - obbl - az - liq), tot };
+}
+
+/* --- grafico a due serie (PAC) --- */
+function lineChart2(series) {
+  const W = 300, H = 120, P = 8, all = series.flatMap(s => s.v), lo = Math.min(0, ...all), hi = Math.max(...all) || 1, n = series[0].v.length;
+  const xy = v => v.map((y, i) => [P + i * (W - 2 * P) / Math.max(1, n - 1), H - P - (y - lo) / (hi - lo || 1) * (H - 2 * P)].join(',')).join(' ');
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="chart" role="img" aria-label="Proiezione">' + series.map(s => '<polyline fill="none" stroke="' + s.c + '" stroke-width="2.5"' + (s.dash ? ' stroke-dasharray="5 4"' : '') + ' stroke-linejoin="round" points="' + xy(s.v) + '"/>').join('') + '</svg><div class="gap sm">' + series.map(s => '<span><i class="dot" style="background:' + s.c + '"></i> ' + h(s.l) + '</span>').join('') + '</div>';
+}
+const rc = (t, v, d) => '<div class="card rc"><p class="sm mut" style="margin:0">' + h(t) + '</p><p class="rv">' + h(v) + '</p>' + (d ? '<p class="sm mut" style="margin:0">' + h(d) + '</p>' : '') + '</div>';
+
+/* --- modulo generico a campi --- */
+function genForm(o) {
+  U.gen = o;
+  const f = o.fields.map(x => {
+    if (x.type === 'lots') return '<label class="f">' + h(x.label) + '</label><div id="g_lots">' + (x.value.length ? x.value : [{}]).map(l => lotRow(x, l)).join('') + '</div><button type="button" class="btn sm" data-act="lotAdd">' + ic('plus') + ' Aggiungi</button><p class="sm mut" id="g_sum" role="status"></p>';
+    if (x.type === 'select') return '<label class="f" for="g_' + x.id + '">' + h(x.label) + '</label><select class="in" id="g_' + x.id + '">' + x.options.map(op => { const v = Array.isArray(op) ? op[0] : op, t = Array.isArray(op) ? op[1] : op; return '<option value="' + h(v) + '"' + (String(v) === String(x.value) ? ' selected' : '') + '>' + h(t) + '</option>'; }).join('') + '</select>';
+    return '<label class="f" for="g_' + x.id + '">' + h(x.label) + '</label><input class="in" id="g_' + x.id + '" type="' + (x.type || 'text') + '"' + (x.type === 'number' ? ' step="' + (x.step || 'any') + '" inputmode="decimal"' : '') + (x.req ? ' required' : '') + ' value="' + h(x.value == null ? '' : x.value) + '" autocomplete="off">';
+  }).join('');
+  const m = modal('<h2>' + h(o.title) + '</h2><form data-form="gen">' + f + '<p class="sm bad" id="g_err" role="alert"></p><div class="gap" style="margin-top:8px">' + (o.onDelete ? '<button type="button" class="btn dan" data-act="genDel" aria-label="Elimina">' + ic('trash') + '</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true, noFocus: !!o.noFocus });
+  m.el.addEventListener('input', () => { if (o.onInput) o.onInput(); }); if (o.onInput) o.onInput();
+}
+const lotRow = (x, l) => '<div class="lot"><input class="in lot-d" type="date" aria-label="Data" value="' + h(l.date || '') + '"><input class="in lot-q" type="number" step="any" inputmode="decimal" aria-label="' + h(x.cols[0]) + '" placeholder="' + h(x.cols[0]) + '" value="' + h(l[x.keys[0]] == null ? '' : l[x.keys[0]]) + '"><input class="in lot-p" type="number" step="any" inputmode="decimal" aria-label="' + h(x.cols[1]) + '" placeholder="' + h(x.cols[1]) + '" value="' + h(l[x.keys[1]] == null ? '' : l[x.keys[1]]) + '"><button type="button" class="ib" data-act="lotDel" aria-label="Rimuovi">' + ic('x') + '</button></div>';
+const gv = id => { const e = $('g_' + id); return e ? e.value : ''; };
+const readLots = (k0, k1) => [...document.querySelectorAll('#g_lots .lot')].map(r => ({ [k0]: num(r.querySelector('.lot-q').value), [k1]: num(r.querySelector('.lot-p').value), date: r.querySelector('.lot-d').value })).filter(l => l[k0] > 0);
+FORMS.gen = async () => { const o = U.gen; try { const r = await o.onSubmit(); if (r === false) return; } catch (e) { return $('g_err').textContent = e.message; } await finSave(); closeTop(); render(); toast('Salvato'); };
+
+/* --- viste --- */
+Object.assign(FV, {
+  acc() {
+    const d = FIN();
+    return '<div class="gap"><h2 class="sp">Conti bancari</h2><button class="btn sm pri" data-act="accNew">' + ic('plus') + ' Conto</button></div>' +
+      (d.bankAccounts.length ? d.bankAccounts.map((a, i) => '<button class="row" data-act="accEdit" data-i="' + i + '"><span class="av a0">' + ic('card') + '</span><span class="t"><b>' + h(a.name) + '</b><span class="sm mut">' + h([a.type, a.owner].filter(Boolean).join(' · ')) + '</span></span><b>' + h(eur(a.balance)) + '</b></button>').join('') + '<p class="c"><b>Totale: ' + h(eur(sum(d.bankAccounts, a => a.balance))) + '</b></p>' : '<div class="card c mut">Nessun conto. Aggiungine uno o importa il backup di Financial Dashboard.</div>');
+  },
+  tit() {
+    const d = FIN(); const tv = sum(d.assets, assetValue), tc = sum(d.assets, a => a.lots && a.lots.length ? assetCost(a) : (assetCost(a) || 0));
+    return '<div class="gap"><h2 class="sp">Titoli e ETF</h2><button class="btn sm pri" data-act="astEdit" data-i="-1">' + ic('plus') + ' Titolo</button></div>' +
+      (d.assets.length ? d.assets.map((a, i) => { const v = assetValue(a), c = assetCost(a), g = c > 0 ? v - c : null; return '<button class="row" data-act="astEdit" data-i="' + i + '"><span class="av a3">' + h((a.ticker || a.name || '?').charAt(0)) + '</span><span class="t"><b>' + h(a.name) + (a.ticker ? ' [' + h(a.ticker) + ']' : '') + '</b><span class="sm mut">' + h(a.category) + (assetQty(a) ? ' · ' + assetQty(a).toLocaleString('it-IT', { maximumFractionDigits: 4 }) + ' quote @ ' + eur(assetPrice(a)) : '') + '</span>' + (g !== null ? '<span class="sm ' + (g >= 0 ? 'ok' : 'bad') + '">' + (g >= 0 ? '▲ ' : '▼ ') + h(eur(Math.abs(g))) + ' (' + pct(g / c * 100) + ')</span>' : '') + '</span><b>' + h(eur(v)) + '</b></button>'; }).join('') + '<p class="c"><b>Totale: ' + h(eur(tv)) + '</b></p>' : '<div class="card c mut">Nessun titolo registrato.</div>');
+  },
+  btp() {
+    const d = FIN(), mc = new Array(12).fill(0); let net = 0; const near = [];
+    const rows = d.btps.map((b, i) => {
+      const nom = btpNominal(b), inv = btpInvested(b), pmc = nom > 0 ? inv / nom * 100 : num(b.buyPrice), cur = num(b.currentPrice) || pmc, an = nom * num(b.couponRate) / 100 * 0.875; net += an;
+      const md = new Date(b.maturity); if (!isNaN(md)) { const mm = md.getMonth(); if (parseInt(b.freq) === 2) { mc[(mm + 6) % 12] += an / 2; mc[mm] += an / 2; } else mc[mm] += an; }
+      const dd = daysTo(b.maturity); if (dd >= 0 && dd <= 90) near.push(b.name + ' (' + b.maturity + ')'); const tir = btpTir(nom, inv, b.couponRate, b.maturity, b.freq);
+      return '<button class="row" data-act="btpEdit" data-i="' + i + '"><span class="av a5">B</span><span class="t"><b>' + h(b.name) + (b.ticker ? ' [' + h(b.ticker) + ']' : '') + '</b><span class="sm mut">Nominale ' + h(eur(nom)) + ' · cedola ' + h(b.couponRate) + '% · scad. ' + h(b.maturity) + '</span><span class="sm mut">PMC ' + pmc.toFixed(2) + ' · mercato ' + cur.toFixed(2) + (tir !== null ? ' · TIR netto ~' + tir.toFixed(2) + '%' : '') + '</span></span><b>' + h(eur(nom * cur / 100)) + '</b></button>';
+    });
+    return (near.length ? '<div class="alert">' + ic('warn') + ' In scadenza entro 90 giorni: ' + h(near.join(' • ')) + '</div>' : '') + '<div class="gap"><h2 class="sp">BTP</h2><button class="btn sm pri" data-act="btpEdit" data-i="-1">' + ic('plus') + ' BTP</button></div>' + (rows.join('') || '<div class="card c mut">Nessun BTP registrato.</div>') +
+      '<div class="card"><h3>Cedole nette annue stimate: ' + h(eur(net)) + '</h3><p class="sm mut">Calendario mensile (tassazione 12,5%)</p><div class="mgrid">' + MON.map((m, i) => '<div class="mcell"><span class="sm mut">' + m + '</span><b>' + h(eur(mc[i])) + '</b></div>').join('') + '</div></div>';
+  },
+  poste() {
+    const d = FIN(), near = d.posteItems.filter(p => { const x = daysTo(p.maturity); return x >= 0 && x <= 90; }).map(p => p.name + ' (' + p.maturity + ')');
+    return (near.length ? '<div class="alert">' + ic('warn') + ' In scadenza entro 90 giorni: ' + h(near.join(' • ')) + '</div>' : '') + '<div class="gap"><h2 class="sp">Poste e depositi</h2><button class="btn sm pri" data-act="poEdit" data-i="-1">' + ic('plus') + ' Strumento</button></div>' +
+      (d.posteItems.length ? d.posteItems.map((p, i) => '<button class="row" data-act="poEdit" data-i="' + i + '"><span class="av a6">P</span><span class="t"><b>' + h(p.name) + '</b><span class="sm mut">' + h(p.type) + ' · ' + h(p.rate) + '% · scad. ' + h(p.maturity) + '</span><span class="sm ok">Netto stimato a scadenza ' + h(eur(posteNet(p))) + '</span></span><b>' + h(eur(p.capital)) + '</b></button>').join('') + '<p class="c"><b>Totale: ' + h(eur(sum(d.posteItems, p => p.capital))) + '</b></p>' : '<div class="card c mut">Nessuno strumento registrato.</div>');
+  },
+  pac() {
+    const d = FIN();
+    return '<div class="gap"><h2 class="sp">Piani di accumulo</h2><button class="btn sm pri" data-act="pacEdit" data-i="-1">' + ic('plus') + ' PAC</button></div>' +
+      (d.pacItems.length ? d.pacItems.map((p, i) => '<button class="row" data-act="pacEdit" data-i="' + i + '"><span class="av a1">P</span><span class="t"><b>' + h(p.name) + '</b><span class="sm mut">Versamento ' + h(eur(p.monthly)) + '/mese</span></span><b>' + h(eur(p.currentVal)) + '</b></button>').join('') : '<div class="card c mut">Nessun PAC registrato.</div>') +
+      '<div class="card"><h3>Simulatore</h3>' + [['pi', 'Capitale iniziale (€)', 0], ['pm', 'Versamento mensile (€)', 200], ['pr', 'Rendimento annuo (%)', 5], ['py', 'Anni', 10]].map(x => '<label class="f" for="' + x[0] + '">' + x[1] + '</label><input class="in" id="' + x[0] + '" type="number" step="any" inputmode="decimal" value="' + x[2] + '">').join('') + '<div id="pres" class="mt" aria-live="polite"></div></div>';
+  },
+  reb() {
+    const t = FIN().targets, s = num(t.obbligazionario) + num(t.azionario) + num(t.liquidita);
+    return '<h2>Ribilanciamento</h2><p class="sm mut">Imposta l’allocazione obiettivo: ti dico quanto comprare o vendere per tornare in linea.</p><div class="card">' + [['ro', 'Obbligazionario / BTP / Poste (%)', t.obbligazionario], ['ra', 'Azionario / ETF (%)', t.azionario], ['rl', 'Liquidità e conti (%)', t.liquidita]].map(x => '<label class="f" for="' + x[0] + '">' + x[1] + '</label><input class="in" id="' + x[0] + '" type="number" step="1" min="0" max="100" inputmode="decimal" value="' + h(x[2]) + '">').join('') + '<p class="sm b mt" id="rsum" role="status"></p></div><div id="rres"></div>';
+  },
+  cf() {
+    const d = FIN(), me = c => c.freq === 'ANNUAL' ? num(c.amount) / 12 : num(c.amount), inc = sum(d.cashflows.filter(c => c.type === 'INCOME'), me), out = sum(d.cashflows.filter(c => c.type !== 'INCOME'), me);
+    return '<div class="gap"><h2 class="sp">Flussi ricorrenti</h2><button class="btn sm pri" data-act="cfEdit" data-i="-1">' + ic('plus') + ' Voce</button></div>' +
+      '<div class="card"><div class="kv"><div class="gap"><span class="sp">Entrate mensili</span><b class="ok">' + h(eur(inc)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Uscite mensili</span><b class="bad">' + h(eur(out)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Saldo mensile</span><b class="' + (inc - out >= 0 ? 'ok' : 'bad') + '">' + h(eur(inc - out)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Saldo annuo</span><b>' + h(eur((inc - out) * 12)) + '</b></div></div></div>' +
+      (d.cashflows.length ? d.cashflows.map((c, i) => '<button class="row" data-act="cfEdit" data-i="' + i + '"><span class="av ' + (c.type === 'INCOME' ? 'a5' : 'a2') + '">' + (c.type === 'INCOME' ? '+' : '−') + '</span><span class="t"><b>' + h(c.name) + '</b><span class="sm mut">' + (c.freq === 'ANNUAL' ? 'Annuale' : 'Mensile') + ' · ' + h(eur(me(c))) + '/mese</span></span><b>' + h(eur(c.amount)) + '</b></button>').join('') : '<div class="card c mut">Nessuna voce.</div>');
+  },
+  sim() {
+    return '<h2>Simulazioni</h2><div class="card"><h3>Proiezione del patrimonio</h3>' + [['sm', 'Versamento mensile (€)', 0], ['sy', 'Anni (1-40)', 15], ['sc', 'Capitale di partenza (vuoto = patrimonio attuale)', '']].map(x => '<label class="f" for="' + x[0] + '">' + x[1] + '</label><input class="in" id="' + x[0] + '" type="number" step="any" inputmode="decimal" value="' + x[2] + '">').join('') + '<div id="sres" class="mt"></div></div>' +
+      '<div class="card"><h3>Stress test sui BTP</h3><label class="f" for="xi">Inflazione (%)</label><input class="in" id="xi" type="number" step="any" inputmode="decimal" value="2"><label class="f" for="xr">Variazione tassi (punti base)</label><input class="in" id="xr" type="number" step="any" inputmode="decimal" value="100"><div id="xres" class="mt"></div></div>' +
+      '<div class="card"><h3>Nuovo investimento</h3><p class="sm mut">Come ripartire una somma secondo i tuoi target.</p><label class="f" for="ia">Importo (€)</label><input class="in" id="ia" type="number" step="any" inputmode="decimal" value="10000"><div id="ires" class="mt"></div></div>' +
+      '<div class="card"><h3>Scadenze dei prossimi 12 mesi</h3>' + timeline() + '</div>';
+  },
+  piano() {
+    const s = wset(), F = (id, l, t) => '<label class="f" for="' + id + '">' + l + '</label><input class="in" id="' + id + '" data-ws="1" type="' + (t || 'number') + '" ' + (t ? '' : 'step="any" inputmode="decimal" ') + 'value="' + h(s[id]) + '">';
+    return '<h2>Piano patrimoniale</h2><div class="card"><h3>Rendimento</h3><p class="sm mut">Confronta il patrimonio attuale con quanto hai messo.</p>' + F('wInitial', 'Capitale iniziale (€)') + F('wContrib', 'Versamenti successivi (€)') + F('wIncome', 'Cedole/interessi incassati (€)') + F('wWithdraw', 'Prelievi (€)') + '<div id="w1" class="mt"></div></div>' +
+      '<div class="card"><h3>Piano a 5, 10 e 15 anni</h3>' + F('wPlanCapital', 'Capitale di partenza (0 = patrimonio attuale)') + F('wPlanPac', 'PAC mensile (€)') + F('wPlanCoupons', 'Cedole reinvestite al mese (€)') + F('wPlanRate', 'Rendimento lordo annuo (%)') + F('wPlanDrag', 'Costi e tasse (% annuo)') + F('wPlanInflation', 'Inflazione (%)') + '<div id="w2" class="mt"></div></div>' +
+      '<div class="card"><h3>Eventi pianificati</h3><div id="w3"></div><button class="btn sm" data-act="evAdd">' + ic('plus') + ' Evento</button></div>' +
+      '<div class="card"><h3>Rischio</h3>' + F('wShockEquity', 'Shock azionario (%)') + F('wShockBond', 'Shock obbligazionario (%)') + '<div id="w4" class="mt"></div></div>' +
+      '<div class="card"><h3>Budget familiare</h3>' + F('wSalary', 'Entrate mensili (€)') + F('wExpenses', 'Spese mensili (€)') + F('wCash', 'Liquidità immediata (€)') + F('wEmergencyMonths', 'Mesi di fondo emergenza') + '<div id="w5" class="mt"></div></div>';
+  },
+});
+FTABS.splice(0, FTABS.length, ['ov', 'Panoramica'], ['acc', 'Conti'], ['tit', 'Titoli'], ['btp', 'BTP'], ['poste', 'Poste'], ['pac', 'PAC'], ['reb', 'Ribilancia'], ['cf', 'Flussi'], ['sim', 'Simula'], ['piano', 'Piano'], ['exp', 'Spese'], ['bud', 'Budget'], ['alr', 'Avvisi']);
+
+function timeline() {
+  const d = FIN(), now = new Date(), end = new Date(); end.setFullYear(end.getFullYear() + 1); const ev = [];
+  d.btps.forEach(b => { const x = new Date(b.maturity); if (x >= now && x <= end) ev.push({ d: x, t: 'Scadenza BTP: ' + b.name, a: btpNominal(b) }); });
+  d.posteItems.forEach(p => { const x = new Date(p.maturity); if (x >= now && x <= end) ev.push({ d: x, t: 'Svincolo ' + p.type + ': ' + p.name, a: posteNet(p) }); });
+  ev.sort((a, b) => a.d - b.d);
+  return ev.length ? ev.map(e => '<div class="kv"><div class="gap"><span class="sp"><b>' + h(e.t) + '</b><br><span class="sm mut">' + e.d.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: 'numeric' }) + '</span></span><b>' + h(eur(e.a)) + '</b></div></div>').join('') : '<p class="sm mut">Nessuna scadenza nei prossimi 12 mesi.</p>';
+}
+const WDEF = { wInitial: 0, wContrib: 0, wIncome: 0, wWithdraw: 0, wPlanCapital: 0, wPlanPac: 200, wPlanCoupons: 0, wPlanRate: 5, wPlanInflation: 2, wPlanDrag: 0.5, wSalary: 2000, wExpenses: 1750, wCash: 20000, wEmergencyMonths: 6, wShockEquity: -30, wShockBond: -10, wPlanStart: '2027-07', wPlanEnd: '2029-08', wPlanTransfer: 0 };
+const wset = () => { const s = FIN().wealthSettings, o = {}; Object.keys(WDEF).forEach(k => { o[k] = s[k] !== undefined && s[k] !== null && s[k] !== '' ? s[k] : WDEF[k]; }); return o; };
+const wn = id => { const e = $(id); return e ? num(e.value) : num(wset()[id]); };
+
+/* --- aggiornamenti live dei risultati --- */
+const LIVE = {
+  pac() {
+    const P = wn('pi'), M = wn('pm'), r = wn('pr') / 100 / 12, y = Math.min(60, Math.max(1, Math.round(wn('py')))); let b = P, dep = P; const val = [P], inv = [P];
+    for (let i = 1; i <= y * 12; i++) { b = (b + M) * (1 + r); dep += M; if (i % 12 === 0) { val.push(Math.round(b)); inv.push(dep); } }
+    $('pres').innerHTML = '<div class="kv"><div class="gap"><span class="sp">Capitale versato</span><b>' + h(eur(dep)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Interessi</span><b class="ok">' + h(eur(b - dep)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Valore finale</span><b>' + h(eur(b)) + '</b></div></div>' + lineChart2([{ v: val, c: '#1d4ed8', l: 'Valore' }, { v: inv, c: '#0f766e', l: 'Versato', dash: 1 }]);
+  },
+  reb() {
+    const d = FIN(); d.targets = { obbligazionario: wn('ro'), azionario: wn('ra'), liquidita: wn('rl') }; const s = wn('ro') + wn('ra') + wn('rl');
+    $('rsum').textContent = 'Totale target: ' + s + '%' + (s === 100 ? ' ✓' : ' (deve essere 100%)'); $('rsum').className = 'sm b mt ' + (s === 100 ? 'ok' : 'bad');
+    const c = classTotals(d), T = d.targets, cl = [['Obbligazionario / BTP / Poste', c.obbl, T.obbligazionario], ['Azionario / ETF', c.az, T.azionario], ['Liquidità e conti', c.liq, T.liquidita], ['Altri / non classificati', c.other, 0]];
+    $('rres').innerHTML = cl.map(x => { const cp = c.tot ? x[1] / c.tot * 100 : 0, tv = c.tot * x[2] / 100, df = tv - x[1], act = Math.abs(df) < 50 ? '<span class="mut">In target</span>' : df > 0 ? '<span class="ok">Acquista ' + h(eur(df)) + '</span>' : '<span class="bad">Vendi ' + h(eur(-df)) + '</span>'; return '<div class="card"><div class="gap"><b class="sp">' + h(x[0]) + '</b><b>' + h(eur(x[1])) + '</b></div><p class="sm mut" style="margin:4px 0">Attuale ' + pct(cp) + ' · target ' + pct(num(x[2])) + '</p>' + bar(cp) + bar(num(x[2]), 'tgt') + '<p class="sm" style="margin:0">' + act + '</p></div>'; }).join('');
+    saveSoon();
+  },
+  sim() {
+    const d = FIN(), init = wn('sc') > 0 ? wn('sc') : grand(d), m = Math.max(0, wn('sm')), y = Math.min(40, Math.max(1, Math.round(wn('sy'))));
+    $('sres').innerHTML = [3, 5, 7].map(rate => { const r = Math.pow(1 + rate / 100, 1 / 12) - 1, n = y * 12, fv = init * Math.pow(1 + r, n) + (r ? m * ((Math.pow(1 + r, n) - 1) / r) : m * n); return '<div class="kv"><div class="gap"><span class="sp">Scenario ' + rate + '% annuo</span><b>' + h(eur(fv)) + '</b></div></div>'; }).join('') + '<p class="sm mut">Capitale di partenza: ' + h(eur(init)) + ' · ipotesi illustrative, non previsioni.</p>';
+    const infl = wn('xi'), bps = wn('xr'); const rows = d.btps.map(b => { const years = Math.max(0, (new Date(b.maturity) - new Date()) / 31557600000), price = num(b.currentPrice) || num(b.buyPrice) || 100; return { v: btpNominal(b) * price / 100, dur: modDuration(num(b.couponRate) / 100, years, parseInt(b.freq) || 2, price) }; });
+    const bv = sum(rows, r => r.v), wd = bv > 0 ? rows.reduce((a, r) => a + r.v * r.dur, 0) / bv : 0, imp = -rows.reduce((a, r) => a + r.v * r.dur * (bps / 10000), 0), real = ((1.05) / (1 + infl / 100) - 1) * 100;
+    $('xres').innerHTML = '<div class="kv"><div class="gap"><span class="sp">Impatto stimato sui BTP (duration media ' + wd.toFixed(1) + ' anni)</span><b class="' + (imp >= 0 ? 'ok' : 'bad') + '">' + (imp >= 0 ? '+' : '') + h(eur(imp)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Rendimento reale (ipotesi nominale 5%)</span><b>' + (real >= 0 ? '+' : '') + real.toFixed(2) + '%</b></div></div>';
+    const a = wn('ia'), T = d.targets, w = [num(T.obbligazionario), num(T.azionario), num(T.liquidita)], sw = w.reduce((x, y2) => x + y2, 0) || 1, lab = ['Obbligazionario', 'Azionario / ETF', 'Liquidità'];
+    $('ires').innerHTML = w.map((x, i) => '<div class="kv"><div class="gap"><span class="sp">' + lab[i] + ' · ' + pct(x / sw * 100) + '</span><b>' + h(eur(a * x / sw)) + '</b></div></div>').join('');
+  },
+  piano() {
+    const d = FIN(), cur = grand(d), s = wset(), gv2 = id => wn(id);
+    const gain = cur - gv2('wInitial') - gv2('wContrib') + gv2('wWithdraw'), base = gv2('wInitial') + gv2('wContrib');
+    $('w1').innerHTML = rc('Patrimonio attuale', eur(cur), 'Letto dalle altre schede') + rc('Variazione stimata', eur(gain), pct(base > 0 ? gain / base * 100 : 0) + ' su capitale e flussi') + rc('Cedole/interessi dichiarati', eur(gv2('wIncome')), 'Dato inserito da te');
+    const init = Math.max(0, gv2('wPlanCapital') || cur), rate = (gv2('wPlanRate') - gv2('wPlanDrag')) / 100, inf = Math.max(0, gv2('wPlanInflation')) / 100, contrib = Math.max(0, gv2('wPlanPac')) + Math.max(0, gv2('wPlanCoupons'));
+    $('w2').innerHTML = [5, 10, 15].map(y => { const r = Math.pow(1 + rate, 1 / 12) - 1; let b = init; for (let i = 0; i < y * 12; i++) b = b * (1 + r) + contrib; return rc(y + ' anni', eur(b), 'Valore reale odierno ' + eur(b / Math.pow(1 + inf, y)) + ' · nuovi flussi ' + eur(contrib * y * 12)); }).join('');
+    const ev = (d.wealthEvents || []).slice().sort((a, b) => String(a.date).localeCompare(String(b.date))), inc = sum(ev.filter(e => e.type === 'IN'), e => e.amount), out = sum(ev.filter(e => e.type === 'OUT'), e => e.amount);
+    $('w3').innerHTML = (ev.length ? ev.map((e, i) => '<div class="kv"><div class="gap"><span class="sp"><b>' + h(e.name) + '</b><br><span class="sm mut">' + h(e.date) + '</span></span><b class="' + (e.type === 'IN' ? 'ok' : 'bad') + '">' + (e.type === 'IN' ? '+' : '−') + h(eur(e.amount)) + '</b><button class="ib" data-act="evDel" data-i="' + d.wealthEvents.indexOf(e) + '" aria-label="Elimina evento">' + ic('trash') + '</button></div></div>').join('') + '<p class="sm mut">Entrate pianificate ' + h(eur(inc)) + ' · uscite ' + h(eur(out)) + ' · saldo ' + h(eur(inc - out)) + '</p>' : '<p class="sm mut">Nessun evento.</p>');
+    const bt = sum(d.btps, btpValue), eq = sum(d.pacItems, p => p.currentVal) + sum(d.assets, assetValue), tot = cur, eqS = Math.min(0, gv2('wShockEquity')) / 100, bS = Math.min(0, gv2('wShockBond')) / 100, loss = bt * bS + eq * eqS;
+    $('w4').innerHTML = rc('Obbligazioni', eur(bt), tot ? pct(bt / tot * 100) : '') + rc('Titoli e PAC', eur(eq), tot ? pct(eq / tot * 100) : '') + '<p class="sm">Perdita teorica nello scenario: <b class="bad">' + h(eur(loss)) + '</b> · patrimonio dopo lo shock: <b>' + h(eur(tot + loss)) + '</b> (' + (tot ? pct(loss / tot * 100) : '0%') + ')</p>';
+    const sal = Math.max(0, gv2('wSalary')), exp = Math.max(0, gv2('wExpenses')), cash = Math.max(0, gv2('wCash')), mo = Math.max(1, gv2('wEmergencyMonths'));
+    $('w5').innerHTML = rc('Avanzo / disavanzo mensile', eur(sal - exp), sal >= exp ? 'Margine teorico' : 'Spese superiori alle entrate') + rc('Copertura liquidità', (exp ? cash / exp : 0).toFixed(1) + ' mesi', 'Liquidità / spese') + rc('Fondo emergenza obiettivo', eur(exp * mo), 'Differenza ' + eur(cash - exp * mo));
+  },
+};
+let saveT; function saveSoon() { clearTimeout(saveT); saveT = setTimeout(() => { if (S.protOpen && S.items.has('fin-db')) finSave().catch(() => { }); }, 700); }
+const _postFin = POST.fin;
+POST.fin = () => {
+  _postFin();
+  const t = U.fin.tab, key = { pac: 'pac', reb: 'reb', sim: 'sim', piano: 'piano' }[t]; if (!key) return;
+  const main = document.querySelector('main.wrap'), run = () => { try { LIVE[key](); } catch (e) { console.warn(e); } };
+  main.addEventListener('input', e => { if (e.target.dataset.ws) { FIN().wealthSettings[e.target.id] = e.target.value; saveSoon(); } run(); }); run();
+};
+
+/* --- azioni --- */
+Object.assign(ACT, {
+  lotAdd() { const x = U.gen.fields.find(f => f.type === 'lots'); $('g_lots').insertAdjacentHTML('beforeend', lotRow(x, {})); U.gen.onInput && U.gen.onInput(); },
+  lotDel(t) { t.parentElement.remove(); U.gen.onInput && U.gen.onInput(); },
+  async genDel() { if (await ask('Eliminare?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { await U.gen.onDelete(); await finSave(); closeTop(); render(); } },
+  astEdit(t) {
+    const d = FIN(), i = +t.dataset.i, a = i >= 0 ? d.assets[i] : { category: ASSET_CATS[0], lots: [] };
+    genForm({ title: i >= 0 ? 'Modifica titolo' : 'Nuovo titolo', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: a.name }, { id: 't', label: 'Ticker', value: a.ticker }, { id: 'c', label: 'Categoria', type: 'select', options: [...new Set([...ASSET_CATS, a.category].filter(Boolean))], value: a.category }, { id: 'o', label: 'Intestatario', value: a.owner }, { type: 'lots', label: 'Acquisti (data, quote, prezzo €)', cols: ['Quote', 'Prezzo €'], keys: ['quantity', 'buyPrice'], value: (a.lots || []) }, { id: 'p', label: 'Prezzo attuale (€, facoltativo)', type: 'number', value: a.lastPrice || '' }, { id: 'v', label: 'Valore totale (€, solo se senza quote)', type: 'number', value: a.lots && a.lots.length ? '' : a.value }],
+      onInput() { const l = readLots('quantity', 'buyPrice'), q = sum(l, x => x.quantity), c = sum(l, x => x.quantity * x.buyPrice), pmc = q ? c / q : 0, cp = num(gv('p')) || pmc; const s = $('g_sum'); if (s) s.textContent = q ? q.toLocaleString('it-IT', { maximumFractionDigits: 4 }) + ' quote @ ' + eur(pmc) + ' → valore ' + eur(q * cp) : ''; },
+      onSubmit() { const l = readLots('quantity', 'buyPrice'), q = sum(l, x => x.quantity), pmc = q ? sum(l, x => x.quantity * x.buyPrice) / q : 0, mp = num(gv('p')) || null, name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.');
+        const rec = { ...a, name: name.slice(0, 100), ticker: gv('t').trim().toUpperCase().slice(0, 20), category: gv('c'), owner: gv('o').trim().slice(0, 60), lots: l, quantity: q, buyPrice: pmc, lastPrice: mp, value: q > 0 ? q * (mp || pmc) : num(gv('v')) }; if (i >= 0) d.assets[i] = rec; else d.assets.push(rec); },
+      onDelete: i >= 0 ? () => { d.assets.splice(i, 1); } : null });
+  },
+  btpEdit(t) {
+    const d = FIN(), i = +t.dataset.i, b = i >= 0 ? d.btps[i] : { freq: 2, lots: [] };
+    genForm({ title: i >= 0 ? 'Modifica BTP' : 'Nuovo BTP', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: b.name }, { id: 't', label: 'ISIN / ticker', value: b.ticker }, { type: 'lots', label: 'Acquisti (data, nominale €, prezzo)', cols: ['Nominale €', 'Prezzo'], keys: ['nominal', 'buyPrice'], value: b.lots && b.lots.length ? b.lots : (b.nominal ? [{ nominal: b.nominal, buyPrice: b.buyPrice }] : []) }, { id: 'cp', label: 'Corso attuale (% del nominale)', type: 'number', value: b.currentPrice || '' }, { id: 'cr', label: 'Cedola annua (%)', type: 'number', req: 1, value: b.couponRate }, { id: 'f', label: 'Cedole all’anno', type: 'select', options: [['2', 'Semestrale (2)'], ['1', 'Annuale (1)']], value: b.freq }, { id: 'm', label: 'Scadenza', type: 'date', req: 1, value: b.maturity }],
+      onInput() { const l = readLots('nominal', 'buyPrice'), nom = sum(l, x => x.nominal), inv = sum(l, x => x.nominal * (x.buyPrice || 100) / 100), s = $('g_sum'); if (s) s.textContent = nom ? 'Nominale ' + eur(nom) + ' · investito ' + eur(inv) + ' · PMC ' + (inv / nom * 100).toFixed(2) : ''; },
+      onSubmit() { const l = readLots('nominal', 'buyPrice').map(x => ({ ...x, buyPrice: x.buyPrice || 100 })), nom = sum(l, x => x.nominal), inv = sum(l, x => x.nominal * x.buyPrice / 100), pmc = nom ? inv / nom * 100 : 100, name = gv('n').trim(); if (!name || !nom || !gv('m')) throw new Error('Nome, almeno un acquisto e scadenza sono obbligatori.');
+        const rec = { ...b, name: name.slice(0, 100), ticker: gv('t').trim().toUpperCase().slice(0, 20), lots: l, nominal: nom, buyPrice: pmc, currentPrice: num(gv('cp')) || pmc, couponRate: num(gv('cr')), freq: parseInt(gv('f')) || 2, maturity: gv('m') }; if (i >= 0) d.btps[i] = rec; else d.btps.push(rec); },
+      onDelete: i >= 0 ? () => { d.btps.splice(i, 1); } : null });
+  },
+  poEdit(t) {
+    const d = FIN(), i = +t.dataset.i, p = i >= 0 ? d.posteItems[i] : { type: POSTE_TYPES[0], startDate: todayISO() };
+    genForm({ title: i >= 0 ? 'Modifica strumento' : 'Nuovo strumento', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: p.name }, { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...POSTE_TYPES, p.type].filter(Boolean))], value: p.type }, { id: 'o', label: 'Intestatario', value: p.owner }, { id: 'c', label: 'Capitale (€)', type: 'number', req: 1, value: p.capital }, { id: 'r', label: 'Tasso annuo lordo (%)', type: 'number', value: p.rate }, { id: 's', label: 'Data di inizio', type: 'date', value: p.startDate }, { id: 'm', label: 'Scadenza / svincolo', type: 'date', value: p.maturity }],
+      onSubmit() { const name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.'); const rec = { ...p, name: name.slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), capital: num(gv('c')), rate: num(gv('r')), startDate: gv('s'), maturity: gv('m') }; if (i >= 0) d.posteItems[i] = rec; else d.posteItems.push(rec); },
+      onDelete: i >= 0 ? () => { d.posteItems.splice(i, 1); } : null });
+  },
+  pacEdit(t) {
+    const d = FIN(), i = +t.dataset.i, p = i >= 0 ? d.pacItems[i] : {};
+    genForm({ title: i >= 0 ? 'Modifica PAC' : 'Nuovo PAC', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: p.name }, { id: 'm', label: 'Versamento mensile (€)', type: 'number', value: p.monthly }, { id: 'v', label: 'Valore attuale (€)', type: 'number', value: p.currentVal }],
+      onSubmit() { const name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.'); const rec = { ...p, name: name.slice(0, 100), monthly: num(gv('m')), currentVal: num(gv('v')) }; if (i >= 0) d.pacItems[i] = rec; else d.pacItems.push(rec); },
+      onDelete: i >= 0 ? () => { d.pacItems.splice(i, 1); } : null });
+  },
+  cfEdit(t) {
+    const d = FIN(), i = +t.dataset.i, c = i >= 0 ? d.cashflows[i] : { type: 'INCOME', freq: 'MONTHLY' };
+    genForm({ title: i >= 0 ? 'Modifica voce' : 'Nuova voce', noFocus: i >= 0, fields: [{ id: 'n', label: 'Descrizione', req: 1, value: c.name }, { id: 't', label: 'Tipo', type: 'select', options: [['INCOME', 'Entrata'], ['EXPENSE', 'Uscita']], value: c.type }, { id: 'a', label: 'Importo (€)', type: 'number', req: 1, value: c.amount }, { id: 'f', label: 'Frequenza', type: 'select', options: [['MONTHLY', 'Mensile'], ['ANNUAL', 'Annuale']], value: c.freq }],
+      onSubmit() { const name = gv('n').trim(); if (!name) throw new Error('Inserisci la descrizione.'); const rec = { ...c, name: name.slice(0, 100), type: gv('t'), amount: Math.abs(num(gv('a'))), freq: gv('f') }; if (i >= 0) d.cashflows[i] = rec; else d.cashflows.push(rec); },
+      onDelete: i >= 0 ? () => { d.cashflows.splice(i, 1); } : null });
+  },
+  evAdd() {
+    const d = FIN(); genForm({ title: 'Nuovo evento', fields: [{ id: 'd', label: 'Data', type: 'date', req: 1, value: todayISO() }, { id: 'n', label: 'Descrizione', req: 1, value: '' }, { id: 't', label: 'Tipo', type: 'select', options: [['IN', 'Entrata'], ['OUT', 'Uscita']], value: 'IN' }, { id: 'a', label: 'Importo (€)', type: 'number', req: 1, value: '' }],
+      onSubmit() { const a = Math.abs(num(gv('a'))), n = gv('n').trim(); if (!gv('d') || !n || a <= 0) throw new Error('Inserisci data, descrizione e importo.'); d.wealthEvents.push({ date: gv('d'), name: n.slice(0, 100), type: gv('t'), amount: a }); d.wealthEvents.sort((x, y) => String(x.date).localeCompare(String(y.date))); } });
+  },
+  async evDel(t) { if (await ask('Eliminare l’evento?', '', { ok: 'Elimina', danger: true })) { FIN().wealthEvents.splice(+t.dataset.i, 1); await finSave(); render(); } },
+});
+/* accountForm aggiornato: tipo a scelta */
+function accForm(a) {
+  genForm({ title: U.ff.i != null ? 'Modifica conto' : 'Nuovo conto', fields: [{ id: 'n', label: 'Nome', req: 1, value: a.name }, { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...BA_TYPES, a.type].filter(Boolean))], value: a.type || BA_TYPES[0] }, { id: 'o', label: 'Intestatario', value: a.owner }, { id: 'b', label: 'Saldo (€)', type: 'number', value: a.balance }],
+    onSubmit() { const d = FIN(), rec = { ...a, name: gv('n').trim().slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), balance: num(gv('b')) }; if (!rec.name) throw new Error('Inserisci il nome.'); if (U.ff.i != null) d.bankAccounts[U.ff.i] = rec; else d.bankAccounts.push(rec); },
+    onDelete: U.ff.i != null ? () => { FIN().bankAccounts.splice(U.ff.i, 1); } : null });
+}
+/* assistente: ripartizione di un importo secondo i target */
+function simAnswer(q) {
+  const t = fold(q); if (!/invest|versare|mettere|da investire|ripartir/.test(t)) return null;
+  const m = /(\d[\d.,]*)\s*(?:€|euro)?/.exec(t.replace(/\s/g, '')); if (!m) return null; let v = m[1]; v = v.includes(',') && v.includes('.') ? v.replace(/\./g, '').replace(',', '.') : v.includes(',') ? v.replace(',', '.') : (v.match(/\./g) || []).length > 1 || /\.\d{3}$/.test(v) ? v.replace(/\./g, '') : v;
+  const a = parseFloat(v); if (!(a > 0)) return null; const T = FIN().targets, w = [num(T.obbligazionario), num(T.azionario), num(T.liquidita)], s = w.reduce((x, y) => x + y, 0) || 1;
+  return 'Con i tuoi target, ' + eur(a) + ' si ripartiscono così: obbligazionario ' + eur(a * w[0] / s) + ' (' + pct(w[0] / s * 100) + '), azionario ' + eur(a * w[1] / s) + ' (' + pct(w[1] / s * 100) + '), liquidità ' + eur(a * w[2] / s) + ' (' + pct(w[2] / s * 100) + '). È un calcolo, non una consulenza.';
+}
+
+/* ---------- Backup: promemoria, verifica, Google Drive (facoltativo) ---------- */
+const LB = 'unica_lastbk', GC = 'unica_gcid', GSCOPE = 'https://www.googleapis.com/auth/drive.appdata', GFILE = 'unica-backup.enc';
+const lsGet = k => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+const bkAge = () => { const t = +lsGet(LB); return t ? Math.floor((Date.now() - t) / 864e5) : null; };
+const markBk = () => lsSet(LB, String(Date.now()));
+function bkStatus() { const a = bkAge(); return '<p class="sm ' + (a === null || a > 30 ? 'bad' : 'mut') + '">' + (a === null ? 'Nessun backup eseguito da questo dispositivo.' : 'Ultimo backup: ' + (a === 0 ? 'oggi' : a + (a === 1 ? ' giorno fa' : ' giorni fa')) + '.') + '</p>'; }
+function bkBanner() {
+  const a = bkAge(); if (!(S.cards.size || (S.items && S.items.size))) return '';
+  if (a !== null && a <= 30) return '';
+  return '<button class="alert blk" style="text-align:left;width:100%;border:0" data-act="nav" data-r="settings">' + ic('shield') + ' ' + (a === null ? 'Non hai ancora fatto un backup: se perdi il telefono perdi i dati.' : 'Ultimo backup di ' + a + ' giorni fa. Aggiornalo.') + '</button>';
+}
+
+/* --- ritorno dal login Google (popup): passa il token alla finestra principale e si chiude --- */
+const GBC = typeof BroadcastChannel === 'function' ? new BroadcastChannel('unica-gauth') : null;
+if (/[#&]access_token=/.test(location.hash) && /state=/.test(location.hash)) {
+  const q = new URLSearchParams(location.hash.slice(1));
+  if (GBC) GBC.postMessage({ state: q.get('state'), token: q.get('access_token'), exp: +q.get('expires_in') || 3000 });
+  history.replaceState(null, '', location.pathname); window.__POPUP = true;
+  document.body.innerHTML = '<main class="center"><p class="c">Accesso completato. Puoi chiudere questa finestra.</p></main>'; setTimeout(() => window.close(), 300);
+}
+let GTOK = null;
+function gAuth() {
+  if (GTOK && GTOK.exp > Date.now() + 60000) return Promise.resolve(GTOK.t);
+  const cid = lsGet(GC); if (!cid) return Promise.reject(new Error('Imposta prima l’ID client Google.'));
+  if (!GBC) return Promise.reject(new Error('Browser non supportato.'));
+  const st = Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+  return new Promise((res, rej) => {
+    const to = setTimeout(() => { GBC.onmessage = null; rej(new Error('Accesso scaduto o annullato.')); }, 180000);
+    GBC.onmessage = e => { const d = e.data; if (!d || d.state !== st || !d.token) return; clearTimeout(to); GBC.onmessage = null; GTOK = { t: d.token, exp: Date.now() + d.exp * 1000 }; res(d.token); };
+    const url = 'https://accounts.google.com/o/oauth2/v2/auth?' + new URLSearchParams({ client_id: cid, redirect_uri: location.origin + location.pathname, response_type: 'token', scope: GSCOPE, state: st });
+    if (!window.open(url, 'unica_g', 'width=480,height=660')) { clearTimeout(to); rej(new Error('Il browser ha bloccato la finestra di accesso.')); }
+  });
+}
+async function gApi(path, opt = {}, base = 'https://www.googleapis.com/drive/v3/') {
+  const t = await gAuth(); const r = await fetch(base + path, { ...opt, headers: { Authorization: 'Bearer ' + t, ...(opt.headers || {}) } });
+  if (r.status === 401) GTOK = null; if (!r.ok) throw new Error('Google Drive: errore ' + r.status);
+  return r;
+}
+const gFind = async () => { const r = await (await gApi('files?spaces=appDataFolder&fields=files(id,modifiedTime)&q=' + encodeURIComponent("name='" + GFILE + "'"))).json(); return r.files && r.files[0] || null; };
+async function gSave() {
+  const body = JSON.stringify(await exportBackup()), f = await gFind();
+  if (f) await gApi('files/' + f.id + '?uploadType=media', { method: 'PATCH', headers: { 'Content-Type': 'application/octet-stream' }, body }, 'https://www.googleapis.com/upload/drive/v3/');
+  else { const bd = 'unica' + Date.now(); await gApi('files?uploadType=multipart', { method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + bd }, body: '--' + bd + '\r\nContent-Type: application/json\r\n\r\n' + JSON.stringify({ name: GFILE, parents: ['appDataFolder'] }) + '\r\n--' + bd + '\r\nContent-Type: application/octet-stream\r\n\r\n' + body + '\r\n--' + bd + '--' }, 'https://www.googleapis.com/upload/drive/v3/'); }
+  markBk();
+}
+function driveCard() {
+  const cid = lsGet(GC);
+  return '<div style="margin-top:16px"><h4 style="margin:0 0 4px">Google Drive (facoltativo)</h4><p class="sm mut">Il file resta cifrato: Google vede solo dati illeggibili, in una cartella nascosta riservata a questa app. Serve un tuo ID client OAuth (tipo «Applicazione web») con origine e URI di reindirizzamento <b>' + h(location.origin + location.pathname) + '</b>.</p><div class="stack">' +
+    (cid ? '<button class="btn blk" data-act="gSave">' + ic('up') + ' Salva il backup su Drive</button><button class="btn blk" data-act="gRestore">' + ic('dl') + ' Ripristina da Drive</button><button class="btn blk" data-act="gSet">Cambia o rimuovi l’ID client</button>' : '<button class="btn blk" data-act="gSet">Imposta l’ID client Google</button>') + '</div></div>';
+}
+Object.assign(ACT, {
+  async verifyBk() {
+    const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return;
+    const bk = parseRestore(await f.text()); if (!bk) return toast('Non è un backup di ' + APP_NAME);
+    const s = await askText('Verifica backup', 'Inserisci la master password o le 24 parole di recupero. Nulla viene modificato.'); if (!s || !s.trim()) return;
+    const saved = S.meta; S.meta = bk.meta;
+    try { /\s/.test(s.trim()) && s.trim().split(/\s+/).length >= 20 ? await unwrapWithRecovery(parseRecovery(s)) : await unwrapWithPassword(s); toast('Backup valido: ' + bk.items.filter(i => i.t !== 'tomb').length + ' elementi, esportato il ' + new Date(bk.exported).toLocaleDateString('it-IT')); }
+    catch (e) { toast('Password o codice non corretti.'); } finally { S.meta = saved; }
+  },
+  async gSet() { const v = await askText('ID client Google', 'Incolla l’ID client OAuth (finisce con .apps.googleusercontent.com). Lascia vuoto per rimuoverlo.', true); if (v === undefined) return; const x = v.trim(); if (x && !/^[\w.-]+\.apps\.googleusercontent\.com$/.test(x)) return toast('ID client non valido.'); lsSet(GC, x); GTOK = null; render(); },
+  async gSave() { try { toast('Salvataggio su Drive…'); await gSave(); toast('Backup salvato su Drive'); render(); } catch (e) { toast(e.message); } },
+  async gRestore() { try { const f = await gFind(); if (!f) return toast('Nessun backup su Drive.'); const txt = await (await gApi('files/' + f.id + '?alt=media')).text(); await ACT.restore(txt); } catch (e) { toast(e.message); } },
+});
+{ const _exp = ACT.exp; ACT.exp = async function () { await _exp.apply(this, arguments); markBk(); if (U.route === 'settings') render(); }; }
+
 /* ---------- avvio ---------- */
 (async function boot() {
+  if (window.__POPUP) return;
   try { applyPrefs(); } catch (e) { }
   try {
     if (location.hash.startsWith('#c=')) { U.incoming = parseShared(location.hash); history.replaceState(null, '', location.pathname + location.search); }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-FNHnZLjmar/bOlh5oEiHHsYjUrYAjlt8D1DLGLbSBpI='; style-src 'sha256-CZmUdNH2G9Hm1LMZQaetw20uilyfgn+KsmqvcgXhPHA='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-swL+GRvNbU2TsP8bXEWrARh52vwkeW/A7K6cfX7GQyc='; style-src 'sha256-CZmUdNH2G9Hm1LMZQaetw20uilyfgn+KsmqvcgXhPHA='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -2580,13 +2580,34 @@ async function exportCsvVault() {
 }
 
 /* --- 3. Installazione, diagnostica, guida, notifiche, reset --- */
-let DEFP = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); DEFP = e; if (U.route === 'settings') render(); });
-addEventListener('appinstalled', () => { DEFP = null; toast('App installata'); });
+let DEFP = null, installBar = null;
 const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+function hideInstallBar() { if (installBar) { installBar.remove(); installBar = null; } }
+function showInstallBar(manual = false) {
+  if (isStandalone() || installBar || !document.body) return;
+  installBar = document.createElement('aside');
+  installBar.setAttribute('role', 'status');
+  installBar.setAttribute('aria-label', 'Installa Unica');
+  installBar.style.cssText = 'position:fixed;z-index:1000;left:12px;right:12px;bottom:calc(78px + env(safe-area-inset-bottom));max-width:680px;margin:auto;padding:12px 14px;border:1px solid var(--pri);border-radius:16px;background:var(--card);color:var(--ink);box-shadow:0 8px 30px rgba(0,0,0,.24);display:flex;align-items:center;gap:10px';
+  const msg = document.createElement('div'); msg.style.cssText = 'flex:1;min-width:0;font-size:.9rem';
+  msg.innerHTML = manual ? '<b>Installa Unica</b><div style="color:var(--mut);font-size:.82rem">Tocca Condividi e scegli “Aggiungi alla schermata Home”.</div>' : '<b>Unica è pronta per l’installazione</b><div style="color:var(--mut);font-size:.82rem">Aggiungila al dispositivo per aprirla come un’app.</div>';
+  const btn = document.createElement('button'); btn.className = 'btn pri sm'; btn.type = 'button'; btn.textContent = manual ? 'Come fare' : 'Installa';
+  btn.addEventListener('click', async () => {
+    if (manual) { alert('Su iPhone/iPad: apri Unica in Safari, tocca Condividi e poi “Aggiungi alla schermata Home”.'); return; }
+    if (!DEFP) return;
+    const promptEvent = DEFP; DEFP = null;
+    try { promptEvent.prompt(); const choice = await promptEvent.userChoice; if (choice && choice.outcome === 'accepted') hideInstallBar(); else { btn.textContent = 'Riprova'; } }
+    catch (e) { btn.textContent = 'Riprova'; DEFP = promptEvent; }
+  });
+  const close = document.createElement('button'); close.className = 'ib'; close.type = 'button'; close.setAttribute('aria-label','Chiudi'); close.textContent = '×'; close.addEventListener('click', hideInstallBar);
+  installBar.append(msg, btn, close); document.body.appendChild(installBar);
+}
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); DEFP = e; showInstallBar(false); if (U.route === 'settings') render(); });
+addEventListener('appinstalled', () => { DEFP = null; hideInstallBar(); toast('App installata'); });
 function extraSettings() {
   const np = 'Notification' in window ? Notification.permission : 'unsupported';
-  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Unica è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('dl') + ' Installa Unica</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">Per installare usa il menu del browser («Installa app»). Serve l’indirizzo https.</p>') +
+  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Unica è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('dl') + ' Installa Unica</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: apri in Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">Apri l’app tramite HTTPS e usa il comando «Installa Unica» o «Installa app» nel menu di Chrome/Edge. La richiesta compare quando il browser riconosce i requisiti PWA.</p>') +
     '<div class="stack mt"><button class="btn blk" data-act="diag">Aggiornamento e diagnostica</button><button class="btn blk" data-act="guide">' + ic('file') + ' Guida all’uso</button></div></div>' +
     '<div class="card"><h3>Vault: CSV</h3><p class="sm mut">Importa da Chrome, Edge, Firefox, Bitwarden e simili (nome, sito, utente, password). L’esportazione è in chiaro: usala con cautela.</p><div class="stack"><button class="btn blk" data-act="csvIn">' + ic('up') + ' Importa accessi da CSV</button><button class="btn blk" data-act="csvOut">' + ic('dl') + ' Esporta accessi in CSV</button></div></div>' +
     '<div class="card"><h3>Notifiche e preferenze</h3>' + (np === 'unsupported' ? '' : '<p class="sm mut">Notifica generica quando un avviso di prezzo viene raggiunto (senza dettagli dei tuoi dati). Stato: ' + (np === 'granted' ? 'attive' : np === 'denied' ? 'bloccate dal browser' : 'non attive') + '.</p>' + (np === 'default' ? '<button class="btn blk" data-act="notifOn">Attiva le notifiche</button>' : '')) +
@@ -2868,8 +2889,11 @@ Object.assign(ACT, { async rotate() { if (!(await ensureProt())) return; openRot
     if (location.hash.startsWith('#c=')) { U.incoming = parseShared(location.hash); history.replaceState(null, '', location.pathname + location.search); }
     await DB.open(); S.meta = await DB.get('meta', 'acct') || null;
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
-    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(() => {});
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      try { await navigator.serviceWorker.register('./sw.js', { scope: './', updateViaCache: 'none' }); } catch (e) { console.warn('Service worker non registrato', e); }
+    }
     go(S.meta ? 'lock' : 'welcome');
+    if (isIOS() && !isStandalone()) showInstallBar(true);
   } catch (e) { $('app').innerHTML = '<main class="center"><h1>Archivio non disponibile</h1><p class="mut">Il browser non permette di salvare dati (navigazione privata?). ' + h(e.message) + '</p></main>'; }
 })();
 </script>

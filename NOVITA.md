@@ -15,6 +15,24 @@
 - **Backup interni** automatici con rotazione, copie con nome e copia di sicurezza prima di ogni ripristino; promemoria backup e vibrazione configurabili.
 - **Quote JSON** per aggiornare i prezzi di titoli e BTP (come in Financial Dashboard).
 
+## v1.8.0: geofencing, icone, notifiche, biometria
+- **Geofencing rifatto** come in Fidelity Wallet: GPS continuo ad alta precisione, geometria degli edifici da OpenStreetMap (avviso quando sei dentro o a 20/30/50/100 m), controllo dell'accuratezza, pausa di 20 minuti, stato in tempo reale nella schermata Carte, schermo acceso opzionale, posizione del negozio salvabile nella carta («Posizione attuale» / «Trova il negozio più vicino»). Cache dei negozi cifrata.
+- **Vista a icone** per le carte fedeltà (pulsante nell'intestazione, scelta ricordata), con logo/iniziale, stella dei preferiti e punto luminoso per «qui vicino».
+- **Notifiche** consegnate dal service worker (funzionano su Android, dove `new Notification` non va), tocco sulla notifica apre la carta, prova della notifica, nome negozio facoltativo.
+- **Notifiche push** programmate dal tuo Worker (promemoria settimanale senza contenuto, chiavi VAPID, trigger orario, `gen-vapid.mjs`).
+- **Sblocco biometrico** anche per Vault e Conti sui dispositivi senza PRF (con scadenza di sicurezza), richiesta automatica dell'impronta all'apertura, scheda dedicata in Impostazioni.
+
+## v1.7.0: autoinstallante
+- Proposta di installazione automatica dopo lo sblocco: banner «Installa Unica» (Android/desktop: un tocco; iPhone: istruzioni Condividi → Aggiungi alla Home). «Più tardi» la ripropone dopo 7 giorni, ✕ non la mostra più.
+- Autosufficiente: se manifest.webmanifest o le icone mancano (per esempio copiando solo index.html), l'app genera da sola manifest e icone; funziona anche da una cartella con il solo index.html servito via https.
+- Aggiornamento automatico: controlla nuove versioni ogni ora e al ritorno nell'app, e le applica da sola al primo blocco.
+- Chiede al browser la memoria persistente per proteggere i dati cifrati dalla pulizia automatica.
+
+## v1.6.0: IA generativa integrata
+- Nell'Assistente, interruttore «Locale / IA generativa». L'IA risponde in streaming (Claude o OpenAI) con la tua chiave API, impostabile in Impostazioni → IA generativa (verifica della chiave al salvataggio, rimozione, modello modificabile).
+- Privacy: parte solo ciò che scrivi nella chat IA; mai carte, Vault, conti o password. Avviso se il messaggio contiene IBAN, numeri di carta o password. Cronologia solo in memoria, azzerata al blocco. Pulsante «Interrompi», risposta in formato leggibile (grassetto, elenchi, codice) con testo sempre ripulito.
+- Nessuna libreria esterna: tutto il codice è nel file unico (nessun CDN), quindi nessun codice di terzi da fidarsi.
+
 ## v1.5.0: allineamento a Fidelity Wallet 13.7
 - Database di 19 insegne italiane: scrivendo il nome (o dal prefisso del codice) compaiono sito e colore; per le altre, sito da Wikidata preferendo il .it; logo salvato nella carta (consenso al primo uso).
 - Link di condivisione `?card=` di Fidelity Wallet accettati; import dei backup `{cards:[…]}` e delle carte con campo `fav`; codici lunghi che vanno a capo nella carta aperta.

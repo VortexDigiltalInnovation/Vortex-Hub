@@ -7,4 +7,8 @@ binding = "SYNC"
 id = "INCOLLA_QUI_L_ID_DEL_NAMESPACE_KV"
 
 [vars]
+VAPID_SUBJECT = "mailto:tuo@indirizzo.it"
 ALLOWED_ORIGIN = "https://IL-TUO-DOMINIO"   # l'indirizzo dove pubblichi Unica, senza barra finale
+
+[triggers]
+crons = ["0 * * * *"]   # ogni ora: invia i promemoria push in scadenza

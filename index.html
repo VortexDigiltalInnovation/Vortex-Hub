@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-uEvMscyfbTU6ReDobp4aZDRnVdVHWw2kxH8FEFMEPEM='; style-src 'sha256-2Hxkz9dNrTrLxR9mQ/6uhF+089dRll3A5hSGISY1bZ0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-JuXKW3Ow6B0n3Dus9Y7aMiH2GRAOR26sXhliInnCyrE='; style-src 'sha256-2Hxkz9dNrTrLxR9mQ/6uhF+089dRll3A5hSGISY1bZ0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -287,7 +287,7 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '2.2.1';
+const APP_VERSION = '2.2.2';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -2263,7 +2263,7 @@ function openAssistant() {
   const m = modal('<div class="gap"><h2 class="sp" style="margin:0">Assistente</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><div id="alog" role="log" aria-live="polite" style="max-height:44vh;overflow:auto;margin:8px 0"></div><form data-form="x" class="gap"><input class="in sp" id="aqi" placeholder="Scrivi una domanda…" aria-label="Domanda" autocomplete="off"><button type="button" class="ib" id="amic" aria-label="Detta la domanda"' + (SR ? '' : ' hidden') + '>' + ic('mic') + '</button><button class="btn pri">Invia</button></form><label class="sm"><input type="checkbox" id="atts"' + (lsGet('unica_tts') === '1' ? ' checked' : '') + '> Leggi le risposte ad alta voce (voce locale)</label><p class="sm mut">Risponde con i dati locali, senza IA esterne. La dettatura usa il riconoscimento vocale del browser: su alcuni browser l’audio può essere elaborato dal fornitore del browser.</p>', { onClose: () => { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) { } } });
   m.q('form').onsubmit = ev => { ev.preventDefault(); const i = m.q('#aqi'), q = i.value.trim(); if (!q) return; i.value = ''; asPush(q); };
   m.q('#atts').onchange = e => { lsSet('unica_tts', e.target.checked ? '1' : '0'); if (!e.target.checked) try { window.speechSynthesis.cancel(); } catch (x) { } };
-  if (SR) m.q('#amic').onclick = () => { try { const r = new SR(); r.lang = 'it-IT'; r.interimResults = false; try { r.processLocally = true; } catch (e) { } r.onresult = e => { m.q('#aqi').value = e.results[0][0].transcript; m.q('form').requestSubmit(); }; r.onerror = () => toast('Dettatura non disponibile'); r.start(); toast('Parla ora…'); } catch (e) { toast('Dettatura non disponibile'); } };
+  if (SR) m.q('#amic').onclick = () => { try { const r = new SR(); r.lang = 'it-IT'; r.interimResults = false; r.onresult = e => { m.q('#aqi').value = e.results[0][0].transcript; m.q('form').requestSubmit(); }; r.onerror = () => toast('Dettatura non disponibile'); r.start(); toast('Parla ora…'); } catch (e) { toast('Dettatura non disponibile'); } };
   asDraw(); m.q('#aqi').focus();
 }
 
@@ -2494,7 +2494,7 @@ Object.assign(ACT, {
   vxico: t => { $('f_ic').value = $('f_ic').value === t.dataset.i ? '' : t.dataset.i; document.querySelectorAll('[data-act=vxico]').forEach(b => b.setAttribute('aria-pressed', b.dataset.i === $('f_ic').value)); },
   async vxphoto() { const f = await pickFile('image/*'); if (!f) return; try { $('f_ph').value = await photoData(f); $('vx_prev').textContent = 'Foto scelta'; } catch (e) { toast('Immagine non valida'); } },
   vxnophoto: () => { $('f_ph').value = ''; $('f_ic').value = ''; $('f_co').value = ''; document.querySelectorAll('[data-act=vxcol],[data-act=vxico]').forEach(b => b.setAttribute('aria-pressed', 'false')); $('vx_prev').textContent = 'Rimossi'; },
-  vmic() { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return; try { const r = new SR(); r.lang = 'it-IT'; r.interimResults = false; try { r.processLocally = true; } catch (e) { } r.onresult = e => { U.q = e.results[0][0].transcript.replace(/[.,;!?]+$/, ''); const q = $('vq'); if (q) q.value = U.q; const l = $('vlist'); if (l) l.innerHTML = vlist(); }; r.onerror = () => toast('Ricerca vocale non disponibile'); r.start(); toast('Parla ora…'); } catch (e) { toast('Ricerca vocale non disponibile'); } },
+  vmic() { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return; try { const r = new SR(); r.lang = 'it-IT'; r.interimResults = false; r.onresult = e => { U.q = e.results[0][0].transcript.replace(/[.,;!?]+$/, ''); const q = $('vq'); if (q) q.value = U.q; const l = $('vlist'); if (l) l.innerHTML = vlist(); }; r.onerror = e => toast(e.error === 'not-allowed' ? 'Microfono non consentito: abilitalo nelle impostazioni del browser' : e.error === 'no-speech' ? 'Non ho sentito nulla, riprova' : 'Ricerca vocale non disponibile (' + e.error + ')'); r.start(); toast('Parla ora…'); } catch (e) { toast('Ricerca vocale non disponibile'); } },
 });
 
 /* ---------- Backup automatico su cartella del dispositivo + schede comprimibili con «Vai a» ---------- */
@@ -3407,7 +3407,7 @@ function vcStart(onlineFallback) {
   try {
     const r = new SR(); VC.r = r; VC.on = true; let got = false, fin = '';
     r.lang = 'it-IT'; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
-    try { r.processLocally = !onlineFallback; } catch (e) { }
+    try { if (!onlineFallback && 'processLocally' in r) r.processLocally = true; } catch (e) { }
     r.onresult = e => {
       const res = e.results[e.results.length - 1], t = res[0].transcript.trim();
       vcUI('“' + t + '”', 'live'); if (!res.isFinal) return;
@@ -3419,7 +3419,7 @@ function vcStart(onlineFallback) {
     };
     r.onerror = async e => {
       VC.on = false; VC.r = null;
-      if (e.error === 'language-not-supported' && !onlineFallback) {
+      if (!onlineFallback && ['language-not-supported','service-not-allowed','network','not-allowed-local','bad-grammar'].includes(e.error) || (!onlineFallback && !got && e.error !== 'aborted' && e.error !== 'no-speech' && e.error !== 'not-allowed' && e.error !== 'audio-capture')) {
         vcUI('Il riconoscimento offline in italiano non è disponibile', 'no');
         const ok = await ask('Riconoscimento vocale online', 'Il pacchetto italiano locale non è disponibile. Per continuare, il browser potrebbe inviare l’audio al proprio servizio di riconoscimento vocale. Vuoi procedere?', { ok: 'Continua online' });
         if (ok) vcStart(true);
@@ -3431,7 +3431,7 @@ function vcStart(onlineFallback) {
     };
     r.onend = () => { if (VC.on) { VC.on = false; if (!got) { vcUI('Non ho sentito nulla, riprova', 'no'); setTimeout(() => vcUI(), 2000); } } };
     r.start(); vcUI('Parla ora… prova “apri Esselunga”', 'live');
-  } catch (e) { VC.on = false; vcUI('Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2200); }
+  } catch (e) { VC.on = false; VC.r = null; if (!onlineFallback) return vcStart(true); vcUI('Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2200); }
 }
 function say2(t) { try { if (t && lsGet('unica_tts') === '1') say(t); } catch (e) { } }
 /* microfono nella barra di ricerca */

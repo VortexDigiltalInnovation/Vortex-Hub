@@ -1,5 +1,10 @@
 # Unica – stato dell'integrazione
 
+## v2.5.1 — Biometria: «unknown error occurred while talking to the credential manager»
+- Il gestore credenziali di Android rifiutava la richiesta di passkey. Ora Unica prova in sequenza richieste via via più semplici (con e senza suggerimenti, estensione PRF, vincolo sul sensore del dispositivo) e si ferma solo se annulli tu. Lo stesso vale per lo sblocco.
+- Se l'errore persiste, il messaggio mostra anche il nome tecnico (es. «NotSupportedError – …») per capire la causa.
+- Se continua a fallire: verifica che il telefono abbia un blocco schermo con impronta/volto, che Chrome sia aggiornato e che in Impostazioni di Android → Google → Gestore password/Passkey il servizio sia attivo.
+
 ## v2.5.0 — Zero iniziale, biometria in un tocco, password che non si azzera
 - **Zero iniziale delle carte**: la scansione ora completa a 13 cifre gli EAN-13 (e a 8 gli EAN-8) che alcuni lettori consegnano senza lo zero davanti, e il salvataggio completa un EAN-13 scritto con 12 cifre. Se una carta già salvata ha ancora lo zero mancante, aprila con Modifica e correggi il codice.
 - **Biometria senza elementi esterni**: la passkey ora usa solo il sensore del dispositivo (impronta, volto o blocco schermo), senza proporre chiavi di sicurezza, QR o altri telefoni.

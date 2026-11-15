@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-1kC99kFEW9aHrK43yNxOUtwcMqQpPT62rHgLWu3mMyg='; style-src 'sha256-VxDa1cX0l5UbvyKy0YwcpXtipWXMrjw+/LfTLimstc0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-QGkZKTLcuOI4k1pR4VGBO6gqKOe2DsfmDXdPSbJOiCs='; style-src 'sha256-VxDa1cX0l5UbvyKy0YwcpXtipWXMrjw+/LfTLimstc0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -316,7 +316,7 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '2.5.0';
+const APP_VERSION = '2.5.1';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -468,11 +468,18 @@ async function buildAccount(pw) {
 const pkSupported = () => !!(window.PublicKeyCredential && navigator.credentials && window.isSecureContext);
 async function pkCreate() {
   const salt = rnd(32);
-  const cred = await navigator.credentials.create({ publicKey: {
-    rp: { name: APP_NAME, id: location.hostname }, user: { id: rnd(16), name: 'utente@unica', displayName: 'Utente ' + APP_NAME },
-    challenge: rnd(32), pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
-    authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' }, hints: ['client-device'], timeout: 120000,
-    extensions: { prf: { eval: { first: salt } } } } });
+  const mkBase = () => ({ rp: { name: APP_NAME, id: location.hostname }, user: { id: rnd(16), name: 'utente@unica', displayName: 'Utente ' + APP_NAME }, challenge: rnd(32), pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], timeout: 120000 });
+  const SEL = { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' };
+  // Alcuni telefoni (gestore credenziali di Android) rifiutano le opzioni avanzate con «unknown error»: si riprova con richieste via via più semplici.
+  const variants = [
+    o => ({ ...o, authenticatorSelection: SEL, hints: ['client-device'], extensions: { prf: { eval: { first: salt } } } }),
+    o => ({ ...o, authenticatorSelection: SEL, extensions: { prf: {} } }),
+    o => ({ ...o, authenticatorSelection: SEL }),
+    o => ({ ...o, authenticatorSelection: { userVerification: 'preferred', residentKey: 'preferred' } })
+  ];
+  let cred, lastE;
+  for (const v of variants) { try { cred = await navigator.credentials.create({ publicKey: v(mkBase()) }); break; } catch (e) { lastE = e; if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) throw e; } }
+  if (!cred && lastE) throw lastE;
   if (!cred) throw new Error('Registrazione annullata');
   const ext = cred.getClientExtensionResults ? cred.getClientExtensionResults() : {};
   let prf = ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null;
@@ -482,8 +489,14 @@ async function pkCreate() {
 }
 async function pkAssert(pk) {
   pk = pk || S.meta.pk;
-  const a = await navigator.credentials.get({ publicKey: { challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: b64d(pk.id), transports: ['internal'] }], hints: ['client-device'], userVerification: 'required', timeout: 120000,
-    extensions: { prf: { eval: { first: b64d(pk.salt) } } } } });
+  const idb = b64d(pk.id), vs = [
+    () => ({ challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: idb, transports: ['internal'] }], hints: ['client-device'], userVerification: 'required', timeout: 120000, extensions: { prf: { eval: { first: b64d(pk.salt) } } } }),
+    () => ({ challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: idb }], userVerification: 'required', timeout: 120000, extensions: { prf: { eval: { first: b64d(pk.salt) } } } }),
+    () => ({ challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: idb }], userVerification: 'required', timeout: 120000 })
+  ];
+  let a, lastE;
+  for (const v of vs) { try { a = await navigator.credentials.get({ publicKey: v() }); break; } catch (e) { lastE = e; if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) throw e; } }
+  if (!a && lastE) throw lastE;
   if (!a) return null;
   const ext = a.getClientExtensionResults ? a.getClientExtensionResults() : {};
   return { prf: ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null };
@@ -4152,7 +4165,7 @@ Object.assign(P, {
       if (!S.meta.pk.prf && !S.meta.wrapBio && S.kp) await bioEnable(true);
       try { localStorage.setItem('unica_bioskip', '1'); } catch (e) { }
       toast('Impronta / Face ID attivi' + (S.meta.wrapBio ? ' (ogni ' + BIO_DAYS + ' giorni chiederà la master password)' : ''));
-    } catch (e) { toast('Non attivata: ' + (e.name === 'NotAllowedError' ? 'operazione annullata o nessun sensore sul dispositivo' : e.message)); }
+    } catch (e) { toast('Non attivata: ' + (e.name === 'NotAllowedError' ? 'operazione annullata o nessun sensore sul dispositivo' : (e.name ? e.name + ' – ' : '') + e.message)); }
     render();
   };
   ACT.bioOn = ACT.bioQuick;

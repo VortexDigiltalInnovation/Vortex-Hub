@@ -1,5 +1,16 @@
 # Unica – stato dell'integrazione
 
+## v2.4.0 — Effetto wow: carte olografiche 3D e Home viva
+- **Carta fisica 3D**: aprendo una carta compare una vera «tessera» (colore, logo, nome) che si inclina seguendo il telefono (giroscopio) o il puntatore e, dopo un istante, **gira con una molla** mostrando il codice sul retro bianco, pronto per la cassa. Un tocco (o Invio/Spazio) la rigira. Con «riduci movimento» attivo il codice compare subito, senza animazioni.
+- **Ologramma**: su ogni carta della lista e sulla tessera un riflesso iridescente cambia con l'inclinazione. Su iPhone il permesso al movimento viene chiesto al primo tocco.
+- **Home viva**: saluto per fascia oraria, contatori animati (carte, preferite, utilizzi) e anello animato della quota di preferite.
+- Tutto locale, senza librerie né rete; i dati mostrati sono solo quelli delle carte.
+
+## v2.3.0 — Ricerca vocale libera, icone sui pulsanti, installazione
+- **Ricerca vocale libera**: il microfono usa direttamente il riconoscimento del browser, senza il blocco «solo offline» e senza la finestra di conferma. Se il riconoscimento non è disponibile compare solo un messaggio chiaro (microfono negato, nessun audio, rete assente). Su Chrome l'audio può essere elaborato dal servizio del browser (vedi SICUREZZA.md).
+- **Icone di qualità su tutti i pulsanti**: set coerente di icone a tratto (SVG inline, nessuna dipendenza) applicato in modo automatico a ogni pulsante testuale, anche nelle schermate future: salva, annulla, elimina, importa/ripristina, chiavi e password, notifiche, sincronizzazione, diagnostica, cartelle, categorie, condivisione ecc. Colore coerente con il tema, versione piccola nei pulsanti compatti.
+- **Installazione**: la diagnostica indicava `icons/icon-192x192.png`, `icon-512x512.png` e `apple-touch-icon.png` mancanti sul tuo hosting, causa per cui Chrome non offre «Installa». Il service worker ora fornisce da solo queste icone se mancano (copia di riserva, non testata sul tuo Chrome), ma il modo corretto resta caricare l'intera cartella `icons/` (vedi INSTALLAZIONE.md).
+
 ## v2.2.1 — Ricerca e avvisi automatici
 - Ricerca automatica di sito e logo abilitata per impostazione iniziale, con interruttore nelle Impostazioni; parte dopo aver inserito il nome del negozio.
 - Ricerca negozi vicini e avvisi di prossimità attivi per impostazione iniziale dopo lo sblocco. Il browser deve autorizzare la posizione; le notifiche di sistema richiedono il relativo permesso.

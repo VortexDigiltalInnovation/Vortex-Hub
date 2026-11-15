@@ -8,6 +8,10 @@ Unica è una **Progressive Web App (PWA)**, non un file APK/EXE. Per motivi di s
 2. Pubblica tutti i file e le cartelle estratti su un hosting statico **HTTPS**, mantenendo la struttura delle cartelle. Non caricare solo `index.html`.
 3. Apri l’indirizzo HTTPS nel browser indicato sotto. Aprire `index.html` direttamente dal file manager (`file://`) non consente l’installazione né la geolocalizzazione.
 
+## Se Chrome non offre «Installa»
+
+In Unica apri Impostazioni → Aggiornamento e diagnostica → Verifica file. Se elenca file mancanti (per esempio `icons/icon-192x192.png`), non sono stati caricati: su GitHub Pages carica **anche la cartella `icons/` con tutti i 6 file PNG**, oltre a `index.html`, `sw.js`, `manifest.webmanifest`, `privacy.html`, `ocr.html`, `ocr-frame.js`. Con il caricamento dal sito web di GitHub le cartelle vanno trascinate intere (oppure usa «Add file → Upload files» entrando prima nella cartella `icons`). Poi premi «Ripara e ricarica» e riapri il sito. Chrome può impiegare qualche secondo a mostrare «Installa app» nel menu ⋮.
+
 ## Android
 
 Apri il sito in Chrome o Edge e premi **Installa Unica** nel banner, oppure apri il menu ⋮ e scegli **Installa app** / **Aggiungi alla schermata Home**.

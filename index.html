@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-JuXKW3Ow6B0n3Dus9Y7aMiH2GRAOR26sXhliInnCyrE='; style-src 'sha256-2Hxkz9dNrTrLxR9mQ/6uhF+089dRll3A5hSGISY1bZ0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-kTG2tb2mhggCvW2aVP4Cgi4jGVbb7xbHuRW9JOUltaA='; style-src 'sha256-VxDa1cX0l5UbvyKy0YwcpXtipWXMrjw+/LfTLimstc0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -278,6 +278,35 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 @media(prefers-contrast:more){.card,.in,.ccard{border-color:currentColor}}
 .cmpb{height:7px;border-radius:5px;background:var(--line);overflow:hidden;margin:3px 0}.cmpb i{display:block;height:100%;border-radius:5px}
 .legend{list-style:none;display:flex;flex-wrap:wrap;gap:4px 12px;padding:0;margin:8px 0 0;font-size:.8rem}.legend .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.btn>.ic{width:1.3em;height:1.3em;stroke-width:2;flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18))}
+.btn.sm>.ic{width:1.15em;height:1.15em}
+.btn.pri>.ic{stroke:#fff}
+.btn.dan>.ic{stroke:var(--dan)}
+.btn.blk{gap:10px}
+.btn:not(.pri):not(.dan)>.ic{color:var(--pri)}
+.btn:hover>.ic{transform:scale(1.08)}
+.btn>.ic{transition:transform .2s}
+@media(prefers-reduced-motion:reduce){.btn>.ic{transition:none}.btn:hover>.ic{transform:none}}
+.holo{position:absolute!important;inset:0;pointer-events:none;z-index:2;border-radius:inherit;mix-blend-mode:color-dodge;opacity:.5;background:linear-gradient(115deg,transparent 18%,rgba(255,60,170,.55) 34%,rgba(60,255,225,.55) 48%,rgba(255,235,70,.5) 62%,transparent 78%);background-size:260% 260%;background-position:calc(50% + var(--tx,0)*45%) calc(50% + var(--ty,0)*45%)}
+.hero3d{perspective:1000px;margin:12px auto;max-width:360px}
+.htilt{transform-style:preserve-3d;transform:rotateX(calc(var(--ty,0)*-7deg)) rotateY(calc(var(--tx,0)*9deg));transition:transform .12s linear}
+.hflip{position:relative;aspect-ratio:1.586;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.2,.9,.25,1.12);cursor:pointer;border-radius:20px;box-shadow:0 24px 50px -18px rgba(0,0,0,.6),0 0 40px rgba(139,92,246,.25)}
+.hflip.back{transform:rotateY(180deg)}.hflip.nomo{transition:none}
+.hf{position:absolute;inset:0;border-radius:20px;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;color:#fff}
+.hfront{display:flex;flex-direction:column;justify-content:space-between;padding:18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.hfront::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 0% 0%,rgba(255,255,255,.4),transparent 55%),linear-gradient(160deg,transparent 40%,rgba(0,0,0,.35))}
+.hfront>*{position:relative}
+.hlogo{width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.22);display:grid;place-items:center;overflow:hidden;font-style:normal;font-size:1.7rem;font-weight:800;backdrop-filter:blur(6px)}.hlogo img{width:100%;height:100%;object-fit:contain;background:#fff}.hlogo i{font-style:normal}
+.hname{font-size:1.45rem;text-shadow:0 2px 8px rgba(0,0,0,.35);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hhint{position:absolute!important;right:14px;top:16px;font-size:.72rem;opacity:.8;letter-spacing:.04em;text-transform:uppercase}
+.hback{transform:rotateY(180deg);background:#fff;color:#000;display:flex;align-items:center;justify-content:center}
+.hback .cview{background:#fff;color:#000;width:100%}
+.pulse{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:18px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#0ea5e9 0%,#7c3aed 55%,#db2777 110%);box-shadow:0 18px 44px -16px rgba(124,58,237,.65),inset 0 1px 0 rgba(255,255,255,.35);position:relative;overflow:hidden}
+.pulse::after{content:"";position:absolute;width:70%;height:160%;right:-20%;top:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.28),transparent);pointer-events:none}
+.pulse .pl{flex:1;min-width:0;position:relative;z-index:1}.pg{font-size:1.25rem;font-weight:700;margin-bottom:8px;text-shadow:0 1px 3px rgba(0,0,0,.25)}
+.pst{display:flex;gap:18px}.pst div{display:flex;flex-direction:column}.pst b{font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}.pst span{font-size:.75rem;opacity:.85;margin-top:2px}
+.ring{width:84px;height:84px;flex:none;position:relative;z-index:1;color:#fff}
+@media(prefers-reduced-motion:reduce){.htilt,.hflip{transition:none}.holo{background-position:50% 50%}}
 </style>
 </head>
 <body>
@@ -287,7 +316,7 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '2.2.2';
+const APP_VERSION = '2.4.0';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -3400,14 +3429,13 @@ function vcUI(txt, state) {
   b.className = 'vcb ' + (state || ''); b.innerHTML = '<span class="vcd" aria-hidden="true"></span><span class="vct">' + h(txt) + '</span>' + (VC.on ? '<button class="ib" data-act="vcStop" aria-label="Annulla">' + ic('x') + '</button>' : '');
 }
 function vcStop() { VC.on = false; try { VC.r && VC.r.abort(); } catch (e) { } VC.r = null; vcUI(); }
-function vcStart(onlineFallback) {
+function vcStart() {
   const SR = VSR();
   if (!SR) { toast('Il riconoscimento vocale non è supportato da questo browser'); return; }
   if (VC.on) { vcStop(); return; }
   try {
     const r = new SR(); VC.r = r; VC.on = true; let got = false, fin = '';
     r.lang = 'it-IT'; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
-    try { if (!onlineFallback && 'processLocally' in r) r.processLocally = true; } catch (e) { }
     r.onresult = e => {
       const res = e.results[e.results.length - 1], t = res[0].transcript.trim();
       vcUI('“' + t + '”', 'live'); if (!res.isFinal) return;
@@ -3417,21 +3445,14 @@ function vcStart(onlineFallback) {
       cmd.run(); say2(cmd.say);
       setTimeout(() => { if (!VC.on) vcUI(); }, 2200);
     };
-    r.onerror = async e => {
+    r.onerror = e => {
       VC.on = false; VC.r = null;
-      if (!onlineFallback && ['language-not-supported','service-not-allowed','network','not-allowed-local','bad-grammar'].includes(e.error) || (!onlineFallback && !got && e.error !== 'aborted' && e.error !== 'no-speech' && e.error !== 'not-allowed' && e.error !== 'audio-capture')) {
-        vcUI('Il riconoscimento offline in italiano non è disponibile', 'no');
-        const ok = await ask('Riconoscimento vocale online', 'Il pacchetto italiano locale non è disponibile. Per continuare, il browser potrebbe inviare l’audio al proprio servizio di riconoscimento vocale. Vuoi procedere?', { ok: 'Continua online' });
-        if (ok) vcStart(true);
-        else { vcUI('Installa il pacchetto vocale italiano o abilita il riconoscimento online', 'no'); setTimeout(() => vcUI(), 3200); }
-        return;
-      }
-      const m = { 'not-allowed': 'Microfono non consentito: abilitalo nelle impostazioni del browser', 'service-not-allowed': 'Riconoscimento vocale non consentito', 'no-speech': 'Non ho sentito nulla, riprova', 'audio-capture': 'Microfono non trovato', 'network': 'Il riconoscimento vocale richiede la rete su questo dispositivo', 'language-not-supported': 'Italiano non disponibile anche per il riconoscimento online' }[e.error];
+      const m = { 'not-allowed': 'Microfono non consentito: abilitalo nelle impostazioni del browser', 'service-not-allowed': 'Riconoscimento vocale non consentito', 'no-speech': 'Non ho sentito nulla, riprova', 'audio-capture': 'Microfono non trovato', 'network': 'Il riconoscimento vocale richiede la rete su questo dispositivo', 'language-not-supported': 'Italiano non disponibile in questo browser' }[e.error];
       if (e.error !== 'aborted') { vcUI(m || 'Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2800); } else vcUI();
     };
     r.onend = () => { if (VC.on) { VC.on = false; if (!got) { vcUI('Non ho sentito nulla, riprova', 'no'); setTimeout(() => vcUI(), 2000); } } };
     r.start(); vcUI('Parla ora… prova “apri Esselunga”', 'live');
-  } catch (e) { VC.on = false; VC.r = null; if (!onlineFallback) return vcStart(true); vcUI('Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2200); }
+  } catch (e) { VC.on = false; VC.r = null; vcUI('Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2200); }
 }
 function say2(t) { try { if (t && lsGet('unica_tts') === '1') say(t); } catch (e) { } }
 /* microfono nella barra di ricerca */
@@ -4017,6 +4038,108 @@ Object.assign(ACT, { async rotate() { if (!(await ensureProt())) return; openRot
   }, { passive: true });
   document.addEventListener('pointerout', e => { const t = e.target.closest && e.target.closest('.ccard'); if (t && !t.contains(e.relatedTarget)) t.style.transform = ''; });
   if (document.body) init(); else addEventListener('DOMContentLoaded', init);
+})();
+
+/* ===== Icone di qualità su tutti i pulsanti (v2.3.0) ===== */
+Object.assign(P, {
+  send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
+  tag: '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.2"/>',
+  power: '<path d="M12 2v10M18.4 6.6a9 9 0 1 1-12.8 0"/>',
+  cloud: '<path d="M17.5 19a4.5 4.5 0 0 0 .5-9 6 6 0 0 0-11.5 1.5A3.8 3.8 0 0 0 7 19Z"/>',
+  unlock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.6-2"/>',
+  share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
+  open: '<path d="M7 17 17 7M8 7h9v9"/>',
+  wrench: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7V21h3.3l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.4-.6-.6-2.4Z"/>',
+  mic2: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>',
+  bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'
+});
+(function () {
+  const RULES = [
+    [/notific/i, 'bell'], [/sincroni|server|collegamento|link/i, 'cloud'],
+    [/diagnostica|verifica file|verifica/i, 'shield'], [/ripara/i, 'wrench'], [/aggiorn|ripristina le impostazioni/i, 'refresh'],
+    [/passkey|password|chiav|recupero|recupera|cifratura|id client/i, 'key'],
+    [/ripristina|backup|importa|import /i, 'dl'], [/esporta|salva su file|scarica/i, 'up'],
+    [/cartella/i, 'folder'], [/categori|propriet/i, 'tag'], [/quote/i, 'chart'], [/vicin|posizione|negozio|geo/i, 'pin'],
+    [/elimina|cancella|annulla import|svuota/i, 'trash'], [/disattiva|rimuovi|nascondi|ignora/i, 'power'],
+    [/condividi|share/i, 'share'], [/copia$|^copia|crea una copia/i, 'copy'],
+    [/invia|chiedi/i, 'send'], [/scrivi/i, 'edit'], [/apri|vedi|mostra/i, 'eye'],
+    [/sblocca|usa$/i, 'unlock'], [/blocca/i, 'lock'],
+    [/riattiva|attiva/i, 'bolt'], [/cerca/i, 'search'],
+    [/crea|aggiungi|nuov|nuova/i, 'plus'], [/cambia|modifica|imposta|scegli/i, 'edit'],
+    [/annulla|chiudi|interrompi|più tardi/i, 'x'],
+    [/salva|applica|fatto|^ok$|continua|conferm|ho salvato|tutte|ho già/i, 'check']
+  ];
+  const ACTS = { dgFix: 'wrench', dgUp: 'refresh', dgFiles: 'shield', forgot: 'key', snapNow: 'copy', snapRestore: 'dl', syNow: 'refresh', syLink: 'cloud', pushTest: 'bell', notifOn: 'bell', quotes: 'chart', aistop: 'x', toCreate: 'plus', restore: 'dl', pkOn: 'key', chpw: 'key', showRec: 'eye', rotate: 'key', fbNow: 'refresh', diag: 'info', vselMode: 'check', vselAll: 'check', vmeta: 'tag', vbCat: 'tag', vbOwn: 'tag' };
+  function pick(b, t) {
+    const a = b.getAttribute('data-act'); if (a && ACTS[a]) return ACTS[a];
+    for (const [re, n] of RULES) if (re.test(t)) return n;
+    return null;
+  }
+  function decorate(root) {
+    (root.querySelectorAll ? root : document).querySelectorAll('button.btn:not([data-ico]),a.btn:not([data-ico])').forEach(b => {
+      b.setAttribute('data-ico', '1');
+      if (b.querySelector('.ic,svg')) return;
+      const t = (b.textContent || '').trim(); if (!t) return;
+      const n = pick(b, t); if (n && P[n]) b.insertAdjacentHTML('afterbegin', ic(n));
+    });
+  }
+  let q = 0;
+  new MutationObserver(() => { if (q) return; q = requestAnimationFrame(() => { q = 0; try { decorate(document); } catch (e) { } }); }).observe(document.documentElement, { childList: true, subtree: true });
+  try { decorate(document); } catch (e) { }
+})();
+
+/* ===== Effetto wow (v2.4.0): carte olografiche 3D, carta che gira, Home viva ===== */
+(function () {
+  const RMq = matchMedia('(prefers-reduced-motion: reduce)');
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  /* --- inclinazione: giroscopio sul telefono, puntatore sul computer --- */
+  let tx = 0, ty = 0, gyro = false, raf = 0, perm = false;
+  const apply = () => { raf = 0; if (RMq.matches) return; if (!document.querySelector('.hero3d,.ccard')) return; const r = document.documentElement.style; r.setProperty('--tx', tx.toFixed(3)); r.setProperty('--ty', ty.toFixed(3)); };
+  const push = () => { if (!raf) raf = requestAnimationFrame(apply); };
+  addEventListener('deviceorientation', e => { if (e.gamma == null || e.beta == null) return; gyro = true; tx += (clamp(e.gamma / 28, -1, 1) - tx) * .25; ty += (clamp((e.beta - 45) / 28, -1, 1) - ty) * .25; push(); }, { passive: true });
+  addEventListener('pointermove', e => { if (gyro || e.pointerType === 'touch') return; tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; push(); }, { passive: true });
+  addEventListener('pointerdown', () => { if (perm) return; perm = true; try { const D = window.DeviceOrientationEvent; if (D && typeof D.requestPermission === 'function') D.requestPermission().catch(() => { }); } catch (e) { } }, { once: true, passive: true });
+
+  /* --- ologramma su ogni carta della lista --- */
+  { const ct = cardTile; cardTile = function (c) { return ct(c).replace(/<\/button>$/, '<i class="holo" aria-hidden="true"></i></button>'); }; }
+
+  /* --- carta fisica 3D che gira: davanti il logo, dietro il codice --- */
+  { const co = cardOpen; cardOpen = async function (id) {
+    await co.apply(this, arguments);
+    try {
+      const c = S.cards.get(id); if (!c) return; const d = c.data, cvs = [...document.querySelectorAll('.cview')], cv = cvs[cvs.length - 1]; if (!cv || cv.closest('.hero3d')) return;
+      const ini = (String(d.name || '?').trim()[0] || '?').toUpperCase();
+      const hero = document.createElement('div'); hero.className = 'hero3d';
+      hero.innerHTML = '<div class="htilt"><div class="hflip" role="button" tabindex="0" aria-pressed="false" aria-label="Carta ' + h(d.name) + ': tocca per girarla"><div class="hf hfront" style="background:' + hex(d.color) + '"><span class="hlogo">' + (d.logo ? '<img src="' + h(d.logo) + '" alt="">' : '<i>' + h(ini) + '</i>') + '</span><b class="hname">' + h(d.name) + '</b><span class="hhint">tocca per girare</span><i class="holo" aria-hidden="true"></i></div><div class="hf hback"></div></div></div>';
+      cv.parentNode.insertBefore(hero, cv); hero.querySelector('.hback').appendChild(cv); cv.style.cssText = 'margin:0;padding:10px 12px;border-radius:0;width:100%';
+      const fl = hero.querySelector('.hflip'); let back = false;
+      const set = b => { back = b; fl.classList.toggle('back', b); fl.setAttribute('aria-pressed', String(b)); buzz(12); };
+      fl.addEventListener('click', () => set(!back)); fl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set(!back); } });
+      if (RMq.matches) { fl.classList.add('back', 'nomo'); back = true; fl.setAttribute('aria-pressed', 'true'); } else setTimeout(() => set(true), 650);
+    } catch (e) { }
+  }; }
+
+  /* --- Home viva: saluto, contatori animati, anello dei preferiti --- */
+  { const hv = V.home; V.home = function () {
+    const html = hv.apply(this, arguments), cs = cardsArr(), n = cs.length, fav = cs.filter(c => c.data.fav).length, uses = cs.reduce((a, c) => a + (c.data.uses || 0), 0);
+    const hr = new Date().getHours(), g = hr < 5 ? 'Buona notte' : hr < 13 ? 'Buongiorno' : hr < 18 ? 'Buon pomeriggio' : 'Buonasera';
+    const pct = n ? fav / n : 0, C = 2 * Math.PI * 34;
+    const hero = '<section class="pulse" aria-label="Riepilogo"><div class="pl"><div class="pg">' + g + '</div><div class="pst"><div><b data-count="' + n + '">' + n + '</b><span>carte</span></div><div><b data-count="' + fav + '">' + fav + '</b><span>preferite</span></div><div><b data-count="' + uses + '">' + uses + '</b><span>utilizzi</span></div></div></div>' +
+      '<svg class="ring" viewBox="0 0 80 80" aria-hidden="true"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="7"/><circle class="rfg" cx="40" cy="40" r="34" fill="none" stroke="url(#rg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="' + C.toFixed(2) + '" stroke-dashoffset="' + C.toFixed(2) + '" data-to="' + (C * (1 - pct)).toFixed(2) + '" transform="rotate(-90 40 40)"/><text x="40" y="45" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">' + Math.round(pct * 100) + '%</text></svg></section>';
+    return html.replace('<main class="wrap">', '<main class="wrap">' + hero);
+  }; }
+  function countUp(el) {
+    el.setAttribute('data-cd', '1'); const to = +el.dataset.count; if (RMq.matches || !to) return; const t0 = performance.now();
+    (function f(t) { const k = clamp((t - t0) / 1000, 0, 1); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); })(t0);
+  }
+  function wow() {
+    document.querySelectorAll('[data-count]:not([data-cd])').forEach(countUp);
+    document.querySelectorAll('.rfg:not([data-rd])').forEach(c => { c.setAttribute('data-rd', '1'); if (RMq.matches) { c.setAttribute('stroke-dashoffset', c.dataset.to); return; } requestAnimationFrame(() => requestAnimationFrame(() => { c.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)'; c.setAttribute('stroke-dashoffset', c.dataset.to); })); });
+  }
+  let q2 = 0; new MutationObserver(() => { if (q2) return; q2 = requestAnimationFrame(() => { q2 = 0; try { wow(); } catch (e) { } }); }).observe(document.documentElement, { childList: true, subtree: true });
 })();
 
 /* ---------- avvio ---------- */

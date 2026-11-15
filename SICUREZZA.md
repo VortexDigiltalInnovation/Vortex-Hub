@@ -66,3 +66,7 @@ Revisione interna del codice e test automatici su Chromium. **Non è un audit in
 27. **_headers**: `ocr.html` deve poter essere incorniciato dalla stessa origine; per questo le intestazioni `X-Frame-Options: DENY` ora sono elencate per ogni file tranne `ocr.html`. Se usi un hosting diverso da Netlify/Cloudflare Pages, replica la regola.
 28. **IA del browser**: elaborazione sul dispositivo, ma dipende dal browser (può scaricare un modello di alcuni GB).
 29. **Allegati**: cifrati come le altre voci; il limite per file è 15 MB. Le foto non vengono ripulite dai metadati (posizione, ecc.) prima di essere salvate: restano cifrate nel Vault ma, se le scarichi e le inoltri, portano i metadati originali.
+
+
+## Ricerca vocale (v2.3.0)
+La ricerca vocale usa il riconoscimento del browser. Su Chrome per Android l'audio viene in genere inviato al servizio di riconoscimento di Google; Unica non lo registra né lo salva e usa solo il testo riconosciuto per filtrare le carte. Se non vuoi che l'audio lasci il dispositivo, non usare il microfono e scrivi la ricerca.

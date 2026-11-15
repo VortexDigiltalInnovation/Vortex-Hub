@@ -1,5 +1,10 @@
 # Unica – stato dell'integrazione
 
+## v2.7.0 — Barre superiori chiare, microfono grande, ricerca che riparte
+- **Barre superiori**: ogni azione ha un'icona a colori dedicata con etichetta sotto: Cerca, Assistente (scintille), Blocca, Controllo (scudo), Genera (dado, al posto delle frecce circolari che si confondevano con «aggiorna»), Nuova, Vicino, Scansiona, Schede/Icone, Report.
+- **Microfono della ricerca vocale** molto più grande (56 px, tondo, a gradiente), nella ricerca delle carte e in quella del Vault.
+- **Nuova carta**: cambiando il nome la ricerca automatica di sito, colore e logo riparte da sola ogni volta, senza premere «Cerca». Il sito trovato dalla ricerca precedente viene sostituito; se lo scrivi tu a mano, resta quello.
+
 ## v2.6.0 — Biometria semplice, nuovi sfondi, loghi
 - **Biometria semplice**: l'attivazione usa solo il sensore del telefono (impronta, volto o blocco schermo) con una credenziale non rilevabile, quindi niente passkey salvata su Google, niente chiavi di sicurezza, niente QR e niente altri dispositivi. Se il telefono la rifiuta compare un errore con il nome tecnico, ma non viene più proposta nessuna chiave esterna.
 - **Tema scuro: cielo stellato**: cielo profondo con via lattea, nebulose, centinaia di stelle che brillano, cinque costellazioni ben visibili (Orione, Orsa Maggiore, Cassiopea, Cigno, Scorpione) che si disegnano all'apertura con piccoli impulsi di luce lungo le linee, stelle cadenti e parallasse col movimento del telefono o del mouse.

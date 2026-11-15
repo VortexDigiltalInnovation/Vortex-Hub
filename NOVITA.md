@@ -1,5 +1,12 @@
 # Unica – stato dell'integrazione
 
+## v2.2.1 — Ricerca e avvisi automatici
+- Ricerca automatica di sito e logo abilitata per impostazione iniziale, con interruttore nelle Impostazioni; parte dopo aver inserito il nome del negozio.
+- Ricerca negozi vicini e avvisi di prossimità attivi per impostazione iniziale dopo lo sblocco. Il browser deve autorizzare la posizione; le notifiche di sistema richiedono il relativo permesso.
+- «Trova il negozio più vicino» ora tollera nomi con accenti e varianti di insegna, cerca anche il gestore e usa una posizione più precisa; errori e negozi non trovati sono distinti.
+- Se manca il riconoscimento offline in italiano, la ricerca vocale propone il riconoscimento online solo dopo aver spiegato che il browser potrebbe inviare l’audio.
+- Icone esplicative aggiunte alle azioni di installazione, posizione, ricerca e avvisi. La PWA non si installa senza conferma: serve HTTPS e l’approvazione nel browser.
+
 ## Vault (v0.9.0): funzioni portate dall'app originale
 - Viste **Schede / Tabella / Icone** (ricordata), filtro per **categoria e proprietario**, gestione di categorie e proprietari (aggiungi, rinomina, elimina con spostamento delle voci).
 - **Aspetto personalizzato** per ogni voce: colore, icona o foto (ridimensionata e cifrata con la voce).

@@ -1,5 +1,5 @@
 /* Unica – Service Worker: solo shell offline. Nessun dato utente passa dalla cache. */
-const VERSION = 'unica-v2-2-0';
+const VERSION = 'unica-v2-2-1';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './privacy.html', './ocr.html', './ocr-frame.js', './icons/icon-192x192.png', './icons/icon-512x512.png', './icons/maskable-192x192.png', './icons/maskable-512x512.png', './icons/apple-touch-icon.png', './icons/favicon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => Promise.all(SHELL.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => null)))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== VERSION).map(x => caches.delete(x)))).then(() => self.clients.claim())); });

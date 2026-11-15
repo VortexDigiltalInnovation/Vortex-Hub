@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-DZu+IRpbVZC3omQR5VlBp68xBfXhxTMQPyKVtKkVe00='; style-src 'sha256-2Hxkz9dNrTrLxR9mQ/6uhF+089dRll3A5hSGISY1bZ0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-uEvMscyfbTU6ReDobp4aZDRnVdVHWw2kxH8FEFMEPEM='; style-src 'sha256-2Hxkz9dNrTrLxR9mQ/6uhF+089dRll3A5hSGISY1bZ0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -287,7 +287,7 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '2.2.0';
+const APP_VERSION = '2.2.1';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -738,6 +738,9 @@ const P = {
   warn: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>',
   refresh: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/>',
   pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/>',
+  install: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 6v7m-3-3 3 3 3-3M10 18h4"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
   scan: '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/>',
   chart: '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
 };
@@ -956,13 +959,13 @@ V.settings = () => hdr('Impostazioni') + '<main class="wrap">' +
   '<div class="card"><h3>Aspetto</h3><p class="sm mut">Dimensione del testo</p>' + seg('fs', localStorage.getItem('unica_fs') || 16, [[14, 'Piccolo'], [16, 'Medio'], [19, 'Grande'], [22, 'Molto grande']]) +
   '<p class="sm mut" style="margin-top:12px">Dimensione delle icone</p>' + seg('ic', localStorage.getItem('unica_ic') || 22, [[18, 'Piccole'], [22, 'Medie'], [28, 'Grandi'], [34, 'Molto grandi']]) +
   '<p class="sm mut" style="margin-top:12px">Tema</p>' + seg('theme', localStorage.getItem('unica_theme') || 'auto', [['auto', 'Auto'], ['light', 'Chiaro'], ['dark', 'Scuro']]) + '</div>' +
-  '<div class="card"><h3>Carte</h3><div class="stack"><button class="btn blk" data-act="impFidelity">' + ic('up') + ' Importa il JSON di Fidelity Wallet</button><button class="btn blk" data-act="cardImpEnc">' + ic('lock') + ' Importa una carta cifrata ricevuta</button><label class="chk"><input type="checkbox" data-act="nearToggle"' + (nearOn() ? ' checked' : '') + '><span>Consenti la ricerca dei negozi vicini (invia a OpenStreetMap solo un’area di ~100 m e i nomi dei negozi)</span></label></div></div>' +
+  '<div class="card"><h3>Carte</h3><div class="stack"><button class="btn blk" data-act="impFidelity">' + ic('up') + ' Importa il JSON di Fidelity Wallet</button><button class="btn blk" data-act="cardImpEnc">' + ic('lock') + ' Importa una carta cifrata ricevuta</button><label class="chk"><input type="checkbox" data-act="webToggle"' + (lsg('unica_web') !== '0' ? ' checked' : '') + '><span>Cerca automaticamente sito e logo mentre scrivi il nome. Vengono inviati solo il nome del negozio a Wikidata e il dominio ai servizi di icone.</span></label><label class="chk"><input type="checkbox" data-act="nearToggle"' + (nearOn() ? ' checked' : '') + '><span>Cerca automaticamente i negozi vicini (a OpenStreetMap invia un’area approssimata di ~100 m e i nomi dei negozi)</span></label></div></div>' +
   '<div class="card"><h3>Sicurezza</h3><p class="sm mut">Blocco automatico dell’area protetta dopo</p>' + seg('idle', S.idleMin, [[1, '1 min'], [5, '5 min'], [15, '15 min']]) +
   '<div class="stack" style="margin-top:14px">' + (pkSupported() ? (S.meta.pk ? '<div class="gap"><span class="sp">Passkey attiva' + (S.meta.pk.prf ? ' (impronta anche per l’area protetta)' : ' (solo per le carte: l’area protetta chiede la master password)') + '</span><button class="btn sm dan" data-act="pkOff">Rimuovi</button></div>' : '<button class="btn blk" data-act="pkOn2">' + ic('key') + ' Attiva la passkey</button>') : '<p class="sm mut">Passkey non disponibile in questo contesto (serve https o localhost).</p>') +
   '<button class="btn blk" data-act="chpw">Cambia master password</button><button class="btn blk" data-act="showRec">Mostra il codice di recupero</button><button class="btn blk" data-act="rotate">Cambia le chiavi di cifratura</button><button class="btn blk" data-act="audit2">' + ic('shield') + ' Controlla password compromesse</button></div></div>' +
   '<div class="card"><h3>Backup</h3><p class="sm mut">File .enc cifrato con la tua master password e il tuo codice di recupero. Contiene tutto: carte, Vault e conti.</p>' + bkStatus() + '<div class="stack"><button class="btn blk" data-act="exp">' + ic('dl') + ' Esporta backup cifrato</button><button class="btn blk" data-act="restore">' + ic('up') + ' Ripristina da backup (sostituisce i dati)</button><button class="btn blk" data-act="impVault">' + ic('up') + ' Importa backup del vecchio Vault</button><button class="btn blk" data-act="impFin">' + ic('up') + ' Importa backup di Financial Dashboard</button><button class="btn blk" data-act="verifyBk">' + ic('shield') + ' Verifica un file di backup</button></div>' + driveCard() + '</div>' +
   snapCard() + folderCard() + syCard() +
-  '<div class="card"><h3>Privacy</h3><p class="sm">I tuoi dati sono cifrati sul dispositivo con AES-256-GCM; le chiavi derivano dalla master password (PBKDF2, 600.000 iterazioni) e non lasciano mai il dispositivo. Non ci sono analytics né script di terze parti. L’unica connessione esterna è il controllo password compromesse, che invia solo i primi 5 caratteri dell’hash. Questa versione non ha un server; il backup su Google Drive è facoltativo e resta cifrato.</p></div>' +
+  '<div class="card"><h3>Privacy</h3><p class="sm">I tuoi dati sono cifrati sul dispositivo con AES-256-GCM; le chiavi derivano dalla master password (PBKDF2, 600.000 iterazioni) e non lasciano mai il dispositivo. Non ci sono analytics né script di terze parti. Per impostazione iniziale, la ricerca automatica invia il nome del negozio a Wikidata e il dominio ai servizi di icone; la ricerca di vicinanza invia a OpenStreetMap un’area approssimata (~100 m) e i nomi dei negozi. Puoi disattivare entrambe in Impostazioni. Il controllo password compromesse invia solo i primi 5 caratteri dell’hash. Il riconoscimento vocale online parte solo se lo autorizzi. Il backup su Google Drive è facoltativo e resta cifrato.</p></div>' +
   '<div class="card"><h3>Info</h3><p class="sm mut">' + APP_NAME + ' ' + APP_VERSION + ' — carte, Vault, conti e backup</p><div class="stack"><button class="btn blk" data-act="lockNow">' + ic('lock') + ' Blocca ora</button><button class="btn blk dan" data-act="wipeAll">' + ic('trash') + ' Elimina tutti i dati da questo dispositivo</button></div></div></main>';
 
 /* ---------- logica ---------- */
@@ -1182,7 +1185,7 @@ const CCOL = ['#0f766e', '#7c3aed', '#c2410c', '#1d4ed8', '#be185d', '#4d7c0f', 
 const CTYPES = { EAN13: 'EAN-13', EAN8: 'EAN-8', CODE128: 'CODE-128', CODE39: 'CODE-39', QR: 'QR code' };
 const cardsArr = () => [...S.cards.values()].filter(c => c.type === 'card');
 const cSort = () => localStorage.getItem('unica_csort') || 'recent';
-const nearOn = () => localStorage.getItem('unica_near') === '1';
+const nearOn = () => localStorage.getItem('unica_near') !== '0';
 const hex = c => /^#[0-9a-f]{6}$/i.test(c) ? c : CCOL[0];
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 const cleanCode = s => String(s || '').trim();
@@ -1246,9 +1249,9 @@ function openCardForm(id, pre) {
     '<p class="sm mut" id="c_hint" role="status"></p>' +
     '<label class="f">Colore</label><div class="gap" id="c_cols">' + CCOL.map(c => '<button type="button" class="sw" data-act="swatch" data-c="' + c + '" style="background:' + c + '" aria-label="Colore ' + c + '" aria-pressed="' + (hex(d.color) === c) + '"></button>').join('') + '</div>' +
     '<label class="f" for="c_h">Intestatario (facoltativo)</label><input class="in" id="c_h" value="' + h(d.holder) + '" autocomplete="off">' +
-    '<label class="f" for="c_d">Sito web (facoltativo)</label><div class="pw"><input class="in" id="c_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off"><button type="button" class="btn" data-act="findSite">Cerca</button></div>' +
+    '<label class="f" for="c_d">Sito web (facoltativo)</label><div class="pw"><input class="in" id="c_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off"><button type="button" class="btn" data-act="findSite">' + ic('search') + ' Cerca</button></div>' +
     '<label class="f" for="c_o">Note</label><textarea class="in" id="c_o" rows="2">' + h(d.notes) + '</textarea>' +
-    '<p class="sm bad" id="c_err" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true, noFocus: !!it || !!d.code });
+    '<p class="sm bad" id="c_err" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">' + ic('x') + ' Annulla</button><button class="btn pri" type="submit">' + ic('check') + ' Salva</button></div></form>', { sticky: true, noFocus: !!it || !!d.code });
   m.el.dataset.color = hex(d.color);
   const code = m.q('#c_c'), type = m.q('#c_t');
   const hint = () => { const c = cleanCode(code.value), t = type.value; let msg = '';
@@ -1361,15 +1364,11 @@ async function nearStores() {
   toast('Cerco i negozi vicini…');
   const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 })).catch(() => null);
   if (!pos) return toast('Posizione non disponibile o negata');
-  const lat = pos.coords.latitude.toFixed(3), lng = pos.coords.longitude.toFixed(3);
-  const q = '[out:json][timeout:15];(nwr["shop"](around:200,' + lat + ',' + lng + ');nwr["amenity"~"^(fuel|pharmacy|restaurant|cafe|fast_food)$"](around:200,' + lat + ',' + lng + '););out tags 60;';
-  let els = null;
-  for (const url of ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']) {
-    try { const r = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(q), headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, credentials: 'omit', referrerPolicy: 'no-referrer' }); if (r.ok) { els = (await r.json()).elements || []; break; } } catch (e) { }
-  }
+  const lat = (Math.round(pos.coords.latitude * 1000) / 1000).toFixed(3), lng = (Math.round(pos.coords.longitude * 1000) / 1000).toFixed(3);
+  const q = '[out:json][timeout:15];(nwr["shop"](around:400,' + lat + ',' + lng + ');nwr["amenity"~"^(fuel|pharmacy|restaurant|cafe|fast_food)$"](around:400,' + lat + ',' + lng + '););out tags;';
+  let els = null; try { els = (await gOverpass(q)).elements || []; } catch (e) { }
   if (!els) return toast('Servizio mappe non raggiungibile');
-  const names = els.flatMap(e => [e.tags && e.tags.name, e.tags && e.tags.brand, e.tags && e.tags.operator]).filter(Boolean).map(norm);
-  U.near = new Set(cardsArr().filter(c => { const n = norm(c.data.name); return n.length >= 3 && names.some(x => (' ' + x + ' ').includes(' ' + n + ' ')); }).map(c => c.id));
+  U.near = new Set(cardsArr().filter(c => els.some(e => !gIgnored(e.tags || {}) && gNameMatch(c.data.name, e.tags || {}))).map(c => c.id));
   toast(U.near.size ? 'Trovate ' + U.near.size + ' carte qui vicino' : 'Nessuna tua carta nei negozi vicini'); if (U.route === 'cards') render();
 }
 
@@ -1406,7 +1405,8 @@ Object.assign(ACT, {
   async cardFav(t) { const c = S.cards.get(t.dataset.id); await putItem(c.id, 'card', { ...c.data, fav: !c.data.fav }, c, 'c'); closeTop(); render(); },
   async cardDel(t) { if (await ask('Eliminare la carta?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { await delItem(t.dataset.id, 'c'); closeTop(); render(); toast('Carta eliminata'); } },
   impFidelity: async () => { await importFidelity(); },
-  nearToggle: t => { localStorage.setItem('unica_near', nearOn() ? '0' : '1'); render(); },
+  webToggle: t => { lss('unica_web', t.checked ? '1' : '0'); },
+  nearToggle: t => { localStorage.setItem('unica_near', t.checked ? '1' : '0'); if (t.checked) { GEO.backoff = 0; gQuery(true); } },
 });
 
 /* ================= Conti e dashboard (area protetta) =================
@@ -2665,7 +2665,7 @@ const isStandalone = () => matchMedia('(display-mode: standalone)').matches || n
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 function extraSettings() {
   const np = 'Notification' in window ? Notification.permission : 'unsupported';
-  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Unica è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('dl') + ' Installa Unica</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">' + h(instWhy()) + '</p>') +
+  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Unica è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('install') + ' Installa Unica</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">' + h(instWhy()) + '</p>') +
     '<div class="stack mt"><button class="btn blk" data-act="diag">Aggiornamento e diagnostica</button><button class="btn blk" data-act="guide">' + ic('file') + ' Guida all’uso</button></div></div>' +
     '<div class="card"><h3>Vault: CSV</h3><p class="sm mut">Importa da Chrome, Edge, Firefox, Bitwarden e simili (nome, sito, utente, password). L’esportazione è in chiaro: usala con cautela.</p><div class="stack"><button class="btn blk" data-act="csvIn">' + ic('up') + ' Importa accessi da CSV</button><button class="btn blk" data-act="csvOut">' + ic('dl') + ' Esporta accessi in CSV</button></div></div>' +
     '<div class="card"><h3>Notifiche e preferenze</h3>' + (np === 'unsupported' ? '' : '<p class="sm mut">Notifica generica quando un avviso di prezzo viene raggiunto (senza dettagli dei tuoi dati). Stato: ' + (np === 'granted' ? 'attive' : np === 'denied' ? 'bloccate dal browser' : 'non attive') + '.</p>' + (np === 'default' ? '<button class="btn blk" data-act="notifOn">Attiva le notifiche</button>' : '')) +
@@ -2766,7 +2766,7 @@ const colDist = (a, b) => { const p = x => [1, 3, 5].map(i => parseInt(x.slice(i
 })();
 
 /* --- ricerca automatica mentre scrivi: insegna nota → sito/colore subito; poi Wikidata e logo (con consenso) --- */
-const WEB = { ok: () => lsg('unica_web') === '1', async consent() { if (lsg('unica_web') === '1') return true; if (lsg('unica_web') === '0') return false; const y = await ask('Ricerca automatica online', 'Per trovare sito e logo, Unica invia solo il NOME del negozio a Wikidata e il dominio del sito a servizi di icone (icon.horse, Google, DuckDuckGo). Le tue carte e i codici non vengono mai inviati. Attivare?', { ok: 'Attiva' }); lss('unica_web', y ? '1' : '0'); return y; } };
+const WEB = { ok: () => lsg('unica_web') !== '0', async consent() { if (lsg('unica_web') === '0') return false; if (lsg('unica_web') !== '1') lss('unica_web', '1'); return true; } };
 function loadImg(src, minW) { return new Promise(res => { const im = new Image(); im.crossOrigin = 'anonymous'; const t = setTimeout(() => res(null), 6000); im.onload = () => { clearTimeout(t); res(im.naturalWidth >= minW ? im : null); }; im.onerror = () => { clearTimeout(t); res(null); }; im.src = src; }); }
 function imgData(im) { try { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 64, 64); const r = Math.min(56 / im.naturalWidth, 56 / im.naturalHeight); const w = im.naturalWidth * r, hh = im.naturalHeight * r; x.drawImage(im, (64 - w) / 2, (64 - hh) / 2, w, hh); const u = c.toDataURL('image/png'); return u.length < 60000 ? u : null; } catch (e) { return null; } }
 async function probeLogo(dom) { for (const [src, w] of [['https://icon.horse/icon/' + dom, 16], ['https://www.google.com/s2/favicons?domain=' + dom + '&sz=128', 32], ['https://icons.duckduckgo.com/ip3/' + dom + '.ico', 16]]) { const im = await loadImg(src, w); if (im) { const d = imgData(im); if (d) return d; } } return null; }
@@ -2795,17 +2795,17 @@ async function wikiDomain(name) {
     d.addEventListener('input', () => { st.autoDom = false; });
     const setColor = hexc => { const sw = [...document.querySelectorAll('#c_cols .sw')]; if (!sw.length) return; const best = sw.reduce((a, b) => colDist(hexc, b.dataset.c) < colDist(hexc, a.dataset.c) ? b : a); sw.forEach(x => x.setAttribute('aria-pressed', x === best ? 'true' : 'false')); };
     const run = async () => {
-      const name = n.value.trim(); if (name.length < 3 || name === st.autoName && st.ran) return; st.autoName = name; st.ran = true;
+      const name = n.value.trim(); if (name.length < 2 || name === st.autoName && st.ran) return; st.autoName = name; st.ran = true;
       const br = detectBrand(c ? c.value : '', name);
       if (br) { if (st.autoDom && !d.value) { d.value = br.domain; } if (st.autoCol) setColor(br.color); }
       let dom = d.value.trim();
       if (!dom && st.autoDom && !br) { if (!(await WEB.consent())) return; dom = await wikiDomain(name); if (dom && n.value.trim() === name && st.autoDom && !d.value) { d.value = dom; toast('Sito trovato: ' + dom); } }
       if (dom && !(id && S.cards.get(id) && S.cards.get(id).data.logo) && lsg('unica_web') !== '0') { if (!(await WEB.consent())) return; const lg = await probeLogo(dom); if (lg && n.value.trim() === name) { st.logo = lg; toast('Logo trovato'); } }
     };
-    n.addEventListener('input', () => { clearTimeout(T); T = setTimeout(run, 800); });
+    n.addEventListener('input', () => { clearTimeout(T); T = setTimeout(run, 450); });
     if (c) c.addEventListener('input', () => { if (!n.value.trim() && !st.userName) { const br = detectBrand(c.value, ''); if (br) { n.value = br.name; st.autoName = ''; clearTimeout(T); T = setTimeout(run, 200); } } });
     n.addEventListener('keydown', () => { st.userName = true; });
-    if (!id && n.value.trim().length >= 3) T = setTimeout(run, 300);
+    if (!id && n.value.trim().length >= 2) T = setTimeout(run, 250);
   };
 }
 
@@ -2984,7 +2984,7 @@ ACT.aiLocal = async () => {
     const canPrompt = typeof DEFP !== 'undefined' && DEFP; if (!canPrompt && !ios()) return;
     shown = true;
     const b = document.createElement('div'); b.id = 'inb'; b.className = 'inb'; b.setAttribute('role', 'region'); b.setAttribute('aria-label', 'Installa Unica');
-    b.innerHTML = '<div class="inbt"><b>Installa Unica</b><span>' + (canPrompt ? 'Aprila come un’app, anche offline.' : 'Tocca Condividi, poi «Aggiungi alla schermata Home».') + '</span></div>' + (canPrompt ? '<button class="btn pri sm" data-in="go">Installa</button>' : '') + '<button class="btn sm" data-in="later">Più tardi</button><button class="ib" data-in="never" aria-label="Non chiedere più">✕</button>';
+    b.innerHTML = '<div class="inbt"><b>Installa Unica</b><span>' + (canPrompt ? 'Aprila come un’app, anche offline.' : 'Tocca Condividi, poi «Aggiungi alla schermata Home».') + '</span></div>' + (canPrompt ? '<button class="btn pri sm" data-in="go">' + ic('install') + ' Installa</button>' : '') + '<button class="btn sm" data-in="later">' + ic('clock') + ' Più tardi</button><button class="ib" data-in="never" aria-label="Non chiedere più">' + ic('x') + '</button>';
     b.addEventListener('click', async e => {
       const t = e.target.closest('[data-in]'); if (!t) return; const a = t.dataset.in;
       if (a === 'go' && DEFP) { try { DEFP.prompt(); await DEFP.userChoice; } catch (x) { } DEFP = null; }
@@ -2993,7 +2993,7 @@ ACT.aiLocal = async () => {
     });
     document.body.appendChild(b);
   }
-  setInterval(() => { try { if (S.kcKey && !document.querySelector('.ov')) banner(); } catch (e) { } }, 5000);
+  setInterval(() => { try { if (!document.querySelector('.ov')) banner(); } catch (e) { } }, 5000);
   addEventListener('appinstalled', () => { ls('unica_indone', '1'); const b = document.getElementById('inb'); if (b) b.remove(); });
 
   /* 3. Memoria persistente (impedisce al browser di cancellare i dati cifrati con lo spazio scarso) */
@@ -3045,7 +3045,7 @@ async function notify(title, opts) {
 
 const GEO = { pos: null, err: '', watch: null, stores: [], query: null, querying: false, backoff: 0, last: {}, wake: null, loaded: false, tmr: null };
 const GEO_COVER = 400, GEO_REQ = 250, GEO_COOL = 20 * 60000, GEO_OVP = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
-const gcfg = () => { let c = {}; try { c = JSON.parse(localStorage.getItem('unica_geo2') || '{}') || {}; } catch (e) { } return Object.assign({ on: false, radius: 30, wake: false, name: true }, c); };
+const gcfg = () => { let c = {}; try { c = JSON.parse(localStorage.getItem('unica_geo2') || '{}') || {}; } catch (e) { } return Object.assign({ on: true, radius: 30, wake: false, name: true }, c); };
 const gset = o => { try { localStorage.setItem('unica_geo2', JSON.stringify(Object.assign(gcfg(), o))); } catch (e) { } };
 const hav = (a, b, c, d) => { const R = 6371000, p = Math.PI / 180, x = Math.sin((c - a) * p / 2) ** 2 + Math.cos(a * p) * Math.cos(c * p) * Math.sin((d - b) * p / 2) ** 2; return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x)); };
 function gGeom(el) {
@@ -3066,7 +3066,18 @@ function gDist(lat, lng, g) {
 }
 const gIgnored = t => !!(t.highway || t.public_transport || t.railway || t.parking || ['parking', 'parking_space', 'bus_station', 'charging_station'].includes(t.amenity));
 const gNames = () => [...new Set(cardsArr().map(c => c.data.name).filter(n => norm(n).length >= 3))];
-const gNameMatch = (cn, t) => { const c = norm(cn); if (c.length < 3) return false; const re = new RegExp('(^| )' + c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '( |$)'); return [t.name, t.brand, t.operator].some(v => v && re.test(norm(v))); };
+const G_GENERIC = new Set(['supermercato', 'market', 'negozio', 'negozi', 'store', 'shop', 'centro', 'city', 'express', 'italia', 'online', 'point']);
+const gTokens = s => norm(s).split(' ').filter(x => x.length >= 3);
+const gRegexToken = s => [...s].map(c => ({ a: '[aàáâäãå]', e: '[eèéêë]', i: '[iìíîï]', o: '[oòóôöõ]', u: '[uùúûü]', c: '[cç]' }[c] || c)).join('');
+const gOverpassRx = names => [...new Set(names.flatMap(gTokens))].map(gRegexToken).join('|');
+const gNameMatch = (cn, t) => {
+  const c = norm(cn); if (c.length < 3) return false;
+  const fields = [t.name, t.brand, t.operator].map(norm).filter(Boolean);
+  const compact = c.replace(/ /g, '');
+  if (fields.some(v => v === c || v.replace(/ /g, '') === compact)) return true;
+  const wanted = gTokens(c).filter(x => !G_GENERIC.has(x)), found = new Set(fields.flatMap(gTokens));
+  return wanted.some(x => found.has(x));
+};
 function gParse(json) {
   const out = [], cards = cardsArr();
   (json.elements || []).forEach(el => { const t = el.tags || {}; if (gIgnored(t)) return; const m = cards.filter(c => gNameMatch(c.data.name, t)); if (!m.length) return; const g = gGeom(el); if (!g) return;
@@ -3082,13 +3093,13 @@ const gSig = () => gNames().map(norm).sort().join('|');
 async function gSaveCache() { try { if (S.kcKey) await DB.put('meta', await seal(S.kcKey, te.encode(JSON.stringify({ q: GEO.query, s: GEO.stores })), 'geo'), 'geo'); } catch (e) { } }
 async function gLoadCache() { if (GEO.loaded || !S.kcKey) return; GEO.loaded = true; try { const r = await DB.get('meta', 'geo'); if (r) { const c = JSON.parse(td.decode(await unseal(S.kcKey, r, 'geo'))); if (c.q && Date.now() - c.q.time < 864e5) { GEO.query = c.q; GEO.stores = c.s || []; } } } catch (e) { } }
 async function gQuery(force) {
-  if (GEO.querying || !GEO.pos || !navigator.onLine) return; const names = gNames(); if (!names.length || Date.now() < GEO.backoff) return;
+  if (GEO.querying || !GEO.pos || !navigator.onLine || !nearOn()) return; const names = gNames(); if (!names.length || Date.now() < GEO.backoff) return;
   const sig = gSig(), now = Date.now();
-  if (!force && GEO.query) { const moved = hav(GEO.pos.lat, GEO.pos.lng, GEO.query.lat, GEO.query.lng), fresh = GEO.query.sig === sig && moved < GEO_REQ && now - GEO.query.time < 30 * 60000; if (fresh || now - GEO.query.time < 20000) return; }
+  if (!force && GEO.query) { const same = GEO.query.sig === sig, moved = hav(GEO.pos.lat, GEO.pos.lng, GEO.query.lat, GEO.query.lng), fresh = same && moved < GEO_REQ && now - GEO.query.time < 30 * 60000; if (fresh || same && now - GEO.query.time < 20000) return; }
   GEO.querying = true; const clat = Math.round(GEO.pos.lat * 1000) / 1000, clng = Math.round(GEO.pos.lng * 1000) / 1000;
-  const rx = names.map(n => n.replace(/[^A-Za-z0-9 ]/g, '.')).join('|');
+  const rx = gOverpassRx(names);
   try {
-    const json = await gOverpass('[out:json][timeout:15];(nwr["name"~"' + rx + '",i](around:' + GEO_COVER + ',' + clat + ',' + clng + ');nwr["brand"~"' + rx + '",i](around:' + GEO_COVER + ',' + clat + ',' + clng + '););out tags geom;');
+    const json = await gOverpass('[out:json][timeout:15];(nwr["name"~"' + rx + '",i](around:' + GEO_COVER + ',' + clat + ',' + clng + ');nwr["brand"~"' + rx + '",i](around:' + GEO_COVER + ',' + clat + ',' + clng + ');nwr["operator"~"' + rx + '",i](around:' + GEO_COVER + ',' + clat + ',' + clng + '););out tags geom;');
     GEO.stores = gParse(json); GEO.query = { lat: clat, lng: clng, time: Date.now(), sig }; GEO.err = ''; gSaveCache();
   } catch (e) { GEO.err = 'Ricerca negozi non riuscita (rete o servizio non disponibile).'; GEO.backoff = Date.now() + 60000; }
   finally { GEO.querying = false; gEval(); gStatus(); }
@@ -3126,8 +3137,13 @@ function gOnPos(p) { GEO.pos = { lat: p.coords.latitude, lng: p.coords.longitude
 function gOnErr(e) { GEO.pos = null; GEO.err = e && e.code === 1 ? 'Posizione negata: consentila per questo sito nelle impostazioni del browser.' : 'Posizione non disponibile al momento.'; gStatus(); }
 async function gWake() { try { if (gcfg().wake && 'wakeLock' in navigator && !document.hidden && !GEO.wake) { GEO.wake = await navigator.wakeLock.request('screen'); GEO.wake.addEventListener('release', () => { GEO.wake = null; }); } else if (!gcfg().wake && GEO.wake) { await GEO.wake.release(); GEO.wake = null; } } catch (e) { GEO.wake = null; } }
 function gStart() {
-  if (GEO.watch !== null || !navigator.geolocation) return; gLoadCache();
-  GEO.watch = navigator.geolocation.watchPosition(gOnPos, gOnErr, { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }); gWake(); gStatus();
+  if (GEO.watch !== null) return;
+  if (!navigator.geolocation) { GEO.err = 'Questo browser non supporta la posizione.'; gStatus(); return; }
+  if (!window.isSecureContext) { GEO.err = 'La posizione richiede HTTPS o localhost.'; gStatus(); return; }
+  gLoadCache();
+  try { GEO.watch = navigator.geolocation.watchPosition(gOnPos, gOnErr, { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }); }
+  catch (e) { GEO.err = 'Impossibile avviare la posizione: controlla i permessi del browser.'; }
+  gWake(); gStatus();
 }
 function gStop() { if (GEO.watch !== null) { try { navigator.geolocation.clearWatch(GEO.watch); } catch (e) { } GEO.watch = null; } GEO.pos = null; if (GEO.wake) { GEO.wake.release().catch(() => { }); GEO.wake = null; } }
 setInterval(() => { const on = gcfg().on && !!S.kcKey; if (on) gStart(); else if (GEO.watch !== null) { gStop(); if (!S.kcKey) { GEO.loaded = false; GEO.stores = []; GEO.query = null; } } }, 3000);
@@ -3140,7 +3156,7 @@ addEventListener('online', () => { GEO.backoff = 0; gQuery(false); });
   openCardForm = function (id, pre) {
     base(id, pre); const o = $('c_o'); if (!o) return; const it = id ? S.cards.get(id) : null, d = it ? it.data : (pre || {}), st = U.cform;
     const has = typeof d.lat === 'number'; const lab = o.previousElementSibling;
-    lab.insertAdjacentHTML('beforebegin', '<label class="f">Posizione del negozio (facoltativa, per gli avvisi di vicinanza)</label><p class="sm mut" id="c_pl" role="status">' + (has ? 'Salvata: ' + h(d.address || d.lat.toFixed(4) + ', ' + d.lng.toFixed(4)) : 'Nessuna posizione salvata.') + '</p><div class="gap"><button type="button" class="btn sm" data-act="plHere">' + ic('pin') + ' Posizione attuale</button><button type="button" class="btn sm" data-act="plFind">Trova il negozio più vicino</button><button type="button" class="btn sm" data-act="plClear"' + (has ? '' : ' hidden') + '>Rimuovi</button></div>');
+    lab.insertAdjacentHTML('beforebegin', '<label class="f">Posizione del negozio (facoltativa, per gli avvisi di vicinanza)</label><p class="sm mut" id="c_pl" role="status">' + (has ? 'Salvata: ' + h(d.address || d.lat.toFixed(4) + ', ' + d.lng.toFixed(4)) : 'Nessuna posizione salvata.') + '</p><div class="gap"><button type="button" class="btn sm" data-act="plHere">' + ic('pin') + ' Posizione attuale</button><button type="button" class="btn sm" data-act="plFind">' + ic('search') + ' Trova il negozio più vicino</button><button type="button" class="btn sm" data-act="plClear"' + (has ? '' : ' hidden') + '>' + ic('trash') + ' Rimuovi</button></div>');
   };
 }
 async function gHere() { return new Promise((res, rej) => navigator.geolocation ? navigator.geolocation.getCurrentPosition(res, () => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, maximumAge: 5000, timeout: 12000 }), { enableHighAccuracy: false, maximumAge: 120000, timeout: 6000 }) : rej(new Error('no gps'))); }
@@ -3149,12 +3165,12 @@ Object.assign(ACT, {
   async plHere() { plSet(U.cform.place, 'Rilevo la posizione…'); try { const p = await gHere(); plSet({ lat: +p.coords.latitude.toFixed(6), lng: +p.coords.longitude.toFixed(6) }, 'Posizione attuale: ' + p.coords.latitude.toFixed(5) + ', ' + p.coords.longitude.toFixed(5)); } catch (e) { plSet(U.cform.place, 'Posizione non disponibile: consentila nelle impostazioni del browser.'); } },
   async plFind() {
     const name = $('c_n').value.trim(); if (norm(name).length < 3) return toast('Scrivi prima il nome del negozio');
-    if (!nearOn() && !(await ask('Posizione e OpenStreetMap', 'Per trovare il negozio, Unica usa la tua posizione approssimata (~1 km) e invia a OpenStreetMap quell’area e il nome del negozio. Procedere?', { ok: 'Procedi' }))) return; localStorage.setItem('unica_near', '1');
+    if (!nearOn() && !(await ask('Posizione e OpenStreetMap', 'Per trovare il negozio, Unica usa la tua posizione approssimata (~100 m) e invia a OpenStreetMap quell’area e il nome del negozio. Procedere?', { ok: 'Procedi' }))) return; localStorage.setItem('unica_near', '1');
     plSet(U.cform.place, 'Cerco il negozio più vicino…');
-    try { const p = await gHere(), lat = p.coords.latitude, lng = p.coords.longitude, clat = Math.round(lat * 100) / 100, clng = Math.round(lng * 100) / 100, rx = name.replace(/[^A-Za-z0-9 ]/g, '.');
-      const j = await gOverpass('[out:json][timeout:15];(nwr["name"~"' + rx + '",i](around:2500,' + clat + ',' + clng + ');nwr["brand"~"' + rx + '",i](around:2500,' + clat + ',' + clng + '););out tags geom;');
+    try { const p = await gHere(), lat = p.coords.latitude, lng = p.coords.longitude, clat = Math.round(lat * 1000) / 1000, clng = Math.round(lng * 1000) / 1000, rx = gOverpassRx([name]);
+      const j = await gOverpass('[out:json][timeout:15];(nwr["name"~"' + rx + '",i](around:2500,' + clat + ',' + clng + ');nwr["brand"~"' + rx + '",i](around:2500,' + clat + ',' + clng + ');nwr["operator"~"' + rx + '",i](around:2500,' + clat + ',' + clng + '););out tags geom;');
       const L = (j.elements || []).filter(e => !gIgnored(e.tags || {}) && gNameMatch(name, e.tags || {})).map(e => ({ e, g: gGeom(e) })).filter(x => x.g).map(x => ({ ...x, d: gDist(lat, lng, x.g) })).sort((a, b) => a.d - b.d);
-      if (!L.length) return plSet(U.cform.place, 'Nessun «' + name + '» entro 2 km: usa «Posizione attuale».');
+      if (!L.length) return plSet(U.cform.place, 'Nessun «' + name + '» entro 2,5 km: usa «Posizione attuale» o verifica il nome.');
       const s = L[0], c = s.g.k === 'p' ? { lat: s.g.lat, lng: s.g.lng } : { lat: s.g.pts.reduce((a, p) => a + p[0], 0) / s.g.pts.length, lng: s.g.pts.reduce((a, p) => a + p[1], 0) / s.g.pts.length }, t = s.e.tags || {};
       const addr = [[t['addr:street'], t['addr:housenumber']].filter(Boolean).join(' '), t['addr:city'] || t['addr:town'] || t['addr:village']].filter(Boolean).join(', ');
       plSet({ lat: +c.lat.toFixed(6), lng: +c.lng.toFixed(6), address: addr.slice(0, 200) }, (t.name || name) + ' a ' + Math.round(s.d) + ' m' + (addr ? ' · ' + addr : ''));
@@ -3183,7 +3199,7 @@ Object.assign(ACT, {
       '<label class="chk" style="margin-top:8px"><input type="checkbox" data-act="geoWake"' + (c.wake ? ' checked' : '') + '><span>Tieni lo schermo acceso (consuma batteria)</span></label>' +
       '<label class="chk" style="margin-top:8px"><input type="checkbox" data-act="geoName"' + (c.name ? ' checked' : '') + '><span>Mostra il nome del negozio nella notifica (visibile a schermo bloccato)</span></label>' +
       '<p class="sm mut" style="margin-top:8px">Notifiche: ' + (np === 'granted' ? 'consentite' : np === 'denied' ? 'bloccate dal browser' : np === 'unsupported' ? 'non supportate' : 'non ancora consentite') + '. Funzionano solo con l’app aperta (anche in secondo piano su Android); per un avviso più preciso salva la posizione nella carta.</p>' +
-      '<div class="stack"><button class="btn blk" data-act="geoTest">Prova la notifica</button><button class="btn blk" data-act="geoScan">Rileva ora la posizione</button></div></div>' + s.slice(i); };
+      '<div class="stack"><button class="btn blk" data-act="geoTest">' + ic('bell') + ' Prova la notifica</button><button class="btn blk" data-act="geoScan">' + ic('pin') + ' Rileva ora la posizione</button></div></div>' + s.slice(i); };
   const vc = V.cards; V.cards = () => { const s = vc(), i = s.indexOf('<div id="clist"'); return i < 0 ? s : s.slice(0, i) + '<p class="sm gstat" id="gstat" role="status" aria-live="polite" hidden></p>' + s.slice(i); };
   const pc = POST.cards; POST.cards = () => { pc(); gStatus(); };
 }
@@ -3384,14 +3400,14 @@ function vcUI(txt, state) {
   b.className = 'vcb ' + (state || ''); b.innerHTML = '<span class="vcd" aria-hidden="true"></span><span class="vct">' + h(txt) + '</span>' + (VC.on ? '<button class="ib" data-act="vcStop" aria-label="Annulla">' + ic('x') + '</button>' : '');
 }
 function vcStop() { VC.on = false; try { VC.r && VC.r.abort(); } catch (e) { } VC.r = null; vcUI(); }
-function vcStart() {
+function vcStart(onlineFallback) {
   const SR = VSR();
   if (!SR) { toast('Il riconoscimento vocale non è supportato da questo browser'); return; }
   if (VC.on) { vcStop(); return; }
   try {
     const r = new SR(); VC.r = r; VC.on = true; let got = false, fin = '';
     r.lang = 'it-IT'; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
-    try { r.processLocally = true; } catch (e) { }
+    try { r.processLocally = !onlineFallback; } catch (e) { }
     r.onresult = e => {
       const res = e.results[e.results.length - 1], t = res[0].transcript.trim();
       vcUI('“' + t + '”', 'live'); if (!res.isFinal) return;
@@ -3401,7 +3417,18 @@ function vcStart() {
       cmd.run(); say2(cmd.say);
       setTimeout(() => { if (!VC.on) vcUI(); }, 2200);
     };
-    r.onerror = e => { VC.on = false; const m = { 'not-allowed': 'Microfono non consentito: abilitalo nelle impostazioni del browser', 'service-not-allowed': 'Riconoscimento vocale non consentito', 'no-speech': 'Non ho sentito nulla, riprova', 'audio-capture': 'Microfono non trovato', 'network': 'Il riconoscimento vocale richiede la rete su questo dispositivo', 'language-not-supported': 'Italiano non disponibile per il riconoscimento vocale' }[e.error]; if (e.error !== 'aborted') { vcUI(m || 'Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2800); } else vcUI(); };
+    r.onerror = async e => {
+      VC.on = false; VC.r = null;
+      if (e.error === 'language-not-supported' && !onlineFallback) {
+        vcUI('Il riconoscimento offline in italiano non è disponibile', 'no');
+        const ok = await ask('Riconoscimento vocale online', 'Il pacchetto italiano locale non è disponibile. Per continuare, il browser potrebbe inviare l’audio al proprio servizio di riconoscimento vocale. Vuoi procedere?', { ok: 'Continua online' });
+        if (ok) vcStart(true);
+        else { vcUI('Installa il pacchetto vocale italiano o abilita il riconoscimento online', 'no'); setTimeout(() => vcUI(), 3200); }
+        return;
+      }
+      const m = { 'not-allowed': 'Microfono non consentito: abilitalo nelle impostazioni del browser', 'service-not-allowed': 'Riconoscimento vocale non consentito', 'no-speech': 'Non ho sentito nulla, riprova', 'audio-capture': 'Microfono non trovato', 'network': 'Il riconoscimento vocale richiede la rete su questo dispositivo', 'language-not-supported': 'Italiano non disponibile anche per il riconoscimento online' }[e.error];
+      if (e.error !== 'aborted') { vcUI(m || 'Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2800); } else vcUI();
+    };
     r.onend = () => { if (VC.on) { VC.on = false; if (!got) { vcUI('Non ho sentito nulla, riprova', 'no'); setTimeout(() => vcUI(), 2000); } } };
     r.start(); vcUI('Parla ora… prova “apri Esselunga”', 'live');
   } catch (e) { VC.on = false; vcUI('Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2200); }

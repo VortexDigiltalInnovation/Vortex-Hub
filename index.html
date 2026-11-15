@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; script-src 'sha256-ltM699jAwL7A/UlnYMJzp3y4cY1Mq3BH/fdWILgNuHQ='; style-src 'sha256-BvX0PbEmTIio8y4vR590trITGovrhlPio3S0rwvxW0g='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-DZu+IRpbVZC3omQR5VlBp68xBfXhxTMQPyKVtKkVe00='; style-src 'sha256-2Hxkz9dNrTrLxR9mQ/6uhF+089dRll3A5hSGISY1bZ0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -229,6 +229,55 @@ body::before{z-index:-2}
 .gstat{margin:8px 2px 0}.gstat.warn{color:#f59e0b}.gstat.mut{color:var(--mut)}
 .gbn{position:fixed;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top));width:min(540px,calc(100% - 20px));z-index:30;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:20px;background:var(--grad);color:#fff;box-shadow:0 14px 40px rgba(0,0,0,.45);animation:up .35s}
 .gbn .inbt span{color:rgba(255,255,255,.85)}.gbn .btn.pri{background:#fff;color:#4c1d95;text-shadow:none}.gbn .ib{color:#fff}
+.vcm{flex:none}
+.vcb{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 32px);padding:10px 16px;border-radius:999px;background:rgba(14,18,40,.88);color:#eaf0ff;border:1px solid rgba(120,160,255,.35);backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(0,0,0,.4);font-size:.95rem}
+.vcb .vcd{width:10px;height:10px;border-radius:50%;background:#7aa2ff;flex:none}
+.vcb.live .vcd{background:#ff4d6d;animation:vcp 1s infinite}
+.vcb.ok .vcd{background:#34d399}.vcb.no .vcd{background:#fbbf24}
+@keyframes vcp{50%{transform:scale(1.6);opacity:.5}}
+@media(prefers-reduced-motion:reduce){.vcb.live .vcd{animation:none}}
+.ver{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font:600 .68rem/1.3 system-ui,sans-serif;letter-spacing:.04em;color:var(--mut,#9aa7d6);border:1px solid rgba(140,160,255,.35);background:rgba(120,140,255,.1);vertical-align:middle;-webkit-text-fill-color:currentColor;text-shadow:none}
+.center .ver{display:block;width:max-content;margin:6px auto 0}
+.hdr h1 .ver{margin-left:8px}
+
+/* ===== v2.0: rifinitura grafica ===== */
+:root{--r1:12px;--r2:18px;--r3:26px}
+body{font-feature-settings:"cv11","ss01","tnum";-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3{letter-spacing:-.015em;text-wrap:balance}
+p{text-wrap:pretty}
+:focus-visible{outline:2px solid var(--neo1);outline-offset:3px;border-radius:10px;box-shadow:0 0 0 5px rgba(34,211,238,.18)}
+/* logo-marchio nell'intestazione al posto del triangolo */
+.hdr h1::before{content:"";width:.78em;height:.78em;border-radius:.26em;margin-right:9px;vertical-align:-.02em;background:var(--grad);-webkit-text-fill-color:transparent;box-shadow:0 0 14px rgba(139,92,246,.55);filter:none}
+.hdr{padding-top:max(10px,env(safe-area-inset-top))}
+/* barra di ricerca con microfono integrato */
+.sbox{position:relative;min-width:0}.sbox .in{padding-right:48px}
+.sbox .vcm{position:absolute;right:2px;top:50%;transform:translateY(-50%);min-width:40px;min-height:40px}
+#cs{width:auto;max-width:118px;padding-right:6px}
+/* toast sopra la barra di navigazione */
+.toast{bottom:calc(98px + env(safe-area-inset-bottom))}
+/* controlli nativi coerenti */
+input[type=checkbox],input[type=radio]{accent-color:var(--neo2);width:22px;height:22px;flex:none;vertical-align:middle}
+select.in{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 17px) 55%,calc(100% - 12px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:30px}
+/* schede carta: lucentezza e profondità */
+.ccard{position:relative;overflow:hidden;box-shadow:0 10px 26px -10px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.12) inset;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.ccard::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 0% 0%,rgba(255,255,255,.32),transparent 55%),linear-gradient(160deg,transparent 55%,rgba(0,0,0,.28));pointer-events:none}
+.ccard:active{transform:scale(.97)}
+.ccard>*{position:relative}
+/* stato vuoto */
+.empt{display:block;width:120px;margin:4px auto 12px;color:var(--mut,#8a93c4)}
+.card.c.mut{text-align:center;padding:26px 18px;line-height:1.5}
+.card.c.mut b{color:var(--ink);font-size:1.05rem}
+/* chip e segmenti più compatti */
+.chips{scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.btn.sm{min-height:38px;padding:6px 14px;border-radius:999px}
+/* tocco: niente evidenziazione grigia, transizioni di pagina */
+*{-webkit-tap-highlight-color:transparent}
+@keyframes pgin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
+@media(prefers-reduced-motion:reduce){main.wrap{animation:none}.ccard{transition:none}}
+@media(prefers-contrast:more){.card,.in,.ccard{border-color:currentColor}}
+.cmpb{height:7px;border-radius:5px;background:var(--line);overflow:hidden;margin:3px 0}.cmpb i{display:block;height:100%;border-radius:5px}
+.legend{list-style:none;display:flex;flex-wrap:wrap;gap:4px 12px;padding:0;margin:8px 0 0;font-size:.8rem}.legend .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
 </style>
 </head>
 <body>
@@ -238,7 +287,7 @@ body::before{z-index:-2}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '1.8.0';
+const APP_VERSION = '2.2.0';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -814,9 +863,9 @@ async function openProt() { if (!(await ensureProt())) return false; if (!S.item
 async function ensureVMeta() { if (!S.items.has('vault-meta')) await putItem('vault-meta', 'vmeta', { cats: ['Banche', 'Ufficio', 'Personale', 'Siti/Altri'], owners: ['Utente 1', 'Utente 2', 'Condiviso'] }); }
 
 /* ---------- Vault ---------- */
-const VT = { login: ['key', 'Accesso'], note: ['note', 'Nota'], file: ['file', 'File'] };
+const VT = { login: ['key', 'Accesso'], passkey: ['shield', 'Passkey'], note: ['note', 'Nota'], file: ['file', 'File'] };
 const vmeta = () => S.items.get('vault-meta').data;
-const vitems = () => [...S.items.values()].filter(i => VT[i.type]);
+const vitems = () => [...S.items.values()].filter(i => VT[i.type] && !i.data.parent);
 const titleOf = i => i.data.service || i.data.title || 'Senza nome';
 const avCls = s => 'a' + ([...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 8);
 function vlist() {
@@ -850,6 +899,7 @@ function openDetail(id) {
   const it = S.items.get(id); if (!it) return; const d = it.data;
   let b = '';
   if (it.type === 'login') b = kv('Utente', d.username, { copy: 1, item: id, f: 'username' }) + kv('Password', '', { secret: 1, copy: 1, id: 'sv', item: id, f: 'password' }) + (d.domain ? kv('Sito', d.domain) : '') + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
+  else if (it.type === 'passkey') b = kv('Utente', d.username, { copy: 1 }) + kv('Salvata in', d.where) + (d.device ? kv('Dispositivo', d.device) : '') + (d.domain ? kv('Sito', d.domain) : '') + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
   else if (it.type === 'note') b = kv('Testo', '', { secret: 1, copy: 1, id: 'sv', item: id, f: 'text' });
   else b = kv('File', d.fname) + kv('Dimensione', fmtSize(d.size)) + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
   const m = modal('<div class="gap">' + avHtml(it) + '<h2 class="sp" style="margin:0">' + h(titleOf(it)) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
@@ -867,6 +917,7 @@ function openForm(id, type) {
     ? '<label class="f" for="f_t">Servizio</label><input class="in" id="f_t" required value="' + h(d.service) + '" autocomplete="off"><label class="f" for="f_u">Utente / email</label><input class="in" id="f_u" value="' + h(d.username) + '" autocomplete="off" autocapitalize="off">' +
       '<label class="f" for="f_p">Password</label><div class="pw"><input class="in mono" id="f_p" type="password" value="' + h(d.password) + '" autocomplete="new-password" autocapitalize="off" spellcheck="false"><button type="button" class="btn" data-act="eye" data-for="f_p" aria-label="Mostra o nascondi">' + ic('eye') + '</button><button type="button" class="btn" data-act="genfor" aria-label="Genera password">' + ic('refresh') + '</button></div>' + meterHtml('fm') +
       '<label class="f" for="f_d">Sito web</label><input class="in" id="f_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off">'
+    : type === 'passkey' ? '<p class="sm mut">Una passkey vera resta nel dispositivo o nel gestore che l’ha creata e Unica non può contenerla né usarla. Qui annoti dove si trova e come recuperarla, così non la perdi.</p><label class="f" for="f_t">Servizio</label><input class="in" id="f_t" required value="' + h(d.service) + '" autocomplete="off"><label class="f" for="f_u">Utente / email</label><input class="in" id="f_u" value="' + h(d.username) + '" autocomplete="off" autocapitalize="off"><label class="f" for="f_pw">Dove è salvata</label><select class="in" id="f_pw">' + sel(['iCloud / Portachiavi Apple', 'Google Password Manager', 'Windows Hello', 'Chiave di sicurezza (YubiKey…)', 'Altro gestore di password', 'Telefono / altro dispositivo'], d.where) + '</select><label class="f" for="f_pi">Dispositivo o nome della chiave</label><input class="in" id="f_pi" value="' + h(d.device || '') + '" autocomplete="off" placeholder="es. iPhone di Mario"><label class="f" for="f_d">Sito web</label><input class="in" id="f_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off">'
     : type === 'note' ? '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '"><label class="f" for="f_x">Testo</label><textarea class="in" id="f_x" rows="6">' + h(d.text) + '</textarea>'
     : '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '">' + (it ? '<p class="sm mut">File: ' + h(d.fname) + ' (' + fmtSize(d.size) + ')</p>' : '<label class="f" for="f_f">File (max ' + fmtSize(MAX_FILE) + ')</label><input class="in" id="f_f" type="file" required>');
   const m = modal('<h2>' + (it ? 'Modifica voce' : 'Nuova voce') + '</h2>' + (it ? '' : '<div class="seg" role="group" aria-label="Tipo">' + Object.keys(VT).map(k => '<button type="button" data-act="ftype" data-t="' + k + '" aria-pressed="' + (k === type) + '">' + VT[k][1] + '</button>').join('') + '</div>') +
@@ -905,7 +956,7 @@ V.settings = () => hdr('Impostazioni') + '<main class="wrap">' +
   '<div class="card"><h3>Aspetto</h3><p class="sm mut">Dimensione del testo</p>' + seg('fs', localStorage.getItem('unica_fs') || 16, [[14, 'Piccolo'], [16, 'Medio'], [19, 'Grande'], [22, 'Molto grande']]) +
   '<p class="sm mut" style="margin-top:12px">Dimensione delle icone</p>' + seg('ic', localStorage.getItem('unica_ic') || 22, [[18, 'Piccole'], [22, 'Medie'], [28, 'Grandi'], [34, 'Molto grandi']]) +
   '<p class="sm mut" style="margin-top:12px">Tema</p>' + seg('theme', localStorage.getItem('unica_theme') || 'auto', [['auto', 'Auto'], ['light', 'Chiaro'], ['dark', 'Scuro']]) + '</div>' +
-  '<div class="card"><h3>Carte</h3><div class="stack"><button class="btn blk" data-act="impFidelity">' + ic('up') + ' Importa il JSON di Fidelity Wallet</button><label class="chk"><input type="checkbox" data-act="nearToggle"' + (nearOn() ? ' checked' : '') + '><span>Consenti la ricerca dei negozi vicini (invia a OpenStreetMap solo un’area di ~100 m e i nomi dei negozi)</span></label></div></div>' +
+  '<div class="card"><h3>Carte</h3><div class="stack"><button class="btn blk" data-act="impFidelity">' + ic('up') + ' Importa il JSON di Fidelity Wallet</button><button class="btn blk" data-act="cardImpEnc">' + ic('lock') + ' Importa una carta cifrata ricevuta</button><label class="chk"><input type="checkbox" data-act="nearToggle"' + (nearOn() ? ' checked' : '') + '><span>Consenti la ricerca dei negozi vicini (invia a OpenStreetMap solo un’area di ~100 m e i nomi dei negozi)</span></label></div></div>' +
   '<div class="card"><h3>Sicurezza</h3><p class="sm mut">Blocco automatico dell’area protetta dopo</p>' + seg('idle', S.idleMin, [[1, '1 min'], [5, '5 min'], [15, '15 min']]) +
   '<div class="stack" style="margin-top:14px">' + (pkSupported() ? (S.meta.pk ? '<div class="gap"><span class="sp">Passkey attiva' + (S.meta.pk.prf ? ' (impronta anche per l’area protetta)' : ' (solo per le carte: l’area protetta chiede la master password)') + '</span><button class="btn sm dan" data-act="pkOff">Rimuovi</button></div>' : '<button class="btn blk" data-act="pkOn2">' + ic('key') + ' Attiva la passkey</button>') : '<p class="sm mut">Passkey non disponibile in questo contesto (serve https o localhost).</p>') +
   '<button class="btn blk" data-act="chpw">Cambia master password</button><button class="btn blk" data-act="showRec">Mostra il codice di recupero</button><button class="btn blk" data-act="rotate">Cambia le chiavi di cifratura</button><button class="btn blk" data-act="audit2">' + ic('shield') + ' Controlla password compromesse</button></div></div>' +
@@ -915,7 +966,7 @@ V.settings = () => hdr('Impostazioni') + '<main class="wrap">' +
   '<div class="card"><h3>Info</h3><p class="sm mut">' + APP_NAME + ' ' + APP_VERSION + ' — carte, Vault, conti e backup</p><div class="stack"><button class="btn blk" data-act="lockNow">' + ic('lock') + ' Blocca ora</button><button class="btn blk dan" data-act="wipeAll">' + ic('trash') + ' Elimina tutti i dati da questo dispositivo</button></div></div></main>';
 
 /* ---------- logica ---------- */
-const afterUnlock = async () => { S.last = Date.now(); await loadCards(); go('home'); if (U.incoming) setTimeout(offerIncoming, 300); if (U.openCard) { const id = U.openCard; U.openCard = null; setTimeout(() => { if (S.cards.get(id)) cardOpen(id); }, 400); } };
+const afterUnlock = async () => { S.last = Date.now(); await loadCards(); go('home'); if (U.incoming) setTimeout(offerIncoming, 300); if (U.go) setTimeout(applyGo, 350); if (U.openCard) { const id = U.openCard; U.openCard = null; setTimeout(() => { if (S.cards.get(id)) cardOpen(id); }, 400); } };
 async function commitAccount(p) {
   S.meta = p.meta; await DB.put('meta', p.meta, 'acct'); await setKeys(p.kc, p.kp); await ensureVMeta(); S.items = new Map(); S.cards = new Map(); S.protOpen = false; U.pending = null;
 }
@@ -965,6 +1016,7 @@ const FORMS = {
     const { id, type } = U.form, e = $('ferr'), prev = id ? S.items.get(id) : null, old = prev ? prev.data : {};
     const d = { category: $('f_c').value, owner: $('f_o').value, fav: $('f_fav').checked, notes: $('f_n') ? $('f_n').value : '' };
     if (type === 'login') Object.assign(d, { service: $('f_t').value.trim(), username: $('f_u').value.trim(), password: $('f_p').value, domain: $('f_d').value.trim() });
+    else if (type === 'passkey') Object.assign(d, { service: $('f_t').value.trim(), username: $('f_u').value.trim(), where: $('f_pw').value, device: $('f_pi').value.trim(), domain: $('f_d').value.trim() });
     else if (type === 'note') Object.assign(d, { title: $('f_t').value.trim(), text: $('f_x').value });
     else Object.assign(d, { title: $('f_t').value.trim(), fname: old.fname, size: old.size, mime: old.mime });
     Object.assign(d, vxExtra());
@@ -1155,7 +1207,7 @@ function iconTile(c) {
 }
 function cardsList() {
   const a = sortedCards();
-  if (!a.length) return '<div class="card c mut">' + (cardsArr().length ? 'Nessun risultato.' : 'Nessuna carta. Tocca + per aggiungerne una, oppure ' + ic('search') + ' per scansionarla. Puoi anche importare il JSON di Fidelity Wallet dalle Impostazioni.') + '</div>';
+  if (!a.length) return '<div class="card c mut">' + (cardsArr().length ? 'Nessun risultato.' : '<svg class="empt" viewBox="0 0 120 80" aria-hidden="true"><rect x="14" y="18" width="92" height="56" rx="10" fill="none" stroke="currentColor" stroke-width="2" opacity=".35"/><rect x="6" y="8" width="92" height="56" rx="10" fill="url(#eg)" opacity=".9"/><defs><linearGradient id="eg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset=".55" stop-color="#8b5cf6"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs><path d="M18 44h30M18 52h18" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg><div><b>Nessuna carta</b><br>Tocca + per aggiungerne una, oppure ' + ic('scan') + ' per scansionarla. Puoi anche importare il JSON di Fidelity Wallet dalle Impostazioni.</div>') + '</div>';
   return cview() === 'icons' ? '<div class="igrid">' + a.map(iconTile).join('') + '</div>' : '<div class="cgrid">' + a.map(cardTile).join('') + '</div>';
 }
 function drawMinis() {
@@ -1166,7 +1218,7 @@ V.cards = () => hdr('Carte', '<button class="ib" data-act="cview" aria-label="' 
   [['recent', 'Recenti'], ['used', 'Più usate'], ['added', 'Come aggiunte'], ['az', 'A–Z']].map(o => '<option value="' + o[0] + '"' + (cSort() === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></div><div id="clist" class="mt">' + cardsList() + '</div></main>';
 POST.cards = () => {
   const q = $('cq'); drawMinis();
-  q.addEventListener('input', () => { U.cq = q.value; $('clist').innerHTML = cardsList(); drawMinis(); });
+  q.addEventListener('input', () => { U.cq = q.value; U.cfav = false; $('clist').innerHTML = cardsList(); drawMinis(); });
   $('cs').addEventListener('change', e => { localStorage.setItem('unica_csort', e.target.value); $('clist').innerHTML = cardsList(); drawMinis(); });
 };
 
@@ -1283,7 +1335,8 @@ async function offerIncoming() {
 }
 async function cardShare(id) {
   const d = S.cards.get(id).data, link = shareLink(d);
-  const m = modal('<h2>Condividi «' + h(d.name) + '»</h2><p class="mut sm">Il link contiene nome e codice della carta e si apre in Unica: chi lo riceve può aggiungerla. Non viene inviato a nessun server, ma chiunque abbia il link vede il codice.</p><div class="c"><canvas id="shq" class="bc big"></canvas></div><div class="gap" style="margin-top:12px"><button class="btn pri" id="shs">' + ic('up') + ' Condividi con…</button><button class="btn" id="shc">' + ic('copy') + ' Copia link</button><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div>');
+  const m = modal('<h2>Condividi «' + h(d.name) + '»</h2><p class="mut sm">Il link contiene nome e codice della carta e si apre in Unica: chi lo riceve può aggiungerla. Non viene inviato a nessun server, ma chiunque abbia il link vede il codice.</p><div class="c"><canvas id="shq" class="bc big"></canvas></div><div class="gap" style="margin-top:12px"><button class="btn pri" id="shs">' + ic('up') + ' Condividi con…</button><button class="btn" id="shc">' + ic('copy') + ' Copia link</button><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div><h3>Modo più sicuro: file cifrato con codice monouso</h3><p class="sm mut">Il file si apre solo con un codice che comunichi a parte; vale 48 ore e funziona una sola volta sul dispositivo che lo riceve.</p><div id="shfa"><button type="button" class="btn blk" id="shf">' + ic('lock') + ' Crea file cifrato</button></div>');
+  m.q('#shf').onclick = () => cardShareFile(id, m);
   try { BC.draw(m.q('#shq'), { type: 'QR', code: link }, { width: 280 }); } catch (e) { m.q('#shq').replaceWith(Object.assign(document.createElement('p'), { className: 'sm mut', textContent: 'Link troppo lungo per un QR: usa Condividi o Copia.' })); }
   m.q('#shc').onclick = () => copy(link, 'Link');
   m.q('#shs').onclick = async () => { if (navigator.share) { try { await navigator.share({ title: 'Carta ' + d.name, text: 'Carta fedeltà ' + d.name, url: link }); } catch (e) { } } else copy(link, 'Link'); };
@@ -1360,7 +1413,7 @@ Object.assign(ACT, {
    L'intero archivio finanziario è UN elemento cifrato ("fin-db") con la stessa struttura di Financial Dashboard v3.x:
    così l'import del vecchio backup .enc conserva tutti i dati, anche quelli dei moduli non ancora riportati (BTP, PAC, Poste...). */
 const DEF_BUDGETS = { 'Alimentari & Supermercato': 500, 'Utenze & Casa': 300, 'Trasporti & Carburante': 200, 'Svago & Ristoranti': 250, 'Salute & Persona': 150, 'Varie / Altro': 200 };
-const FIN_ARR = ['assets', 'btps', 'cashflows', 'pacItems', 'posteItems', 'bankAccounts', 'expenses', 'history', 'wealthEvents', 'priceAlerts'];
+const FIN_ARR = ['assets', 'btps', 'cashflows', 'pacItems', 'posteItems', 'bankAccounts', 'expenses', 'history', 'wealthEvents', 'priceAlerts', 'goals', 'recIgnore'];
 const EUR = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' });
 const eur = n => EUR.format(+n || 0);
 const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : 0; };
@@ -2311,7 +2364,7 @@ vlist = function () {
   if (view === 'table') return '<div style="overflow:auto"><table class="vt"><thead><tr>' + (sm ? '<th></th>' : '') + '<th>Voce</th><th>Utente</th><th>Categoria</th><th>Proprietario</th><th>Modificata</th></tr></thead><tbody>' +
     a.map(i => '<tr class="' + sel(i).trim() + '" tabindex="0" role="button" ' + act(i) + '>' + (sm ? '<td>' + chk(i) + '</td>' : '') + '<td><b>' + (i.data.fav ? '★ ' : '') + h(titleOf(i)) + '</b> ' + badge(i) + '</td><td>' + h(i.data.username || '') + '</td><td>' + h(i.data.category || '') + '</td><td>' + h(i.data.owner || '') + '</td><td>' + fmtDate(i.ts) + '</td></tr>').join('') + '</tbody></table></div>';
   if (view === 'icons') return '<div class="vgrid">' + a.map(i => '<button class="vtile' + sel(i) + '" ' + act(i) + '>' + chk(i) + avHtml(i, true) + '<b>' + h(titleOf(i)) + '</b>' + badge(i) + '</button>').join('') + '</div>';
-  return a.map(i => '<button class="row' + sel(i) + '" ' + act(i) + '>' + chk(i) + avHtml(i) + '<span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm mut">' + h(i.type === 'login' ? (i.data.username || i.data.domain || '') : i.type === 'file' ? (i.data.fname || '') : 'Nota cifrata') + (i.data.owner ? ' · ' + h(i.data.owner) : '') + '</span></span>' + (i.data.fav ? '<span class="ok" aria-label="Preferito">' + ic('star') + '</span>' : '') + badge(i) + '<span class="tag">' + VT[i.type][1] + '</span></button>').join('');
+  return a.map(i => '<button class="row' + sel(i) + '" ' + act(i) + '>' + chk(i) + avHtml(i) + '<span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm mut">' + h((i.type === 'login' || i.type === 'passkey') ? (i.data.username || i.data.domain || '') : i.type === 'file' ? (i.data.fname || '') : 'Nota cifrata') + (i.data.owner ? ' · ' + h(i.data.owner) : '') + '</span></span>' + (i.data.fav ? '<span class="ok" aria-label="Preferito">' + ic('star') + '</span>' : '') + badge(i) + '<span class="tag">' + VT[i.type][1] + '</span></button>').join('');
 };
 const vbar = () => {
   if (!U.selmode) return '';
@@ -2324,7 +2377,7 @@ V.vault = () => {
   const seg = (k, l) => '<button type="button" data-act="vview" data-v="' + k + '" aria-pressed="' + (view === k) + '">' + l + '</button>';
   return hdr('Vault', '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button><button class="ib" data-act="audit" aria-label="Controllo password">' + ic('shield') + '</button><button class="ib" data-act="gen" aria-label="Generatore">' + ic('refresh') + '</button><button class="ib" data-act="newItem" aria-label="Nuova voce">' + ic('plus') + '</button>') +
     '<main class="wrap"><div class="gap"><input class="in sp" id="vq" type="search" placeholder="Cerca…" aria-label="Cerca" value="' + h(U.q) + '">' + (SR ? '<button class="ib" data-act="vmic" aria-label="Ricerca vocale">' + ic('mic') + '</button>' : '') + '<select class="in" id="vs" style="width:auto" aria-label="Ordina"><option value="recent"' + (U.sort === 'recent' ? ' selected' : '') + '>Recenti</option><option value="az"' + (U.sort === 'az' ? ' selected' : '') + '>A–Z</option></select></div>' +
-    '<div class="gap" style="margin-top:8px;flex-wrap:wrap"><div class="seg" role="group" aria-label="Modalità di visualizzazione">' + seg('cards', 'Schede') + seg('table', 'Tabella') + seg('icons', 'Icone') + '</div><span class="sp"></span><button class="btn sm" data-act="vselMode" aria-pressed="' + U.selmode + '">' + (U.selmode ? 'Fine' : 'Seleziona') + '</button><button class="btn sm" data-act="vmeta">Categorie e proprietari</button><button class="btn sm" data-act="vimpCard">Importa credenziale cifrata</button></div>' +
+    '<div class="gap" style="margin-top:8px;flex-wrap:wrap"><div class="seg" role="group" aria-label="Modalità di visualizzazione">' + seg('cards', 'Schede') + seg('table', 'Tabella') + seg('icons', 'Icone') + '</div><span class="sp"></span><button class="btn sm" data-act="vselMode" aria-pressed="' + U.selmode + '">' + (U.selmode ? 'Fine' : 'Seleziona') + '</button><button class="btn sm" data-act="vmeta" aria-label="Categorie e proprietari">Categorie</button><button class="btn sm" data-act="vimpCard" aria-label="Importa credenziale cifrata">Importa</button></div>' +
     '<div class="chips" style="margin-top:8px" aria-label="Filtro per categoria"><button class="chip" data-act="cat" data-c="" aria-pressed="' + (!U.cat) + '">Tutte</button>' + vm.cats.map(c => '<button class="chip" data-act="cat" data-c="' + h(c) + '" aria-pressed="' + (U.cat === c) + '">' + h(c) + '</button>').join('') + '</div>' +
     (vm.owners.length > 1 ? '<div class="chips" style="margin-top:6px" aria-label="Filtro per proprietario"><button class="chip" data-act="vown" data-o="" aria-pressed="' + (!U.own) + '">Tutti</button>' + vm.owners.map(o => '<button class="chip" data-act="vown" data-o="' + h(o) + '" aria-pressed="' + (U.own === o) + '">' + h(o) + '</button>').join('') + '</div>' : '') +
     '<div style="margin-top:8px">' + vbar() + '</div><div id="vlist">' + vlist() + '</div></main>';
@@ -2337,7 +2390,7 @@ function vxFields(d) {
     '<div class="gap" style="margin-top:6px"><button type="button" class="btn sm" data-act="vxphoto">Scegli una foto…</button><button type="button" class="btn sm" data-act="vxnophoto">Togli foto, icona e colore</button><span id="vx_prev" class="sm mut"></span></div>' +
     '<input type="hidden" id="f_ic" value="' + h(d.icon || '') + '"><input type="hidden" id="f_co" value="' + h(d.color || '') + '"><input type="hidden" id="f_ph" value="' + h(PHOTO_RE.test(d.photo || '') ? d.photo : '') + '">';
 }
-const vxExtra = () => ({ icon: $('f_ic') && $('f_ic').value || undefined, color: $('f_co') && $('f_co').value || undefined, photo: $('f_ph') && $('f_ph').value || undefined });
+let vxExtra = () => ({ icon: $('f_ic') && $('f_ic').value || undefined, color: $('f_co') && $('f_co').value || undefined, photo: $('f_ph') && $('f_ph').value || undefined });
 async function photoData(file) {
   const bmp = await createImageBitmap(file), s = Math.min(bmp.width, bmp.height), c = document.createElement('canvas'); c.width = c.height = 128;
   c.getContext('2d').drawImage(bmp, (bmp.width - s) / 2, (bmp.height - s) / 2, s, s, 0, 0, 128, 128);
@@ -2612,7 +2665,7 @@ const isStandalone = () => matchMedia('(display-mode: standalone)').matches || n
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 function extraSettings() {
   const np = 'Notification' in window ? Notification.permission : 'unsupported';
-  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Unica è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('dl') + ' Installa Unica</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">Per installare usa il menu del browser («Installa app»). Serve l’indirizzo https.</p>') +
+  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Unica è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('dl') + ' Installa Unica</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">' + h(instWhy()) + '</p>') +
     '<div class="stack mt"><button class="btn blk" data-act="diag">Aggiornamento e diagnostica</button><button class="btn blk" data-act="guide">' + ic('file') + ' Guida all’uso</button></div></div>' +
     '<div class="card"><h3>Vault: CSV</h3><p class="sm mut">Importa da Chrome, Edge, Firefox, Bitwarden e simili (nome, sito, utente, password). L’esportazione è in chiaro: usala con cautela.</p><div class="stack"><button class="btn blk" data-act="csvIn">' + ic('up') + ' Importa accessi da CSV</button><button class="btn blk" data-act="csvOut">' + ic('dl') + ' Esporta accessi in CSV</button></div></div>' +
     '<div class="card"><h3>Notifiche e preferenze</h3>' + (np === 'unsupported' ? '' : '<p class="sm mut">Notifica generica quando un avviso di prezzo viene raggiunto (senza dettagli dei tuoi dati). Stato: ' + (np === 'granted' ? 'attive' : np === 'denied' ? 'bloccate dal browser' : 'non attive') + '.</p>' + (np === 'default' ? '<button class="btn blk" data-act="notifOn">Attiva le notifiche</button>' : '')) +
@@ -2837,7 +2890,8 @@ function aiSetup() {
   const cur = AI.cfg || { p: 'anthropic', k: '', m: '' };
   const m = modal('<div class="gap"><h2 class="sp" style="margin:0">IA generativa</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
     '<p class="sm mut">Collega un servizio con la <b>tua chiave API</b>. La chiave resta cifrata sul dispositivo. Verrà inviato al servizio solo ciò che scrivi nella chat IA: <b>mai</b> carte, Vault, conti o password. Il servizio può conservare i messaggi secondo le sue regole.</p>' +
-    '<form data-form="aisetup"><label class="f">Servizio</label><div class="seg" id="aiprov" role="group">' + Object.keys(AI.prov).map(k => '<button type="button" data-act="aiprov" data-p="' + k + '" aria-pressed="' + (cur.p === k) + '">' + h(AI.prov[k].n) + '</button>').join('') + '</div>' +
+    '<button type="button" class="btn blk" data-act="aiLocal">' + ic('chat') + ' Usa l’IA del browser (gratis, sul dispositivo)</button><p class="sm mut">Nessuna chiave né invio a server: il modello gira nel browser, se supportato (es. Chrome recente su computer).</p>' +
+    '<form data-form="aisetup"><label class="f">Servizio</label><div class="seg" id="aiprov" role="group">' + Object.keys(AI.prov).filter(k => k !== 'local').map(k => '<button type="button" data-act="aiprov" data-p="' + k + '" aria-pressed="' + (cur.p === k) + '">' + h(AI.prov[k].n) + '</button>').join('') + '</div>' +
     '<label class="f" for="ai_k">Chiave API</label><div class="pw"><input class="in mono" id="ai_k" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" value="' + h(cur.k) + '" placeholder="sk-…"><button type="button" class="ib" data-act="aieye" aria-label="Mostra o nascondi la chiave">' + ic('eye') + '</button></div>' +
     '<label class="f" for="ai_m">Modello</label><input class="in mono" id="ai_m" value="' + h(cur.m || AI.prov[cur.p].model) + '" autocomplete="off" autocapitalize="off" spellcheck="false">' +
     '<p class="sm bad" id="ai_err" role="alert"></p><div class="gap"><button type="button" class="btn dan" data-act="aidel"' + (AI.cfg ? '' : ' hidden') + '>Rimuovi chiave</button><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva e verifica</button></div></form>');
@@ -2857,6 +2911,39 @@ ACT.aidel = async () => { if (!(await ask('Rimuovere la chiave?', 'La chiave API
 ACT.aiCfg = () => aiSetup();
 { const s2 = V.settings; V.settings = () => { const s = s2(), i = s.lastIndexOf('</main>'); if (i < 0) return s; aiLoad().then(c => { if (c && U.route === 'settings' && !document.querySelector('.ov') && !s.__r) { const el = document.getElementById('aist'); if (el) el.textContent = 'Collegata: ' + AI.prov[c.p].n + ' · ' + (c.m || AI.prov[c.p].model); } });
   return s.slice(0, i) + '<div class="card"><h3>IA generativa (facoltativa)</h3><p class="sm mut">Chat con un modello linguistico tramite la tua chiave API (Claude o OpenAI). Dall’Assistente scegli «IA generativa». Viene inviato solo il testo che scrivi; mai carte, Vault, conti o password.</p><p class="sm" id="aist">' + (AI.cfg ? 'Collegata: ' + h(AI.prov[AI.cfg.p].n) + ' · ' + h(AI.cfg.m || AI.prov[AI.cfg.p].model) : 'Non collegata.') + '</p><button class="btn blk" data-act="aiCfg">' + ic('key') + ' ' + (AI.cfg ? 'Modifica / rimuovi la chiave' : 'Collega un servizio') + '</button></div>' + s.slice(i); }; }
+
+/* ===== IA locale: modello integrato nel browser (Prompt API / Gemini Nano), senza chiave né server ===== */
+AI.prov.local = { n: 'IA del browser (sul dispositivo)', host: '', model: '' };
+const LMapi = () => window.LanguageModel || (window.ai && window.ai.languageModel) || null;
+async function lmAvail() {
+  const L = LMapi(); if (!L) return 'unsupported';
+  try { if (L.availability) return await L.availability(); const c = await L.capabilities(); return c.available === 'readily' ? 'available' : c.available === 'after-download' ? 'downloadable' : 'unavailable'; } catch (e) { return 'unavailable'; }
+}
+(function () {
+  const orig = aiStream;
+  aiStream = async function (cfg, msgs, onText, signal) {
+    if (cfg.p !== 'local') return orig.apply(this, arguments);
+    const L = LMapi(); if (!L) throw new Error('Questo browser non ha un’IA integrata.');
+    const prior = msgs.slice(0, -1).map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content) }));
+    const s = await L.create({ initialPrompts: [{ role: 'system', content: AI_SYS }, ...prior], signal });
+    try {
+      let full = ''; const st = s.promptStreaming(msgs[msgs.length - 1].content, { signal });
+      for await (const ch of st) { full = (full && String(ch).startsWith(full)) ? String(ch) : full + ch; onText(full); }
+      return full;
+    } finally { try { s.destroy(); } catch (e) { } }
+  };
+})();
+ACT.aiLocal = async () => {
+  const st = await lmAvail();
+  if (st === 'unsupported' || st === 'unavailable') return modal('<div class="gap"><h2 class="sp" style="margin:0">IA del browser non disponibile</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><p class="sm">Questo browser non offre un modello di IA integrato (o il dispositivo non è adatto). Al momento è presente solo in alcune versioni recenti di Chrome per computer, con almeno circa 20 GB liberi e una scheda grafica o CPU adeguata; in Chrome può servire abilitare «Prompt API for Gemini Nano» in <span class="mono">chrome://flags</span>.</p><p class="sm mut">In alternativa collega Claude o OpenAI con la tua chiave API.</p>');
+  if (st !== 'available' && !(await ask('Scaricare il modello?', 'Il browser scaricherà un modello di IA (alcuni GB) una sola volta. Può richiedere diversi minuti: usa il Wi‑Fi.', { ok: 'Scarica' }))) return;
+  try {
+    toast('Preparo l’IA del browser…');
+    const s = await LMapi().create({ monitor(m) { m.addEventListener('downloadprogress', e => { const t = document.querySelector('.toast'); if (t) t.textContent = 'Download modello: ' + Math.round(e.loaded * 100) + '%'; }); } });
+    try { s.destroy(); } catch (e) { }
+    await aiSave({ p: 'local', k: '', m: '' }); closeTop(); toast('IA del browser attiva'); AS.mode = 'ai'; aiModeUi(); if (U.route === 'settings') render();
+  } catch (e) { toast('IA non disponibile: ' + (e && e.message ? e.message : e)); }
+};
 
 /* ===== v1.7: installazione e aggiornamento automatici ===== */
 (function () {
@@ -2878,7 +2965,7 @@ ACT.aiCfg = () => aiSetup();
     let ok = false; try { const r = await fetch('manifest.webmanifest', { cache: 'no-store' }); ok = r.ok; } catch (e) { }
     if (ok) return;
     const base = location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, ''), i192 = iconUrl(192), i512 = iconUrl(512), m512 = iconUrl(512, true);
-    const man = { name: 'Unica', short_name: 'Unica', description: 'Carte, conti e password in un\'unica app cifrata', lang: 'it', start_url: base, scope: base, display: 'standalone', background_color: '#060818', theme_color: '#060818', icons: [{ src: i192, sizes: '192x192', type: 'image/png' }, { src: i512, sizes: '512x512', type: 'image/png' }, { src: m512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }] };
+    const man = { id: base, name: 'Unica', short_name: 'Unica', description: 'Carte, conti e password in un\'unica app cifrata', lang: 'it', start_url: base, scope: base, shortcuts: [['Carte preferite', 'Preferite', 'fav'], ['Scansiona carta', 'Scansiona', 'scan'], ['Nuova carta', 'Nuova carta', 'new'], ['Vault', 'Vault', 'vault'], ['Conti', 'Conti', 'fin']].map(s => ({ name: s[0], short_name: s[1], url: base + '?go=' + s[2], icons: [{ src: base + 'icons/icon-192x192.png', sizes: '192x192', type: 'image/png' }] })), display: 'standalone', background_color: '#060818', theme_color: '#060818', icons: [{ src: i192, sizes: '192x192', type: 'image/png' }, { src: i512, sizes: '512x512', type: 'image/png' }, { src: m512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }] };
     const l = document.querySelector('link[rel=manifest]') || document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'manifest' }));
     l.href = URL.createObjectURL(new Blob([JSON.stringify(man)], { type: 'application/manifest+json' }));
     document.querySelectorAll('link[rel=apple-touch-icon],link[rel=icon]').forEach(e => e.remove());
@@ -2920,6 +3007,27 @@ ACT.aiCfg = () => aiSetup();
     setInterval(chk, 3600e3); document.addEventListener('visibilitychange', () => { if (!document.hidden) chk(); });
     setInterval(() => { if (pending && !S.kcKey) { pending = false; location.reload(); } else if (pending && !window.__updToast) { window.__updToast = 1; toast('Nuova versione pronta: si applicherà al prossimo blocco'); } }, 3000);
   }
+})();
+
+/* ===== v1.9.1: perché non si installa + versione vicino al logo ===== */
+function instWhy() {
+  const ua = navigator.userAgent, p = location.protocol;
+  if (p === 'file:') return 'Stai aprendo il file direttamente dal dispositivo (file://): così nessun browser può installare l’app. Caricala su un hosting https (Netlify, Cloudflare Pages, GitHub Pages…) oppure provala in locale con «python3 -m http.server» e apri http://localhost:8000.';
+  if (!window.isSecureContext) return 'Questa pagina non è servita in modo sicuro: per installare serve https (fa eccezione solo localhost).';
+  if (!('serviceWorker' in navigator)) return 'Questo browser o questa modalità (navigazione privata?) non supporta il service worker, necessario per installare.';
+  if (/FBAN|FBAV|Instagram|Line\/|Snapchat|Telegram|; wv\)|WebView|MiuiBrowser.*XiaoMi/i.test(ua)) return 'Stai usando il browser interno di un’altra app: apri l’indirizzo in Chrome (Android) o Safari (iPhone) e riprova.';
+  if (window.UNICA_SELF) return 'Mancano i file manifest.webmanifest, sw.js e la cartella icons accanto a index.html: caricali TUTTI sullo stesso hosting (carica l’intero contenuto dello zip, non solo index.html).';
+  if (window.SWERR) return 'Il service worker non si registra (' + window.SWERR + '). Controlla che sw.js sia caricato nella stessa cartella di index.html e che l’hosting lo serva come JavaScript.';
+  if (/iphone|ipad|ipod/i.test(ua) && !/Safari/i.test(ua)) return 'Su iPhone/iPad l’installazione funziona solo da Safari: Condividi → «Aggiungi alla schermata Home».';
+  if (/iphone|ipad|ipod/i.test(ua)) return 'Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».';
+  if (/Firefox/i.test(ua) && !/Android/i.test(ua)) return 'Firefox desktop non permette di installare le app web: usa Chrome o Edge (oppure Safari su Mac).';
+  return 'Il browser non ha ancora offerto l’installazione. Apri il menu (⋮) e scegli «Installa app» / «Aggiungi a schermata Home»; se non c’è, ricarica la pagina una volta e attendi qualche secondo. Se l’app è già installata, aprila dalla sua icona.';
+}
+(function () {
+  const tag = ' <span class="ver" title="Versione dell’app">v' + APP_VERSION + '</span>';
+  const addAfterH1 = f => { const o = V[f]; V[f] = function () { return o.apply(this, arguments).replace('</h1>', '</h1>' + tag.trim()); }; };
+  ['welcome', 'lock', 'pkask'].forEach(addAfterH1);
+  const hv = V.home; V.home = function () { return hv.apply(this, arguments).replace('<h1>' + APP_NAME + '</h1>', '<h1>' + APP_NAME + tag + '</h1>'); };
 })();
 
 /* ===== v1.8: notifiche (service worker) + geofencing continuo con geometria dei negozi (da Fidelity Wallet) ===== */
@@ -3184,6 +3292,596 @@ Object.assign(ACT, {
     '<div class="gap" style="margin-top:8px"><select class="in" data-act="pushDay" aria-label="Giorno" style="flex:1">' + PUSH_DAYS.map((d, k) => '<option value="' + k + '"' + (c.dow === k ? ' selected' : '') + '>' + d + '</option>').join('') + '</select><select class="in" data-act="pushHour" aria-label="Ora" style="width:auto">' + Array.from({ length: 24 }, (_, k) => '<option value="' + k + '"' + (c.hour === k ? ' selected' : '') + '>' + String(k).padStart(2, '0') + ':00</option>').join('') + '</select></div>' +
     '<div class="stack mt"><button class="btn blk" data-act="pushTest">Mostra una notifica di prova</button></div>') + '</div>' + s.slice(i); }; }
 
+/* ===== Ricerca vocale carte + ricerca fuzzy/fonetica (v1.9.0) ===== */
+const VSR = () => window.SpeechRecognition || window.webkitSpeechRecognition;
+function phon(s) { // normalizzazione fonetica italiana semplificata
+  return norm(s).replace(/ch/g, 'k').replace(/gh/g, 'g').replace(/sci|sce/g, 'sc').replace(/qu/g, 'kw').replace(/c(?=[aou])/g, 'k').replace(/q/g, 'k')
+    .replace(/ph/g, 'f').replace(/w/g, 'v').replace(/y/g, 'i').replace(/x/g, 'ks').replace(/h/g, '').replace(/(.)\1+/g, '$1').replace(/ /g, '');
+}
+function lev(a, b) {
+  if (a === b) return 0; if (!a.length) return b.length; if (!b.length) return a.length;
+  let p = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) { const c = [i]; for (let j = 1; j <= b.length; j++) c[j] = Math.min(p[j] + 1, c[j - 1] + 1, p[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); p = c; }
+  return p[b.length];
+}
+/* punteggio 0..1 tra la query e il nome carta */
+function cardScore(c, qs) {
+  const q = norm(qs); if (!q) return 1;
+  const n = norm(c.data.name), dom = norm(c.data.domain || '').replace(/ (com|it|net|org|eu)$/, '');
+  if ((c.data.code || '').includes(String(qs).trim())) return 1;
+  if (n === q) return 1; if (n.includes(q) || dom.includes(q)) return .95;
+  const qp = phon(q), np = phon(n);
+  if (qp.length > 1 && np.includes(qp)) return .9;
+  let best = 0;
+  const toks = q.split(' ').filter(Boolean), nt = n.split(' ').concat(dom.split(' ')).filter(Boolean);
+  // ogni parola della query deve somigliare a una parola del nome
+  let sum = 0;
+  for (const t of toks) {
+    let tb = 0; const tp = phon(t);
+    for (const w of nt) {
+      const wp = phon(w); if (!wp || !tp) continue;
+      if (wp.startsWith(tp) && tp.length > 1) { tb = Math.max(tb, .85); continue; }
+      const d = lev(tp, wp), m = Math.max(tp.length, wp.length);
+      tb = Math.max(tb, 1 - d / m);
+    }
+    sum += tb;
+  }
+  best = sum / toks.length;
+  const d2 = lev(qp, np), m2 = Math.max(qp.length, np.length); best = Math.max(best, 1 - d2 / m2);
+  return best;
+}
+const CS_MIN = .66;
+function cardMatch(c, qs) { return cardScore(c, qs) >= CS_MIN; }
+/* ricerca fuzzy nella lista: ordina per rilevanza quando c'è una query */
+(function () {
+  const old = sortedCards;
+  sortedCards = function () {
+    const q = (U.cq || '').trim(); if (!q) { const o = old(); return U.cfav ? o.filter(c => c.data.fav) : o; }
+    const sc = new Map(); cardsArr().forEach(c => sc.set(c.id, cardScore(c, q)));
+    const all = cardsArr().filter(c => sc.get(c.id) >= CS_MIN);
+    return all.sort((x, y) => sc.get(y.id) - sc.get(x.id) || (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) || (y.data.uses || 0) - (x.data.uses || 0));
+  };
+})();
+
+/* ---- comandi vocali ---- */
+function vcCommand(t, alts) {
+  const s = norm(t);
+  const has = re => re.test(s);
+  if (has(/^(mostra |vedi )?(tutte|tutto)( le carte)?$|^(azzera|cancella|pulisci)( la ricerca| filtro)?$/)) return { say: 'Mostro tutte le carte', run() { U.cq = ''; vcRefresh(); } };
+  if (has(/\b(vista|visualizza|mostra)\b.*\b(icone|icona)\b|^icone$/)) return { say: 'Vista a icone', run() { localStorage.setItem('unica_cview', 'icons'); render(); } };
+  if (has(/\b(vista|visualizza|mostra)\b.*\b(schede|carte|scheda)\b|^schede$/) && !has(/^apri/)) return { say: 'Vista a schede', run() { localStorage.setItem('unica_cview', 'cards'); render(); } };
+  if (has(/\b(ordina|ordine)\b/)) {
+    const m = has(/piu usate|usate/) ? 'used' : has(/\b(az|alfabet\w*|nome)\b/) ? 'az' : has(/aggiunt|ordine di inserimento/) ? 'added' : has(/recent|ultime/) ? 'recent' : null;
+    if (m) return { say: 'Ordino', run() { localStorage.setItem('unica_csort', m); render(); } };
+  }
+  if (has(/\b(preferit\w*|stellat\w*)\b/) && !has(/^apri/)) return { say: 'Preferite', run() { const f = cardsArr().filter(c => c.data.fav); if (!f.length) return toast('Nessuna carta preferita'); U.cq = ''; U.cfav = true; vcRefresh(); } };
+  if (has(/\b(vicin\w*|qui intorno|nei dintorni)\b/)) return { say: 'Cerco i negozi vicini', run() { ACT.near && ACT.near({ dataset: {} }); } };
+  if (has(/(nuova|aggiungi|crea)( una)?( nuova)? carta|aggiungi$/)) return { say: 'Nuova carta', run() { openCardForm(null, {}); } };
+  if (has(/\b(scansiona|scanner|fotocamera)\b/)) return { say: 'Scanner', run() { ACT.scan && ACT.scan({ dataset: {} }); } };
+  const open = s.match(/^(apri|mostra|vai a|usa|fammi vedere|trova|cerca)( la| il| lo| l| le| carta| tessera| della| di)* ?(.*)$/);
+  const open2 = open && open[3] ? open[3] : null;
+  const isOpen = open && /^(apri|vai a|usa|fammi vedere|mostra)/.test(s) && open2;
+  const query = open2 || s;
+  // trova la carta migliore su tutte le alternative del riconoscimento
+  let top = null, second = 0;
+  for (const alt of [query].concat((alts || []).map(a => norm(a).replace(/^(apri|mostra|cerca|trova|usa|vai a)( la| il| lo| l| carta| tessera| di| della)* ?/, '')).filter(Boolean))) {
+    for (const c of cardsArr()) { const sc = cardScore(c, alt); if (!top || sc > top.sc) { if (top && top.c.id !== c.id) second = Math.max(second, top.sc); top = { c, sc }; } else if (c.id !== top.c.id) second = Math.max(second, sc); }
+  }
+  if (isOpen && top && top.sc >= .75 && top.sc - second >= .08) return { say: 'Apro ' + top.c.data.name, run() { U.cq = ''; cardOpen(top.c.id); } };
+  return { say: null, search: query, run() { U.cq = query; vcRefresh(); } };
+}
+function vcRefresh() {
+  if (U.cq) U.cfav = false;
+  const q = $('cq'); if (q) q.value = U.cq || '';
+  const l = $('clist'); if (l) { l.innerHTML = cardsList(); drawMinis(); }
+}
+/* ---- riconoscimento ---- */
+const VC = { r: null, on: false };
+function vcUI(txt, state) {
+  let b = $('vcb');
+  if (!txt && !state) { if (b) b.remove(); return; }
+  if (!b) { b = document.createElement('div'); b.id = 'vcb'; b.className = 'vcb'; b.setAttribute('role', 'status'); b.setAttribute('aria-live', 'polite'); document.body.appendChild(b); }
+  b.className = 'vcb ' + (state || ''); b.innerHTML = '<span class="vcd" aria-hidden="true"></span><span class="vct">' + h(txt) + '</span>' + (VC.on ? '<button class="ib" data-act="vcStop" aria-label="Annulla">' + ic('x') + '</button>' : '');
+}
+function vcStop() { VC.on = false; try { VC.r && VC.r.abort(); } catch (e) { } VC.r = null; vcUI(); }
+function vcStart() {
+  const SR = VSR();
+  if (!SR) { toast('Il riconoscimento vocale non è supportato da questo browser'); return; }
+  if (VC.on) { vcStop(); return; }
+  try {
+    const r = new SR(); VC.r = r; VC.on = true; let got = false, fin = '';
+    r.lang = 'it-IT'; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
+    try { r.processLocally = true; } catch (e) { }
+    r.onresult = e => {
+      const res = e.results[e.results.length - 1], t = res[0].transcript.trim();
+      vcUI('“' + t + '”', 'live'); if (!res.isFinal) return;
+      got = true; fin = t; const alts = []; for (let i = 0; i < res.length; i++) alts.push(res[i].transcript);
+      VC.on = false; const cmd = vcCommand(t, alts);
+      if (cmd.say) { vcUI(cmd.say, 'ok'); buzz && buzz(); } else { const n = (U.cq = cmd.search, cardsArr().filter(c => cardMatch(c, cmd.search)).length); vcUI(n ? '“' + t + '” · ' + n + (n === 1 ? ' carta' : ' carte') : '“' + t + '” · nessuna carta', n ? 'ok' : 'no'); }
+      cmd.run(); say2(cmd.say);
+      setTimeout(() => { if (!VC.on) vcUI(); }, 2200);
+    };
+    r.onerror = e => { VC.on = false; const m = { 'not-allowed': 'Microfono non consentito: abilitalo nelle impostazioni del browser', 'service-not-allowed': 'Riconoscimento vocale non consentito', 'no-speech': 'Non ho sentito nulla, riprova', 'audio-capture': 'Microfono non trovato', 'network': 'Il riconoscimento vocale richiede la rete su questo dispositivo', 'language-not-supported': 'Italiano non disponibile per il riconoscimento vocale' }[e.error]; if (e.error !== 'aborted') { vcUI(m || 'Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2800); } else vcUI(); };
+    r.onend = () => { if (VC.on) { VC.on = false; if (!got) { vcUI('Non ho sentito nulla, riprova', 'no'); setTimeout(() => vcUI(), 2000); } } };
+    r.start(); vcUI('Parla ora… prova “apri Esselunga”', 'live');
+  } catch (e) { VC.on = false; vcUI('Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2200); }
+}
+function say2(t) { try { if (t && lsGet('unica_tts') === '1') say(t); } catch (e) { } }
+/* microfono nella barra di ricerca */
+(function () {
+  const vc = V.cards;
+  V.cards = function () {
+    let html = vc();
+    const mic = VSR() ? '<button class="ib vcm" data-act="vcStart" aria-label="Ricerca vocale" title="Ricerca vocale">' + ic('mic') + '</button>' : '';
+    if (U.cfav) html = html.replace('<div id="clist"', '<div class="chips"><button class="chip" data-act="cfavOff" aria-label="Mostra tutte le carte">' + ic('star') + ' Solo preferite ' + ic('x') + '</button></div><div id="clist"');
+    return html.replace('<input class="in sp" id="cq"', '<div class="sbox sp"><input class="in" id="cq"').replace('<select class="in" id="cs"', mic + '</div><select class="in" id="cs"');
+  };
+  Object.assign(ACT, { cfavOff: () => { U.cfav = false; render(); }, vcStart: () => vcStart(), vcStop: () => vcStop() });
+})();
+
+/* ===== Codici 2FA (TOTP, RFC 6238) nel Vault ===== */
+const B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function b32dec(s) {
+  s = String(s).toUpperCase().replace(/[\s-]+/g, '').replace(/=+$/, ''); let bits = '', out = [];
+  for (const ch of s) { const v = B32.indexOf(ch); if (v < 0) return null; bits += v.toString(2).padStart(5, '0'); }
+  for (let i = 0; i + 8 <= bits.length; i += 8) out.push(parseInt(bits.slice(i, i + 8), 2));
+  return out.length ? new Uint8Array(out) : null;
+}
+/* accetta un segreto base32 oppure un URI otpauth://totp/...; restituisce la configurazione normalizzata */
+function totpParse(txt) {
+  txt = String(txt || '').trim(); if (!txt) return null;
+  let secret = txt, digits = 6, period = 30, algo = 'SHA-1', issuer = '', label = '';
+  if (/^otpauth:\/\//i.test(txt)) {
+    let u; try { u = new URL(txt); } catch (e) { return null; }
+    if (u.hostname.toLowerCase() !== 'totp') return null;
+    const q = u.searchParams; secret = q.get('secret') || '';
+    digits = [6, 7, 8].includes(+q.get('digits')) ? +q.get('digits') : 6;
+    period = +q.get('period') >= 10 && +q.get('period') <= 120 ? +q.get('period') : 30;
+    const a = (q.get('algorithm') || 'SHA1').toUpperCase().replace('SHA', 'SHA-').replace('SHA--', 'SHA-'); algo = ['SHA-1', 'SHA-256', 'SHA-512'].includes(a) ? a : 'SHA-1';
+    label = decodeURIComponent(u.pathname.replace(/^\//, '')); issuer = q.get('issuer') || (label.includes(':') ? label.split(':')[0] : '');
+  }
+  const key = b32dec(secret); if (!key || key.length < 10) return null;
+  return { secret: secret.toUpperCase().replace(/[\s-]+/g, '').replace(/=+$/, ''), digits, period, algo, issuer, label };
+}
+async function totpCode(cfg, t) {
+  t = t == null ? Date.now() : t; const ctr = Math.floor(t / 1000 / cfg.period), buf = new ArrayBuffer(8), dv = new DataView(buf);
+  dv.setUint32(0, Math.floor(ctr / 4294967296)); dv.setUint32(4, ctr >>> 0);
+  const key = await crypto.subtle.importKey('raw', b32dec(cfg.secret), { name: 'HMAC', hash: cfg.algo }, false, ['sign']);
+  const h = new Uint8Array(await crypto.subtle.sign('HMAC', key, buf)), o = h[h.length - 1] & 15;
+  const n = ((h[o] & 127) << 24 | h[o + 1] << 16 | h[o + 2] << 8 | h[o + 3]) % Math.pow(10, cfg.digits);
+  return String(n).padStart(cfg.digits, '0');
+}
+const totpFmt = c => c.length === 6 ? c.slice(0, 3) + ' ' + c.slice(3) : c.length === 8 ? c.slice(0, 4) + ' ' + c.slice(4) : c;
+
+/* campo nel modulo della voce (solo per gli accessi) */
+(function () {
+  const vf = vxFields; vxFields = function (d) {
+    const base = vf(d); if (!U.form || U.form.type !== 'login') return base;
+    return base + '<label class="f" for="f_totp">Codice 2FA (facoltativo)</label><div class="pw"><input class="in mono" id="f_totp" type="password" value="' + h(d.totp || '') + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Chiave segreta o link otpauth://"><button type="button" class="btn" data-act="eye" data-for="f_totp" aria-label="Mostra o nascondi">' + ic('eye') + '</button><button type="button" class="btn" data-act="totpScan" aria-label="Scansiona il QR">' + ic('scan') + '</button></div><p class="sm mut">Incolla la chiave che ti mostra il sito (o scansiona il suo QR): Unica genererà i codici a 6 cifre. Resta cifrata come la password.</p><p class="sm bad" id="totperr" role="alert"></p>';
+  };
+  const vx = vxExtra; vxExtra = function () { const o = vx(), f = $('f_totp'); if (f) { const c = totpParse(f.value); o.totp = c ? f.value.trim() : undefined; } return o; };
+  /* validazione prima del salvataggio: se non valida avvisa */
+  const fi = FORMS.item; FORMS.item = async function (f) {
+    const t = $('f_totp'); if (t && t.value.trim() && !totpParse(t.value)) { const e = $('totperr'); if (e) e.textContent = 'Chiave 2FA non valida: controlla di aver copiato tutto il codice (almeno 16 caratteri A–Z e 2–7) oppure il link otpauth://.'; t.focus(); return; }
+    return fi.call(this, f);
+  };
+})();
+
+/* riga con codice nel dettaglio */
+(function () {
+  const od = openDetail; openDetail = function (id) {
+    const m = od(id), it = S.items.get(id); if (!m || !it || it.type !== 'login' || !it.data.totp) return m;
+    const cfg = totpParse(it.data.totp); if (!cfg) return m; const card = m.q('.card'); if (!card) return m;
+    const row = document.createElement('div'); row.className = 'kv'; row.innerHTML = '<div class="k">Codice 2FA' + (cfg.issuer ? ' · ' + h(cfg.issuer) : '') + '</div><div class="v"><span id="totpv" class="mono b" style="font-size:1.35rem;letter-spacing:.08em" aria-live="off">••• •••</span><svg id="totpr" viewBox="0 0 36 36" width="30" height="30" aria-hidden="true" style="flex:none"><circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" stroke-opacity=".2" stroke-width="3"/><circle id="totpc" cx="18" cy="18" r="15" fill="none" stroke="var(--neo2,#8b5cf6)" stroke-width="3" stroke-linecap="round" stroke-dasharray="94.2" transform="rotate(-90 18 18)"/></svg><span class="sm mut" id="totps" style="min-width:2ch;text-align:right"></span><button class="ib" id="totpb" aria-label="Copia codice 2FA">' + ic('copy') + '</button></div>';
+    card.appendChild(row);
+    let cur = '', last = -1;
+    const tick = async () => {
+      if (!row.isConnected) return clearInterval(iv);
+      const now = Date.now(), ctr = Math.floor(now / 1000 / cfg.period), left = cfg.period - ((now / 1000) % cfg.period);
+      if (ctr !== last) { last = ctr; try { cur = await totpCode(cfg, now); row.querySelector('#totpv').textContent = totpFmt(cur); } catch (e) { row.querySelector('#totpv').textContent = 'Errore'; } }
+      row.querySelector('#totpc').style.strokeDashoffset = String(94.2 * (1 - left / cfg.period)); row.querySelector('#totps').textContent = Math.ceil(left);
+      row.querySelector('#totpv').style.opacity = left < 5 ? .55 : 1;
+    };
+    const iv = setInterval(tick, 500); tick();
+    row.querySelector('#totpb').onclick = () => { if (cur) copy(cur, 'Codice 2FA'); };
+    return m;
+  };
+  Object.assign(ACT, {
+    totpScan: () => openScanner(r => {
+      const f = $('f_totp'); if (!f) return; if (!r) return toast('Scrivi o incolla la chiave a mano');
+      if (!totpParse(r.code)) return toast('Il QR non contiene un codice 2FA valido');
+      f.value = r.code; f.type = 'text'; toast('Codice 2FA letto');
+    })
+  });
+})();
+
+/* ===== Import estratti conto CSV intelligente (v2.1) ===== */
+function csvRows(txt, sep) {
+  const rows = []; let r = [], c = '', q = false;
+  for (let i = 0; i < txt.length; i++) {
+    const ch = txt[i];
+    if (q) { if (ch === '"') { if (txt[i + 1] === '"') { c += '"'; i++; } else q = false; } else c += ch; }
+    else if (ch === '"' && c === '') q = true; else if (ch === sep) { r.push(c.trim()); c = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && txt[i + 1] === '\n') i++; r.push(c.trim()); c = ''; if (r.some(x => x !== '')) rows.push(r); r = []; }
+    else c += ch;
+  }
+  r.push(c.trim()); if (r.some(x => x !== '')) rows.push(r); return rows;
+}
+function bankSep(txt) {
+  const L = txt.split(/\r?\n/).filter(x => x.trim()).slice(0, 40); let best = ';', bs = -1;
+  for (const s of [';', '\t', ',', '|']) { const counts = L.map(l => l.split(s).length - 1).filter(n => n > 0); if (counts.length < 2) continue; const freq = {}; counts.forEach(n => freq[n] = (freq[n] || 0) + 1); const sc = Math.max(...Object.values(freq)) * 10 + counts.length; if (sc > bs) { bs = sc; best = s; } }
+  return best;
+}
+async function bankText(f) {
+  const buf = await f.arrayBuffer(); let t = new TextDecoder('utf-8').decode(buf);
+  if (t.includes('�')) t = new TextDecoder('windows-1252').decode(buf);
+  return t.replace(/^﻿/, '');
+}
+const bkNum = raw => {
+  let s = String(raw == null ? '' : raw).trim(); if (!s) return NaN; let neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1); } if (/-\s*$/.test(s)) { neg = true; s = s.replace(/-\s*$/, ''); }
+  s = s.replace(/eur|euro|€|\s/gi, ''); const n = parseAmount(s); return isNaN(n) ? NaN : (neg ? -Math.abs(n) : n);
+};
+function bankDetect(rows) {
+  let hi = -1;
+  for (let i = 0; i < Math.min(rows.length, 40); i++) { const j = rows[i].join(' ').toLowerCase(); const k = ['data', 'descrizione', 'importo', 'causale', 'dare', 'avere', 'entrate', 'uscite', 'operazione', 'valuta', 'addebit', 'accredit', 'date', 'description', 'amount', 'debit', 'credit', 'details', 'memo'].filter(w => j.includes(w)).length; if (k >= 2 && !/\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}/.test(j)) { hi = i; break; } }
+  const head = hi >= 0 ? rows[hi].map(x => x.toLowerCase()) : [], data = rows.slice(hi + 1), w = Math.max(...rows.slice(hi + 1, hi + 40).map(r => r.length), head.length, 1);
+  const find = (...res) => { for (const re of res) { const i = head.findIndex(h => re.test(h)); if (i >= 0) return i; } return -1; };
+  let date = find(/contabil|data operazione|^data$/, /data(?! valuta)/, /date/, /valuta/), desc = find(/descrizione|causale|dettagli|operazione(?! data)|descr|motivo|note/), amt = find(/^importo|importo in eur|ammontare|amount|^eur$/, /importo/);
+  const debit = find(/dare|uscite|addebit|debit/), credit = find(/avere|entrate|accredit|credit/);
+  const samp = data.slice(0, 40);
+  const colScore = (i, fn) => samp.filter(r => r[i] !== undefined && fn(r[i])).length;
+  if (date < 0) { let b = 0; for (let i = 0; i < w; i++) { const s = colScore(i, v => !!parseDate(v)); if (s > b) { b = s; date = i; } } }
+  if (amt < 0 && debit < 0) { let b = 0; for (let i = 0; i < w; i++) { if (i === date) continue; const s = colScore(i, v => !isNaN(bkNum(v)) && /\d/.test(v) && !parseDate(v)); if (s > b) { b = s; amt = i; } } }
+  if (desc < 0) { let b = 0; for (let i = 0; i < w; i++) { if (i === date || i === amt || i === debit || i === credit) continue; const s = samp.reduce((a, r) => a + (r[i] ? String(r[i]).length : 0), 0); if (s > b) { b = s; desc = i; } } }
+  return { hi, head, data, w, date, desc, amt, debit, credit };
+}
+function bankParse(D, m, opt) {
+  const out = [];
+  D.data.forEach(r => {
+    if (r.length < 2) return; const date = parseDate(r[m.date]); if (!date) { out.push({ bad: true }); return; }
+    let a = NaN;
+    if (m.amt >= 0) a = bkNum(r[m.amt]);
+    else { const dv = bkNum(r[m.debit]), cv = bkNum(r[m.credit]); if (!isNaN(dv) && dv !== 0) a = -Math.abs(dv); else if (!isNaN(cv) && cv !== 0) a = Math.abs(cv); }
+    if (isNaN(a)) { out.push({ bad: true }); return; }
+    if (opt.flip) a = -a;
+    const desc = String(r[m.desc] || 'Movimento bancario').replace(/\s+/g, ' ').slice(0, 200);
+    out.push({ date, desc, a });
+  });
+  return out;
+}
+const bkKey = (date, amt, desc) => date + '|' + Math.round(Math.abs(amt) * 100) + '|' + norm(desc).slice(0, 40);
+function bankPlan(rows) {
+  const d = FIN(), have = new Map(); d.expenses.forEach(e => { const k = bkKey(e.date, num(e.amount), e.desc); have.set(k, (have.get(k) || 0) + 1); });
+  const res = { add: [], dup: 0, inc: 0, bad: 0, incSum: 0, outSum: 0 };
+  rows.forEach(r => {
+    if (r.bad) return res.bad++;
+    if (r.a >= 0) { res.inc++; res.incSum += r.a; return; }
+    const k = bkKey(r.date, r.a, r.desc); if ((have.get(k) || 0) > 0) { have.set(k, have.get(k) - 1); res.dup++; return; }
+    const c = categorize(r.desc); res.add.push({ date: r.date, desc: r.desc, category: c.cat, amount: Math.abs(r.a) }); res.outSum += Math.abs(r.a);
+  });
+  return res;
+}
+async function bankImport() {
+  const f = await pickFile('.csv,.tsv,.txt,text/csv,text/plain'); if (!f) return;
+  let text; try { text = await bankText(f); } catch (e) { return toast('File non leggibile'); }
+  if (text.length > 8e6) return toast('File troppo grande');
+  const sep = bankSep(text), rows = csvRows(text, sep); if (rows.length < 2) return toast('CSV vuoto o non riconosciuto');
+  const D = bankDetect(rows); if (!D.data.length) return toast('Nessun movimento trovato');
+  const st = { date: D.date, desc: D.desc, amt: D.amt >= 0 ? D.amt : -1, debit: D.debit, credit: D.credit, mode: D.amt >= 0 || D.debit < 0 ? 'one' : 'two', flip: false };
+  const colName = i => (D.head[i] ? D.head[i] : 'Colonna ' + (i + 1)).slice(0, 28) + ' · ' + String((D.data[0] || [])[i] || '').slice(0, 14);
+  const opts = (sel, none) => (none ? '<option value="-1"' + (sel < 0 ? ' selected' : '') + '>—</option>' : '') + Array.from({ length: D.w }, (_, i) => '<option value="' + i + '"' + (i === sel ? ' selected' : '') + '>' + h(colName(i)) + '</option>').join('');
+  const m = modal('<div id="bkb"></div>', { sticky: true });
+  let plan = null;
+  const draw = () => {
+    const m2 = { date: +st.date, desc: +st.desc, amt: st.mode === 'one' ? +st.amt : -1, debit: +st.debit, credit: +st.credit };
+    const valid = m2.date >= 0 && m2.desc >= 0 && (m2.amt >= 0 || (m2.debit >= 0 || m2.credit >= 0));
+    plan = valid ? bankPlan(bankParse(D, m2, st)) : null;
+    const prev = plan ? plan.add.slice(0, 6).map(e => '<tr><td>' + h(e.date.slice(5).split('-').reverse().join('/')) + '</td><td>' + h(e.desc.slice(0, 26)) + '</td><td class="sm mut">' + h(e.category) + '</td><td style="text-align:right">' + h(eur(e.amount)) + '</td></tr>').join('') : '';
+    m.q('#bkb').innerHTML = '<div class="gap"><h2 class="sp" style="margin:0">Importa estratto conto</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+      '<p class="sm mut">File «' + h(f.name) + '» · ' + D.data.length + ' righe · separatore «' + (sep === '\t' ? 'tab' : h(sep)) + '». Ho riconosciuto le colonne: correggile se serve.</p>' +
+      '<label class="f" for="bk_d">Data</label><select class="in" id="bk_d" data-bk="date">' + opts(st.date) + '</select><label class="f" for="bk_s">Descrizione</label><select class="in" id="bk_s" data-bk="desc">' + opts(st.desc) + '</select>' +
+      '<div class="seg" role="group" aria-label="Importi" style="margin-top:10px"><button type="button" data-bkm="one" aria-pressed="' + (st.mode === 'one') + '">Una colonna importi</button><button type="button" data-bkm="two" aria-pressed="' + (st.mode === 'two') + '">Uscite / Entrate separate</button></div>' +
+      (st.mode === 'one' ? '<label class="f" for="bk_a">Importo</label><select class="in" id="bk_a" data-bk="amt">' + opts(st.amt, 1) + '</select><label class="chk"><input type="checkbox" data-bkf' + (st.flip ? ' checked' : '') + '><span>Le uscite sono positive (inverti il segno)</span></label>'
+        : '<label class="f" for="bk_u">Uscite (dare)</label><select class="in" id="bk_u" data-bk="debit">' + opts(st.debit, 1) + '</select><label class="f" for="bk_e">Entrate (avere)</label><select class="in" id="bk_e" data-bk="credit">' + opts(st.credit, 1) + '</select>') +
+      (plan ? '<div class="card" style="margin-top:12px"><b>' + plan.add.length + ' spese da importare</b> (' + h(eur(plan.outSum)) + ')<p class="sm mut" style="margin:4px 0 0">' + plan.dup + ' già presenti · ' + plan.inc + ' entrate ignorate (' + h(eur(plan.incSum)) + ')' + (plan.bad ? ' · ' + plan.bad + ' righe non lette' : '') + '</p></div>' +
+        (prev ? '<div style="overflow:auto"><table class="sm" style="width:100%;border-collapse:collapse"><tbody>' + prev + '</tbody></table></div>' : '') : '<p class="sm bad">Scegli almeno data, descrizione e importo.</p>') +
+      '<div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-act="close">Annulla</button><button class="btn pri" id="bk_go"' + (plan && plan.add.length ? '' : ' disabled') + '>Importa ' + (plan ? plan.add.length : 0) + '</button></div>';
+  };
+  m.el.addEventListener('change', e => { const t = e.target; if (t.dataset.bk) { st[t.dataset.bk] = +t.value; draw(); } else if (t.hasAttribute('data-bkf')) { st.flip = t.checked; draw(); } });
+  m.el.addEventListener('click', async e => {
+    const b = e.target.closest('[data-bkm]'); if (b) { st.mode = b.dataset.bkm; draw(); return; }
+    if (e.target.id === 'bk_go' && plan && plan.add.length) {
+      const d = FIN(), id = 'i' + Date.now().toString(36);
+      plan.add.forEach(x => { if (d.budgets[x.category] === undefined) d.budgets[x.category] = 150; d.expenses.unshift({ ...x, imp: id }); });
+      await finSave(); const n = plan.add.length; m.close(); render();
+      const r = modal('<h2>Importate ' + n + ' spese</h2><p class="mut sm">Le trovi in Conti → Spese, già categorizzate per parole chiave: puoi correggere la categoria di ognuna. Se hai sbagliato colonna o segno, puoi annullare questo import.</p><div class="gap"><button class="btn dan" id="bk_un">Annulla import</button><span class="sp"></span><button class="btn pri" data-act="close">Fatto</button></div>');
+      r.q('#bk_un').onclick = async () => { const d2 = FIN(); d2.expenses = d2.expenses.filter(x => x.imp !== id); await finSave(); r.close(); render(); toast('Import annullato'); };
+    }
+  });
+  draw();
+}
+Object.assign(ACT, { csvImp: () => bankImport() });
+
+/* ===== Conti: obiettivi di risparmio, ricorrenze/abbonamenti, confronti (v2.2) ===== */
+FTABS.splice(FTABS.findIndex(t => t[0] === 'bud') + 1, 0, ['obi', 'Obiettivi'], ['ric', 'Ricorrenze'], ['cmp', 'Confronti']);
+const isoDay3 = (d = new Date()) => d.toISOString().slice(0, 10);
+const addMon3 = (d, n) => { const x = new Date(d); const day = x.getDate(); x.setDate(1); x.setMonth(x.getMonth() + n); x.setDate(Math.min(day, new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate())); return x; };
+const fmtD3 = d => new Date(d).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' });
+
+/* ---------- Obiettivi di risparmio ---------- */
+function goalForecast(g) {
+  const target = num(g.target), saved = num(g.saved), rem = target - saved, now = new Date();
+  if (target > 0 && rem <= 0) return { done: true, text: 'Obiettivo raggiunto 🎉', cls: 'ok' };
+  const since = Date.now() - 90 * MS_DAY, last = (g.hist || []).filter(x => new Date(x.d).getTime() >= since).reduce((s, x) => s + num(x.a), 0);
+  const avg = last / 3, plan = num(g.monthly), rate = plan > 0 ? plan : avg;
+  const out = { rate, rem, plan, avg };
+  if (g.deadline) { const dl = new Date(g.deadline), ml = Math.max(1, (dl.getFullYear() - now.getFullYear()) * 12 + dl.getMonth() - now.getMonth()); out.need = rem / ml; out.deadline = dl; if (dl < now) out.late = true; }
+  if (rate <= 0) { out.text = 'Indica un versamento mensile o registra dei versamenti per avere la previsione.' + (out.need ? ' Per rispettare la scadenza servirebbero ' + eur(out.need) + ' al mese.' : ''); out.cls = 'mut'; return out; }
+  const months = Math.ceil(rem / rate); out.eta = addMon3(now, months);
+  out.text = 'Al ritmo di ' + eur(rate) + '/mese lo raggiungi ' + (months <= 1 ? 'entro un mese' : 'tra ' + months + ' mesi') + ' (' + fmtD3(out.eta) + ').';
+  if (out.deadline) { if (out.late) { out.text += ' La scadenza è passata.'; out.cls = 'bad'; } else if (out.eta <= out.deadline) { out.text += ' Sei in linea con la scadenza.'; out.cls = 'ok'; } else { out.text += ' Per la scadenza (' + fmtD3(out.deadline) + ') servono ' + eur(out.need) + '/mese.'; out.cls = 'bad'; } } else out.cls = 'mut';
+  return out;
+}
+FV.obi = function () {
+  const d = FIN(), G = d.goals;
+  const tot = G.reduce((s, g) => s + num(g.saved), 0), tgt = G.reduce((s, g) => s + num(g.target), 0);
+  return '<div class="gap"><b class="sp">Obiettivi di risparmio</b><button class="btn sm pri" data-act="goalNew">' + ic('plus') + ' Obiettivo</button></div>' +
+    (G.length ? '<p class="sm mut">Messi da parte: <b>' + h(eur(tot)) + '</b> su ' + h(eur(tgt)) + '</p>' : '') +
+    (G.map(g => { const f = goalForecast(g), p = num(g.target) ? Math.min(100, num(g.saved) / num(g.target) * 100) : 0; return '<div class="card mt"><div class="gap"><b class="sp">' + h(g.name) + '</b><button class="ib" data-act="goalEdit" data-id="' + h(g.id) + '" aria-label="Modifica ' + h(g.name) + '">' + ic('edit') + '</button></div><p style="margin:2px 0"><b>' + h(eur(num(g.saved))) + '</b> <span class="mut sm">su ' + h(eur(num(g.target))) + ' · ' + Math.round(p) + '%</span></p>' + bar(p, f.done ? '' : '') + '<p class="sm ' + (f.cls || 'mut') + '">' + h(f.text) + '</p>' + (f.done ? '' : '<button class="btn sm pri" data-act="goalAdd" data-id="' + h(g.id) + '">' + ic('plus') + ' Versamento</button>') + '</div>'; }).join('') || '<div class="card c mut mt">Nessun obiettivo. Crea il primo: vacanza, fondo emergenza, auto…</div>');
+};
+function goalForm(id) {
+  const g = id ? FIN().goals.find(x => x.id === id) : { name: '', target: '', saved: 0, monthly: '', deadline: '' }; U.gid = id || null;
+  modal('<h2>' + (id ? 'Modifica obiettivo' : 'Nuovo obiettivo') + '</h2><form data-form="goal"><label class="f" for="g_n">Nome</label><input class="in" id="g_n" required maxlength="60" value="' + h(g.name) + '" autocomplete="off"><label class="f" for="g_t">Importo da raggiungere (€)</label><input class="in" id="g_t" inputmode="decimal" required value="' + h(g.target) + '"><label class="f" for="g_s">Già messi da parte (€)</label><input class="in" id="g_s" inputmode="decimal" value="' + h(g.saved) + '"><label class="f" for="g_m">Versamento mensile previsto (facoltativo)</label><input class="in" id="g_m" inputmode="decimal" value="' + h(g.monthly || '') + '"><label class="f" for="g_d">Scadenza (facoltativa)</label><input class="in" type="date" id="g_d" value="' + h(g.deadline || '') + '"><p class="sm bad" id="g_err" role="alert"></p><div class="gap" style="margin-top:12px">' + (id ? '<button type="button" class="btn dan" data-act="goalDel">Elimina</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true });
+}
+Object.assign(FORMS, {
+  async goal() {
+    const g = { name: $('g_n').value.trim().slice(0, 60), target: Math.abs(num($('g_t').value)), saved: Math.abs(num($('g_s').value)), monthly: Math.abs(num($('g_m').value)) || 0, deadline: $('g_d').value || '' };
+    if (!g.name || !g.target) return $('g_err').textContent = 'Inserisci nome e importo da raggiungere.';
+    const d = FIN(); if (U.gid) { const o = d.goals.find(x => x.id === U.gid); Object.assign(o, g); } else d.goals.push({ id: 'g' + Date.now().toString(36), hist: [], ...g });
+    await finSave(); closeTop(); render(); toast('Obiettivo salvato');
+  },
+  async goaladd() {
+    const a = Math.abs(num($('ga_a').value)); if (!a) return $('ga_err').textContent = 'Inserisci un importo.';
+    const g = FIN().goals.find(x => x.id === U.gid); if (!g) return; g.saved = num(g.saved) + a; (g.hist = g.hist || []).push({ d: isoDay3(), a }); g.hist = g.hist.slice(-120);
+    await finSave(); closeTop(); render(); toast('Versamento registrato');
+  }
+});
+Object.assign(ACT, {
+  goalNew: () => goalForm(null), goalEdit: t => goalForm(t.dataset.id),
+  goalAdd: t => { U.gid = t.dataset.id; modal('<h2>Nuovo versamento</h2><form data-form="goaladd"><label class="f" for="ga_a">Importo (€)</label><input class="in" id="ga_a" inputmode="decimal" required autofocus><p class="sm bad" id="ga_err" role="alert"></p><div class="gap" style="margin-top:12px"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Aggiungi</button></div></form>', { sticky: true }); },
+  async goalDel() { if (await ask('Eliminare l’obiettivo?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { const d = FIN(); d.goals = d.goals.filter(x => x.id !== U.gid); await finSave(); closeTop(); render(); } }
+});
+
+/* ---------- Ricorrenze e abbonamenti ---------- */
+function recKey(desc) {
+  return norm(String(desc)).replace(/\b(pagamento|pos|carta|addebito|sdd|rid|bonifico|a favore di|ordinante|data|del|il|n|nr|rif|ref)\b/g, ' ').replace(/[0-9]+/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 1).slice(0, 3).join(' ');
+}
+const REC_F = [['settimanale', 7, 2, 1], ['mensile', 30.4, 4, 3], ['trimestrale', 91, 8, 3], ['annuale', 365, 15, 2]];
+function recDetect(d) {
+  const groups = new Map();
+  d.expenses.forEach(e => { const a = num(e.amount), dt = new Date(e.date); if (!a || isNaN(dt)) return; const k = recKey(e.desc); if (!k) return; (groups.get(k) || groups.set(k, []).get(k)).push({ t: dt.getTime(), a, desc: e.desc, date: e.date }); });
+  const out = [], today = Date.now();
+  groups.forEach((L, k) => {
+    L.sort((x, y) => x.t - y.t);
+    const amts = L.map(x => x.a).sort((x, y) => x - y), med = amts[Math.floor(amts.length / 2)];
+    // un movimento al giorno per lo stesso pagamento non conta due volte
+    const days = L.filter((x, i) => !i || x.t - L[i - 1].t > 3 * MS_DAY); if (days.length < 2) return;
+    const iv = days.slice(1).map((x, i) => (x.t - days[i].t) / MS_DAY);
+    for (const [name, dd, tol, minN] of REC_F) {
+      if (days.length < minN) continue;
+      const okI = iv.filter(v => Math.abs(v - dd) <= tol).length; if (okI / iv.length < .7) continue;
+      const okA = days.filter(x => Math.abs(x.a - med) <= med * .2 + .5).length; if (okA / days.length < .7) continue;
+      const last = days[days.length - 1], next = new Date(last.t + dd * MS_DAY), mEq = med * (name === 'settimanale' ? 52 / 12 : name === 'mensile' ? 1 : name === 'trimestrale' ? 1 / 3 : 1 / 12);
+      out.push({ key: k, label: last.desc.slice(0, 40), amount: med, freq: name, n: days.length, last: last.date, next, mEq, stale: today - next.getTime() > dd * 1.5 * MS_DAY });
+      break;
+    }
+  });
+  return out.sort((a, b) => a.next - b.next);
+}
+const recActive = d => recDetect(d).filter(r => !d.recIgnore.includes(r.key));
+FV.ric = function () {
+  const d = FIN(), all = recDetect(d), act = all.filter(r => !d.recIgnore.includes(r.key) && !r.stale), hid = all.filter(r => d.recIgnore.includes(r.key)), old = all.filter(r => !d.recIgnore.includes(r.key) && r.stale);
+  const mo = act.reduce((s, r) => s + r.mEq, 0), now = Date.now();
+  const row = r => { const dd = Math.ceil((r.next.getTime() - now) / MS_DAY); return '<div class="card mt"><div class="gap"><b class="sp">' + h(r.label) + '</b><b>' + h(eur(r.amount)) + '</b></div><p class="sm mut" style="margin:2px 0">' + h(r.freq) + ' · ' + r.n + ' addebiti · prossimo ' + (dd < 0 ? 'atteso da ' + (-dd) + ' g' : dd === 0 ? '<b>oggi</b>' : dd === 1 ? 'domani' : 'tra ' + dd + ' giorni') + ' (' + h(fmtD3(r.next)) + ')</p><button class="btn sm" data-act="recIgnore" data-k="' + h(r.key) + '">Ignora</button></div>'; };
+  return '<div class="card"><h3>Abbonamenti e pagamenti ricorrenti</h3><p class="sm mut">Rilevati dalle tue spese (servono almeno 2–3 addebiti simili e regolari). Importa un estratto conto per un risultato migliore.</p>' + (act.length ? '<p style="margin:0"><b>' + h(eur(mo)) + '</b> <span class="mut sm">al mese (' + h(eur(mo * 12)) + ' l’anno) in ' + act.length + ' ricorrenze</span></p>' : '<p class="sm mut">Nessuna ricorrenza rilevata per ora.</p>') + '</div>' +
+    act.map(row).join('') + (old.length ? '<h3 class="mt">Forse terminate</h3>' + old.map(r => '<p class="sm mut">' + h(r.label) + ' · ultimo addebito ' + h(r.last) + ' · <button class="btn sm" data-act="recIgnore" data-k="' + h(r.key) + '">Nascondi</button></p>').join('') : '') +
+    (hid.length ? '<details class="mt"><summary class="sm">Ignorate (' + hid.length + ')</summary>' + hid.map(r => '<p class="sm">' + h(r.label) + ' <button class="btn sm" data-act="recRestore" data-k="' + h(r.key) + '">Ripristina</button></p>').join('') + '</details>' : '');
+};
+Object.assign(ACT, {
+  async recIgnore(t) { const d = FIN(); if (!d.recIgnore.includes(t.dataset.k)) d.recIgnore.push(t.dataset.k); await finSave(); render(); },
+  async recRestore(t) { const d = FIN(); d.recIgnore = d.recIgnore.filter(k => k !== t.dataset.k); await finSave(); render(); }
+});
+/* promemoria in Home e notifica prima del rinnovo */
+(function () {
+  const ag = agenda; agenda = function () {
+    const L = ag();
+    if (finLoaded()) { const lim = Date.now() + 5 * MS_DAY; recActive(FIN()).filter(r => !r.stale && r.next.getTime() <= lim && r.next.getTime() > Date.now() - MS_DAY).slice(0, 3).forEach(r => L.push({ i: 'cal', t: 'Rinnovo/addebito: ' + r.label + ' · ' + eur(r.amount) + ' · ' + fmtD3(r.next), tab: 'ric' })); }
+    return L;
+  };
+  const chk = () => { try { if (!finLoaded()) return; const lim = Date.now() + 3 * MS_DAY; recActive(FIN()).filter(r => !r.stale && r.next.getTime() <= lim && r.next.getTime() > Date.now()).forEach(r => { const k = 'unica_recn_' + r.key + '_' + r.next.toISOString().slice(0, 10); if (localStorage.getItem(k)) return; localStorage.setItem(k, '1'); notify('Addebito in arrivo', { body: r.label + ' · ' + eur(r.amount) + ' · ' + fmtD3(r.next), tag: 'rec-' + r.key }); }); } catch (e) { } };
+  setInterval(chk, 15 * 60 * 1000); setTimeout(chk, 6000);
+})();
+
+/* ---------- Confronti e flussi ---------- */
+const prevMon3 = m => { const [y, mm] = m.split('-').map(Number); return monthKey(new Date(y, mm - 2, 1)); };
+FV.cmp = function () {
+  const d = FIN(), m = U.fin.month, pm = prevMon3(m), cur = spentBy(d, m), prv = spentBy(d, pm), ex = c => c !== INC_CAT;
+  const cats = [...new Set([...Object.keys(cur), ...Object.keys(prv)])].filter(ex).sort((a, b) => ((cur[b] || 0) + (prv[b] || 0)) - ((cur[a] || 0) + (prv[a] || 0)));
+  const tc = cats.reduce((s, c) => s + (cur[c] || 0), 0), tp = cats.reduce((s, c) => s + (prv[c] || 0), 0), dl = tc - tp;
+  const mx = Math.max(1, ...cats.map(c => Math.max(cur[c] || 0, prv[c] || 0)));
+  const cmpRows = cats.map((c, i) => { const a = cur[c] || 0, b = prv[c] || 0, dd = a - b; return '<div class="kv"><div class="gap"><b class="sp">' + h(c) + '</b><span class="sm ' + (dd > 0 ? 'bad' : dd < 0 ? 'ok' : 'mut') + '">' + (dd > 0 ? '▲ ' : dd < 0 ? '▼ ' : '') + h(eur(Math.abs(dd))) + (b ? ' (' + (dd >= 0 ? '+' : '−') + Math.round(Math.abs(dd) / b * 100) + '%)' : b === 0 && a ? ' (nuova)' : '') + '</span></div><div class="cmpb" aria-hidden="true"><i style="width:' + a / mx * 100 + '%;background:' + PAL[i % PAL.length] + '"></i></div><div class="cmpb" aria-hidden="true"><i style="width:' + b / mx * 100 + '%;background:' + PAL[i % PAL.length] + ';opacity:.4"></i></div><div class="sm mut">' + h(monthLabel(m)) + ' ' + h(eur(a)) + ' · ' + h(monthLabel(pm)) + ' ' + h(eur(b)) + '</div></div>'; }).join('');
+  /* ultimi 6 mesi, barre impilate */
+  const ms = []; { const [y, mm] = m.split('-').map(Number); for (let i = 5; i >= 0; i--) ms.push(monthKey(new Date(y, mm - 1 - i, 1))); }
+  const per = ms.map(k => spentBy(d, k)), totC = {}; per.forEach(o => Object.entries(o).forEach(([c, v]) => { if (ex(c)) totC[c] = (totC[c] || 0) + v; }));
+  const top = Object.entries(totC).sort((a, b) => b[1] - a[1]).slice(0, 6).map(x => x[0]), series = [...top, 'Altre'];
+  const vals = per.map(o => { const r = {}; let oth = 0; Object.entries(o).forEach(([c, v]) => { if (!ex(c)) return; if (top.includes(c)) r[c] = v; else oth += v; }); r['Altre'] = oth; return r; });
+  const sums = vals.map(r => Object.values(r).reduce((a, b) => a + b, 0)), my = Math.max(1, ...sums), W = 320, H = 170, bw = 30, gx = (W - 6 * bw) / 7;
+  const svg = '<svg viewBox="0 0 ' + W + ' ' + (H + 22) + '" class="chart" role="img" aria-label="Spese per categoria negli ultimi 6 mesi">' + vals.map((r, i) => { let y = H; const x = gx + i * (bw + gx); return series.map((c, j) => { const v = r[c] || 0, hh = v / my * (H - 16); y -= hh; return hh > .3 ? '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="' + hh + '" rx="2" fill="' + PAL[j % PAL.length] + '"><title>' + h(c) + ' ' + h(eur(v)) + '</title></rect>' : ''; }).join('') + '<text x="' + (x + bw / 2) + '" y="' + (y - 4) + '" text-anchor="middle" font-size="8" fill="currentColor">' + (sums[i] >= 1000 ? Math.round(sums[i] / 100) / 10 + 'k' : Math.round(sums[i])) + '</text><text x="' + (x + bw / 2) + '" y="' + (H + 14) + '" text-anchor="middle" font-size="9" fill="currentColor" opacity=".7">' + MESI[+ms[i].split('-')[1] - 1].slice(0, 3) + '</text>'; }).join('') + '</svg>' +
+    '<ul class="legend">' + series.map((c, j) => '<li><i class="dot" style="background:' + PAL[j % PAL.length] + '"></i><span>' + h(c) + '</span></li>').join('') + '</ul>';
+  /* flusso: totale → categorie (sankey semplificato) */
+  const fl = cats.map(c => [c, cur[c] || 0]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]), ftot = fl.reduce((s, x) => s + x[1], 0);
+  let flow = '<p class="sm mut">Nessuna spesa nel mese.</p>';
+  if (ftot) { const FH = 150, gap = 4, avail = FH - gap * (fl.length - 1); let ly = 0, ry = 0; const paths = fl.map((x, i) => { const hh = Math.max(2, x[1] / ftot * avail), l0 = ly, r0 = ry; ly += x[1] / ftot * FH; ry += hh + gap; return '<path d="M70 ' + l0 + ' C 150 ' + l0 + ',150 ' + r0 + ',230 ' + r0 + ' L230 ' + (r0 + hh) + ' C 150 ' + (r0 + hh) + ',150 ' + (l0 + x[1] / ftot * FH) + ',70 ' + (l0 + x[1] / ftot * FH) + ' Z" fill="' + PAL[i % PAL.length] + '" opacity=".55"/><text x="236" y="' + (r0 + hh / 2 + 3) + '" font-size="8.5" fill="currentColor">' + h(x[0].slice(0, 22)) + ' · ' + Math.round(x[1] / ftot * 100) + '%</text>'; }).join('');
+    flow = '<svg viewBox="0 0 340 ' + (FH + 6) + '" class="chart" role="img" aria-label="Flusso delle spese dal totale alle categorie"><rect x="62" y="0" width="8" height="' + FH + '" rx="3" fill="currentColor" opacity=".7"/><text x="58" y="' + FH / 2 + '" text-anchor="end" font-size="9" fill="currentColor">' + h(eur(ftot)) + '</text>' + paths + '</svg>'; }
+  return '<div class="gap">' + monthPicker() + '</div>' +
+    '<div class="card mt"><h3>' + h(monthLabel(m)) + ' contro ' + h(monthLabel(pm)) + '</h3><p style="margin:0"><b>' + h(eur(tc)) + '</b> <span class="sm ' + (dl > 0 ? 'bad' : dl < 0 ? 'ok' : 'mut') + '">' + (dl > 0 ? '▲ ' : dl < 0 ? '▼ ' : '') + h(eur(Math.abs(dl))) + (tp ? ' (' + (dl >= 0 ? '+' : '−') + Math.round(Math.abs(dl) / tp * 100) + '%)' : '') + ' rispetto al mese prima (' + h(eur(tp)) + ')</span></p>' + (cmpRows || '<p class="sm mut">Nessuna spesa da confrontare.</p>') + '</div>' +
+    '<div class="card mt"><h3>Ultimi 6 mesi per categoria</h3>' + svg + '</div><div class="card mt"><h3>Flusso delle spese</h3>' + flow + '</div>';
+};
+
+/* ===== Scorciatoie dell'icona (pressione lunga) e collegamenti ?go= ===== */
+(function () {
+  try {
+    const g = new URLSearchParams(location.search).get('go');
+    if (g && /^(fav|scan|new|cards|vault|fin)$/.test(g)) { U.go = g; history.replaceState(null, '', location.pathname + location.hash); }
+  } catch (e) { }
+})();
+function applyGo() {
+  const g = U.go; U.go = null; if (!g || !S.kcKey) return;
+  if (g === 'vault') return ACT.enterProt();
+  if (g === 'fin') return ACT.enterFin();
+  go('cards'); U.cq = '';
+  if (g === 'fav') { U.cfav = true; render(); if (!cardsArr().some(c => c.data.fav)) toast('Nessuna carta preferita: tocca la stella su una carta'); }
+  else if (g === 'scan') setTimeout(() => ACT.scan && ACT.scan({ dataset: {} }), 200);
+  else if (g === 'new') setTimeout(() => openCardForm(null, {}), 200);
+}
+
+/* ===== OCR da foto (motore Tesseract in iframe isolato, scaricato solo su richiesta) ===== */
+const OCR = { frame: null, ready: null };
+function ocrFrame() {
+  if (OCR.frame && OCR.frame.isConnected) return OCR.ready;
+  const f = document.createElement('iframe'); f.setAttribute('sandbox', 'allow-scripts'); f.src = 'ocr.html'; f.title = 'OCR'; f.setAttribute('aria-hidden', 'true'); f.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden';
+  OCR.frame = f; OCR.ready = new Promise((res, rej) => { const t = setTimeout(() => rej(new Error('Modulo OCR non caricato')), 8000); const on = e => { if (e.source === f.contentWindow && e.data && e.data.t === 'ready') { clearTimeout(t); removeEventListener('message', on); res(f); } }; addEventListener('message', on); });
+  document.body.appendChild(f); return OCR.ready;
+}
+async function ocrRead(file, onSt) {
+  const f = await ocrFrame(), buf = await file.arrayBuffer();
+  return new Promise((res, rej) => {
+    const to = setTimeout(() => { cleanup(); rej(new Error('Tempo scaduto')); }, 180000);
+    const on = e => {
+      if (e.source !== f.contentWindow || !e.data) return; const d = e.data;
+      if (d.t === 'st') onSt && onSt(d.s, d.p); else if (d.t === 'done') { cleanup(); res(d.text); } else if (d.t === 'err') { cleanup(); rej(new Error(d.m)); }
+    };
+    const cleanup = () => { clearTimeout(to); removeEventListener('message', on); setTimeout(() => { try { f.remove(); } catch (x) { } }, 100); };
+    addEventListener('message', on); f.contentWindow.postMessage({ t: 'ocr', buf, mime: file.type }, '*', [buf]);
+  });
+}
+async function ocrConsent() {
+  if (localStorage.getItem('unica_ocr') === '1') return true;
+  const ok = await ask('Leggere il testo da una foto', 'Unica scarica una sola volta il motore OCR (Tesseract, circa 10 MB) da cdn.jsdelivr.net. La foto resta sul dispositivo e viene letta in una finestra isolata che non vede i tuoi dati. Serve la connessione. Procedere?', { ok: 'Scarica e leggi' });
+  if (ok) try { localStorage.setItem('unica_ocr', '1'); } catch (e) { } return ok;
+}
+function ocrParse(text) {
+  const lines = text.split(/\r?\n/).map(s => s.replace(/\s+/g, ' ').trim()).filter(s => s.length >= 3 && /[A-Za-zÀ-ÿ]{3}/.test(s)).slice(0, 12);
+  const codes = [...new Set((text.replace(/[Oo]/g, '0').match(/\d[\d \-]{6,26}\d/g) || []).map(s => s.replace(/[ \-]/g, '')).filter(s => s.length >= 8 && s.length <= 20))].slice(0, 6);
+  let brand = null; for (const l of lines) { const b = detectBrand('', l); if (b) { brand = b; break; } }
+  return { lines: lines.slice(0, 5), codes, brand };
+}
+ACT.ocrCard = async () => {
+  if (!(await ocrConsent())) return;
+  const fs = await pickMany('image/*'); const file = fs[0]; if (!file) return;
+  if (file.size > 12 * 1024 * 1024) return toast('Foto troppo grande');
+  toast('Lettura in corso…', 60000);
+  try {
+    const text = await ocrRead(file, (s, p) => toast('OCR: ' + s + (p ? ' ' + Math.round(p * 100) + '%' : '')));
+    const o = ocrParse(text), has = o.codes.length || o.lines.length;
+    modal('<div class="gap"><h2 class="sp" style="margin:0">Testo letto dalla foto</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+      (has ? '' : '<p class="sm mut">Non ho trovato testo utile. Riprova con una foto più nitida e ben illuminata.</p>') +
+      (o.brand ? '<p class="sm">Riconosciuto: <b>' + h(o.brand.name || '') + '</b> <button type="button" class="btn sm" data-ocrn="' + h(o.brand.name || '') + '">Usa come nome</button></p>' : '') +
+      (o.lines.length ? '<p class="sm mut" style="margin-bottom:4px">Nome del negozio</p><div class="chips">' + o.lines.map(l => '<button type="button" class="chip" data-ocrn="' + h(l.slice(0, 60)) + '">' + h(l.slice(0, 32)) + '</button>').join('') + '</div>' : '') +
+      (o.codes.length ? '<p class="sm mut" style="margin-bottom:4px">Codici trovati (tocca per usarlo)</p><div class="chips">' + o.codes.map(c => '<button type="button" class="chip mono" data-ocrc="' + h(c) + '">' + h(c) + '</button>').join('') + '</div>' : '') +
+      '<details class="mt"><summary class="sm">Testo completo</summary><pre class="sm" style="white-space:pre-wrap">' + h(text.slice(0, 2000)) + '</pre></details>').el.addEventListener('click', e => {
+        const n = e.target.closest('[data-ocrn]'), c = e.target.closest('[data-ocrc]');
+        if (n && $('c_n')) { $('c_n').value = n.dataset.ocrn; $('c_n').dispatchEvent(new Event('input')); toast('Nome impostato'); }
+        if (c && $('c_c')) { $('c_c').value = c.dataset.ocrc; const t = $('c_t'); if (t) t.value = c.dataset.ocrc.length === 13 ? 'EAN13' : c.dataset.ocrc.length === 8 ? 'EAN8' : 'CODE128'; toast('Codice impostato'); }
+      });
+  } catch (e) { toast('OCR non riuscito: ' + (e && e.message ? e.message : e), 4000); }
+};
+(function () {
+  const base = openCardForm; openCardForm = function (id, pre) {
+    base(id, pre); const row = $('c_c') && $('c_c').closest('.pw'); if (!row || $('ocrb')) return;
+    row.insertAdjacentHTML('afterend', '<button type="button" class="btn sm" id="ocrb" data-act="ocrCard" style="margin-top:6px">' + ic('scan') + ' Leggi nome e codice da una foto</button>');
+  };
+})();
+
+/* ===== Allegati cifrati a note, accessi e passkey (documenti, foto) ===== */
+const attOf = id => [...S.items.values()].filter(i => i.type === 'file' && i.data.parent === id).sort((a, b) => a.ts - b.ts);
+const pickMany = (accept, cam) => new Promise(res => { const i = document.createElement('input'); i.type = 'file'; i.multiple = !cam; if (accept) i.accept = accept; if (cam) i.setAttribute('capture', 'environment'); i.onchange = () => res([...i.files]); i.oncancel = () => res([]); i.click(); });
+const isImg = m => /^image\/(png|jpe?g|gif|webp|bmp|avif)$/i.test(m || '');
+(function () {
+  const dl = delItem; delItem = async function (id, k) {
+    if ((k || 'p') === 'p') for (const c of attOf(id)) await dl(c.id, 'p');
+    return dl(id, k);
+  };
+  const od = openDetail; openDetail = function (id) {
+    const m = od(id), it = S.items.get(id); if (!m || !it || it.type === 'file') return m;
+    const card = m.q('.card'); if (!card) return m;
+    const box = document.createElement('div'); box.className = 'card mt'; box.id = 'attbox'; card.after(box); attDraw(box, id, m); return m;
+  };
+  window.attDraw = function (box, id, m) {
+    const L = attOf(id);
+    box.innerHTML = '<div class="gap"><b class="sp">' + ic('file') + ' Allegati' + (L.length ? ' (' + L.length + ')' : '') + '</b><button class="btn sm" data-attadd="' + h(id) + '">' + ic('plus') + ' File</button><button class="btn sm" data-attcam="' + h(id) + '">' + ic('scan') + ' Foto</button></div>' +
+      (L.length ? L.map(a => '<div class="kv"><div class="gap"><span class="sp"><b>' + h(a.data.fname) + '</b><br><span class="sm mut">' + h(fmtSize(a.data.size)) + ' · ' + h(a.data.mime) + '</span></span>' + (isImg(a.data.mime) ? '<button class="ib" data-attview="' + h(a.id) + '" aria-label="Anteprima">' + ic('eye') + '</button>' : '') + '<button class="ib" data-attdl="' + h(a.id) + '" aria-label="Scarica">' + ic('dl') + '</button><button class="ib" data-attdel="' + h(a.id) + '" aria-label="Elimina allegato">' + ic('trash') + '</button></div></div>').join('') : '<p class="sm mut" style="margin:6px 0 0">Nessun allegato. Documenti e foto vengono cifrati come il resto (max ' + h(fmtSize(MAX_FILE)) + ' ciascuno).</p>');
+    const add = async (files) => {
+      for (const f of files) {
+        if (f.size > MAX_FILE) { toast(f.name + ': troppo grande'); continue; }
+        try { const par = S.items.get(id), nid = uid(); await putBlob(nid, new Uint8Array(await f.arrayBuffer())); await putItem(nid, 'file', { title: f.name, fname: f.name, size: f.size, mime: f.type || 'application/octet-stream', parent: id, category: (par.data.category || ''), owner: (par.data.owner || '') }, null); }
+        catch (e) { toast('Errore: ' + e.message); }
+      }
+      if (files.length) { toast('Allegato/i salvato/i'); attDraw(box, id, m); }
+    };
+    const pick = cam => pickMany(cam ? 'image/*' : '', cam).then(fs => fs.length && add(fs));
+    box.querySelector('[data-attadd]').onclick = () => pick(false);
+    box.querySelector('[data-attcam]').onclick = () => pick(true);
+    box.querySelectorAll('[data-attdl]').forEach(b => b.onclick = async () => { try { const a = S.items.get(b.dataset.attdl); download(a.data.fname, new Blob([await getBlob(a.id)], { type: a.data.mime })); } catch (e) { toast('Errore: ' + e.message); } });
+    box.querySelectorAll('[data-attdel]').forEach(b => b.onclick = async () => { const a = S.items.get(b.dataset.attdel); if (a && await ask('Eliminare l’allegato?', a.data.fname, { ok: 'Elimina', danger: true })) { await delItem(a.id, 'p'); attDraw(box, id, m); } });
+    box.querySelectorAll('[data-attview]').forEach(b => b.onclick = async () => {
+      try { const a = S.items.get(b.dataset.attview), url = URL.createObjectURL(new Blob([await getBlob(a.id)], { type: a.data.mime }));
+        const v = modal('<div class="gap"><b class="sp">' + h(a.data.fname) + '</b><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><img src="' + url + '" alt="' + h(a.data.fname) + '" style="max-width:100%;max-height:70vh;display:block;margin:10px auto;border-radius:12px">', { onClose: () => URL.revokeObjectURL(url) }); } catch (e) { toast('Errore: ' + e.message); }
+    });
+  };
+})();
+
+/* ===== Condivisione carta: file cifrato + codice monouso ===== */
+const CSH = { ttl: 48 * 3600e3, aad: 'unica-fcard' };
+const usedSh = () => { try { return JSON.parse(localStorage.getItem('unica_usedsh') || '[]'); } catch (e) { return []; } };
+const markSh = sid => { try { const a = usedSh(); a.push(sid); localStorage.setItem('unica_usedsh', JSON.stringify(a.slice(-200))); } catch (e) { } };
+async function cardSealShare(d) {
+  const code = shCode(), salt = rnd(16), sid = b64u(rnd(9)), key = await kekPw(code.replace(/-/g, ''), salt, KDF_ITER);
+  const card = { name: d.name, code: d.code, type: d.type, color: d.color, holder: d.holder || '', domain: d.domain || '', notes: d.notes || '' };
+  const pl = { unicaFCard: 1, iter: KDF_ITER, salt: b64e(salt), ...(await seal(key, te.encode(JSON.stringify({ v: 1, sid, exp: Date.now() + CSH.ttl, card })), CSH.aad)) };
+  const slug = String(d.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'carta';
+  return { code, file: new File([JSON.stringify(pl)], 'Unica_carta_' + slug + '.json', { type: 'application/json' }) };
+}
+async function cardShareFile(id, m) {
+  const c = S.cards.get(id); if (!c) return; const box = m.q('#shfa'); box.innerHTML = '<p class="sm mut">Cifro…</p>';
+  try {
+    const { code, file } = await cardSealShare(c.data);
+    box.innerHTML = '<div class="card c"><div class="mono b" style="font-size:1.2rem">' + h(code) + '</div><p class="sm mut">Invia il file e comunica questo codice a parte (voce o un’altra chat). Scade fra 48 ore.</p></div><div class="gap"><button type="button" class="btn pri" id="shfs">' + ic('up') + ' Invia il file…</button><button type="button" class="btn" id="shfc">' + ic('copy') + ' Copia il codice</button></div>';
+    m.q('#shfc').onclick = () => copy(code, 'Codice');
+    m.q('#shfs').onclick = async () => { try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Carta ' + c.data.name }); return; } } catch (x) { if (x && x.name === 'AbortError') return; } download(file.name, file); toast('File salvato: invialo e comunica il codice a parte.'); };
+  } catch (e) { box.innerHTML = '<p class="sm bad">Non sono riuscito a cifrare la carta.</p>'; }
+}
+async function cardOpenShareFile(txt) {
+  let pl; try { pl = JSON.parse(txt); } catch (e) { return toast('File non valido'); }
+  if (!pl || !pl.unicaFCard) return toast('Non è una carta condivisa con Unica');
+  const code = await askText('Carta condivisa', 'Inserisci il codice che ti ha dato il mittente (es. ABCD-EFGH-JKLM).', true); if (!code) return;
+  let o; try { toast('Decifro…'); const key = await kekPw(code.toUpperCase().replace(/[^A-Z0-9]/g, ''), b64d(pl.salt), Math.min(+pl.iter || KDF_ITER, 2000000)); o = JSON.parse(td.decode(await unseal(key, pl, CSH.aad))); } catch (e) { return toast('Codice errato o file non valido.'); }
+  if (!o || !o.card) return toast('File non valido');
+  if (o.exp && Date.now() > o.exp) return toast('Il file è scaduto: chiedi al mittente di crearne uno nuovo.');
+  if (o.sid && usedSh().includes(o.sid)) return toast('Questo file è già stato usato su questo dispositivo.');
+  const s = (v, n) => String(v == null ? '' : v).slice(0, n), cd = o.card;
+  const card = { name: s(cd.name, 100), code: s(cd.code, 300), type: CTYPES[cd.type] ? cd.type : BC.detectType(s(cd.code, 300)), color: hex(cd.color), holder: s(cd.holder, 100), domain: s(cd.domain, 100), notes: s(cd.notes, 1000) };
+  if (!card.name || !card.code) return toast('File non valido');
+  if (!(await ask('Carta condivisa', 'Aggiungere «' + card.name + '» (' + card.code + ') alle tue carte? Il file non potrà essere riusato.', { ok: 'Aggiungi' }))) return;
+  if (o.sid) markSh(o.sid);
+  await putItem(uid(), 'card', { ...card, added: Date.now(), uses: 0 }, null, 'c'); toast('Carta aggiunta'); if (U.route === 'cards') render(); else go('cards');
+}
+async function cardImportEnc() { const f = await pickFile('.json,application/json'); if (!f) return; cardOpenShareFile(await f.text()); }
+Object.assign(ACT, { cardImpEnc: () => cardImportEnc() });
+/* riga di aiuto nella lista Carte */
+(function () { const vc = V.cards; V.cards = function () { return vc().replace(/<\/main>\s*$/, '<p class="c sm" style="margin-top:14px"><button class="btn sm" data-act="cardImpEnc">' + ic('lock') + ' Ho ricevuto una carta cifrata</button></p></main>'); }; })();
+
 /* ---------- Rotazione delle chiavi di cifratura (dispositivo perso / sospetta compromissione) ---------- */
 const rawTx = (stores, fn) => new Promise((res, rej) => { const tx = DB.db.transaction(stores, 'readwrite'); fn(tx); tx.oncomplete = () => res(); tx.onerror = tx.onabort = () => rej(tx.error || new Error('Operazione annullata')); });
 async function rotateKeys(pw, nw) {
@@ -3302,7 +4000,7 @@ Object.assign(ACT, { async rotate() { if (!(await ensureProt())) return; openRot
     if (location.hash.startsWith('#c=')) { U.incoming = parseShared(location.hash); history.replaceState(null, '', location.pathname + location.search); }
     await DB.open(); S.meta = await DB.get('meta', 'acct') || null;
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
-    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(() => {});
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').then(r => { window.SWOK = true; return r; }).catch(e => { window.SWERR = (e && e.message) || String(e); });
     go(S.meta ? 'lock' : 'welcome');
   } catch (e) { $('app').innerHTML = '<main class="center"><h1>Archivio non disponibile</h1><p class="mut">Il browser non permette di salvare dati (navigazione privata?). ' + h(e.message) + '</p></main>'; }
 })();

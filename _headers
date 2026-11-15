@@ -1,4 +1,36 @@
-/*
+/
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(self), geolocation=(self), microphone=(self), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+/index.html
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(self), geolocation=(self), microphone=(self), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+/manifest.webmanifest
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(self), geolocation=(self), microphone=(self), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+/privacy.html
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(self), geolocation=(self), microphone=(self), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+/icons/*
   Content-Security-Policy: frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
@@ -7,6 +39,19 @@
   Cross-Origin-Opener-Policy: same-origin-allow-popups
   Strict-Transport-Security: max-age=63072000; includeSubDomains
 /sw.js
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(self), geolocation=(self), microphone=(self), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+/ocr.html
+  Content-Security-Policy: frame-ancestors 'self'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+/ocr-frame.js
+  X-Content-Type-Options: nosniff
   Cache-Control: no-cache
 /index.html
   Cache-Control: no-cache

@@ -66,3 +66,37 @@
 ## Non portato (di proposito)
 - Import da Excel: l'app originale Financial Dashboard sapeva solo *esportare* l'Excel, non importarlo; l'export c'è anche in Unica.
 - Funzioni che dipendono da librerie esterne (CDN): Unica non ne carica nessuna.
+
+## v1.9.0 — Ricerca vocale nelle carte
+- Pulsante microfono nella ricerca delle Carte: parla e la lista si filtra; mostra la trascrizione in tempo reale e il numero di carte trovate.
+- Comandi vocali: «apri Esselunga», «cerca Coop», «mostra tutte», «preferite», «vicino a me», «vista icone / schede», «ordina per più usate / A–Z», «nuova carta», «scansiona».
+- Ricerca più tollerante (anche digitando): errori di ortografia e di pronuncia («esselonga», «decatlon», «cop»), nomi parziali, dominio del sito, codice; risultati ordinati per pertinenza.
+- Per aprire una carta a voce serve una corrispondenza chiara; se ambigua resta la ricerca filtrata. Con "lettura vocale" attiva, la conferma viene letta.
+- Messaggi chiari per microfono negato, nessun audio, rete assente.
+
+## v1.9.1 — Installazione e versione
+- La versione (es. v1.9.1) compare accanto al logo/nome nelle schermate di benvenuto, sblocco e Home.
+- «Impostazioni → Installazione» ora spiega il motivo esatto se il browser non permette l'installazione (file://, senza https, file mancanti accanto a index.html, browser interno di un'altra app, Safari su iPhone, Firefox desktop…).
+- Manifest più completo (id, display_override, categorie); errori del service worker rilevati e mostrati.
+- Importante: per installare servono TUTTI i file dello zip sullo stesso hosting https (index.html, sw.js, manifest.webmanifest, cartella icons).
+
+## v2.0.0 — Rifinitura grafica
+- Marchio gradiente nell'intestazione, barra di ricerca con microfono integrato, menu a tendina e checkbox coerenti con il tema.
+- Schede carta con lucentezza e profondità, stato vuoto illustrato, transizione morbida tra le pagine, focus da tastiera ben visibile, supporto contrasto elevato e riduzione animazioni.
+- Notifiche brevi sopra la barra di navigazione (non la coprono più); pulsanti del Vault più compatti.
+- Funzioni delle app originali: tutte già presenti. Unica eccezione: OCR da foto (richiede la libreria Tesseract da internet; non incluso per mantenere l'app senza dipendenze esterne).
+
+## v2.1.0 — 2FA, estratti conto, carte cifrate
+- **Codici 2FA (TOTP) nel Vault**: nelle voci di accesso c'è il campo «Codice 2FA»: incolla la chiave del sito o il link otpauth://, oppure scansiona il QR. Nel dettaglio compare il codice a 6 cifre con conto alla rovescia e copia. Supporta SHA-1/256/512, 6–8 cifre, periodo personalizzato; verificato sui vettori ufficiali RFC 6238. La chiave è cifrata come la password e finisce nei backup/sincronizzazione.
+- **Import estratti conto CSV intelligente** (Conti → Spese): riconosce da solo separatore, codifica (UTF-8/Windows), righe di intestazione, colonne data/descrizione/importo oppure dare/avere; puoi correggere le colonne e invertire il segno. Anteprima con totali, rilevamento dei movimenti già presenti (nessun doppione se reimporti lo stesso file), categorizzazione automatica, «Annulla import».
+- **Condivisione carta con file cifrato e codice monouso** (Carte → carta → Condividi): file `.json` cifrato (AES-256-GCM) + codice tipo ABCD-EFGH-JKLM da comunicare a parte. Il file vale 48 ore e, una volta usato, non si riapre su quel dispositivo. Chi riceve: Impostazioni → Carte → «Importa una carta cifrata ricevuta» (o il pulsante in fondo alla lista Carte).
+
+## v2.2.0 — Allegati, obiettivi, ricorrenze, OCR, IA del browser
+- **Allegati cifrati** su accessi, note e passkey: documenti e foto (anche dalla fotocamera), anteprima immagini, download, eliminazione; si cancellano insieme alla voce e viaggiano nei backup/sincronizzazione.
+- **Passkey (promemoria)**: nuova voce «Passkey» per annotare dove si trova (iCloud, Google, Windows Hello, chiave di sicurezza…) e su quale dispositivo. Una passkey vera non può essere salvata né usata da Unica.
+- **Scorciatoie dell'icona** (pressione lunga, Android/Chrome e Windows): Carte preferite, Scansiona carta, Nuova carta, Vault, Conti. Aprono l'app dopo lo sblocco. Non è possibile una scorciatoia per ogni singola carta (il manifest è fisso).
+- **Obiettivi di risparmio** (Conti → Obiettivi): progresso, versamenti, previsione della data di raggiungimento e importo mensile necessario per la scadenza.
+- **Ricorrenze e abbonamenti** (Conti → Ricorrenze): rilevati da soli dalle spese (settimanali, mensili, trimestrali, annuali); totale mensile/annuale; prossimo addebito; promemoria in Home e notifica 3 giorni prima; «Ignora».
+- **Confronti** (Conti → Confronti): mese contro mese per categoria, ultimi 6 mesi a barre impilate, flusso delle spese dal totale alle categorie.
+- **OCR da foto** (nel modulo carta): legge nome e codice da una foto. Il motore Tesseract si scarica da cdn.jsdelivr.net solo dopo il tuo consenso ed è eseguito in una finestra isolata che non vede i dati di Unica. Va caricato anche `ocr.html` e `ocr-frame.js`.
+- **IA del browser** (Assistente → IA generativa → «Usa l’IA del browser»): usa il modello integrato (Prompt API/Gemini Nano) dove il browser lo offre; nessuna chiave né server.

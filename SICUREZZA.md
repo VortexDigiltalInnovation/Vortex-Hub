@@ -70,3 +70,7 @@ Revisione interna del codice e test automatici su Chromium. **Non è un audit in
 
 ## Ricerca vocale (v2.3.0)
 La ricerca vocale usa il riconoscimento del browser. Su Chrome per Android l'audio viene in genere inviato al servizio di riconoscimento di Google; Unica non lo registra né lo salva e usa solo il testo riconosciuto per filtrare le carte. Se non vuoi che l'audio lasci il dispositivo, non usare il microfono e scrivi la ricerca.
+
+
+## Biometria in un tocco (v2.5.0)
+L'attivazione rapida usa solo l'autenticatore del dispositivo (WebAuthn platform). Se il dispositivo non supporta PRF, la chiave dell'area protetta resta custodita da una chiave non estraibile del dispositivo, con scadenza di 14 giorni o 25 sblocchi: ora viene attivata subito insieme alla passkey invece di chiedere una seconda conferma. Si disattiva da Impostazioni.

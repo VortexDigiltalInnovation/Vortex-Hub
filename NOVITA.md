@@ -1,5 +1,11 @@
 # Unica – stato dell'integrazione
 
+## v2.5.0 — Zero iniziale, biometria in un tocco, password che non si azzera
+- **Zero iniziale delle carte**: la scansione ora completa a 13 cifre gli EAN-13 (e a 8 gli EAN-8) che alcuni lettori consegnano senza lo zero davanti, e il salvataggio completa un EAN-13 scritto con 12 cifre. Se una carta già salvata ha ancora lo zero mancante, aprila con Modifica e correggi il codice.
+- **Biometria senza elementi esterni**: la passkey ora usa solo il sensore del dispositivo (impronta, volto o blocco schermo), senza proporre chiavi di sicurezza, QR o altri telefoni.
+- **Attivazione in un tocco**: nella Home compare «Entra con impronta o Face ID → Attiva ora». Una sola verifica, senza finestre di conferma né seconda richiesta della password; anche Impostazioni usa lo stesso percorso. Dove il telefono non supporta la modalità più sicura, la biometria vale anche per Vault e Conti con la scadenza di sempre (14 giorni o 25 sblocchi, poi master password).
+- **Password che si azzerava**: la schermata di blocco non si ricarica più da sola mentre scrivi (succedeva quando era pronta una nuova versione dell'app), e la richiesta automatica dell'impronta non parte se hai già cominciato a digitare.
+
 ## v2.4.0 — Effetto wow: carte olografiche 3D e Home viva
 - **Carta fisica 3D**: aprendo una carta compare una vera «tessera» (colore, logo, nome) che si inclina seguendo il telefono (giroscopio) o il puntatore e, dopo un istante, **gira con una molla** mostrando il codice sul retro bianco, pronto per la cassa. Un tocco (o Invio/Spazio) la rigira. Con «riduci movimento» attivo il codice compare subito, senza animazioni.
 - **Ologramma**: su ogni carta della lista e sulla tessera un riflesso iridescente cambia con l'inclinazione. Su iPhone il permesso al movimento viene chiesto al primo tocco.

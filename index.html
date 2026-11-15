@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-kTG2tb2mhggCvW2aVP4Cgi4jGVbb7xbHuRW9JOUltaA='; style-src 'sha256-VxDa1cX0l5UbvyKy0YwcpXtipWXMrjw+/LfTLimstc0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-1kC99kFEW9aHrK43yNxOUtwcMqQpPT62rHgLWu3mMyg='; style-src 'sha256-VxDa1cX0l5UbvyKy0YwcpXtipWXMrjw+/LfTLimstc0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -316,7 +316,7 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '2.4.0';
+const APP_VERSION = '2.5.0';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -471,7 +471,7 @@ async function pkCreate() {
   const cred = await navigator.credentials.create({ publicKey: {
     rp: { name: APP_NAME, id: location.hostname }, user: { id: rnd(16), name: 'utente@unica', displayName: 'Utente ' + APP_NAME },
     challenge: rnd(32), pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
-    authenticatorSelection: { userVerification: 'required', residentKey: 'preferred' }, timeout: 120000,
+    authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' }, hints: ['client-device'], timeout: 120000,
     extensions: { prf: { eval: { first: salt } } } } });
   if (!cred) throw new Error('Registrazione annullata');
   const ext = cred.getClientExtensionResults ? cred.getClientExtensionResults() : {};
@@ -482,7 +482,7 @@ async function pkCreate() {
 }
 async function pkAssert(pk) {
   pk = pk || S.meta.pk;
-  const a = await navigator.credentials.get({ publicKey: { challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: b64d(pk.id) }], userVerification: 'required', timeout: 120000,
+  const a = await navigator.credentials.get({ publicKey: { challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: b64d(pk.id), transports: ['internal'] }], hints: ['client-device'], userVerification: 'required', timeout: 120000,
     extensions: { prf: { eval: { first: b64d(pk.salt) } } } } });
   if (!a) return null;
   const ext = a.getClientExtensionResults ? a.getClientExtensionResults() : {};
@@ -1292,7 +1292,7 @@ function openCardForm(id, pre) {
 }
 FORMS.card = async () => {
   const { id } = U.cform, e = $('c_err'), prev = id ? S.cards.get(id) : null, old = prev ? prev.data : {};
-  const name = $('c_n').value.trim(), code = cleanCode($('c_c').value); let type = $('c_t').value;
+  const name = $('c_n').value.trim(); let code = cleanCode($('c_c').value); let type = $('c_t').value; if (type === 'EAN13' && /^\d{12}$/.test(code)) code = '0' + code;
   if (!name || !code) return e.textContent = 'Nome e codice sono obbligatori.';
   try { type === 'QR' ? BC.qr(code) : BC.bars(type, code); } catch (x) { return e.textContent = x.message; }
   if (type === 'EAN13' && !BC.eanValid(code) && !(await ask('Cifra di controllo errata', 'L’EAN-13 ha una cifra di controllo che non torna: la carta potrebbe non essere letta alla cassa. Salvare comunque?', { ok: 'Salva comunque' }))) return;
@@ -1309,7 +1309,8 @@ FORMS.card = async () => {
 const NATIVE = { ean_13: 'EAN13', ean_8: 'EAN8', upc_a: 'EAN13', code_128: 'CODE128', code_39: 'CODE39', qr_code: 'QR' };
 function mapNative(r) {
   const t = NATIVE[r.format]; let code = r.rawValue;
-  if (r.format === 'upc_a' && code.length === 12) code = '0' + code;
+  if ((r.format === 'upc_a' || r.format === 'ean_13') && /^\d+$/.test(code) && code.length < 13) code = code.padStart(13, '0');
+  else if (r.format === 'ean_8' && /^\d+$/.test(code) && code.length < 8) code = code.padStart(8, '0');
   return { code, type: t || BC.detectType(code), unsupported: !t };
 }
 async function detectNative(src) {
@@ -3034,7 +3035,7 @@ ACT.aiLocal = async () => {
     navigator.serviceWorker.addEventListener('controllerchange', () => { if (!had) { had = true; return; } pending = true; });
     const chk = () => navigator.serviceWorker.getRegistration().then(r => r && r.update()).catch(() => { });
     setInterval(chk, 3600e3); document.addEventListener('visibilitychange', () => { if (!document.hidden) chk(); });
-    setInterval(() => { if (pending && !S.kcKey) { pending = false; location.reload(); } else if (pending && !window.__updToast) { window.__updToast = 1; toast('Nuova versione pronta: si applicherà al prossimo blocco'); } }, 3000);
+    setInterval(() => { const typing = (() => { const a = document.activeElement; return !!(a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) || [...document.querySelectorAll('input')].some(i => i.value); })(); if (pending && !S.kcKey && !typing) { pending = false; location.reload(); } else if (pending && !window.__updToast) { window.__updToast = 1; toast('Nuova versione pronta: si applicherà al prossimo blocco'); } }, 3000);
   }
 })();
 
@@ -3240,9 +3241,9 @@ document.addEventListener('change', e => { const t = e.target; if (t && t.tagNam
    (WebAuthn). Scade dopo 14 giorni o 25 sblocchi: poi serve la master password. */
 const BIO_DAYS = 14, BIO_MAX = 25;
 function bioOk() { const b = S.meta && S.meta.bio; return !!(S.meta && S.meta.wrapBio && b && Date.now() - b.pw < BIO_DAYS * 864e5 && b.n < BIO_MAX); }
-async function bioEnable() {
+async function bioEnable(fresh) {
   if (!S.kc || !S.kp || !S.meta.pk) throw new Error('Serve prima la passkey e l’area protetta sbloccata');
-  const r = await pkAssert(); if (!r) throw new Error('Verifica annullata');
+  const r = fresh || await pkAssert(); if (!r) throw new Error('Verifica annullata');
   const M = cat(S.kc, S.kp), k = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
   await DB.put('dev', k, 'b'); S.meta.wrapBio = await seal(k, M, 'wrapBio'); S.meta.bio = { pw: Date.now(), n: 0 }; wipe(M); await DB.put('meta', S.meta, 'acct');
 }
@@ -3283,7 +3284,7 @@ Object.assign(ACT, {
 // dopo l'attivazione della passkey senza PRF propone la biometria anche per l'area protetta
 for (const k of ['pkOn2']) { const o = ACT[k]; ACT[k] = async function () { await o.apply(this, arguments); if (S.meta.pk && !S.meta.pk.prf && !S.meta.wrapBio && S.kp) { if (await ask('Biometria anche per Vault e Conti?', 'Il tuo dispositivo non supporta la modalità più sicura (PRF). Vuoi comunque usare impronta o volto anche per l’area protetta su questo dispositivo? Scade dopo ' + BIO_DAYS + ' giorni o ' + BIO_MAX + ' sblocchi.', { ok: 'Sì, attiva', cancel: 'Solo carte' })) { try { await bioEnable(); toast('Biometria attiva anche per l’area protetta'); render(); } catch (e) { toast('Non attivata'); } } } }; }
 // richiesta automatica dell'impronta all'apertura
-{ const vl = V.lock; V.lock = () => { if (S.meta && S.meta.pk && localStorage.getItem('unica_abio') !== '0' && !U._abio) { U._abio = true; setTimeout(() => { if (U.route === 'lock' && !S.kcKey) ACT.pkUnlock(); }, 600); } return vl(); }; }
+{ const vl = V.lock; V.lock = () => { if (S.meta && S.meta.pk && localStorage.getItem('unica_abio') !== '0' && !U._abio) { U._abio = true; setTimeout(() => { const a = document.activeElement, u = document.getElementById('up'); if (U.route === 'lock' && !S.kcKey && !(u && (u.value || a === u))) ACT.pkUnlock(); }, 600); } return vl(); }; }
 setInterval(() => { if (S.kcKey) U._abio = false; }, 2000);
 { const s1 = V.settings; V.settings = () => { const s = s1(), i = s.lastIndexOf('</main>'); if (i < 0 || !pkSupported()) return s;
   const pk = S.meta.pk, bio = !!S.meta.wrapBio, left = bio && S.meta.bio ? Math.max(0, BIO_DAYS - Math.floor((Date.now() - S.meta.bio.pw) / 864e5)) : 0;
@@ -4140,6 +4141,29 @@ Object.assign(P, {
     document.querySelectorAll('.rfg:not([data-rd])').forEach(c => { c.setAttribute('data-rd', '1'); if (RMq.matches) { c.setAttribute('stroke-dashoffset', c.dataset.to); return; } requestAnimationFrame(() => requestAnimationFrame(() => { c.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)'; c.setAttribute('stroke-dashoffset', c.dataset.to); })); });
   }
   let q2 = 0; new MutationObserver(() => { if (q2) return; q2 = requestAnimationFrame(() => { q2 = 0; try { wow(); } catch (e) { } }); }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+
+/* ===== v2.5: biometria in un tocco, solo sensore del dispositivo ===== */
+(function () {
+  ACT.bioQuick = async function () {
+    if (!pkSupported()) return toast('Questo browser non supporta l’impronta / Face ID');
+    try {
+      if (!S.meta.pk) { if (!(await ensureProt())) return; await enablePasskey(); }
+      if (!S.meta.pk.prf && !S.meta.wrapBio && S.kp) await bioEnable(true);
+      try { localStorage.setItem('unica_bioskip', '1'); } catch (e) { }
+      toast('Impronta / Face ID attivi' + (S.meta.wrapBio ? ' (ogni ' + BIO_DAYS + ' giorni chiederà la master password)' : ''));
+    } catch (e) { toast('Non attivata: ' + (e.name === 'NotAllowedError' ? 'operazione annullata o nessun sensore sul dispositivo' : e.message)); }
+    render();
+  };
+  ACT.bioOn = ACT.bioQuick;
+  ACT.bioSkip = () => { try { localStorage.setItem('unica_bioskip', '1'); } catch (e) { } render(); };
+  { const po = ACT.pkOn; ACT.pkOn = async function () { await po.apply(this, arguments); try { if (S.meta.pk && !S.meta.pk.prf && !S.meta.wrapBio && S.kp) await bioEnable(true); } catch (e) { } }; }
+  { const hv = V.home; V.home = function () {
+    const html = hv.apply(this, arguments); let skip = false; try { skip = localStorage.getItem('unica_bioskip') === '1'; } catch (e) { }
+    if (S.meta && S.meta.pk || skip || !pkSupported()) return html;
+    const card = '<div class="card" style="margin:0 0 14px;border-color:#a78bfa"><div class="gap"><span class="ti" style="flex:none">' + ic('key') + '</span><span class="sp"><b>Entra con impronta o Face ID</b><br><span class="sm mut">Attivalo in un solo tocco: usa il sensore del telefono, nessuna chiave esterna.</span></span></div><div class="gap" style="margin-top:10px"><button class="btn pri sp" data-act="bioQuick">' + ic('key') + ' Attiva ora</button><button class="btn" data-act="bioSkip">Non ora</button></div></div>';
+    return html.replace('</section>', '</section>' + card);
+  }; }
 })();
 
 /* ---------- avvio ---------- */

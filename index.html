@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-f6TEFRYnZ27fXvQpRKLfpUrCr1pReB5p08uBMsjvCBo='; style-src 'sha256-m5inFz4etljgF4RVX2CPUaiRndYcby73ujDWgyR99fk='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-57XE96+L6mBzY9y2cUA3Xf7FvV4cDjL7TyTJ/pEuNw8='; style-src 'sha256-m5inFz4etljgF4RVX2CPUaiRndYcby73ujDWgyR99fk='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -329,7 +329,7 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '2.7.0';
+const APP_VERSION = '2.7.1';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -4256,32 +4256,38 @@ Object.assign(P, {
       if (shoot) { const e = (t - shoot.t0) / 1000, x = shoot.x + shoot.vx * e, y = shoot.y + shoot.vy * e; if (e > 1.1 || x < -150 || y > H + 50) shoot = null; else { const gr = cx.createLinearGradient(x, y, x - shoot.vx * .16, y - shoot.vy * .16); gr.addColorStop(0, 'rgba(255,255,255,.95)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); cx.strokeStyle = gr; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x - shoot.vx * .16, y - shoot.vy * .16); cx.stroke(); } }
     }
   }
+  let CLS = null, CLI = null;
+  function cloudSprite(w, h, seed) {
+    const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d'); let r = seed; const rn = () => { r = (r * 16807) % 2147483647; return r / 2147483647; }; const n = 8;
+    for (let i = 0; i < n; i++) { const u = i / (n - 1), cx0 = w * (.16 + .68 * u) + (rn() - .5) * w * .05, rad = h * (.3 + .2 * rn()) * (1 - Math.abs(u - .5) * .55), cy0 = h * (.58 - .14 * rn()); const g = x.createRadialGradient(cx0, cy0, 0, cx0, cy0, rad); g.addColorStop(0, 'rgba(255,255,255,.97)'); g.addColorStop(.55, 'rgba(255,255,255,.6)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.beginPath(); x.arc(cx0, cy0, rad, 0, 6.3); x.fill(); }
+    x.globalCompositeOperation = 'source-atop'; const g2 = x.createLinearGradient(0, h * .4, 0, h); g2.addColorStop(0, 'rgba(190,200,255,0)'); g2.addColorStop(1, 'rgba(206,190,255,.4)'); x.fillStyle = g2; x.fillRect(0, 0, w, h); return c;
+  }
+  const HILLS = [['196,212,255', '176,194,255', .72, .05, 1.3, 0], ['186,238,218', '150,222,196', .79, .045, 1.0, 1.7], ['255,214,220', '255,190,204', .86, .04, 1.6, 3.1], ['214,232,255', '186,216,255', .93, .035, .8, 4.4]];
   function drawLight(t) {
-    const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#fff1df'); g.addColorStop(.42, '#eef0ff'); g.addColorStop(1, '#d6eefc'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
-    // sole con raggi
-    const sx = W * .84 + px * 12, sy = H * .1 + py * 8, R = Math.max(W, H) * .62;
-    const sg = cx.createRadialGradient(sx, sy, 0, sx, sy, R); sg.addColorStop(0, 'rgba(255,214,150,.95)'); sg.addColorStop(.18, 'rgba(255,224,176,.55)'); sg.addColorStop(1, 'rgba(255,224,176,0)'); cx.fillStyle = sg; cx.fillRect(0, 0, W, H);
-    cx.save(); cx.translate(sx, sy); cx.rotate(t / 60000); for (let i = 0; i < 12; i++) { cx.rotate(Math.PI / 6); const rg = cx.createLinearGradient(0, 0, R * 1.4, 0); rg.addColorStop(0, 'rgba(255,236,200,.30)'); rg.addColorStop(1, 'rgba(255,236,200,0)'); cx.fillStyle = rg; cx.beginPath(); cx.moveTo(0, 0); cx.lineTo(R * 1.4, -R * .09); cx.lineTo(R * 1.4, R * .09); cx.fill(); } cx.restore();
-    // nastri di aurora
-    const rib = [['94,234,212', .30, 1.0, 0], ['167,139,250', .52, .8, 2], ['249,168,212', .72, 1.2, 4], ['125,211,252', .88, .9, 1]];
-    cx.lineCap = 'round'; cx.lineJoin = 'round';
-    for (const [c, fy, sp, ph] of rib) {
-      for (const [w, a] of [[110, .05], [70, .07], [38, .09], [14, .14]]) {
-        cx.strokeStyle = 'rgba(' + c + ',' + a + ')'; cx.lineWidth = w; cx.beginPath();
-        for (let x = -30; x <= W + 30; x += 14) { const y = fy * H + py * 10 + Math.sin(x / (W * .28) + t / 4200 * sp + ph) * H * .045 + Math.sin(x / (W * .11) + t / 2600 * sp + ph * 2) * H * .012; x === -30 ? cx.moveTo(x, y) : cx.lineTo(x, y); } cx.stroke();
-      }
+    if (!CLS) { CLS = [cloudSprite(420, 170, 11), cloudSprite(420, 170, 29), cloudSprite(420, 170, 47)]; }
+    if (!CLI || CLI.W !== W) { CLI = { W, a: [] }; for (let i = 0; i < 8; i++) { const near = i >= 4; CLI.a.push({ s: CLS[i % 3], w: near ? rnd(340, 520) : rnd(200, 300), x: Math.random() * (W + 600), y: near ? rnd(.14, .42) * H : rnd(.05, .26) * H, v: near ? rnd(9, 17) : rnd(3, 8), z: near ? 1 : .45, al: near ? .92 : .6, ph: rnd(0, 6.3) }); } }
+    const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#a6d6ff'); g.addColorStop(.38, '#d6e6ff'); g.addColorStop(.7, '#f1ecff'); g.addColorStop(1, '#ffe9d8'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    // sole
+    const sx = W * .84 + px * 10, sy = H * .1 + py * 6, R = Math.max(W, H) * .6;
+    const sg = cx.createRadialGradient(sx, sy, 0, sx, sy, R); sg.addColorStop(0, 'rgba(255,243,205,1)'); sg.addColorStop(.1, 'rgba(255,226,160,.85)'); sg.addColorStop(.35, 'rgba(255,236,190,.32)'); sg.addColorStop(1, 'rgba(255,236,190,0)'); cx.fillStyle = sg; cx.fillRect(0, 0, W, H);
+    const cloud = c => { const x = ((c.x + t / 1000 * c.v) % (W + c.w * 2 + 200)) - c.w - 100 + px * c.z * 14, y = c.y + Math.sin(t / 5000 + c.ph) * 4 + py * c.z * 8; cx.globalAlpha = c.al; cx.drawImage(c.s, x, y, c.w, c.w * .405); cx.globalAlpha = 1; };
+    CLI.a.filter(c => c.z < 1).forEach(cloud);
+    // fasci di luce
+    for (let i = 0; i < 6; i++) {
+      const ang = 1.95 + i * .17 + Math.sin(t / 7000 + i) * .03, wd = .05 + (i % 3) * .018, L = R * 2.2, a0 = ang - wd, a1 = ang + wd, al = .16 + .08 * Math.sin(t / 3000 + i * 1.7);
+      const rg = cx.createLinearGradient(sx, sy, sx + Math.cos(ang) * L, sy + Math.sin(ang) * L); rg.addColorStop(0, 'rgba(255,244,214,' + al + ')'); rg.addColorStop(1, 'rgba(255,244,214,0)');
+      cx.fillStyle = rg; cx.beginPath(); cx.moveTo(sx, sy); cx.lineTo(sx + Math.cos(a0) * L, sy + Math.sin(a0) * L); cx.lineTo(sx + Math.cos(a1) * L, sy + Math.sin(a1) * L); cx.fill();
     }
-    // bolle di vetro
-    const tints = ['125,211,252', '244,114,182', '167,139,250'];
-    for (const b of bubs) {
-      const y = ((b.y - t / 1000 * b.v) % (H + 100) + (H + 100)) % (H + 100) - 50, x = b.x + Math.sin(t / 2000 + b.ph) * b.sw + px * b.r * .4;
-      const rg = cx.createRadialGradient(x - b.r * .3, y - b.r * .35, b.r * .1, x, y, b.r); rg.addColorStop(0, 'rgba(255,255,255,.55)'); rg.addColorStop(.7, 'rgba(' + tints[b.h] + ',.10)'); rg.addColorStop(1, 'rgba(' + tints[b.h] + ',.22)');
-      cx.fillStyle = rg; cx.beginPath(); cx.arc(x, y, b.r, 0, 6.3); cx.fill();
-      cx.strokeStyle = 'rgba(255,255,255,.8)'; cx.lineWidth = 1.2; cx.beginPath(); cx.arc(x, y, b.r, 0, 6.3); cx.stroke();
-      cx.strokeStyle = 'rgba(255,255,255,.95)'; cx.lineWidth = 2; cx.beginPath(); cx.arc(x, y, b.r * .72, 3.5, 4.4); cx.stroke();
-    }
-    // scintille
-    for (const m of motes) { const tw = .5 + .5 * Math.sin(t / 1000 * m.sp + m.ph); cx.globalAlpha = .25 + .6 * tw; cx.fillStyle = m.g ? '#ffd479' : '#ffffff'; cx.beginPath(); cx.arc(m.x + px * 5, m.y + py * 5, m.r, 0, 6.3); cx.fill(); }
+    CLI.a.filter(c => c.z >= 1).forEach(cloud);
+    // colline pastello a strati con nebbiolina e parallasse
+    HILLS.forEach(([c1, c2, fy, amp, fr, ph], i) => {
+      const yb = fy * H + py * (5 + i * 6), pathH = () => { cx.beginPath(); for (let x = -10; x <= W + 10; x += 10) { const y = yb + Math.sin(x / (W * .35) * fr + ph + px * (.25 + i * .2) + t / 9000 * (.6 + i * .25)) * H * amp + Math.sin(x / (W * .13) * fr + ph * 2 + t / 14000) * H * amp * .35; x === -10 ? cx.moveTo(x, y) : cx.lineTo(x, y); } };
+      pathH(); cx.lineTo(W + 10, H + 10); cx.lineTo(-10, H + 10); cx.closePath(); const gr = cx.createLinearGradient(0, yb - H * amp, 0, H); gr.addColorStop(0, 'rgba(' + c1 + ',.93)'); gr.addColorStop(1, 'rgba(' + c2 + ',.98)'); cx.fillStyle = gr; cx.fill();
+      pathH(); cx.strokeStyle = 'rgba(255,255,255,.6)'; cx.lineWidth = 1.3; cx.stroke();
+      const mg = cx.createLinearGradient(0, yb - H * .1, 0, yb + H * .03); mg.addColorStop(0, 'rgba(255,255,255,0)'); mg.addColorStop(.7, 'rgba(255,255,255,.26)'); mg.addColorStop(1, 'rgba(255,255,255,0)'); cx.fillStyle = mg; cx.fillRect(0, yb - H * .1, W, H * .13);
+    });
+    // scintille dorate nei raggi
+    for (const m of motes) { const tw = .5 + .5 * Math.sin(t / 1000 * m.sp + m.ph); cx.globalAlpha = (.2 + .55 * tw) * (m.y < H * .7 ? 1 : .3); cx.fillStyle = m.g ? '#ffd479' : '#ffffff'; cx.beginPath(); cx.arc(m.x + px * 5, m.y + py * 5, m.r, 0, 6.3); cx.fill(); }
     cx.globalAlpha = 1;
   }
   function draw(now) {

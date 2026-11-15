@@ -1,5 +1,11 @@
 # Unica – stato dell'integrazione
 
+## v2.7.1 — Tema chiaro: cielo, nuvole e colline (al posto delle bolle)
+- Cielo azzurro-pesca con sole luminoso e fasci di luce che ondeggiano piano.
+- Nuvole morbide su due piani (lontane e vicine) che scorrono con velocità diverse.
+- Quattro strati di colline pastello (lavanda, menta, rosa, azzurro) con nebbiolina e parallasse col movimento del telefono o del mouse.
+- Le bolle di vetro sono state rimosse; restano poche scintille dorate nei raggi. Con «riduci movimento» lo sfondo resta fermo.
+
 ## v2.7.0 — Barre superiori chiare, microfono grande, ricerca che riparte
 - **Barre superiori**: ogni azione ha un'icona a colori dedicata con etichetta sotto: Cerca, Assistente (scintille), Blocca, Controllo (scudo), Genera (dado, al posto delle frecce circolari che si confondevano con «aggiorna»), Nuova, Vicino, Scansiona, Schede/Icone, Report.
 - **Microfono della ricerca vocale** molto più grande (56 px, tondo, a gradiente), nella ricerca delle carte e in quella del Vault.

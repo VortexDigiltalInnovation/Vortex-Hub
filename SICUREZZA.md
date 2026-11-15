@@ -74,3 +74,10 @@ La ricerca vocale usa il riconoscimento del browser. Su Chrome per Android l'aud
 
 ## Biometria in un tocco (v2.5.0)
 L'attivazione rapida usa solo l'autenticatore del dispositivo (WebAuthn platform). Se il dispositivo non supporta PRF, la chiave dell'area protetta resta custodita da una chiave non estraibile del dispositivo, con scadenza di 14 giorni o 25 sblocchi: ora viene attivata subito insieme alla passkey invece di chiedere una seconda conferma. Si disattiva da Impostazioni.
+
+
+## Loghi (v2.6.0)
+Il recupero dei loghi invia a icon.horse, Google o DuckDuckGo soltanto il nome del sito (es. netflix.com), mai password, codici o nomi utente. Parte solo dopo il tuo consenso (stessa impostazione della ricerca automatica) e puoi disattivarla da Impostazioni. I loghi scaricati sono salvati dentro la voce cifrata. Per le voci del Vault la ricerca avviene solo ad area protetta aperta.
+
+## Biometria (v2.6.0)
+La passkey è creata come credenziale non rilevabile sul solo autenticatore del dispositivo (residentKey: discouraged, attachment: platform). Nessuna chiave resta nel gestore password di Google.

@@ -1,5 +1,12 @@
 # Unica – stato dell'integrazione
 
+## v2.6.0 — Biometria semplice, nuovi sfondi, loghi
+- **Biometria semplice**: l'attivazione usa solo il sensore del telefono (impronta, volto o blocco schermo) con una credenziale non rilevabile, quindi niente passkey salvata su Google, niente chiavi di sicurezza, niente QR e niente altri dispositivi. Se il telefono la rifiuta compare un errore con il nome tecnico, ma non viene più proposta nessuna chiave esterna.
+- **Tema scuro: cielo stellato**: cielo profondo con via lattea, nebulose, centinaia di stelle che brillano, cinque costellazioni ben visibili (Orione, Orsa Maggiore, Cassiopea, Cigno, Scorpione) che si disegnano all'apertura con piccoli impulsi di luce lungo le linee, stelle cadenti e parallasse col movimento del telefono o del mouse.
+- **Tema chiaro: «alba di vetro»**: gradiente pesca-lilla-azzurro, sole con raggi che ruotano piano, nastri di aurora ondulati (menta, viola, rosa, cielo), bolle di vetro che salgono con riflessi e scintille dorate. Con «riduci movimento» lo sfondo resta fermo.
+- **Loghi di carte e servizi**: Impostazioni → «Scarica i loghi mancanti» cerca il logo di ogni carta senza logo (dal sito indicato o dal catalogo delle catene italiane) e di ogni voce del Vault (dal sito o dal nome: Google, Netflix, banche, gestori ecc.). Dopo il consenso la ricerca riparte da sola, al massimo una volta al minuto. Solo il nome del sito viene richiesto a icon.horse, Google o DuckDuckGo; i loghi restano poi salvati cifrati sul dispositivo. Il logo non sostituisce mai una tua foto.
+- Vetro sfocato dietro riquadri e righe per mantenere leggibile il testo sopra gli sfondi.
+
 ## v2.5.1 — Biometria: «unknown error occurred while talking to the credential manager»
 - Il gestore credenziali di Android rifiutava la richiesta di passkey. Ora Unica prova in sequenza richieste via via più semplici (con e senza suggerimenti, estensione PRF, vincolo sul sensore del dispositivo) e si ferma solo se annulli tu. Lo stesso vale per lo sblocco.
 - Se l'errore persiste, il messaggio mostra anche il nome tecnico (es. «NotSupportedError – …») per capire la causa.

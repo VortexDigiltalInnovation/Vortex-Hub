@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-QGkZKTLcuOI4k1pR4VGBO6gqKOe2DsfmDXdPSbJOiCs='; style-src 'sha256-VxDa1cX0l5UbvyKy0YwcpXtipWXMrjw+/LfTLimstc0='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-SqVgY/i4VDBElDGxqgFiwFIRHmURG824Fi9QUI8+fIM='; style-src 'sha256-Cf6XOnC2t7nkmR+wgCEV5iftEmEs6rLADuh9oo7+TiQ='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#060818">
 <title>Unica</title>
@@ -307,6 +307,8 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 .pst{display:flex;gap:18px}.pst div{display:flex;flex-direction:column}.pst b{font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}.pst span{font-size:.75rem;opacity:.85;margin-top:2px}
 .ring{width:84px;height:84px;flex:none;position:relative;z-index:1;color:#fff}
 @media(prefers-reduced-motion:reduce){.htilt,.hflip{transition:none}.holo{background-position:50% 50%}}
+.av.lg{background:#fff!important;padding:5px}.av.lg img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+.tile,.card,.row,.bar,nav.nav{-webkit-backdrop-filter:blur(7px) saturate(1.15);backdrop-filter:blur(7px) saturate(1.15)}
 </style>
 </head>
 <body>
@@ -316,7 +318,7 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 <script>'use strict';
 /* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
 const APP_NAME = 'Unica';
-const APP_VERSION = '2.5.1';
+const APP_VERSION = '2.6.0';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -469,13 +471,12 @@ const pkSupported = () => !!(window.PublicKeyCredential && navigator.credentials
 async function pkCreate() {
   const salt = rnd(32);
   const mkBase = () => ({ rp: { name: APP_NAME, id: location.hostname }, user: { id: rnd(16), name: 'utente@unica', displayName: 'Utente ' + APP_NAME }, challenge: rnd(32), pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], timeout: 120000 });
-  const SEL = { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' };
+  const SEL = { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged', requireResidentKey: false };
   // Alcuni telefoni (gestore credenziali di Android) rifiutano le opzioni avanzate con «unknown error»: si riprova con richieste via via più semplici.
   const variants = [
     o => ({ ...o, authenticatorSelection: SEL, hints: ['client-device'], extensions: { prf: { eval: { first: salt } } } }),
     o => ({ ...o, authenticatorSelection: SEL, extensions: { prf: {} } }),
-    o => ({ ...o, authenticatorSelection: SEL }),
-    o => ({ ...o, authenticatorSelection: { userVerification: 'preferred', residentKey: 'preferred' } })
+    o => ({ ...o, authenticatorSelection: SEL })
   ];
   let cred, lastE;
   for (const v of variants) { try { cred = await navigator.credentials.create({ publicKey: v(mkBase()) }); break; } catch (e) { lastE = e; if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) throw e; } }
@@ -918,7 +919,7 @@ function vlist() {
   let a = vitems().filter(i => (!U.cat || i.data.category === U.cat) && (!q || [i.data.service, i.data.title, i.data.username, i.data.domain, i.data.fname].some(x => x && String(x).toLowerCase().includes(q))));
   a.sort((x, y) => (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) || (U.sort === 'az' ? titleOf(x).localeCompare(titleOf(y), 'it') : y.ts - x.ts));
   if (!a.length) return '<div class="card c mut">' + (vitems().length ? 'Nessun risultato.' : 'Il Vault è vuoto. Aggiungi una voce con il pulsante + oppure importa il backup del vecchio Vault dalle Impostazioni.') + '</div>';
-  return a.map(i => '<button class="row" data-act="detail" data-id="' + h(i.id) + '"><span class="av ' + avCls(titleOf(i)) + '">' + h(titleOf(i).charAt(0).toUpperCase()) + '</span><span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm mut">' + h(i.type === 'login' ? (i.data.username || i.data.domain || '') : i.type === 'file' ? i.data.fname + ' · ' + fmtSize(i.data.size) : 'Nota') + '</span></span>' +
+  return a.map(i => '<button class="row" data-act="detail" data-id="' + h(i.id) + '"><span class="av ' + avCls(titleOf(i)) + (i.data.logo ? ' lg' : '') + '">' + (i.data.logo ? '<img src="' + h(i.data.logo) + '" alt="">' : h(titleOf(i).charAt(0).toUpperCase())) + '</span><span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm mut">' + h(i.type === 'login' ? (i.data.username || i.data.domain || '') : i.type === 'file' ? i.data.fname + ' · ' + fmtSize(i.data.size) : 'Nota') + '</span></span>' +
     (i.data.fav ? '<span class="ok" aria-label="Preferito">' + ic('star') + '</span>' : '') + '<span class="tag">' + VT[i.type][1] + '</span></button>').join('');
 }
 V.vault = () => {
@@ -2378,6 +2379,7 @@ U.own = U.own || ''; U.selmode = false; U.sel = new Set();
 function avHtml(it, big) {
   const d = it.data, t = titleOf(it), st = big ? ' style="width:64px;height:64px;font-size:1.6rem"' : '';
   if (typeof d.photo === 'string' && PHOTO_RE.test(d.photo) && d.photo.length < 60000) return '<span class="av"' + st + '><img src="' + d.photo + '" alt="" style="width:100%;height:100%;border-radius:inherit;object-fit:cover"></span>';
+  if (typeof d.logo === 'string' && /^data:image\/(png|jpeg|webp|gif);base64,/.test(d.logo) && d.logo.length < 80000) return '<span class="av lg"' + st + '><img src="' + h(d.logo) + '" alt=""></span>';
   const col = /^#[0-9a-f]{6}$/i.test(d.color || '') ? ' style="background:' + d.color + (big ? ';width:64px;height:64px;font-size:1.6rem' : '') + '"' : st;
   return '<span class="av ' + (col.includes('background') ? '' : avCls(t)) + '"' + col + '>' + (VEMO.includes(d.icon) ? h(d.icon) : h(t.charAt(0).toUpperCase())) + '</span>';
 }
@@ -2709,7 +2711,7 @@ const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.
 function extraSettings() {
   const np = 'Notification' in window ? Notification.permission : 'unsupported';
   return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Unica è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('install') + ' Installa Unica</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">' + h(instWhy()) + '</p>') +
-    '<div class="stack mt"><button class="btn blk" data-act="diag">Aggiornamento e diagnostica</button><button class="btn blk" data-act="guide">' + ic('file') + ' Guida all’uso</button></div></div>' +
+    '<div class="stack mt"><button class="btn blk" data-act="logoSweep">' + ic('refresh') + ' Scarica i loghi mancanti</button><button class="btn blk" data-act="diag">Aggiornamento e diagnostica</button><button class="btn blk" data-act="guide">' + ic('file') + ' Guida all’uso</button></div></div>' +
     '<div class="card"><h3>Vault: CSV</h3><p class="sm mut">Importa da Chrome, Edge, Firefox, Bitwarden e simili (nome, sito, utente, password). L’esportazione è in chiaro: usala con cautela.</p><div class="stack"><button class="btn blk" data-act="csvIn">' + ic('up') + ' Importa accessi da CSV</button><button class="btn blk" data-act="csvOut">' + ic('dl') + ' Esporta accessi in CSV</button></div></div>' +
     '<div class="card"><h3>Notifiche e preferenze</h3>' + (np === 'unsupported' ? '' : '<p class="sm mut">Notifica generica quando un avviso di prezzo viene raggiunto (senza dettagli dei tuoi dati). Stato: ' + (np === 'granted' ? 'attive' : np === 'denied' ? 'bloccate dal browser' : 'non attive') + '.</p>' + (np === 'default' ? '<button class="btn blk" data-act="notifOn">Attiva le notifiche</button>' : '')) +
     '<div class="stack mt"><button class="btn blk" data-act="prefReset">Ripristina le impostazioni standard</button></div><p class="sm mut">Riporta aspetto, blocco automatico e promemoria ai valori iniziali. I tuoi dati non vengono toccati.</p></div>';
@@ -4022,7 +4024,7 @@ Object.assign(ACT, { async rotate() { if (!(await ensureProt())) return; openRot
   const col = () => getComputedStyle(document.documentElement).getPropertyValue('--neo1').trim() || '#22d3ee';
   function size() { W = cv.width = innerWidth; H = cv.height = innerHeight; const n = Math.min(46, Math.round(W * H / 22000)); while (pts.length < n) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25 }); pts.length = n; }
   function frame() {
-    raf = 0; if (document.hidden || RM.matches || CT.matches) return;
+    raf = 0; return;
     cx.clearRect(0, 0, W, H); const c = col(), dark = !(document.documentElement.getAttribute('data-theme') === 'light' || (!document.documentElement.getAttribute('data-theme') && !matchMedia('(prefers-color-scheme: dark)').matches));
     cx.fillStyle = c; cx.strokeStyle = c;
     for (const p of pts) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; }
@@ -4177,6 +4179,163 @@ Object.assign(P, {
     const card = '<div class="card" style="margin:0 0 14px;border-color:#a78bfa"><div class="gap"><span class="ti" style="flex:none">' + ic('key') + '</span><span class="sp"><b>Entra con impronta o Face ID</b><br><span class="sm mut">Attivalo in un solo tocco: usa il sensore del telefono, nessuna chiave esterna.</span></span></div><div class="gap" style="margin-top:10px"><button class="btn pri sp" data-act="bioQuick">' + ic('key') + ' Attiva ora</button><button class="btn" data-act="bioSkip">Non ora</button></div></div>';
     return html.replace('</section>', '</section>' + card);
   }; }
+})();
+
+/* ===== v2.6: cielo stellato (scuro) e «alba di vetro» (chiaro) ===== */
+(function () {
+  const RM = matchMedia('(prefers-reduced-motion: reduce)'), CT = matchMedia('(prefers-contrast: more)');
+  const cv = document.createElement('canvas'); cv.id = 'sky'; cv.setAttribute('aria-hidden', 'true');
+  cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none';
+  const cx = cv.getContext('2d');
+  let W = 0, H = 0, DPR = 1, raf = 0, T0 = performance.now(), px = 0, py = 0, tpx = 0, tpy = 0, stars = [], bubs = [], motes = [], cons = [], shoot = null, nextShoot = 5000, lastDark = null;
+  const rnd = (a, b) => a + Math.random() * (b - a), clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const isDark = () => { const t = document.documentElement.getAttribute('data-theme'); return t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches); };
+  function sprite(r, g, b) { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'), gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.16, 'rgba(' + r + ',' + g + ',' + b + ',.9)'); gr.addColorStop(.45, 'rgba(' + r + ',' + g + ',' + b + ',.22)'); gr.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b + ',0)'); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); return c; }
+  const SPR = [sprite(205, 220, 255), sprite(255, 228, 170), sprite(160, 195, 255)];
+  const CON = [
+    { n: 'Orione', ax: .08, ay: .09, sz: .50, p: [[.05, 0], [.95, .08], [.5, -.15], [.62, .5], [.5, .48], [.38, .46], [.1, 1], [.95, 1]], l: [[2, 0], [2, 1], [0, 5], [1, 3], [5, 4], [4, 3], [5, 6], [3, 7]] },
+    { n: 'Orsa Maggiore', ax: .52, ay: .05, sz: .44, p: [[0, 0], [.04, .3], [.4, .36], [.43, .08], [.64, .04], [.83, .1], [1, .26]], l: [[0, 1], [1, 2], [2, 3], [3, 0], [3, 4], [4, 5], [5, 6]] },
+    { n: 'Cassiopea', ax: .58, ay: .36, sz: .34, p: [[0, .35], [.25, .9], [.5, .42], [.76, .95], [1, .3]], l: [[0, 1], [1, 2], [2, 3], [3, 4]] },
+    { n: 'Cigno', ax: .07, ay: .52, sz: .30, p: [[.5, 0], [.5, .46], [.5, 1], [.1, .34], [.92, .56]], l: [[0, 1], [1, 2], [3, 1], [1, 4]] },
+    { n: 'Scorpione', ax: .46, ay: .66, sz: .42, p: [[.2, .02], [.04, .22], [.24, .28], [.32, .5], [.42, .7], [.57, .86], [.76, .82], [.95, .62], [.9, .42]], l: [[1, 2], [0, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8]] }
+  ];
+  function size() {
+    DPR = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const n = clamp(Math.round(W * H / 2400), 140, 420); stars = [];
+    for (let i = 0; i < n; i++) {
+      let x = Math.random() * W, y = Math.random() * H;
+      if (Math.random() < .3) { const u = Math.random(); x = u * W; y = H * (.12 + .72 * u) + (Math.random() + Math.random() + Math.random() - 1.5) * H * .09; }
+      const big = Math.random() < .07; stars.push({ x, y, r: big ? rnd(1.6, 2.6) : rnd(.35, 1.3), a: rnd(.35, 1), ph: rnd(0, 6.3), sp: rnd(.6, 2.2), c: (Math.random() * 3) | 0, z: rnd(.2, 1) });
+    }
+    const S = Math.min(W, H); cons = CON.map((c, k) => ({ n: c.n, d: 600 + k * 450, pts: c.p.map((q, i) => ({ x: c.ax * W + q[0] * c.sz * S, y: c.ay * H + q[1] * c.sz * S * 1.05, m: i % 3 === 0 ? 1 : .7, ph: rnd(0, 6.3) })), l: c.l }));
+    bubs = []; const nb = clamp(Math.round(W / 14), 14, 34); for (let i = 0; i < nb; i++) bubs.push({ x: Math.random() * W, y: Math.random() * H, r: rnd(7, 44), v: rnd(5, 18), sw: rnd(6, 24), ph: rnd(0, 6.3), h: (Math.random() * 3) | 0 });
+    motes = []; for (let i = 0; i < 70; i++) motes.push({ x: Math.random() * W, y: Math.random() * H, r: rnd(.6, 1.8), ph: rnd(0, 6.3), sp: rnd(.5, 1.8), g: Math.random() < .5 });
+  }
+  function drawDark(t) {
+    const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#02030c'); g.addColorStop(.55, '#080d28'); g.addColorStop(1, '#1a0f3f'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    // via lattea
+    cx.save(); cx.translate(W * .5, H * .5); cx.rotate(.62); const bg = cx.createLinearGradient(0, -H * .22, 0, H * .22); bg.addColorStop(0, 'rgba(160,175,255,0)'); bg.addColorStop(.5, 'rgba(170,185,255,.13)'); bg.addColorStop(1, 'rgba(160,175,255,0)'); cx.fillStyle = bg; cx.fillRect(-W, -H * .22, W * 2, H * .44); cx.restore();
+    // nebulose
+    const neb = [[.2, .25, '99,102,241', .26, 0], [.85, .55, '236,72,153', .17, 2], [.4, .88, '34,211,238', .15, 4]];
+    for (const [fx, fy, c, a, o] of neb) { const x = fx * W + Math.sin(t / 9000 + o) * 30 + px * 10, y = fy * H + Math.cos(t / 11000 + o) * 24 + py * 10, r = Math.max(W, H) * .6; const q = cx.createRadialGradient(x, y, 0, x, y, r); q.addColorStop(0, 'rgba(' + c + ',' + a + ')'); q.addColorStop(1, 'rgba(' + c + ',0)'); cx.fillStyle = q; cx.fillRect(0, 0, W, H); }
+    // stelle
+    for (const s of stars) { const tw = .72 + .28 * Math.sin(t / 1000 * s.sp + s.ph), x = s.x + px * 6 * s.z, y = s.y + py * 6 * s.z; cx.globalAlpha = s.a * tw; const d = s.r * 5; cx.drawImage(SPR[s.c], x - d / 2, y - d / 2, d, d); }
+    // costellazioni
+    cx.globalCompositeOperation = 'lighter';
+    for (const c of cons) {
+      const pr = clamp((t - c.d) / 2400, 0, 1), ox = px * 14, oy = py * 14;
+      cx.lineCap = 'round';
+      for (let li = 0; li < c.l.length; li++) {
+        const a = c.pts[c.l[li][0]], b = c.pts[c.l[li][1]], k = clamp(pr * c.l.length - li, 0, 1); if (k <= 0) continue;
+        const x1 = a.x + ox, y1 = a.y + oy, x2 = x1 + (b.x + ox - x1) * k, y2 = y1 + (b.y + oy - y1) * k;
+        cx.strokeStyle = 'rgba(120,200,255,.16)'; cx.lineWidth = 4; cx.beginPath(); cx.moveTo(x1, y1); cx.lineTo(x2, y2); cx.stroke();
+        cx.strokeStyle = 'rgba(200,225,255,.75)'; cx.lineWidth = 1.1; cx.beginPath(); cx.moveTo(x1, y1); cx.lineTo(x2, y2); cx.stroke();
+        if (k >= 1 && !RM.matches) { const u = ((t / 3200) + li * .31) % 1; cx.globalAlpha = .95; const d = 9; cx.drawImage(SPR[0], x1 + (x2 - x1) * u - d / 2, y1 + (y2 - y1) * u - d / 2, d, d); }
+      }
+      for (const p of c.pts) { const tw = .8 + .2 * Math.sin(t / 700 + p.ph), d = (p.m > .9 ? 22 : 15) * tw * pr; cx.globalAlpha = Math.min(1, pr * 1.3); cx.drawImage(SPR[p.m > .9 ? 1 : 0], p.x + ox - d / 2, p.y + oy - d / 2, d, d); }
+      cx.globalAlpha = .55 * pr; cx.fillStyle = '#cfe0ff'; cx.font = '600 11px system-ui,sans-serif'; const q = c.pts[0]; cx.fillText(c.n.toUpperCase(), q.x + ox, Math.max(...c.pts.map(z => z.y)) + oy + 22);
+    }
+    cx.globalCompositeOperation = 'source-over'; cx.globalAlpha = 1;
+    // stella cadente
+    if (!RM.matches) {
+      if (!shoot && t > nextShoot) { shoot = { x: rnd(W * .4, W * 1.05), y: rnd(-20, H * .35), vx: -rnd(520, 760), vy: rnd(260, 380), t0: t }; nextShoot = t + rnd(7000, 13000); }
+      if (shoot) { const e = (t - shoot.t0) / 1000, x = shoot.x + shoot.vx * e, y = shoot.y + shoot.vy * e; if (e > 1.1 || x < -150 || y > H + 50) shoot = null; else { const gr = cx.createLinearGradient(x, y, x - shoot.vx * .16, y - shoot.vy * .16); gr.addColorStop(0, 'rgba(255,255,255,.95)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); cx.strokeStyle = gr; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x - shoot.vx * .16, y - shoot.vy * .16); cx.stroke(); } }
+    }
+  }
+  function drawLight(t) {
+    const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#fff1df'); g.addColorStop(.42, '#eef0ff'); g.addColorStop(1, '#d6eefc'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    // sole con raggi
+    const sx = W * .84 + px * 12, sy = H * .1 + py * 8, R = Math.max(W, H) * .62;
+    const sg = cx.createRadialGradient(sx, sy, 0, sx, sy, R); sg.addColorStop(0, 'rgba(255,214,150,.95)'); sg.addColorStop(.18, 'rgba(255,224,176,.55)'); sg.addColorStop(1, 'rgba(255,224,176,0)'); cx.fillStyle = sg; cx.fillRect(0, 0, W, H);
+    cx.save(); cx.translate(sx, sy); cx.rotate(t / 60000); for (let i = 0; i < 12; i++) { cx.rotate(Math.PI / 6); const rg = cx.createLinearGradient(0, 0, R * 1.4, 0); rg.addColorStop(0, 'rgba(255,236,200,.30)'); rg.addColorStop(1, 'rgba(255,236,200,0)'); cx.fillStyle = rg; cx.beginPath(); cx.moveTo(0, 0); cx.lineTo(R * 1.4, -R * .09); cx.lineTo(R * 1.4, R * .09); cx.fill(); } cx.restore();
+    // nastri di aurora
+    const rib = [['94,234,212', .30, 1.0, 0], ['167,139,250', .52, .8, 2], ['249,168,212', .72, 1.2, 4], ['125,211,252', .88, .9, 1]];
+    cx.lineCap = 'round'; cx.lineJoin = 'round';
+    for (const [c, fy, sp, ph] of rib) {
+      for (const [w, a] of [[110, .05], [70, .07], [38, .09], [14, .14]]) {
+        cx.strokeStyle = 'rgba(' + c + ',' + a + ')'; cx.lineWidth = w; cx.beginPath();
+        for (let x = -30; x <= W + 30; x += 14) { const y = fy * H + py * 10 + Math.sin(x / (W * .28) + t / 4200 * sp + ph) * H * .045 + Math.sin(x / (W * .11) + t / 2600 * sp + ph * 2) * H * .012; x === -30 ? cx.moveTo(x, y) : cx.lineTo(x, y); } cx.stroke();
+      }
+    }
+    // bolle di vetro
+    const tints = ['125,211,252', '244,114,182', '167,139,250'];
+    for (const b of bubs) {
+      const y = ((b.y - t / 1000 * b.v) % (H + 100) + (H + 100)) % (H + 100) - 50, x = b.x + Math.sin(t / 2000 + b.ph) * b.sw + px * b.r * .4;
+      const rg = cx.createRadialGradient(x - b.r * .3, y - b.r * .35, b.r * .1, x, y, b.r); rg.addColorStop(0, 'rgba(255,255,255,.55)'); rg.addColorStop(.7, 'rgba(' + tints[b.h] + ',.10)'); rg.addColorStop(1, 'rgba(' + tints[b.h] + ',.22)');
+      cx.fillStyle = rg; cx.beginPath(); cx.arc(x, y, b.r, 0, 6.3); cx.fill();
+      cx.strokeStyle = 'rgba(255,255,255,.8)'; cx.lineWidth = 1.2; cx.beginPath(); cx.arc(x, y, b.r, 0, 6.3); cx.stroke();
+      cx.strokeStyle = 'rgba(255,255,255,.95)'; cx.lineWidth = 2; cx.beginPath(); cx.arc(x, y, b.r * .72, 3.5, 4.4); cx.stroke();
+    }
+    // scintille
+    for (const m of motes) { const tw = .5 + .5 * Math.sin(t / 1000 * m.sp + m.ph); cx.globalAlpha = .25 + .6 * tw; cx.fillStyle = m.g ? '#ffd479' : '#ffffff'; cx.beginPath(); cx.arc(m.x + px * 5, m.y + py * 5, m.r, 0, 6.3); cx.fill(); }
+    cx.globalAlpha = 1;
+  }
+  function draw(now) {
+    const t = RM.matches || CT.matches ? 9000 : now - T0; px += (tpx - px) * .06; py += (tpy - py) * .06;
+    const d = isDark(); lastDark = d; d ? drawDark(t) : drawLight(t);
+  }
+  function loop(now) { raf = 0; if (document.hidden) return; draw(now); if (!RM.matches && !CT.matches) raf = requestAnimationFrame(loop); }
+  function start() { if (raf) return; if (RM.matches || CT.matches) { requestAnimationFrame(now => draw(now)); return; } raf = requestAnimationFrame(loop); }
+  function init() {
+    document.body.prepend(cv); size(); start();
+    addEventListener('resize', () => { size(); start(); }); document.addEventListener('visibilitychange', start);
+    addEventListener('pointermove', e => { tpx = (e.clientX / W - .5) * 2; tpy = (e.clientY / H - .5) * 2; }, { passive: true });
+    addEventListener('deviceorientation', e => { if (e.gamma == null) return; tpx = clamp(e.gamma / 30, -1, 1); tpy = clamp((e.beta - 45) / 30, -1, 1); }, { passive: true });
+    new MutationObserver(() => start()).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener && matchMedia('(prefers-color-scheme: dark)').addEventListener('change', start);
+    RM.addEventListener && RM.addEventListener('change', start);
+  }
+  document.body ? init() : addEventListener('DOMContentLoaded', init);
+  window.__sky = { draw: () => draw(performance.now()), isDark };
+})();
+
+/* ===== v2.6: loghi di carte e servizi del Vault ===== */
+(function () {
+  const SERV = [
+    ['google.com', 'google gmail'], ['youtube.com', 'youtube'], ['facebook.com', 'facebook fb'], ['instagram.com', 'instagram'], ['whatsapp.com', 'whatsapp'], ['amazon.it', 'amazon'], ['netflix.com', 'netflix'], ['spotify.com', 'spotify'], ['paypal.com', 'paypal'], ['apple.com', 'apple icloud itunes'],
+    ['microsoft.com', 'microsoft outlook office365 hotmail onedrive'], ['linkedin.com', 'linkedin'], ['x.com', 'twitter'], ['tiktok.com', 'tiktok'], ['telegram.org', 'telegram'], ['dropbox.com', 'dropbox'], ['github.com', 'github'], ['ebay.it', 'ebay'], ['poste.it', 'poste postepay postemobile'],
+    ['intesasanpaolo.com', 'intesa intesasanpaolo'], ['unicredit.it', 'unicredit'], ['fineco.it', 'fineco'], ['revolut.com', 'revolut'], ['n26.com', 'n26'], ['bnl.it', 'bnl'], ['mps.it', 'montepaschi'], ['bancobpm.it', 'bancobpm'], ['bper.it', 'bper'], ['hype.it', 'hype'], ['satispay.com', 'satispay'],
+    ['booking.com', 'booking'], ['airbnb.it', 'airbnb'], ['uber.com', 'uber'], ['justeat.it', 'justeat'], ['deliveroo.it', 'deliveroo'], ['glovoapp.com', 'glovo'], ['tim.it', 'tim'], ['vodafone.it', 'vodafone'], ['windtre.it', 'windtre'], ['iliad.it', 'iliad'], ['fastweb.it', 'fastweb'],
+    ['enel.it', 'enel enelenergia'], ['eni.com', 'eniplenitude plenitude'], ['a2a.it', 'a2a'], ['inps.it', 'inps'], ['agenziaentrate.gov.it', 'agenziaentrate'], ['pagopa.it', 'pagopa'], ['trenitalia.com', 'trenitalia'], ['italotreno.it', 'italo'], ['ryanair.com', 'ryanair'], ['easyjet.com', 'easyjet'],
+    ['aliexpress.com', 'aliexpress'], ['zalando.it', 'zalando'], ['shein.com', 'shein'], ['twitch.tv', 'twitch'], ['discord.com', 'discord'], ['reddit.com', 'reddit'], ['pinterest.it', 'pinterest'], ['snapchat.com', 'snapchat'], ['zoom.us', 'zoom'], ['adobe.com', 'adobe'], ['steampowered.com', 'steam'],
+    ['playstation.com', 'playstation'], ['xbox.com', 'xbox'], ['nintendo.com', 'nintendo'], ['disneyplus.com', 'disney disneyplus'], ['primevideo.com', 'primevideo'], ['dazn.com', 'dazn'], ['sky.it', 'sky'], ['tripadvisor.it', 'tripadvisor'], ['wetransfer.com', 'wetransfer'], ['proton.me', 'proton protonmail'],
+    ['cloudflare.com', 'cloudflare'], ['openai.com', 'openai chatgpt'], ['claude.ai', 'claude']
+  ].map(r => ({ d: r[0], k: r[1].split(' ').map(fwn) }));
+  const clean = x => { x = String(x || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/[\/?#:].*$/, ''); return /^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(x) ? x : ''; };
+  function domOf(it) {
+    const d = it.data; let x = clean(d.domain); if (x) return x;
+    if (it.type === 'card') { const b = detectBrand(d.code, d.name); return b ? b.domain : ''; }
+    const t = String(d.service || ''); x = /^\S+\.\S+$/.test(t) ? clean(t) : ''; if (x) return x;
+    const f = fwn(t); if (!f) return '';
+    const m = SERV.find(r => r.k.some(k => k.length >= 4 ? f.includes(k) : f === k)); return m ? m.d : '';
+  }
+  let busy = false;
+  async function sweep(manual) {
+    if (busy) return { n: 0, m: 0 }; busy = true; let n = 0, m = 0;
+    try {
+      let fail = {}; try { fail = JSON.parse(lsg('unica_lgf') || '{}'); } catch (e) { } const now = Date.now(), jobs = [];
+      const want = (it, k) => { if (it.data.logo || it.data.parent) return; const dom = domOf(it); if (dom && (manual || !(fail[it.id] > now - 7 * 864e5))) jobs.push({ it, dom, k }); };
+      if (S.kcKey) for (const c of S.cards.values()) want(c, 'c');
+      if (S.kpKey) for (const i of S.items.values()) if (i.type === 'login' || i.type === 'passkey') want(i, 'p');
+      for (const j of jobs.slice(0, 40)) {
+        m++; const lg = await probeLogo(j.dom);
+        if (lg) { const cur = (j.k === 'c' ? S.cards : S.items).get(j.it.id); if (cur) { await putItem(cur.id, cur.type, { ...cur.data, logo: lg }, cur, j.k); n++; } } else fail[j.it.id] = now;
+      }
+      lss('unica_lgf', JSON.stringify(fail));
+    } finally { busy = false; }
+    return { n, m };
+  }
+  { const pi = putItem; putItem = async function (id, type, data, prev) { if (prev && prev.data && prev.data.logo && data && !data.logo && (type === 'login' || type === 'passkey')) data.logo = prev.data.logo; return pi.apply(this, arguments); }; }
+  ACT.logoSweep = async function () {
+    if (lsg('unica_web') !== '1') {
+      if (!(await ask('Scarica i loghi', 'Per ogni carta o servizio il nome del sito (per esempio esselunga.it) viene richiesto a icon.horse, Google o DuckDuckGo per ottenere il logo. Non viene inviata nessuna password né il codice delle carte. I loghi restano poi salvati, cifrati, sul dispositivo.', { ok: 'Scarica' }))) return;
+      lss('unica_web', '1');
+    }
+    toast('Cerco i loghi…'); const r = await sweep(true);
+    toast(r.m ? 'Loghi trovati: ' + r.n + ' su ' + r.m + (S.kpKey ? '' : ' · sblocca il Vault per includere anche i servizi') : 'Nessun logo da cercare' + (S.kpKey ? '' : ' · sblocca il Vault per includere i servizi')); render();
+  };
+  { const r0 = render; let tm = 0, last = 0; render = function () { r0.apply(this, arguments); if (S.kcKey && lsg('unica_web') === '1' && ['home', 'cards', 'vault'].includes(U.route) && !tm && Date.now() - last > 60000) tm = setTimeout(async () => { tm = 0; last = Date.now(); try { const r = await sweep(false); if (r.n) r0(); } catch (e) { } }, 2500); }; }
+  window.__logos = { domOf, sweep };
 })();
 
 /* ---------- avvio ---------- */

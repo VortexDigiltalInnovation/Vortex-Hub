@@ -81,3 +81,7 @@ Il recupero dei loghi invia a icon.horse, Google o DuckDuckGo soltanto il nome d
 
 ## Biometria (v2.6.0)
 La passkey è creata come credenziale non rilevabile sul solo autenticatore del dispositivo (residentKey: discouraged, attachment: platform). Nessuna chiave resta nel gestore password di Google.
+
+
+## Rinomina in Vortex Hub (2.9.0)
+Nessuna modifica crittografica: AES-256-GCM, PBKDF2 600k, sincronizzazione a conoscenza zero e codice di recupero restano identici. I nomi tecnici interni (database `unica`, chiavi `unica_*`, etichette di derivazione) sono rimasti invariati di proposito, perché cambiarli renderebbe illeggibili i dati e i backup già cifrati. Il logo è incorporato nel file, senza richieste di rete.

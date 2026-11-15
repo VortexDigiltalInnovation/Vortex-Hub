@@ -1,4 +1,4 @@
-/* Pagina isolata (iframe sandbox, origine opaca): non ha accesso ai dati di Unica.
+/* Pagina isolata (iframe sandbox, origine opaca): non ha accesso ai dati di Vortex Hub.
    Riceve l'immagine, la legge con Tesseract.js (scaricato da jsDelivr solo su richiesta) e restituisce il testo. */
 (function () {
   const V = '5.1.1', CORE = '5.1.1', P = window.parent;

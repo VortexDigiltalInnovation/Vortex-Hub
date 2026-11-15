@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-57XE96+L6mBzY9y2cUA3Xf7FvV4cDjL7TyTJ/pEuNw8='; style-src 'sha256-m5inFz4etljgF4RVX2CPUaiRndYcby73ujDWgyR99fk='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-Bi1RIJMa730prPD0UQ0YlVuccYurqfoXvh5ziR4HGlQ='; style-src 'sha256-7QBQ10dcTZ9pAZJ+upb5azQO0Rky5ai8A8/J/z76RPQ='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev https://api.anthropic.com https://api.openai.com; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#060818">
-<title>Unica</title>
+<meta name="theme-color" content="#060818"><meta name="apple-mobile-web-app-title" content="Vortex Hub"><meta name="application-name" content="Vortex Hub">
+<title>Vortex Hub</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -320,16 +320,35 @@ main.wrap{animation:pgin .32s cubic-bezier(.2,.8,.2,1) both}
 .ib.vcm:hover,.ib[data-act=vmic]:hover{color:#fff;filter:brightness(1.08)}
 .sbox{align-items:center;gap:8px}
 .sbox{display:flex}.sbox .in{flex:1;min-width:0;padding-right:12px}.sbox .vcm{position:static;transform:none;min-width:56px;min-height:56px}
+.sgsearch{margin:0 0 12px}.sgsearch .in{width:100%}
+.sgs{display:flex;flex-direction:column;gap:10px}
+.sg{border-radius:18px;border:1px solid var(--line);background:var(--card);overflow:hidden}
+.sg>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;min-height:64px;-webkit-tap-highlight-color:transparent}
+.sg>summary::-webkit-details-marker{display:none}
+.sg .sgi{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none;color:#fff;background:linear-gradient(135deg,hsl(var(--h) 85% 58%),hsl(calc(var(--h) + 40) 80% 48%));box-shadow:0 8px 16px -8px hsl(var(--h) 85% 45%/.9),inset 0 1px 0 rgba(255,255,255,.4)}
+.sg .sgi .ic{width:23px;height:23px;stroke:#fff}
+.sg .sgt{flex:1;min-width:0}.sg .sgt b{display:block;font-size:1.02rem}.sg .sgt span{display:block;font-size:.8rem;color:var(--mut);margin-top:2px}
+.sg .chev{width:9px;height:9px;flex:none;border-right:2.5px solid var(--mut);border-bottom:2.5px solid var(--mut);transform:rotate(-45deg);transition:transform .2s;margin-right:4px}
+.sg[open] .chev{transform:rotate(45deg)}
+.sg[open]>summary{border-bottom:1px solid var(--line)}
+.sg .sgb{padding:4px 12px 12px}
+.sg .sgb>.card{box-shadow:none;margin:10px 0 0;background:transparent;border:1px solid var(--line)}
+.sg [hidden],.sg[hidden]{display:none!important}
+
+/* Vortex Hub: logo reale */
+.logo:has(img){width:108px;height:108px;border-radius:50%;background:#aab6c2;overflow:visible}
+.logo:has(img)::before{border-radius:50%;inset:-8px}
+.logo img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;filter:drop-shadow(0 6px 18px rgba(30,64,175,.45))}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<noscript>Unica richiede JavaScript.</noscript>
+<noscript>Vortex Hub richiede JavaScript.</noscript>
 <script>'use strict';
-/* ================= Unica – nucleo: cifratura, database locale, sessione ================= */
-const APP_NAME = 'Unica';
-const APP_VERSION = '2.7.1';
+/* ================= Vortex Hub – nucleo: cifratura, database locale, sessione ================= */
+const APP_NAME = 'Vortex Hub', LOGO = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAABgFBMVEWLnKehq65pnMporq48k5mds86TnqutzOMcTINLaql/f/+SnakGFWcYM5lubrbP5O9wsrsAAP9VVVV///95wcoAf38A/wCensyl8vIjLjYA//9ATlwAAH8eYm3/AAD//wA8deAA/39/AAB/v3+/f7//AP/MzJkAAACXprBOd4cUN00rV2oMJjQyZXRIaXpRhZMEGikNKkluiJcZRVSKmqcqRVcDFk4pSmhyl6gZR2skOk41eIpQpq06hY5QmKk0Z4ugrbZNh7H///9FWWxrqPVmeYo5Zs9IbIQcU1oCFRtHlJt/f39KcX4qWYuYpbApSKocVGojVV0WOWijsbpFdtQQMzsbNZQwVrQyW8dPiOeYpK4EF2oSKYiWo66UpK6YpK8wdHtalu1tprSoqqsjOZOXo66YpK9Je6psjKYSKHVxuMYBChQmR5MADFA9cdhZk8SSnavR6PJTiNFjnPDs/P02Z7FXsriTm610sfiSnak9daZFe+JCa813kZ2OqMoBDCTP7QA/AAAAgHRSTlP0Df8E//+j////AnP//wP//wEDAv8CAQcD/wH/Av8BAf8CAgQEAQUA/f///////////////v///////////////v8B//////////8C///O//////7///////8u//9QF3H///8F/7GS////////////M////////xL/UP///////6mbCo8AABvPSURBVHjatZuHQxvHtsYFuMYtyX3J7e++Lu3M9tVqpV3trgpCBQmEQPQiOgRswL3E9r/+vjOzAjmxEzs3d9wAC346ZU6b2VT6i1blq+mx3X//2Zd3J6YnKl/2k1JfQt2dnqZ/JzY3V8/PN17ROj9f3XyxK/73/u70vwJcEdDpzfNXd27cmJnJXK6Z1I0bdzbOX4yJF1V+Z/D09/jrxfnWjVQ28/E1A/oL8dJvfjewEOPFq4NU5lfWzMGrTXr99O8CnoYFJ1a3hHKvxM0mawSblexz6Lzyh38aXAF289X+yI9/a9s1RaxOhyuKYdt2/oM3cOPO5mdI/StgfPvmxv4IVCINxTBspXOLJ59igX6JThH6fuW3g/GtY1fS5m3JGMKUW4W4ZYiliN8Qfajyma0X4tt/E7jyt/Q/Nm4Mhc1DpUJeoxUVsaJi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';
+const APP_VERSION = '2.9.0';
 const KDF_ITER = 600000;
 const MAX_FILE = 15 * 1024 * 1024;
 const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
@@ -763,7 +782,7 @@ const BC = (() => {
   return { bars, qr, draw, decodeRow, decodeImage, detectType, eanValid, eanCheck };
 })();
 
-/* ================= Unica – interfaccia ================= */
+/* ================= Vortex Hub – interfaccia ================= */
 const $ = id => document.getElementById(id);
 const h = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const P = {
@@ -861,8 +880,8 @@ function render() {
 const V = {}, POST = {};
 
 /* ---------- 1. Benvenuto ---------- */
-V.welcome = () => '<main class="center"><div class="logo">' + ic('shield') + '</div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Carte, conti e password in un’unica app personale, cifrata sul tuo dispositivo.</p><div class="stack" style="margin-top:12px"></div>' +
-  '<button class="btn pri blk" data-act="toCreate">Crea un nuovo account</button><div style="height:10px"></div><button class="btn blk" data-act="restore">Ripristina da un backup</button><div style="height:10px"></div><button class="btn blk" data-act="syLink">Ho già Unica su un altro dispositivo</button>' +
+V.welcome = () => '<main class="center"><div class="logo"><img src="' + LOGO + '" alt="Vortex Hub"></div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Carte, conti e password in un’unica app personale, cifrata sul tuo dispositivo.</p><div class="stack" style="margin-top:12px"></div>' +
+  '<button class="btn pri blk" data-act="toCreate">Crea un nuovo account</button><div style="height:10px"></div><button class="btn blk" data-act="restore">Ripristina da un backup</button><div style="height:10px"></div><button class="btn blk" data-act="syLink">Ho già Vortex Hub su un altro dispositivo</button>' +
   '<p class="sm mut c" style="margin-top:18px">I dati restano sul tuo dispositivo e sono cifrati con AES-256-GCM. Nessun server vede le tue password.</p></main>';
 
 /* ---------- 2. Creazione account ---------- */
@@ -894,7 +913,7 @@ V.migrate = () => '<main class="center"><h1>Porta qui i tuoi dati</h1><p class="
   '<button class="btn pri blk" data-act="toHome">Continua</button></main>';
 
 /* ---------- 6. Sblocco ---------- */
-V.lock = () => '<main class="center"><div class="logo">' + ic('lock') + '</div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Sblocca per continuare</p>' +
+V.lock = () => '<main class="center"><div class="logo"><img src="' + LOGO + '" alt="Vortex Hub"></div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Sblocca per continuare</p>' +
   (S.meta.pk ? '<button class="btn pri blk" data-act="pkUnlock">' + ic('key') + ' Sblocca con impronta / Face ID</button><p class="sm mut c">oppure con la master password:</p>' : '') +
   '<form data-form="unlock">' + pwField('up', 'Master password') + '<p class="sm bad" id="uerr" role="alert"></p><button class="btn ' + (S.meta.pk ? '' : 'pri') + ' blk" type="submit">Sblocca</button></form>' +
   '<p class="c"><button class="btn sm" data-act="forgot" style="border:0">Password dimenticata? Usa il codice di recupero</button></p></main>';
@@ -974,7 +993,7 @@ function openForm(id, type) {
     ? '<label class="f" for="f_t">Servizio</label><input class="in" id="f_t" required value="' + h(d.service) + '" autocomplete="off"><label class="f" for="f_u">Utente / email</label><input class="in" id="f_u" value="' + h(d.username) + '" autocomplete="off" autocapitalize="off">' +
       '<label class="f" for="f_p">Password</label><div class="pw"><input class="in mono" id="f_p" type="password" value="' + h(d.password) + '" autocomplete="new-password" autocapitalize="off" spellcheck="false"><button type="button" class="btn" data-act="eye" data-for="f_p" aria-label="Mostra o nascondi">' + ic('eye') + '</button><button type="button" class="btn" data-act="genfor" aria-label="Genera password">' + ic('refresh') + '</button></div>' + meterHtml('fm') +
       '<label class="f" for="f_d">Sito web</label><input class="in" id="f_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off">'
-    : type === 'passkey' ? '<p class="sm mut">Una passkey vera resta nel dispositivo o nel gestore che l’ha creata e Unica non può contenerla né usarla. Qui annoti dove si trova e come recuperarla, così non la perdi.</p><label class="f" for="f_t">Servizio</label><input class="in" id="f_t" required value="' + h(d.service) + '" autocomplete="off"><label class="f" for="f_u">Utente / email</label><input class="in" id="f_u" value="' + h(d.username) + '" autocomplete="off" autocapitalize="off"><label class="f" for="f_pw">Dove è salvata</label><select class="in" id="f_pw">' + sel(['iCloud / Portachiavi Apple', 'Google Password Manager', 'Windows Hello', 'Chiave di sicurezza (YubiKey…)', 'Altro gestore di password', 'Telefono / altro dispositivo'], d.where) + '</select><label class="f" for="f_pi">Dispositivo o nome della chiave</label><input class="in" id="f_pi" value="' + h(d.device || '') + '" autocomplete="off" placeholder="es. iPhone di Mario"><label class="f" for="f_d">Sito web</label><input class="in" id="f_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off">'
+    : type === 'passkey' ? '<p class="sm mut">Una passkey vera resta nel dispositivo o nel gestore che l’ha creata e Vortex Hub non può contenerla né usarla. Qui annoti dove si trova e come recuperarla, così non la perdi.</p><label class="f" for="f_t">Servizio</label><input class="in" id="f_t" required value="' + h(d.service) + '" autocomplete="off"><label class="f" for="f_u">Utente / email</label><input class="in" id="f_u" value="' + h(d.username) + '" autocomplete="off" autocapitalize="off"><label class="f" for="f_pw">Dove è salvata</label><select class="in" id="f_pw">' + sel(['iCloud / Portachiavi Apple', 'Google Password Manager', 'Windows Hello', 'Chiave di sicurezza (YubiKey…)', 'Altro gestore di password', 'Telefono / altro dispositivo'], d.where) + '</select><label class="f" for="f_pi">Dispositivo o nome della chiave</label><input class="in" id="f_pi" value="' + h(d.device || '') + '" autocomplete="off" placeholder="es. iPhone di Mario"><label class="f" for="f_d">Sito web</label><input class="in" id="f_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off">'
     : type === 'note' ? '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '"><label class="f" for="f_x">Testo</label><textarea class="in" id="f_x" rows="6">' + h(d.text) + '</textarea>'
     : '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '">' + (it ? '<p class="sm mut">File: ' + h(d.fname) + ' (' + fmtSize(d.size) + ')</p>' : '<label class="f" for="f_f">File (max ' + fmtSize(MAX_FILE) + ')</label><input class="in" id="f_f" type="file" required>');
   const m = modal('<h2>' + (it ? 'Modifica voce' : 'Nuova voce') + '</h2>' + (it ? '' : '<div class="seg" role="group" aria-label="Tipo">' + Object.keys(VT).map(k => '<button type="button" data-act="ftype" data-t="' + k + '" aria-pressed="' + (k === type) + '">' + VT[k][1] + '</button>').join('') + '</div>') +
@@ -1151,7 +1170,7 @@ const ACT = {
   cp(t) { const it = S.items.get(t.dataset.id); copy(it.data[t.dataset.f], t.dataset.l); },
   async dlFile(t) { try { const it = S.items.get(t.dataset.id); download(it.data.fname, new Blob([await getBlob(it.id)], { type: it.data.mime })); } catch (e) { toast('Errore: ' + e.message); } },
   async chk1(t) { const el = $('chk1r'); el.textContent = 'Controllo…'; const n = await pwnedCount(S.items.get(t.dataset.id).data.password); el.textContent = n === null ? 'Controllo non riuscito (offline?).' : n === 0 ? 'Nessuna violazione nota per questa password.' : 'Attenzione: password comparsa in ' + n.toLocaleString('it-IT') + ' violazioni. Cambiala.'; },
-  async exp() { const b = await exportBackup(); download('unica-backup-' + new Date().toISOString().slice(0, 10) + '.enc', new Blob([JSON.stringify(b)], { type: 'application/octet-stream' })); toast('Backup esportato'); },
+  async exp() { const b = await exportBackup(); download('vortexhub-backup-' + new Date().toISOString().slice(0, 10) + '.enc', new Blob([JSON.stringify(b)], { type: 'application/octet-stream' })); toast('Backup esportato'); },
   async restore(t) {
     let txt = typeof t === 'string' ? t : null;
     if (txt === null) SY.pend = null;
@@ -1393,7 +1412,7 @@ async function offerIncoming() {
 }
 async function cardShare(id) {
   const d = S.cards.get(id).data, link = shareLink(d);
-  const m = modal('<h2>Condividi «' + h(d.name) + '»</h2><p class="mut sm">Il link contiene nome e codice della carta e si apre in Unica: chi lo riceve può aggiungerla. Non viene inviato a nessun server, ma chiunque abbia il link vede il codice.</p><div class="c"><canvas id="shq" class="bc big"></canvas></div><div class="gap" style="margin-top:12px"><button class="btn pri" id="shs">' + ic('up') + ' Condividi con…</button><button class="btn" id="shc">' + ic('copy') + ' Copia link</button><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div><h3>Modo più sicuro: file cifrato con codice monouso</h3><p class="sm mut">Il file si apre solo con un codice che comunichi a parte; vale 48 ore e funziona una sola volta sul dispositivo che lo riceve.</p><div id="shfa"><button type="button" class="btn blk" id="shf">' + ic('lock') + ' Crea file cifrato</button></div>');
+  const m = modal('<h2>Condividi «' + h(d.name) + '»</h2><p class="mut sm">Il link contiene nome e codice della carta e si apre in Vortex Hub: chi lo riceve può aggiungerla. Non viene inviato a nessun server, ma chiunque abbia il link vede il codice.</p><div class="c"><canvas id="shq" class="bc big"></canvas></div><div class="gap" style="margin-top:12px"><button class="btn pri" id="shs">' + ic('up') + ' Condividi con…</button><button class="btn" id="shc">' + ic('copy') + ' Copia link</button><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div><h3>Modo più sicuro: file cifrato con codice monouso</h3><p class="sm mut">Il file si apre solo con un codice che comunichi a parte; vale 48 ore e funziona una sola volta sul dispositivo che lo riceve.</p><div id="shfa"><button type="button" class="btn blk" id="shf">' + ic('lock') + ' Crea file cifrato</button></div>');
   m.q('#shf').onclick = () => cardShareFile(id, m);
   try { BC.draw(m.q('#shq'), { type: 'QR', code: link }, { width: 280 }); } catch (e) { m.q('#shq').replaceWith(Object.assign(document.createElement('p'), { className: 'sm mut', textContent: 'Link troppo lungo per un QR: usa Condividi o Copia.' })); }
   m.q('#shc').onclick = () => copy(link, 'Link');
@@ -1414,7 +1433,7 @@ async function findSite() {
   } catch (e) { toast('Ricerca non riuscita (offline?)'); }
 }
 async function nearStores() {
-  if (!nearOn()) { if (await ask('Negozi vicini', 'Per trovare le tue carte dei negozi qui intorno, Unica usa la tua posizione (approssimata a ~100 m) e invia a OpenStreetMap solo quell’area e i nomi dei negozi. Attivare questa funzione?', { ok: 'Attiva' })) localStorage.setItem('unica_near', '1'); else return; }
+  if (!nearOn()) { if (await ask('Negozi vicini', 'Per trovare le tue carte dei negozi qui intorno, Vortex Hub usa la tua posizione (approssimata a ~100 m) e invia a OpenStreetMap solo quell’area e i nomi dei negozi. Attivare questa funzione?', { ok: 'Attiva' })) localStorage.setItem('unica_near', '1'); else return; }
   if (!navigator.geolocation) return toast('Posizione non disponibile');
   toast('Cerco i negozi vicini…');
   const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 })).catch(() => null);
@@ -2122,7 +2141,7 @@ const syErr = r => new Error(r.status === 403 ? 'Token non valido per questo spa
 
 async function syMerge(rem) {
   if (!validBackup(rem)) throw new Error('Dati remoti non validi.');
-  if (rem.meta.created !== S.meta.created) throw new Error('Questo spazio appartiene a un altro account Unica.');
+  if (rem.meta.created !== S.meta.created) throw new Error('Questo spazio appartiene a un altro account Vortex Hub.');
   const loc = new Map((await DB.all('items')).map(r => [r.id, r])); let ch = false;
   for (const r of rem.items) {
     if (!r || typeof r.id !== 'string' || !Number.isInteger(r.ver) || !Number.isFinite(r.ts) || typeof r.t !== 'string' || (r.t !== 'tomb' && (typeof r.iv !== 'string' || typeof r.ct !== 'string'))) continue;
@@ -2160,7 +2179,7 @@ function syCard() {
 }
 async function syShowCode(c) {
   const code = syCode(c);
-  const m = modal('<h2>Codice di collegamento</h2><p class="sm mut">Sull’altro dispositivo: schermata iniziale → «Ho già Unica su un altro dispositivo», poi incolla questo codice e inserisci la master password. Chi ha il codice può leggere (solo cifrati) e cancellare i dati sul server: non condividerlo.</p><textarea class="in" rows="5" readonly id="syc"></textarea><div class="gap"><span class="sp"></span><button class="btn" data-r="0">Chiudi</button><button class="btn pri" id="sycp">Copia</button></div>');
+  const m = modal('<h2>Codice di collegamento</h2><p class="sm mut">Sull’altro dispositivo: schermata iniziale → «Ho già Vortex Hub su un altro dispositivo», poi incolla questo codice e inserisci la master password. Chi ha il codice può leggere (solo cifrati) e cancellare i dati sul server: non condividerlo.</p><textarea class="in" rows="5" readonly id="syc"></textarea><div class="gap"><span class="sp"></span><button class="btn" data-r="0">Chiudi</button><button class="btn pri" id="sycp">Copia</button></div>');
   m.q('#syc').value = code; m.q('#sycp').onclick = () => copy(code, 'Codice'); m.el.addEventListener('click', e => { if (e.target.closest('[data-r]')) m.close(); });
 }
 Object.assign(ACT, {
@@ -2501,7 +2520,7 @@ function openShare(id) {
         const code = shCode(), salt = rnd(16), key = await kekPw(code.replace(/-/g, ''), salt, KDF_ITER);
         const pl = { unicaCard: 1, iter: KDF_ITER, salt: b64e(salt), ...(await seal(key, te.encode(JSON.stringify({ v: 1, card })), 'unica-card')) };
         const slug = titleOf(it).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'voce';
-        st.code = code; st.file = new File([JSON.stringify(pl)], 'Unica_credenziale_' + slug + '.json', { type: 'application/json' });
+        st.code = code; st.file = new File([JSON.stringify(pl)], 'VortexHub_credenziale_' + slug + '.json', { type: 'application/json' });
       } catch (x) { toast('Non sono riuscito a creare il file.'); } draw();
     }
     if (a === 'sendfile') { const f = st.file; try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Credenziale cifrata' }); return; } } catch (x) { if (x && x.name === 'AbortError') return; } download(f.name, f); toast('File salvato: invialo e comunica il codice a parte.'); }
@@ -2554,7 +2573,7 @@ Object.assign(ACT, {
 });
 
 /* ---------- Backup automatico su cartella del dispositivo + schede comprimibili con «Vai a» ---------- */
-const FB_OK = typeof window.showDirectoryPicker === 'function', FB_RE = /^Unica_backup_\d{4}-\d\d-\d\d_\d{4}\.enc$/;
+const FB_OK = typeof window.showDirectoryPicker === 'function', FB_RE = /^(?:Unica|VortexHub)_backup_\d{4}-\d\d-\d\d_\d{4}\.enc$/;
 const fbKeep = () => +lsGet('unica_fbkeep') || 10;
 let FBDIR = null;
 const fbGet = async () => FBDIR || (FBDIR = await DB.get('dev', 'fbdir').catch(() => null));
@@ -2566,7 +2585,7 @@ async function fbPerm(dir, ask) {
 async function fbWrite(manual) {
   const dir = await fbGet(); if (!dir) return false;
   if (!(await fbPerm(dir, manual))) { lsSet('unica_fbstate', 'perm'); return false; }
-  const d = new Date(), p2 = n => String(n).padStart(2, '0'), name = 'Unica_backup_' + d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()) + '_' + p2(d.getHours()) + p2(d.getMinutes()) + '.enc';
+  const d = new Date(), p2 = n => String(n).padStart(2, '0'), name = 'VortexHub_backup_' + d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()) + '_' + p2(d.getHours()) + p2(d.getMinutes()) + '.enc';
   const fh = await dir.getFileHandle(name, { create: true }), w = await fh.createWritable(); await w.write(JSON.stringify(await exportBackup())); await w.close();
   const names = []; for await (const [n, e] of dir.entries()) if (e.kind === 'file' && FB_RE.test(n)) names.push(n);
   names.sort().reverse(); for (const n of names.slice(fbKeep())) await dir.removeEntry(n);
@@ -2711,7 +2730,7 @@ async function exportCsvVault() {
   if (!(await ask('Esporta in chiaro', 'Il file CSV conterrà le password NON cifrate: chiunque lo apra le legge. Conservalo al sicuro ed eliminalo dopo l’uso. Per un backup usa il file cifrato .enc.', { ok: 'Esporta CSV' }))) return;
   const L = vitems().filter(i => i.type === 'login');
   const csv = 'name,url,username,password,notes,category,owner\r\n' + L.map(i => [titleOf(i), i.data.domain ? 'https://' + i.data.domain : '', i.data.username, i.data.password, i.data.notes, i.data.category, i.data.owner].map(csvCell).join(',')).join('\r\n');
-  download('unica-vault-' + new Date().toISOString().slice(0, 10) + '.csv', new Blob([csv], { type: 'text/csv' })); toast('Esportate ' + L.length + ' voci (file in chiaro!)');
+  download('vortexhub-vault-' + new Date().toISOString().slice(0, 10) + '.csv', new Blob([csv], { type: 'text/csv' })); toast('Esportate ' + L.length + ' voci (file in chiaro!)');
 }
 
 /* --- 3. Installazione, diagnostica, guida, notifiche, reset --- */
@@ -2721,7 +2740,7 @@ const isStandalone = () => matchMedia('(display-mode: standalone)').matches || n
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 function extraSettings() {
   const np = 'Notification' in window ? Notification.permission : 'unsupported';
-  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Unica è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('install') + ' Installa Unica</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">' + h(instWhy()) + '</p>') +
+  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Vortex Hub è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('install') + ' Installa Vortex Hub</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">' + h(instWhy()) + '</p>') +
     '<div class="stack mt"><button class="btn blk" data-act="logoSweep">' + ic('refresh') + ' Scarica i loghi mancanti</button><button class="btn blk" data-act="diag">Aggiornamento e diagnostica</button><button class="btn blk" data-act="guide">' + ic('file') + ' Guida all’uso</button></div></div>' +
     '<div class="card"><h3>Vault: CSV</h3><p class="sm mut">Importa da Chrome, Edge, Firefox, Bitwarden e simili (nome, sito, utente, password). L’esportazione è in chiaro: usala con cautela.</p><div class="stack"><button class="btn blk" data-act="csvIn">' + ic('up') + ' Importa accessi da CSV</button><button class="btn blk" data-act="csvOut">' + ic('dl') + ' Esporta accessi in CSV</button></div></div>' +
     '<div class="card"><h3>Notifiche e preferenze</h3>' + (np === 'unsupported' ? '' : '<p class="sm mut">Notifica generica quando un avviso di prezzo viene raggiunto (senza dettagli dei tuoi dati). Stato: ' + (np === 'granted' ? 'attive' : np === 'denied' ? 'bloccate dal browser' : 'non attive') + '.</p>' + (np === 'default' ? '<button class="btn blk" data-act="notifOn">Attiva le notifiche</button>' : '')) +
@@ -2731,7 +2750,7 @@ function extraSettings() {
 const GUIDE = [
   ['Primi passi', 'Crea l’account con una master password lunga e scrivi su carta le 24 parole di recupero: sono l’unico modo per rientrare se dimentichi la password. Facoltativo: attiva la passkey per sbloccare con impronta o volto.'],
   ['Due livelli di accesso', 'Le carte fedeltà si aprono subito. Vault e Conti stanno nell’area protetta: servono la master password o la passkey, e si blocca da sola dopo l’inattività scelta in Impostazioni.'],
-  ['Carte fedeltà', 'Aggiungi con il + o scansiona il codice con la fotocamera. Unica cerca da sola sito, logo e negozio vicino. Tocca una carta per mostrare il codice a schermo intero (lo schermo resta acceso). Puoi ordinare per recenti, più usate, A–Z, e condividere una carta con un link o un file cifrato.'],
+  ['Carte fedeltà', 'Aggiungi con il + o scansiona il codice con la fotocamera. Vortex Hub cerca da sola sito, logo e negozio vicino. Tocca una carta per mostrare il codice a schermo intero (lo schermo resta acceso). Puoi ordinare per recenti, più usate, A–Z, e condividere una carta con un link o un file cifrato.'],
   ['Vault', 'Accessi, note e file cifrati. Viste a schede, tabella o icone; filtri per categoria e proprietario; selezione multipla; generatore di password; controllo di password deboli, ripetute o compromesse; condivisione cifrata con codice monouso; import/export CSV.'],
   ['Conti e dashboard', 'Patrimonio, conti, titoli, BTP, Poste, PAC, ribilanciamento, flussi di cassa, simulatori, spese, budget e avvisi di prezzo. Aggiorna i prezzi con «Quote JSON». Il report si stampa o si esporta in Excel.'],
   ['Assistente e ricerca', 'Ctrl/Cmd+K cerca ovunque. L’assistente risponde in locale su carte, Vault, conti e scadenze; puoi dettare le domande. Nulla viene inviato a servizi di intelligenza artificiale.'],
@@ -2774,7 +2793,7 @@ const DGA = {
   importQuotes = async function () {
     const before = finLoaded() ? FIN().priceAlerts.filter(a => a.status === 'hit' && !a.seen).length : 0;
     await iq.apply(this, arguments);
-    try { const n = finLoaded() ? FIN().priceAlerts.filter(a => a.status === 'hit' && !a.seen).length : 0; if (n > before) { buzz([40,60,40]); notify('Unica', { body: 'Un avviso di prezzo è stato raggiunto.', tag: 'unica-alert' }); } } catch (e) { }
+    try { const n = finLoaded() ? FIN().priceAlerts.filter(a => a.status === 'hit' && !a.seen).length : 0; if (n > before) { buzz([40,60,40]); notify('Vortex Hub', { body: 'Un avviso di prezzo è stato raggiunto.', tag: 'unica-alert' }); } } catch (e) { }
   };
 }
 
@@ -2872,7 +2891,7 @@ async function wikiDomain(name) {
    Parte solo il testo che scrivi nella chat. Carte, Vault e Conti non vengono mai inviati. */
 const AI = { cfg: null, hist: [], busy: false, ctl: null,
   prov: { anthropic: { n: 'Claude (Anthropic)', host: 'api.anthropic.com', model: 'claude-sonnet-5-5' }, openai: { n: 'OpenAI', host: 'api.openai.com', model: 'gpt-4o-mini' } } };
-const AI_SYS = 'Sei l’assistente generativo integrato in Unica, un’app personale per carte fedeltà, password e conti. Rispondi sempre in italiano, in modo chiaro e conciso. Non hai accesso ai dati dell’utente (carte, Vault, conti, password): se servono, invita a usare l’assistente locale o a guardare nell’app. Non chiedere mai password, codici, IBAN o numeri di carta. Per temi finanziari o legali dai informazioni generali e ricorda che non sei un consulente.';
+const AI_SYS = 'Sei l’assistente generativo integrato in Vortex Hub, un’app personale per carte fedeltà, password e conti. Rispondi sempre in italiano, in modo chiaro e conciso. Non hai accesso ai dati dell’utente (carte, Vault, conti, password): se servono, invita a usare l’assistente locale o a guardare nell’app. Non chiedere mai password, codici, IBAN o numeri di carta. Per temi finanziari o legali dai informazioni generali e ricorda che non sei un consulente.';
 async function aiLoad() {
   if (AI.cfg || !S.kcKey) return AI.cfg;
   try { const r = await DB.get('meta', 'ai'); if (r) AI.cfg = JSON.parse(td.decode(await unseal(S.kcKey, r, 'ai'))); } catch (e) { AI.cfg = null; }
@@ -3009,22 +3028,20 @@ ACT.aiLocal = async () => {
   const lg = k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, ls = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
   const http = /^https?:$/.test(location.protocol);
   /* 1. Autosufficiente: se manifest o icone mancano (es. si è copiato solo index.html), li genera al volo */
+  let LG = null;
   function iconUrl(sz, mask) {
     const c = document.createElement('canvas'); c.width = c.height = sz; const x = c.getContext('2d');
-    const g = x.createLinearGradient(0, 0, sz, sz); g.addColorStop(0, '#22d3ee'); g.addColorStop(.55, '#8b5cf6'); g.addColorStop(1, '#f472b6');
-    x.fillStyle = g; if (mask) x.fillRect(0, 0, sz, sz); else { const r = sz * .22; x.beginPath(); x.moveTo(r, 0); x.arcTo(sz, 0, sz, sz, r); x.arcTo(sz, sz, 0, sz, r); x.arcTo(0, sz, 0, 0, r); x.arcTo(0, 0, sz, 0, r); x.fill(); }
-    const k = mask ? .62 : .5, w = sz * k * .62, hh = sz * k * .5, cx = sz / 2, y0 = sz * .5;
-    x.strokeStyle = '#fff'; x.lineWidth = sz * .045; x.beginPath(); x.arc(cx, y0, w * .32, Math.PI, 0); x.stroke();
-    x.fillStyle = 'rgba(255,255,255,.96)'; x.beginPath(); x.roundRect ? x.roundRect(cx - w / 2, y0, w, hh, sz * .05) : x.rect(cx - w / 2, y0, w, hh); x.fill();
-    x.fillStyle = '#6d28d9'; x.beginPath(); x.arc(cx, y0 + hh * .38, sz * .03, 0, 7); x.fill(); x.fillRect(cx - sz * .012, y0 + hh * .45, sz * .024, hh * .35);
+    x.fillStyle = '#aab6c2'; if (mask) x.fillRect(0, 0, sz, sz); else { const r = sz * .22; x.beginPath(); x.moveTo(r, 0); x.arcTo(sz, 0, sz, sz, r); x.arcTo(sz, sz, 0, sz, r); x.arcTo(0, sz, 0, 0, r); x.arcTo(0, 0, sz, 0, r); x.fill(); }
+    const k = mask ? .68 : .9; if (LG) x.drawImage(LG, sz * (1 - k) / 2, sz * (1 - k) / 2, sz * k, sz * k);
     return c.toDataURL('image/png');
   }
   async function selfContained() {
     if (!http) return;
     let ok = false; try { const r = await fetch('manifest.webmanifest', { cache: 'no-store' }); ok = r.ok; } catch (e) { }
     if (ok) return;
+    try { LG = new Image(); LG.src = LOGO; await LG.decode(); } catch (e) { LG = null; }
     const base = location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, ''), i192 = iconUrl(192), i512 = iconUrl(512), m512 = iconUrl(512, true);
-    const man = { id: base, name: 'Unica', short_name: 'Unica', description: 'Carte, conti e password in un\'unica app cifrata', lang: 'it', start_url: base, scope: base, shortcuts: [['Carte preferite', 'Preferite', 'fav'], ['Scansiona carta', 'Scansiona', 'scan'], ['Nuova carta', 'Nuova carta', 'new'], ['Vault', 'Vault', 'vault'], ['Conti', 'Conti', 'fin']].map(s => ({ name: s[0], short_name: s[1], url: base + '?go=' + s[2], icons: [{ src: base + 'icons/icon-192x192.png', sizes: '192x192', type: 'image/png' }] })), display: 'standalone', background_color: '#060818', theme_color: '#060818', icons: [{ src: i192, sizes: '192x192', type: 'image/png' }, { src: i512, sizes: '512x512', type: 'image/png' }, { src: m512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }] };
+    const man = { id: base, name: 'Vortex Hub', short_name: 'Vortex Hub', description: 'Carte, conti e password in un\'unica app cifrata', lang: 'it', start_url: base, scope: base, shortcuts: [['Carte preferite', 'Preferite', 'fav'], ['Scansiona carta', 'Scansiona', 'scan'], ['Nuova carta', 'Nuova carta', 'new'], ['Vault', 'Vault', 'vault'], ['Conti', 'Conti', 'fin']].map(s => ({ name: s[0], short_name: s[1], url: base + '?go=' + s[2], icons: [{ src: base + 'icons/icon-192x192.png', sizes: '192x192', type: 'image/png' }] })), display: 'standalone', background_color: '#060818', theme_color: '#060818', icons: [{ src: i192, sizes: '192x192', type: 'image/png' }, { src: i512, sizes: '512x512', type: 'image/png' }, { src: m512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }] };
     const l = document.querySelector('link[rel=manifest]') || document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'manifest' }));
     l.href = URL.createObjectURL(new Blob([JSON.stringify(man)], { type: 'application/manifest+json' }));
     document.querySelectorAll('link[rel=apple-touch-icon],link[rel=icon]').forEach(e => e.remove());
@@ -3042,8 +3059,8 @@ ACT.aiLocal = async () => {
     const snooze = +lg('unica_insnz') || 0; if (lg('unica_indone') === '1' || Date.now() < snooze) return;
     const canPrompt = typeof DEFP !== 'undefined' && DEFP; if (!canPrompt && !ios()) return;
     shown = true;
-    const b = document.createElement('div'); b.id = 'inb'; b.className = 'inb'; b.setAttribute('role', 'region'); b.setAttribute('aria-label', 'Installa Unica');
-    b.innerHTML = '<div class="inbt"><b>Installa Unica</b><span>' + (canPrompt ? 'Aprila come un’app, anche offline.' : 'Tocca Condividi, poi «Aggiungi alla schermata Home».') + '</span></div>' + (canPrompt ? '<button class="btn pri sm" data-in="go">' + ic('install') + ' Installa</button>' : '') + '<button class="btn sm" data-in="later">' + ic('clock') + ' Più tardi</button><button class="ib" data-in="never" aria-label="Non chiedere più">' + ic('x') + '</button>';
+    const b = document.createElement('div'); b.id = 'inb'; b.className = 'inb'; b.setAttribute('role', 'region'); b.setAttribute('aria-label', 'Installa Vortex Hub');
+    b.innerHTML = '<div class="inbt"><b>Installa Vortex Hub</b><span>' + (canPrompt ? 'Aprila come un’app, anche offline.' : 'Tocca Condividi, poi «Aggiungi alla schermata Home».') + '</span></div>' + (canPrompt ? '<button class="btn pri sm" data-in="go">' + ic('install') + ' Installa</button>' : '') + '<button class="btn sm" data-in="later">' + ic('clock') + ' Più tardi</button><button class="ib" data-in="never" aria-label="Non chiedere più">' + ic('x') + '</button>';
     b.addEventListener('click', async e => {
       const t = e.target.closest('[data-in]'); if (!t) return; const a = t.dataset.in;
       if (a === 'go' && DEFP) { try { DEFP.prompt(); await DEFP.userChoice; } catch (x) { } DEFP = null; }
@@ -3177,7 +3194,7 @@ function gEval() {
 }
 async function gNotify(c) {
   const card = S.cards.get(c.id); if (!card || Date.now() - (GEO.last[c.id] || 0) < GEO_COOL) return; GEO.last[c.id] = Date.now(); buzz([200, 100, 200]);
-  const cfg = gcfg(), title = cfg.name ? card.data.name + ' – sei al negozio' : 'Unica – sei vicino a un negozio';
+  const cfg = gcfg(), title = cfg.name ? card.data.name + ' – sei al negozio' : 'Vortex Hub – sei vicino a un negozio';
   gBanner(card, title); notify(title, { body: 'Tocca per aprire la carta.', tag: 'unica-geo-' + c.id, data: { cardId: c.id }, actions: [{ action: 'open', title: 'Apri carta' }] });
 }
 function gBanner(card, title) {
@@ -3224,7 +3241,7 @@ Object.assign(ACT, {
   async plHere() { plSet(U.cform.place, 'Rilevo la posizione…'); try { const p = await gHere(); plSet({ lat: +p.coords.latitude.toFixed(6), lng: +p.coords.longitude.toFixed(6) }, 'Posizione attuale: ' + p.coords.latitude.toFixed(5) + ', ' + p.coords.longitude.toFixed(5)); } catch (e) { plSet(U.cform.place, 'Posizione non disponibile: consentila nelle impostazioni del browser.'); } },
   async plFind() {
     const name = $('c_n').value.trim(); if (norm(name).length < 3) return toast('Scrivi prima il nome del negozio');
-    if (!nearOn() && !(await ask('Posizione e OpenStreetMap', 'Per trovare il negozio, Unica usa la tua posizione approssimata (~100 m) e invia a OpenStreetMap quell’area e il nome del negozio. Procedere?', { ok: 'Procedi' }))) return; localStorage.setItem('unica_near', '1');
+    if (!nearOn() && !(await ask('Posizione e OpenStreetMap', 'Per trovare il negozio, Vortex Hub usa la tua posizione approssimata (~100 m) e invia a OpenStreetMap quell’area e il nome del negozio. Procedere?', { ok: 'Procedi' }))) return; localStorage.setItem('unica_near', '1');
     plSet(U.cform.place, 'Cerco il negozio più vicino…');
     try { const p = await gHere(), lat = p.coords.latitude, lng = p.coords.longitude, clat = Math.round(lat * 1000) / 1000, clng = Math.round(lng * 1000) / 1000, rx = gOverpassRx([name]);
       const j = await gOverpass('[out:json][timeout:15];(nwr["name"~"' + rx + '",i](around:2500,' + clat + ',' + clng + ');nwr["brand"~"' + rx + '",i](around:2500,' + clat + ',' + clng + ');nwr["operator"~"' + rx + '",i](around:2500,' + clat + ',' + clng + '););out tags geom;');
@@ -3237,7 +3254,7 @@ Object.assign(ACT, {
   },
   plClear() { plSet(null, 'Nessuna posizione salvata.'); },
   geoOn: async t => {
-    if (t.checked) { if (!(await ask('Avvisi di vicinanza', 'Mentre l’app è aperta Unica segue la tua posizione e, quando sei dentro o vicino a un negozio di cui hai la carta, ti avvisa. Invia a OpenStreetMap solo un’area di ~100 m e i NOMI dei tuoi negozi (non i codici). Attivare?', { ok: 'Attiva' }))) { t.checked = false; return; }
+    if (t.checked) { if (!(await ask('Avvisi di vicinanza', 'Mentre l’app è aperta Vortex Hub segue la tua posizione e, quando sei dentro o vicino a un negozio di cui hai la carta, ti avvisa. Invia a OpenStreetMap solo un’area di ~100 m e i NOMI dei tuoi negozi (non i codici). Attivare?', { ok: 'Attiva' }))) { t.checked = false; return; }
       localStorage.setItem('unica_near', '1'); gset({ on: true }); if ('Notification' in window && Notification.permission === 'default') try { await Notification.requestPermission(); } catch (e) { } gStart(); }
     else { gset({ on: false }); gStop(); } render();
   },
@@ -3245,14 +3262,14 @@ Object.assign(ACT, {
   async geoTest() {
     if (!('Notification' in window)) return toast('Questo browser non supporta le notifiche');
     if (Notification.permission !== 'granted') { const p = await Notification.requestPermission(); if (p !== 'granted') return toast('Notifiche non consentite: abilitale dalle impostazioni del browser'); }
-    const c = cardsArr()[0]; const ok = await notify(c && gcfg().name ? c.data.name + ' – sei al negozio' : 'Unica – notifica di prova', { body: 'Questa è una notifica di prova.', tag: 'unica-test', data: c ? { cardId: c.id } : {} }); if (c) gBanner(c, c.data.name + ' – notifica di prova'); if (!ok) toast('Notifica non mostrata dal sistema');
+    const c = cardsArr()[0]; const ok = await notify(c && gcfg().name ? c.data.name + ' – sei al negozio' : 'Vortex Hub – notifica di prova', { body: 'Questa è una notifica di prova.', tag: 'unica-test', data: c ? { cardId: c.id } : {} }); if (c) gBanner(c, c.data.name + ' – notifica di prova'); if (!ok) toast('Notifica non mostrata dal sistema');
   },
   geoScan() { if (!navigator.geolocation) return; GEO.err = ''; GEO.backoff = 0; navigator.geolocation.getCurrentPosition(p => { gOnPos(p); gQuery(true); }, gOnErr, { enableHighAccuracy: true, timeout: 15000 }); }
 });
 {
   const s1 = V.settings;
   V.settings = () => { const s = s1(), i = s.lastIndexOf('</main>'), c = gcfg(), np = 'Notification' in window ? Notification.permission : 'unsupported'; if (i < 0) return s;
-    return s.slice(0, i) + '<div class="card"><h3>Avvisi di vicinanza ai negozi</h3><p class="sm mut">Con l’app aperta, Unica segue il GPS e ti avvisa quando sei al negozio di una tua carta (dentro l’edificio o a pochi metri). Nessun dato di posizione lascia il dispositivo, tranne un’area di ~100 m e i nomi dei negozi verso OpenStreetMap.</p>' +
+    return s.slice(0, i) + '<div class="card"><h3>Avvisi di vicinanza ai negozi</h3><p class="sm mut">Con l’app aperta, Vortex Hub segue il GPS e ti avvisa quando sei al negozio di una tua carta (dentro l’edificio o a pochi metri). Nessun dato di posizione lascia il dispositivo, tranne un’area di ~100 m e i nomi dei negozi verso OpenStreetMap.</p>' +
       '<label class="chk"><input type="checkbox" data-act="geoOn"' + (c.on ? ' checked' : '') + '><span>Avvisami quando sono vicino a un negozio</span></label>' +
       '<div class="gap" style="margin-top:8px"><span class="sp">Distanza di avviso</span><select class="in" style="width:auto" data-act="geoRad" aria-label="Distanza di avviso">' + [20, 30, 50, 100].map(r => '<option value="' + r + '"' + (c.radius === r ? ' selected' : '') + '>' + r + ' m</option>').join('') + '</select></div>' +
       '<label class="chk" style="margin-top:8px"><input type="checkbox" data-act="geoWake"' + (c.wake ? ' checked' : '') + '><span>Tieni lo schermo acceso (consuma batteria)</span></label>' +
@@ -3358,7 +3375,7 @@ Object.assign(ACT, {
   },
   async pushDay(t) { pset({ dow: +t.value }); if (pcfg().on) await pushSubscribe().catch(e => toast(e.message)); },
   async pushHour(t) { pset({ hour: +t.value }); if (pcfg().on) await pushSubscribe().catch(e => toast(e.message)); },
-  async pushTest() { const ok = await notify('Unica · promemoria', { body: 'Controlla il backup cifrato e le scadenze: apri Unica.', tag: 'unica-reminder' }); if (!ok) toast(Notification.permission === 'denied' ? 'Notifiche bloccate dal browser' : 'Notifica non mostrata'); }
+  async pushTest() { const ok = await notify('Vortex Hub · promemoria', { body: 'Controlla il backup cifrato e le scadenze: apri Vortex Hub.', tag: 'unica-reminder' }); if (!ok) toast(Notification.permission === 'denied' ? 'Notifiche bloccate dal browser' : 'Notifica non mostrata'); }
 });
 { const s1 = V.settings; V.settings = () => { const s = s1(), i = s.lastIndexOf('</main>'); if (i < 0) return s; const c = pcfg(), sy = !!SY.cfg;
   return s.slice(0, i) + '<div class="card"><h3>Notifiche push</h3>' + (!pushOk() ? '<p class="sm mut">Non disponibili qui: servono https, un browser compatibile e (su iPhone) l’app aggiunta alla schermata Home.</p>' :
@@ -3535,7 +3552,7 @@ const totpFmt = c => c.length === 6 ? c.slice(0, 3) + ' ' + c.slice(3) : c.lengt
 (function () {
   const vf = vxFields; vxFields = function (d) {
     const base = vf(d); if (!U.form || U.form.type !== 'login') return base;
-    return base + '<label class="f" for="f_totp">Codice 2FA (facoltativo)</label><div class="pw"><input class="in mono" id="f_totp" type="password" value="' + h(d.totp || '') + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Chiave segreta o link otpauth://"><button type="button" class="btn" data-act="eye" data-for="f_totp" aria-label="Mostra o nascondi">' + ic('eye') + '</button><button type="button" class="btn" data-act="totpScan" aria-label="Scansiona il QR">' + ic('scan') + '</button></div><p class="sm mut">Incolla la chiave che ti mostra il sito (o scansiona il suo QR): Unica genererà i codici a 6 cifre. Resta cifrata come la password.</p><p class="sm bad" id="totperr" role="alert"></p>';
+    return base + '<label class="f" for="f_totp">Codice 2FA (facoltativo)</label><div class="pw"><input class="in mono" id="f_totp" type="password" value="' + h(d.totp || '') + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Chiave segreta o link otpauth://"><button type="button" class="btn" data-act="eye" data-for="f_totp" aria-label="Mostra o nascondi">' + ic('eye') + '</button><button type="button" class="btn" data-act="totpScan" aria-label="Scansiona il QR">' + ic('scan') + '</button></div><p class="sm mut">Incolla la chiave che ti mostra il sito (o scansiona il suo QR): Vortex Hub genererà i codici a 6 cifre. Resta cifrata come la password.</p><p class="sm bad" id="totperr" role="alert"></p>';
   };
   const vx = vxExtra; vxExtra = function () { const o = vx(), f = $('f_totp'); if (f) { const c = totpParse(f.value); o.totp = c ? f.value.trim() : undefined; } return o; };
   /* validazione prima del salvataggio: se non valida avvisa */
@@ -3846,7 +3863,7 @@ async function ocrRead(file, onSt) {
 }
 async function ocrConsent() {
   if (localStorage.getItem('unica_ocr') === '1') return true;
-  const ok = await ask('Leggere il testo da una foto', 'Unica scarica una sola volta il motore OCR (Tesseract, circa 10 MB) da cdn.jsdelivr.net. La foto resta sul dispositivo e viene letta in una finestra isolata che non vede i tuoi dati. Serve la connessione. Procedere?', { ok: 'Scarica e leggi' });
+  const ok = await ask('Leggere il testo da una foto', 'Vortex Hub scarica una sola volta il motore OCR (Tesseract, circa 10 MB) da cdn.jsdelivr.net. La foto resta sul dispositivo e viene letta in una finestra isolata che non vede i tuoi dati. Serve la connessione. Procedere?', { ok: 'Scarica e leggi' });
   if (ok) try { localStorage.setItem('unica_ocr', '1'); } catch (e) { } return ok;
 }
 function ocrParse(text) {
@@ -3929,7 +3946,7 @@ async function cardSealShare(d) {
   const card = { name: d.name, code: d.code, type: d.type, color: d.color, holder: d.holder || '', domain: d.domain || '', notes: d.notes || '' };
   const pl = { unicaFCard: 1, iter: KDF_ITER, salt: b64e(salt), ...(await seal(key, te.encode(JSON.stringify({ v: 1, sid, exp: Date.now() + CSH.ttl, card })), CSH.aad)) };
   const slug = String(d.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'carta';
-  return { code, file: new File([JSON.stringify(pl)], 'Unica_carta_' + slug + '.json', { type: 'application/json' }) };
+  return { code, file: new File([JSON.stringify(pl)], 'VortexHub_carta_' + slug + '.json', { type: 'application/json' }) };
 }
 async function cardShareFile(id, m) {
   const c = S.cards.get(id); if (!c) return; const box = m.q('#shfa'); box.innerHTML = '<p class="sm mut">Cifro…</p>';
@@ -3942,7 +3959,7 @@ async function cardShareFile(id, m) {
 }
 async function cardOpenShareFile(txt) {
   let pl; try { pl = JSON.parse(txt); } catch (e) { return toast('File non valido'); }
-  if (!pl || !pl.unicaFCard) return toast('Non è una carta condivisa con Unica');
+  if (!pl || !pl.unicaFCard) return toast('Non è una carta condivisa con Vortex Hub');
   const code = await askText('Carta condivisa', 'Inserisci il codice che ti ha dato il mittente (es. ABCD-EFGH-JKLM).', true); if (!code) return;
   let o; try { toast('Decifro…'); const key = await kekPw(code.toUpperCase().replace(/[^A-Z0-9]/g, ''), b64d(pl.salt), Math.min(+pl.iter || KDF_ITER, 2000000)); o = JSON.parse(td.decode(await unseal(key, pl, CSH.aad))); } catch (e) { return toast('Codice errato o file non valido.'); }
   if (!o || !o.card) return toast('File non valido');
@@ -4007,7 +4024,7 @@ function openRotate() {
   const m = modal('<div id="rkb"></div>'); let step = 1, acc = null, chk = null;
   const draw = () => {
     const box = m.q('#rkb');
-    if (step === 1) box.innerHTML = '<div class="gap"><h2 class="sp" style="margin:0">Cambia le chiavi di cifratura</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><p>Usalo se hai perso un dispositivo o sospetti che qualcuno abbia avuto accesso ai tuoi dati sbloccati. Unica genera <b>chiavi nuove</b>, ricifra tutto e crea un <b>nuovo codice di recupero</b>.</p><ul class="sm"><li>Il vecchio codice di recupero smette di funzionare per i dati attuali.</li><li>Se usi la sincronizzazione, viene creato uno spazio nuovo e il vecchio viene eliminato: gli altri dispositivi vanno ricollegati con il nuovo codice.</li><li>La passkey va riattivata.</li><li>Una copia di sicurezza interna con le chiavi precedenti viene creata prima (eliminala dopo, se il rischio era la compromissione del dispositivo).</li></ul><form id="rkf"><label class="f" for="rk_p">Master password (attuale o nuova)</label><div class="pw"><input class="in mono" id="rk_p" type="password" autocomplete="current-password" required><button type="button" class="btn" data-act="eye" data-for="rk_p" aria-label="Mostra o nascondi">' + ic('eye') + '</button></div><p class="sm mut">Se vuoi cambiare anche la password, scrivine una nuova: verrà usata da ora in poi.</p><label class="f" for="rk_c">Per confermare, scrivi la password attuale</label><input class="in mono" id="rk_c" type="password" autocomplete="off" required><p class="sm bad" id="rk_e" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Continua</button></div></form>';
+    if (step === 1) box.innerHTML = '<div class="gap"><h2 class="sp" style="margin:0">Cambia le chiavi di cifratura</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><p>Usalo se hai perso un dispositivo o sospetti che qualcuno abbia avuto accesso ai tuoi dati sbloccati. Vortex Hub genera <b>chiavi nuove</b>, ricifra tutto e crea un <b>nuovo codice di recupero</b>.</p><ul class="sm"><li>Il vecchio codice di recupero smette di funzionare per i dati attuali.</li><li>Se usi la sincronizzazione, viene creato uno spazio nuovo e il vecchio viene eliminato: gli altri dispositivi vanno ricollegati con il nuovo codice.</li><li>La passkey va riattivata.</li><li>Una copia di sicurezza interna con le chiavi precedenti viene creata prima (eliminala dopo, se il rischio era la compromissione del dispositivo).</li></ul><form id="rkf"><label class="f" for="rk_p">Master password (attuale o nuova)</label><div class="pw"><input class="in mono" id="rk_p" type="password" autocomplete="current-password" required><button type="button" class="btn" data-act="eye" data-for="rk_p" aria-label="Mostra o nascondi">' + ic('eye') + '</button></div><p class="sm mut">Se vuoi cambiare anche la password, scrivine una nuova: verrà usata da ora in poi.</p><label class="f" for="rk_c">Per confermare, scrivi la password attuale</label><input class="in mono" id="rk_c" type="password" autocomplete="off" required><p class="sm bad" id="rk_e" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Continua</button></div></form>';
     else box.innerHTML = '<h2>Nuovo codice di recupero</h2><p class="mut">Scrivi queste 24 parole su carta, in un posto sicuro e offline. <b>Il vecchio codice non vale più.</b></p><div class="words" aria-label="24 parole">' + acc.words.map((w, i) => '<div class="w1"><small>' + (i + 1) + '</small><b class="mono">' + h(w) + '</b></div>').join('') + '</div><form id="rkf2"><label class="f" for="rk_w1">Conferma: scrivi la parola n. ' + chk[0] + '</label><input class="in" id="rk_w1" autocapitalize="off" autocomplete="off" spellcheck="false"><label class="f" for="rk_w2">e la parola n. ' + chk[1] + '</label><input class="in" id="rk_w2" autocapitalize="off" autocomplete="off" spellcheck="false"><label class="chk"><input type="checkbox" id="rk_k"><span>Ho salvato il nuovo codice in un posto sicuro.</span></label><p class="sm bad" id="rk_e" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Cambia le chiavi</button></div></form>';
   };
   m.el.addEventListener('submit', async e => {
@@ -4374,6 +4391,45 @@ function hdrFix(html) {
     return '<button class="ib hb"' + a + '><span class="hi" style="--h:' + sp[2] + '">' + ic(sp[1]) + '</span><span class="hl">' + sp[0] + '</span></button>';
   });
 }
+
+/* ===== v2.8: Impostazioni raggruppate in sezioni ripiegabili con ricerca ===== */
+(function () {
+  const SEC = [
+    { k: 'asp', t: 'Aspetto', d: 'Tema, testo, vibrazione', i: 'eye', h: 262, m: ['Aspetto'] },
+    { k: 'sic', t: 'Sicurezza e accesso', d: 'Blocco automatico, impronta / Face ID, password', i: 'shield', h: 150, m: ['Sicurezza', 'Sblocco biometrico'] },
+    { k: 'dat', t: 'Dati e backup', d: 'Backup, copie automatiche, sincronizzazione', i: 'dl', h: 205, m: ['Backup', 'Backup interni', 'Backup automatico', 'Sincronizzazione'] },
+    { k: 'car', t: 'Carte e Vault', d: 'Importazioni, vicinanza ai negozi, CSV', i: 'card', h: 28, m: ['Carte', 'Vault: CSV', 'Avvisi di vicinanza'] },
+    { k: 'not', t: 'Notifiche', d: 'Avvisi e notifiche push', i: 'bell', h: 345, m: ['Notifiche'] },
+    { k: 'ia', t: 'Assistente IA', d: 'Chat con la tua chiave API (facoltativa)', i: 'spark', h: 285, m: ['IA generativa'] },
+    { k: 'inf', t: 'App e informazioni', d: 'Versione, installazione, privacy, dati', i: 'info', h: 220, m: ['Privacy', 'Info', 'Installazione'] }
+  ];
+  const getOpen = () => { try { return JSON.parse(lsg('unica_setopen') || '["sic"]'); } catch (e) { return ['sic']; } };
+  const setOpen = a => lss('unica_setopen', JSON.stringify(a));
+  const titleOf2 = c => { const e = c.querySelector('h2,h3,b'); return e ? e.textContent.trim() : ''; };
+  const s0 = V.settings;
+  V.settings = function () {
+    const html = s0.apply(this, arguments), a = html.indexOf('<main class="wrap">'), z = html.lastIndexOf('</main>'); if (a < 0 || z < 0) return html;
+    const head = html.slice(0, a + 19), tail = html.slice(z), tpl = document.createElement('template'); tpl.innerHTML = html.slice(a + 19, z);
+    const cards = [...tpl.content.children], groups = new Map(SEC.map(x => [x.k, []])), other = [];
+    for (const c of cards) { const t = titleOf2(c), sec = SEC.find(x => x.m.some(p => t.startsWith(p))); (sec ? groups.get(sec.k) : other).push(c.outerHTML); }
+    const open = getOpen(); let out = '<div class="sgsearch"><input class="in" id="sset" type="search" placeholder="Cerca nelle impostazioni…" aria-label="Cerca nelle impostazioni" autocomplete="off"></div><div class="sgs">';
+    const sec = (k, t, d, i, hue, body) => '<details class="sg" data-k="' + k + '" data-t="' + h(t + ' ' + d) + '"' + (open.includes(k) ? ' open' : '') + '><summary><span class="sgi" style="--h:' + hue + '">' + ic(i) + '</span><span class="sgt"><b>' + h(t) + '</b><span>' + h(d) + '</span></span><i class="chev"></i></summary><div class="sgb">' + body.join('') + '</div></details>';
+    for (const x of SEC) if (groups.get(x.k).length) out += sec(x.k, x.t, x.d, x.i, x.h, groups.get(x.k));
+    if (other.length) out += sec('alt', 'Altro', 'Altre impostazioni', 'gear', 200, other);
+    out += '</div><p class="sm mut c" id="sempty" hidden>Nessuna impostazione trovata.</p>';
+    return head + out + tail;
+  };
+  document.addEventListener('toggle', e => { const t = e.target; if (!t || !t.classList || !t.classList.contains('sg')) return; const q = document.getElementById('sset'); if (q && q.value) return; const o = new Set(getOpen()); t.open ? o.add(t.dataset.k) : o.delete(t.dataset.k); setOpen([...o]); }, true);
+  document.addEventListener('input', e => {
+    const q0 = e.target; if (!q0 || q0.id !== 'sset') return; const q = fwn(q0.value), open = getOpen(); let tot = 0;
+    document.querySelectorAll('.sg').forEach(sg => {
+      let any = false, tm = !q || fwn(sg.dataset.t).includes(q);
+      sg.querySelectorAll('.sgb>.card').forEach(c => { const m = tm || fwn(c.textContent).includes(q); c.hidden = !m; if (m) any = true; });
+      sg.hidden = !any; if (any) tot++; if (q) { if (any) sg.open = true; } else sg.open = open.includes(sg.dataset.k);
+    });
+    const em = document.getElementById('sempty'); if (em) em.hidden = tot > 0 || !q;
+  });
+})();
 
 /* ---------- avvio ---------- */
 (async function boot() {

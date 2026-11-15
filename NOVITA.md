@@ -1,4 +1,18 @@
-# Unica – stato dell'integrazione
+# Novità
+
+## 2.9.0 – Vortex Hub
+- L'app si chiama ora **Vortex Hub** (schermata iniziale, blocco, installazione, notifiche, manifest, privacy, guida).
+- Il tuo emblema è il logo dell'app: schermata iniziale, schermata di blocco e icone di installazione (192, 512, maskable, Apple, favicon).
+- Le icone sono incorporate anche nel service worker: se sul sito mancano i file in `icons/`, l'installazione resta possibile.
+- Dati, backup e account esistenti restano compatibili: i nomi interni (database, chiavi locali) non sono cambiati e i vecchi file `Unica_backup_*.enc` vengono ancora riconosciuti.
+- Nuovi file esportati: `VortexHub_backup_…`, `VortexHub_credenziale_…`, `VortexHub_carta_…`.
+- Se avevi installato la vecchia app, rimuovila e reinstallala per vedere nome e icona nuovi.
+
+## v2.8.0 — Impostazioni razionalizzate
+- Le 16 schede di Impostazioni (prima una pagina lunghissima) sono ora **7 sezioni ripiegabili**, ciascuna con icona a colori e descrizione: Aspetto · Sicurezza e accesso (con lo sblocco biometrico) · Dati e backup (backup, copie automatiche, cartella, sincronizzazione) · Carte e Vault (importazioni, vicinanza ai negozi, CSV) · Notifiche (preferenze e push) · Assistente IA · App e informazioni (versione, installazione, privacy).
+- **Ricerca** in cima: filtra e apre le sezioni che contengono il testo cercato (per esempio «biometr», «backup», «chiave»).
+- L'app ricorda quali sezioni hai aperto; la prima volta è aperta solo «Sicurezza e accesso».
+- Nessuna funzione tolta: tutte le azioni e i campi di prima sono ancora presenti, solo raggruppati.
 
 ## v2.7.1 — Tema chiaro: cielo, nuvole e colline (al posto delle bolle)
 - Cielo azzurro-pesca con sole luminoso e fasci di luce che ondeggiano piano.

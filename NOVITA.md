@@ -1,5 +1,45 @@
 # Novità
 
+## 2.13.0
+- **Agenda e sicurezza:** nuova schermata (Home → «Agenda e sicurezza») che riunisce scadenze personali, avvisi (carte in scadenza, backup, sincronizzazione, password) e un punteggio di sicurezza da 0 a 100.
+- **Scadenze personali:** patente, passaporto, assicurazioni, bollo, garanzie, abbonamenti. Data, categoria, ripetizione annuale e preavviso a scelta (7–90 giorni). Sono cifrate con la chiave delle carte, quindi visibili senza sbloccare l’area protetta, viaggiano nel backup e nella sincronizzazione.
+- **Punteggio di sicurezza:** controlla backup recente, blocco automatico, sblocco con impronta/Face ID, dispositivi non usati da oltre 90 giorni e, con l’area protetta aperta, password deboli, ripetute o ferme da oltre un anno. Ogni punto da migliorare ha il suo pulsante.
+- **Home:** sotto l’assistente compaiono le scadenze vicine e il punteggio, con il pulsante per aprire l’agenda.
+- Le notifiche push per le scadenze non sono ancora incluse.
+
+## 2.12.0
+- Nuovo logo (vortice blu e arancio con portafoglio, grafico e cassaforte) in schermata iniziale, blocco, icona dell'app, icone maskable, icona Apple e favicon. Nel logo dell'app il fondo è circolare e trasparente fuori dal cerchio.
+- Colori dell'interfaccia uniformati al logo: blu e azzurro come tinta principale, arancio come accento (tema chiaro e scuro, cielo stellato, colline del tema giorno, pulsanti e icone delle sezioni). Resta solo l'effetto arcobaleno degli ologrammi delle carte.
+- Intestazione della Home: il titolo non viene più troncato (su schermi stretti la versione si legge in Impostazioni → Info).
+- Dopo l'aggiornamento, per vedere la nuova icona sulla schermata Home di Android può servire reinstallare l'app (fai prima un backup).
+
+## 2.11.0
+**Home: assistente**
+- Nuova scheda sotto il riepilogo: ora grande aggiornata ogni 15 secondi, data estesa e un breve «briefing» con quello che conta adesso.
+- Meteo (facoltativo): temperatura, condizioni, minima/massima, probabilità di pioggia e vento da Open-Meteo, con consigli («porta l’ombrello», «copriti bene», «bevi acqua») e il tempo di domani. Si attiva con un tocco sul riquadro meteo, dopo il tuo consenso. Aggiornamento ogni 30 minuti al massimo.
+- Il briefing usa solo dati locali delle carte: carte in scadenza, promemoria backup, errori di sincronizzazione, carte per i negozi vicini, stato offline, batteria bassa. Nulla dell’area protetta (Vault e Conti) compare nella Home.
+- Impostazioni → Aspetto → «Home e assistente»: nascondi l’assistente o spegni il meteo.
+
+## 2.10.1
+- Impostazioni più corte: all'apertura tutte le sezioni sono chiuse (prima «Sicurezza e accesso» occupava oltre 1200 px) e dentro ogni sezione le schede (Sicurezza, Dispositivi, Backup, Privacy…) sono righe a tendina con il solo titolo.
+- Le sezioni e le schede aperte vengono ricordate; la ricerca apre da sola le schede che contengono il testo cercato.
+- Nessuna modifica ai dati, alle chiavi o ai backup.
+
+## 2.10.0
+**Sicurezza**
+- Blocco automatico configurabile: area protetta (1/5/15/30 min), intera app (5 min–1 ora) e, a scelta, blocco quando esci dall'app (30 s o 2 min). Impostazioni → Sicurezza e accesso.
+- Promemoria backup più insistente: banner con pulsante «Backup ora» su Home e Carte, avviso una volta al giorno allo sblocco e conteggio delle modifiche non ancora salvate (da 15 in su).
+- Elenco dei dispositivi (Impostazioni → Sicurezza e accesso → Dispositivi): nome, ultimo accesso e versione; puoi rinominare questo dispositivo. «Revoca» avvia il cambio delle chiavi, che esclude davvero il dispositivo.
+
+**Uso quotidiano**
+- Home: sezione «Carte rapide» subito sotto il riepilogo (vicine, preferite, usate di recente) per mostrare una carta in due tocchi.
+- Nuova scorciatoia dell'icona «Ultima carta usata» (pressione lunga sull'icona dell'app, dopo aver reinstallato).
+- Carte: campo facoltativo «Scadenza» (mese/anno); etichetta «Scaduta» o «Scade fra N g» sulle carte e nei Promemoria.
+- Conti: categorie che imparano dalle tue spese (più di 2 voci simili già classificate), parole chiave ampliate, pulsante «Riclassifica» per le spese in «Varie / Altro» e grafico «Ultimi 6 mesi» con valori e mesi; toccando una barra apri quel mese.
+
+## 2.9.1
+- Rimossa la quadrettatura da tutti gli sfondi (tema chiaro e scuro).
+
 ## 2.9.0 – Vortex Hub
 - L'app si chiama ora **Vortex Hub** (schermata iniziale, blocco, installazione, notifiche, manifest, privacy, guida).
 - Il tuo emblema è il logo dell'app: schermata iniziale, schermata di blocco e icone di installazione (192, 512, maskable, Apple, favicon).

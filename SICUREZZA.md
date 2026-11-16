@@ -85,3 +85,28 @@ La passkey è creata come credenziale non rilevabile sul solo autenticatore del 
 
 ## Rinomina in Vortex Hub (2.9.0)
 Nessuna modifica crittografica: AES-256-GCM, PBKDF2 600k, sincronizzazione a conoscenza zero e codice di recupero restano identici. I nomi tecnici interni (database `unica`, chiavi `unica_*`, etichette di derivazione) sono rimasti invariati di proposito, perché cambiarli renderebbe illeggibili i dati e i backup già cifrati. Il logo è incorporato nel file, senza richieste di rete.
+
+
+## Blocco, backup e dispositivi (2.10.0)
+- Il blocco per uscita dall'app usa il momento in cui la pagina passa in secondo piano; è disattivato per impostazione predefinita perché alcuni selettori di file lo possono far scattare.
+- L'elenco dispositivi è un elemento cifrato come le carte (chiave dell'account) e viaggia con la sincronizzazione; il server non vede nomi né date.
+- La «revoca» non è un semplice flag: un dispositivo che ha già la chiave potrebbe continuare a leggere ciò che ha. Per questo avvia il cambio delle chiavi (nuove chiavi, nuovo codice di recupero, nuovo spazio di sincronizzazione). I dati già presenti sul dispositivo revocato non si possono cancellare da remoto.
+- Le categorie apprese e le scadenze restano sul dispositivo e nei backup cifrati; nessuna richiesta di rete in più.
+
+## Impostazioni compatte (2.10.1)
+Modifica solo di interfaccia: nessun cambiamento a cifratura, chiavi, backup o rete. La preferenza delle sezioni aperte (`unica_setopen`) contiene solo i nomi delle sezioni e delle schede, mai dati. Hash CSP di script e stile ricalcolati.
+
+## Assistente nella Home e meteo (2.11.0)
+- Nuovo host nella CSP (`connect-src`): `https://api.open-meteo.com`. Viene contattato solo se attivi il meteo e dopo un consenso esplicito.
+- Alla richiesta vanno solo latitudine e longitudine arrotondate a 2 decimali (circa 1 km), senza cookie né referrer. La posizione non viene salvata: in `localStorage` (`unica_wxc`) resta solo l’ultima previsione (temperature, codice meteo, vento, probabilità di pioggia).
+- Preferenze: `unica_wx` (meteo acceso, 1/0) e `unica_jv` (assistente visibile, 0 = nascosto).
+- Il briefing legge solo dati già disponibili senza area protetta (scadenze delle carte, età dell’ultimo backup, stato di sincronizzazione, carte vicine, batteria). Nessun dato del Vault o dei Conti, nessuna chiamata all’IA.
+
+## Nuovo logo e colori (2.12.0)
+Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di rete. Icone e logo sono immagini incorporate nella pagina (`data:`), già consentite dalla CSP. Hash CSP di script e stile ricalcolati.
+
+## Agenda e scadenze personali (2.13.0)
+- Le scadenze sono record `deadline` cifrati con la chiave delle carte (AES-256-GCM, stessa AAD delle altre voci). Titolo, data e categoria non sono mai in chiaro nel database.
+- Nessuna nuova richiesta di rete e nessun nuovo host in CSP. Il punteggio di sicurezza è calcolato sul dispositivo; le password vengono lette solo con l’area protetta già aperta, e non lasciano mai la pagina.
+- Le scadenze sono visibili senza lo sblocco forte (come le carte): non inserire in questo elenco dati che vuoi tenere solo nell’area protetta.
+

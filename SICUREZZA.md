@@ -110,3 +110,16 @@ Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di
 - Nessuna nuova richiesta di rete e nessun nuovo host in CSP. Il punteggio di sicurezza è calcolato sul dispositivo; le password vengono lette solo con l’area protetta già aperta, e non lasciano mai la pagina.
 - Le scadenze sono visibili senza lo sblocco forte (come le carte): non inserire in questo elenco dati che vuoi tenere solo nell’area protetta.
 
+## Accesso di emergenza (2.14.0)
+- Schema di Shamir k su n (n ≤ 9) sul codice di recupero, calcolato sul dispositivo nel campo di Galois GF(2^11) (ogni parola del codice è un elemento, polinomio x^11+x^2+1, coefficienti casuali da `crypto.getRandomValues`). Con meno di k parti non si ricava alcuna informazione sul codice.
+- Ogni parte: 27 parole (intestazione con k e posizione, identificativo di serie, 24 valori, controllo). Parti di serie diverse vengono rifiutate. Le parti non sono salvate: nel dispositivo resta solo `unica_emg` (data e schema, senza segreti).
+- Prima di mostrare le parti l’app le ricombina e verifica che diano il codice originale. Per leggere il codice serve l’identità verificata (area protetta).
+- Nessuna rete, nessun server, nessun nuovo host in CSP, nessun nuovo formato di backup.
+- Rischi da conoscere: nessun ritardo né possibilità di veto; chi riunisce k parti e ha il file `.enc` apre carte, Vault e Conti. Le parti già consegnate si annullano solo con «Cambia le chiavi». Il testo copiato negli appunti può restare nella cronologia del telefono.
+
+## IA generativa: allegati espliciti (2.15.0)
+- Regola invariata nella sostanza: l’IA vede solo ciò che l’utente scrive o allega di sua mano. Gli allegati (Briefing, Meteo, Scadenze, Sicurezza, Carte con i soli nomi) sono spenti di default, si scelgono per ogni messaggio, si possono leggere in anteprima e sono mostrati per intero nella chat. Si azzerano dopo l’invio.
+- Non sono allegabili: Vault, Conti, password, codici delle carte, IBAN. Il controllo sui dati sensibili (IBAN, numeri di carta, «password:») resta attivo sul testo finale.
+- Il prompt di sistema contiene solo la data odierna. Nessuna nuova richiesta di rete: l’IA usa lo stesso servizio già collegato dall’utente (o l’IA del browser, che resta sul dispositivo).
+- Le scadenze e i nomi delle carte, se allegati, lasciano il dispositivo verso il servizio scelto: allegali solo se ti sta bene.
+

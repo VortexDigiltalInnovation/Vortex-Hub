@@ -1,5 +1,29 @@
 # Novità
 
+## 2.15.0
+**Assistente locale (nessuna rete, nessuna chiave)**
+- Meteo: «che tempo fa?», «devo portare l’ombrello?», «cosa indosso?» con consigli. Se il meteo è spento, propone di attivarlo.
+- «Cosa devo fare oggi?»: riepilogo unico con data, meteo, scadenze vicine, avvisi e punteggio di sicurezza.
+- Scadenze: «che scadenze ho?». Per crearne una basta scrivere «aggiungi scadenza passaporto 15 marzo 2027», «ricordami la revisione tra 3 mesi» o «segna scadenza assicurazione 12/05/2027 ogni anno»: l’app prepara il modulo con titolo, data e categoria e tu controlli e salvi.
+- «Punteggio sicurezza» e «accesso di emergenza» con i pulsanti per agire. Nuove domande rapide nell’assistente.
+
+**IA generativa (con la tua chiave)**
+- Nuovi pulsanti «Allega»: Briefing, Meteo, Scadenze, Sicurezza, Carte (solo nomi). Li attivi tu, messaggio per messaggio; «Vedi cosa invio» mostra il testo esatto, che compare per intero anche nella chat. Dopo l’invio gli allegati si azzerano. Vault, Conti e password non si possono allegare.
+- L’IA conosce la data di oggi e sa di non vedere altro: usa i dati allegati senza inventare quelli che mancano.
+
+**Correzioni**
+- Pulsanti e righe nascosti (come «Interrompi» e le domande rapide in modalità IA) ora si nascondono davvero.
+- L’avviso «Sblocca l’area protetta» ora dice cosa aggiunge (password e Conti negli avvisi).
+
+## 2.14.0
+- **Accesso di emergenza:** Impostazioni → Sicurezza e accesso → «Accesso di emergenza». Il codice di recupero viene diviso in parti (2 su 3, 2 su 4, 3 su 5 o 3 su 6) da affidare a persone di fiducia. Una parte da sola non rivela nulla; il numero richiesto di parti, insieme al file di backup `.enc`, apre tutti i dati.
+- Ogni parte è un elenco di 27 parole con un controllo che segnala i refusi. Non viene salvata nell’app: si vede solo al momento della creazione.
+- **Uso:** nelle finestre «Recupero con il codice» (schermata di blocco) e «Ripristino» (da backup) c’è il pulsante «Ho le parti di emergenza»: si incollano le parti e il codice si ricostruisce da solo.
+- «Istruzioni per i fiduciari»: testo pronto da consegnare insieme alle parti.
+- **Cambia le chiavi** invalida le parti già consegnate (il codice di recupero cambia): l’app te lo ricorda azzerando lo stato.
+- Il punteggio di sicurezza include ora «Accesso di emergenza».
+- Limite: non c’è un tempo di attesa né la possibilità di annullare, perché non c’è un server. Chi ha abbastanza parti e il backup può aprire tutto.
+
 ## 2.13.0
 - **Agenda e sicurezza:** nuova schermata (Home → «Agenda e sicurezza») che riunisce scadenze personali, avvisi (carte in scadenza, backup, sincronizzazione, password) e un punteggio di sicurezza da 0 a 100.
 - **Scadenze personali:** patente, passaporto, assicurazioni, bollo, garanzie, abbonamenti. Data, categoria, ripetizione annuale e preavviso a scelta (7–90 giorni). Sono cifrate con la chiave delle carte, quindi visibili senza sbloccare l’area protetta, viaggiano nel backup e nella sincronizzazione.

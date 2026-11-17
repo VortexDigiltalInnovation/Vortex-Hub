@@ -1,5 +1,13 @@
 # Novità
 
+## 2.16.3
+**Avvisi di scadenza più affidabili e icona del vocale**
+- **Correzione:** una scadenza veniva segnata come «già avvisata» prima di sapere se la notifica era davvero partita; se la notifica falliva, non veniva più riprovata. Ora viene segnata solo dopo l'invio e il controllo riparte alla riapertura dell'app e ogni 30 minuti.
+- Le notifiche passano dal service worker (come richiede Android) e attendono che sia pronto, invece di ripiegare su un metodo che Chrome per Android non supporta.
+- «Mostra un avviso di prova» ora dice sempre l'esito e, se non parte, il motivo (permesso negato, service worker non pronto…). Sotto l'interruttore compare lo stato di permesso e service worker.
+- **Limite di Android, non aggirabile da una PWA:** gli avvisi locali scattano quando l'app è aperta o riaperta. Ad app chiusa arriva solo il promemoria push generico (serve il Worker).
+- **Icona del vocale:** mentre il microfono ascolta (ricerca vocale delle carte, ricerca nel Vault, dettatura nell'assistente) il pulsante diventa rosso e pulsa; un secondo tocco ferma l'ascolto. Mentre l'assistente legge ad alta voce compare un altoparlante rosso accanto al titolo.
+
 ## 2.16.0
 **Scadenza su ogni elemento**
 - Ogni **carta**, ogni elemento del **Vault** (password, passkey, note e soprattutto **file**) e ogni voce dei **Conti** (conti bancari, titoli, BTP, Poste, PAC, flussi) ha un blocco «Scadenza (facoltativa)»: data, «si ripete ogni anno» e «avvisami prima» (7–90 giorni). Per cancellarla basta svuotare la data.

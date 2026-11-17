@@ -130,3 +130,8 @@ Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di
 - Eccezione alla regola «Vault e Conti non si allegano» (già estesa in 2.15.0 con gli allegati espliciti): ora sono allegabili, su scelta esplicita, solo i titoli delle scadenze.
 - Avvisi di scadenza: sono notifiche locali generate dall'app quando è aperta; nessun server conosce le scadenze. Lo stato «già avvisata» è in localStorage solo come impronta (hash) senza titoli. Nelle notifiche i titoli di Vault e Conti non compaiono mai: solo il numero.
 - Il promemoria push giornaliero resta senza contenuto (nessun dato personale).
+
+## Avvisi e vocale (2.16.3)
+- Nessuna modifica a cifratura, chiavi o sincronizzazione.
+- Lo stato mostrato sotto gli avvisi (permesso, service worker) non contiene titoli né dati. «Già avvisata» resta solo un'impronta (hash).
+- L'indicatore del microfono è solo un attributo di stato sulla pagina: nessun audio viene registrato o salvato dall'app (la dettatura usa il riconoscimento vocale del browser, come prima).

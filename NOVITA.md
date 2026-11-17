@@ -1,9 +1,30 @@
 # Novità
 
+## 2.18.0
+**Analisi interna del patrimonio; tolte l'analisi IA esterna e le quotazioni dei BTP**
+- **Analisi del patrimonio, tutta sul dispositivo** (pulsante «Analisi» in Titoli e nella Panoramica dei Conti): regole semplici su ciò che hai nell'app. Controlla allocazione rispetto all'obiettivo di Ribilancia (con gli importi da aggiungere o ridurre), concentrazione su una sola posizione, mesi di spese coperti dalla liquidità, BTP in scadenza entro 12 mesi, concentrazione delle scadenze e sensibilità ai tassi, Poste in scadenza, titoli in perdita oltre il 15%, prezzi non aggiornati, peso del PAC sulle entrate. Nessun dato esce dall'app: non fa richieste di rete.
+- «Aggiorna prezzi e rianalizza» dentro l'analisi aggiorna le quotazioni (se hai la chiave) e rifà i calcoli.
+- L'**assistente locale** risponde a «analisi del patrimonio», «consigli», «come investire» con le stesse regole.
+- **Tolta l'analisi IA esterna**: il patrimonio non viene più inviato a nessun servizio IA. La chat IA resta com'era (solo ciò che scrivi e allegati espliciti, mai Vault, conti o password).
+- **Tolte le quotazioni dei BTP** (i prezzi dei BTP si inseriscono a mano, come prima).
+- Non è consulenza finanziaria: le regole non conoscono tasse, costi, orizzonte e altri beni.
+
+## 2.17.1 *(funzione rimossa nella 2.18.0)*
+**Prezzi dei BTP con IA**
+- In BTP c'è il pulsante **Prezzi (IA)**. Nessun servizio di prezzi gratuito con chiave copre i BTP, quindi i prezzi si cercano con l'IA (chiave Claude) e la ricerca web. All'IA arrivano solo ISIN e nome (mai nominale, quantità, prezzi di acquisto o importi). Prima di cercare ti chiede conferma.
+- L'IA deve restituire per ogni BTP prezzo (corso secco, % del nominale), data e fonte. **Niente viene applicato da solo**: vedi ogni proposta con data e sito e applichi solo quelle spuntate. Sono scartati: prezzi fuori da 40–200, differenze oltre il 15% dal prezzo precedente, dati più vecchi di 8 giorni, prezzi senza fonte.
+- Funziona solo con Claude (Anthropic); serve che la ricerca web sia attiva sull'account API. I prezzi dell'IA possono essere inesatti: controlla sempre data e fonte.
+
+## 2.17.1
+**Quotazioni: il simbolo senza borsa ora si completa da solo**
+- Se scrivi `VWCE` senza suffisso e il servizio non lo trova, l'app cerca i simboli corrispondenti, sceglie quello quotato **in euro** (es. `VWCE.DEX`), lo salva nel titolo e usa il suo prezzo. Costa 2 richieste in più solo la prima volta.
+- Se i candidati non sono in euro (es. solo `.LON` in dollari) non ne sceglie uno: te li mostra, così scrivi tu quello giusto.
+- Al servizio, per la ricerca, parte solo il simbolo che hai scritto.
+
 ## 2.17.0
 **Quotazioni istantanee, analisi IA del patrimonio, credenziali multiple per asset**
 - **Aggiorna prezzi** (Titoli e Panoramica dei Conti): legge i prezzi da Alpha Vantage con la tua chiave gratuita (cifrata sul dispositivo) e ricalcola tutto: patrimonio, rendimenti, avvisi di prezzo e storico. Al servizio parte solo il simbolo (mai quantità né importi). Ogni titolo ha il campo «Simbolo per le quotazioni» (es. VWCE.DEX). Un prezzo troppo diverso dal precedente (valuta diversa) viene scartato e segnalato; il piano gratuito ha circa 25 richieste al giorno. BTP e Poste restano manuali.
-- **Analisi IA del patrimonio**: pulsante «Analisi IA» (o «Aggiorna e analizza con IA»). Con la tua chiave, l'IA commenta la composizione e suggerisce cosa modificare. Non cambia nessun dato. Per impostazione predefinita parte solo il riepilogo in percentuali; gli importi solo se li spunti. «Vedi cosa invio» mostra il testo intero. Mai password, credenziali, note, IBAN o intestatari.
+- **Analisi IA del patrimonio** *(rimossa nella 2.18.0, sostituita dall'analisi interna)*: pulsante «Analisi IA» (o «Aggiorna e analizza con IA»). Con la tua chiave, l'IA commenta la composizione e suggerisce cosa modificare. Non cambia nessun dato. Per impostazione predefinita parte solo il riepilogo in percentuali; gli importi solo se li spunti. «Vedi cosa invio» mostra il testo intero. Mai password, credenziali, note, IBAN o intestatari.
 - **Credenziali del Vault collegate agli asset, anche più di una**: titoli, BTP, Poste, PAC e conti hanno la sezione «Credenziali nel Vault»: colleghi voci già presenti oppure ne crei una nuova al volo (si collega da sola). Nelle liste compare «N credenziali»; nel dettaglio di una voce del Vault vedi a quali asset è collegata. Il vecchio collegamento singolo dei conti passa da solo al nuovo formato.
 - **PAC ed ETF collegati** (dal tuo zip): un PAC con ETF crea il titolo collegato e nel patrimonio conta una sola volta.
 - **Correzioni allo zip PAC_ETF**: mancava la funzione che calcola il valore di un PAC (la schermata PAC dava errore) e l'impronta di sicurezza (CSP) dello script non era aggiornata, quindi il browser avrebbe bloccato l'app.

@@ -139,6 +139,14 @@ Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di
 ## Quotazioni, analisi IA e credenziali per asset (2.17.0)
 - **Nuovo servizio esterno:** www.alphavantage.co (aggiunto a connect-src della CSP). Parte solo il simbolo del titolo e la tua chiave; mai quantità, importi, nomi o intestatari. La chiave è in `meta` cifrata con la chiave delle carte (come la chiave IA) e si azzera al blocco. Senza chiave non parte nessuna richiesta.
 - **Prezzi non verificati:** il prezzo ricevuto non è autenticato oltre il canale HTTPS; un valore che si discosta di oltre il 40% dal precedente viene scartato e segnalato.
-- **Eccezione alla regola «Vault e Conti non si inviano all'IA» (decisione dell'utente):** il pulsante «Analisi IA» invia un riepilogo del patrimonio solo su azione esplicita, con anteprima. Predefinito: solo percentuali; importi in euro solo con spunta. Non partono mai password, credenziali, testi delle note, contenuti dei file, IBAN, intestatari, nomi dei conti. L'IA non scrive nei dati.
+- **Analisi IA del patrimonio: rimossa nella 2.18.0.** L'eccezione alla regola «Vault e Conti non si inviano all'IA» è revocata: il patrimonio non viene più inviato a nessun servizio IA. L'analisi ora è interna (sul dispositivo, nessuna rete).
 - **Credenziali collegate:** nell'elemento dei Conti (cifrato con la chiave protetta) si salvano solo gli identificativi delle voci del Vault, mai password o utenti copiati. Se una voce del Vault viene eliminata, il collegamento sparisce al primo salvataggio.
 - **Non provato con servizi reali:** Alpha Vantage e le API IA sono provate solo con risposte simulate.
+- **2.17.1:** per completare un simbolo senza borsa l'app usa anche la ricerca simboli di Alpha Vantage (stesso host, già in CSP): parte solo il simbolo scritto dall'utente e la chiave. Il simbolo trovato viene salvato nel titolo, cifrato con gli altri dati.
+
+## Prezzi dei BTP con IA (2.17.1): rimossi nella 2.18.0
+- La funzione è stata tolta: nessun ISIN o nome dei BTP viene più inviato a servizi IA. I prezzi dei BTP si inseriscono a mano.
+
+## Analisi interna del patrimonio (2.18.0)
+- Calcolata interamente sul dispositivo, su dati già decifrati in memoria con l'area protetta aperta. Non fa richieste di rete (verificato dai test) e non salva nulla di nuovo.
+- Canali esterni restanti per i Conti: solo Alpha Vantage (simbolo dei titoli e la tua chiave), se inserisci la chiave.

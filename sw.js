@@ -1,5 +1,5 @@
 /* Vortex Hub – Service Worker: solo shell offline. Nessun dato utente passa dalla cache. */
-const VERSION = 'unica-v2-15-0';
+const VERSION = 'unica-v2-16-1';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './privacy.html', './ocr.html', './ocr-frame.js', './icons/icon-192x192.png', './icons/icon-512x512.png', './icons/maskable-192x192.png', './icons/maskable-512x512.png', './icons/apple-touch-icon.png', './icons/favicon.png'];
 /* Icone di riserva: se sul tuo hosting mancano i file in icons/, il service worker li fornisce da solo
    (serve per l'installazione). Il modo giusto resta caricare l'intera cartella icons/. */
@@ -14,10 +14,10 @@ self.addEventListener('fetch', e => {
 });
 /* Notifiche: tocco su una notifica -> apre l'app (e la carta, se indicata) */
 self.addEventListener('notificationclick', e => {
-  e.notification.close(); const id = e.notification.data && e.notification.data.cardId;
+  e.notification.close(); const nd = e.notification.data || {}, id = nd.cardId, gg = nd.go === 'agenda' ? 'agenda' : '';
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-    const w = list.find(c => 'focus' in c); if (w) { if (id) w.postMessage({ t: 'openCard', id }); return w.focus(); }
-    return self.clients.openWindow('./' + (id ? '?open=' + encodeURIComponent(id) : ''));
+    const w = list.find(c => 'focus' in c); if (w) { if (id) w.postMessage({ t: 'openCard', id }); else if (gg) w.postMessage({ t: 'go', r: gg }); return w.focus(); }
+    return self.clients.openWindow('./' + (id ? '?open=' + encodeURIComponent(id) : gg ? '?go=agenda' : ''));
   }));
 });
 /* Web Push (senza contenuto): mostra un promemoria generico; il server non conosce i dati dell'utente */

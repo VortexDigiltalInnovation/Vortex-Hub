@@ -123,3 +123,10 @@ Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di
 - Il prompt di sistema contiene solo la data odierna. Nessuna nuova richiesta di rete: l’IA usa lo stesso servizio già collegato dall’utente (o l’IA del browser, che resta sul dispositivo).
 - Le scadenze e i nomi delle carte, se allegati, lasciano il dispositivo verso il servizio scelto: allegali solo se ti sta bene.
 
+## Scadenze su ogni elemento (2.16.0)
+- La scadenza (data, ripetizione, anticipo) è un campo dell'elemento stesso: Vault e Conti la cifrano con la chiave protetta, le carte con la chiave delle carte. Nessun nuovo archivio, nessun dato in chiaro, nessuna notifica server.
+- L'agenda legge Vault e Conti solo ad area protetta sbloccata; al blocco quelle righe spariscono.
+- Verso l'IA generativa: «Scadenze» allega solo personali e carte; i titoli di Vault e Conti partono solo con l'allegato esplicito «Scad. Vault e Conti», scelto per ogni messaggio. Mai password, testi delle note, contenuto dei file, importi o saldi.
+- Eccezione alla regola «Vault e Conti non si allegano» (già estesa in 2.15.0 con gli allegati espliciti): ora sono allegabili, su scelta esplicita, solo i titoli delle scadenze.
+- Avvisi di scadenza: sono notifiche locali generate dall'app quando è aperta; nessun server conosce le scadenze. Lo stato «già avvisata» è in localStorage solo come impronta (hash) senza titoli. Nelle notifiche i titoli di Vault e Conti non compaiono mai: solo il numero.
+- Il promemoria push giornaliero resta senza contenuto (nessun dato personale).

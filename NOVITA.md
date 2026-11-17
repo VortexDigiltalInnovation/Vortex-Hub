@@ -1,5 +1,31 @@
 # Novità
 
+## 2.16.0
+**Scadenza su ogni elemento**
+- Ogni **carta**, ogni elemento del **Vault** (password, passkey, note e soprattutto **file**) e ogni voce dei **Conti** (conti bancari, titoli, BTP, Poste, PAC, flussi) ha un blocco «Scadenza (facoltativa)»: data, «si ripete ogni anno» e «avvisami prima» (7–90 giorni). Per cancellarla basta svuotare la data.
+- Gli obiettivi dei Conti usano già la loro data; le scadenze di BTP e Poste vengono prese in automatico.
+- La scadenza resta dentro l’elemento: è cifrata con lui e viaggia nel backup e nella sincronizzazione.
+
+**Agenda unica**
+- «Agenda e sicurezza» mostra in un solo elenco ordinato le scadenze personali, delle carte (anche il mese di scadenza della carta), del Vault e dei Conti, con l’area di provenienza. Toccando una riga si apre l’elemento.
+- Con l’area protetta bloccata vedi solo quelle delle carte e un avviso per sbloccare: Vault e Conti restano cifrati.
+- Home, briefing e conteggio «scadenze vicine» usano lo stesso elenco.
+
+**Assistente e IA**
+- Assistente locale: «che scadenze ho?», «scadenze nel vault», «scadenze dei conti», «scadenze delle carte». Funziona sul dispositivo, senza rete.
+- IA generativa: il pulsante «Scadenze» allega solo quelle personali e delle carte. Per i titoli delle scadenze di Vault e Conti c’è un pulsante separato, «Scad. Vault e Conti», che attivi tu messaggio per messaggio (vedi sempre il testo con «Vedi cosa invio»). Password, note, contenuti dei file e importi non vengono mai allegati.
+
+## 2.16.1
+**Avvisi di scadenza sul telefono**
+- Impostazioni → Notifiche → «Scadenze e promemoria» → «Avvisami delle scadenze». Una notifica compare quando una scadenza entra nel suo anticipo, a 7 giorni e il giorno stesso (una sola volta per fase, senza ripetizioni). Toccandola si apre l’Agenda.
+- Scatta quando apri o riapri l’app, dopo lo sblocco e dopo l’apertura dell’area protetta. Per un promemoria anche ad app chiusa c’è il promemoria push, ora anche **ogni giorno** (prima solo settimanale). Non serve aggiornare il Worker.
+- Privacy: nelle notifiche compaiono i titoli di scadenze personali e carte; di Vault e Conti solo quante sono, senza titoli (il testo si vede a schermo bloccato).
+
+**Meno doppioni**
+- Home: backup, carte in scadenza e sincronizzazione compaiono una volta sola (prima fino a tre volte fra riquadro dell’assistente, avviso e «Promemoria»). Il riquadro «Promemoria» non mostra più «Tutto in ordine» quando non c’è nulla.
+- Agenda: l’invito a sbloccare l’area protetta non è più ripetuto.
+- Codice: tolte quattro definizioni doppie che non venivano più usate e le regole di stile ripetute.
+
 ## 2.15.0
 **Assistente locale (nessuna rete, nessuna chiave)**
 - Meteo: «che tempo fa?», «devo portare l’ombrello?», «cosa indosso?» con consigli. Se il meteo è spento, propone di attivarlo.

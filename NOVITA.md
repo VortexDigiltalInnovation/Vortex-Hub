@@ -15,6 +15,13 @@
 - Assistente locale: «che scadenze ho?», «scadenze nel vault», «scadenze dei conti», «scadenze delle carte». Funziona sul dispositivo, senza rete.
 - IA generativa: il pulsante «Scadenze» allega solo quelle personali e delle carte. Per i titoli delle scadenze di Vault e Conti c’è un pulsante separato, «Scad. Vault e Conti», che attivi tu messaggio per messaggio (vedi sempre il testo con «Vedi cosa invio»). Password, note, contenuti dei file e importi non vengono mai allegati.
 
+## 2.16.2
+**Scadenze: si possono annullare, avvisi più discreti, elenco completo su richiesta**
+- In ogni scadenza (carte, Vault, Conti) c'è il pulsante **«Rimuovi la scadenza»**: la togli del tutto senza doverla solo spostare. Le scadenze personali si eliminano con «Elimina».
+- Gli avvisi compaiono solo poco prima: l'anticipo predefinito ora è **7 giorni** (scelte: 1, 3, 7, 14, 30, 60, 90). BTP e Poste avvisano 30 giorni prima, gli obiettivi 14. Le scadenze già inserite mantengono l'anticipo che avevi scelto.
+- Notifiche più rade: una quando entra nell'anticipo, una il giorno stesso (e una a 7 giorni solo se l'anticipo è lungo). Le scadute avvisano solo nei 3 giorni dopo.
+- L'Agenda mostra solo **«Scadenze in arrivo»**. Per vedere **tutte** le scadenze di tutti i prodotti insieme: pulsante **«Tutte le scadenze»** (Agenda, Home e assistente). La pagina le raggruppa per mese e le filtra per area (Personali, Carte, Vault, Conti).
+
 ## 2.16.1
 **Avvisi di scadenza sul telefono**
 - Impostazioni → Notifiche → «Scadenze e promemoria» → «Avvisami delle scadenze». Una notifica compare quando una scadenza entra nel suo anticipo, a 7 giorni e il giorno stesso (una sola volta per fase, senza ripetizioni). Toccandola si apre l’Agenda.

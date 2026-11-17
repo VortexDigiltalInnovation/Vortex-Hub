@@ -1,5 +1,13 @@
 # Novità
 
+## 2.17.0
+**Quotazioni istantanee, analisi IA del patrimonio, credenziali multiple per asset**
+- **Aggiorna prezzi** (Titoli e Panoramica dei Conti): legge i prezzi da Alpha Vantage con la tua chiave gratuita (cifrata sul dispositivo) e ricalcola tutto: patrimonio, rendimenti, avvisi di prezzo e storico. Al servizio parte solo il simbolo (mai quantità né importi). Ogni titolo ha il campo «Simbolo per le quotazioni» (es. VWCE.DEX). Un prezzo troppo diverso dal precedente (valuta diversa) viene scartato e segnalato; il piano gratuito ha circa 25 richieste al giorno. BTP e Poste restano manuali.
+- **Analisi IA del patrimonio**: pulsante «Analisi IA» (o «Aggiorna e analizza con IA»). Con la tua chiave, l'IA commenta la composizione e suggerisce cosa modificare. Non cambia nessun dato. Per impostazione predefinita parte solo il riepilogo in percentuali; gli importi solo se li spunti. «Vedi cosa invio» mostra il testo intero. Mai password, credenziali, note, IBAN o intestatari.
+- **Credenziali del Vault collegate agli asset, anche più di una**: titoli, BTP, Poste, PAC e conti hanno la sezione «Credenziali nel Vault»: colleghi voci già presenti oppure ne crei una nuova al volo (si collega da sola). Nelle liste compare «N credenziali»; nel dettaglio di una voce del Vault vedi a quali asset è collegata. Il vecchio collegamento singolo dei conti passa da solo al nuovo formato.
+- **PAC ed ETF collegati** (dal tuo zip): un PAC con ETF crea il titolo collegato e nel patrimonio conta una sola volta.
+- **Correzioni allo zip PAC_ETF**: mancava la funzione che calcola il valore di un PAC (la schermata PAC dava errore) e l'impronta di sicurezza (CSP) dello script non era aggiornata, quindi il browser avrebbe bloccato l'app.
+
 ## 2.16.3
 **Avvisi di scadenza più affidabili e icona del vocale**
 - **Correzione:** una scadenza veniva segnata come «già avvisata» prima di sapere se la notifica era davvero partita; se la notifica falliva, non veniva più riprovata. Ora viene segnata solo dopo l'invio e il controllo riparte alla riapertura dell'app e ogni 30 minuti.

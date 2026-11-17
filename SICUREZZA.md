@@ -135,3 +135,10 @@ Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di
 - Nessuna modifica a cifratura, chiavi o sincronizzazione.
 - Lo stato mostrato sotto gli avvisi (permesso, service worker) non contiene titoli né dati. «Già avvisata» resta solo un'impronta (hash).
 - L'indicatore del microfono è solo un attributo di stato sulla pagina: nessun audio viene registrato o salvato dall'app (la dettatura usa il riconoscimento vocale del browser, come prima).
+
+## Quotazioni, analisi IA e credenziali per asset (2.17.0)
+- **Nuovo servizio esterno:** www.alphavantage.co (aggiunto a connect-src della CSP). Parte solo il simbolo del titolo e la tua chiave; mai quantità, importi, nomi o intestatari. La chiave è in `meta` cifrata con la chiave delle carte (come la chiave IA) e si azzera al blocco. Senza chiave non parte nessuna richiesta.
+- **Prezzi non verificati:** il prezzo ricevuto non è autenticato oltre il canale HTTPS; un valore che si discosta di oltre il 40% dal precedente viene scartato e segnalato.
+- **Eccezione alla regola «Vault e Conti non si inviano all'IA» (decisione dell'utente):** il pulsante «Analisi IA» invia un riepilogo del patrimonio solo su azione esplicita, con anteprima. Predefinito: solo percentuali; importi in euro solo con spunta. Non partono mai password, credenziali, testi delle note, contenuti dei file, IBAN, intestatari, nomi dei conti. L'IA non scrive nei dati.
+- **Credenziali collegate:** nell'elemento dei Conti (cifrato con la chiave protetta) si salvano solo gli identificativi delle voci del Vault, mai password o utenti copiati. Se una voce del Vault viene eliminata, il collegamento sparisce al primo salvataggio.
+- **Non provato con servizi reali:** Alpha Vantage e le API IA sono provate solo con risposte simulate.

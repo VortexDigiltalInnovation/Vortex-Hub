@@ -1,5 +1,22 @@
 # Novità
 
+## 2.19.0
+**Grafica rinnovata e codice QR sempre intero**
+- **QR non più tagliato**: aprendo una carta con QR, la carta girata diventa quadrata e il codice si vede per intero, con il suo margine bianco (prima ne perdeva circa un terzo e non si poteva scansionare). Il testo del QR passa sotto la carta. Le barre (EAN, Code128…) restano grandi come prima. Il codice sta sempre su bianco pieno, mai trasparente.
+- **Un colore per ogni settore**: Home blu, Carte arancio, Conti verde, Vault viola, Impostazioni grigio ardesia, Agenda rosa. Cambiano intestazione, pulsanti, icone, barra in basso, sfondo (velo colorato sul cielo) e il colore della barra di stato del telefono. Nei Conti ogni scheda (Panoramica, Titoli, BTP, PAC…) ha il suo colore.
+- **Più trasparenze**: vetro più leggero su schede, intestazione, barra e finestre. Con «riduci trasparenza» attivo nel sistema tornano pieni.
+- **Più animazioni**: le schede entrano a cascata quando cambi sezione, le finestre salgono con un piccolo rimbalzo, l'icona della sezione attiva «scatta», i pulsanti si schiacciano al tocco. Con «riduci animazioni» attivo nel sistema non parte nulla.
+- **Pulsanti con icona**: icona della stessa altezza del testo e centrata; ho aggiunto l'icona ai pulsanti che non l'avevano (Salva, Annulla, Elimina, Modifica, Aggiungi, Copia, Importa, Aggiorna, Scadenze…).
+- Nessun cambiamento a dati, cifratura, rete o permessi.
+
+
+## 2.18.1
+**Tolti i servizi IA esterni (Claude e OpenAI): resta solo l'IA del browser, sul dispositivo**
+- L'app **non può più contattare** api.anthropic.com né api.openai.com: sono stati tolti dalla CSP e dal codice. Anche un eventuale errore o codice indesiderato non potrebbe inviare lì nulla.
+- **Le chiavi API già salvate vengono cancellate** dal dispositivo alla prima apertura dopo lo sblocco delle Carte.
+- In Impostazioni → IA e nell'Assistente resta l'**IA del browser** (Gemini Nano, se il browser la offre): gira sul dispositivo, senza chiave e senza rete. Su molti telefoni non è disponibile: resta l'assistente locale a regole.
+- Le uniche connessioni dell'app sono ora: tuo server di sincronizzazione/Worker (se attivato), Alpha Vantage per le quotazioni (se imposti la chiave), Open-Meteo, Have I Been Pwned (solo prefisso hash), Wikidata, OpenStreetMap/Overpass e Google Drive (se attivato).
+
 ## 2.18.0
 **Analisi interna del patrimonio; tolte l'analisi IA esterna e le quotazioni dei BTP**
 - **Analisi del patrimonio, tutta sul dispositivo** (pulsante «Analisi» in Titoli e nella Panoramica dei Conti): regole semplici su ciò che hai nell'app. Controlla allocazione rispetto all'obiettivo di Ribilancia (con gli importi da aggiungere o ridurre), concentrazione su una sola posizione, mesi di spese coperti dalla liquidità, BTP in scadenza entro 12 mesi, concentrazione delle scadenze e sensibilità ai tassi, Poste in scadenza, titoli in perdita oltre il 15%, prezzi non aggiornati, peso del PAC sulle entrate. Nessun dato esce dall'app: non fa richieste di rete.

@@ -1,5 +1,13 @@
 # Novità
 
+## 2.20.0
+**Assistente interno potenziato, collegamenti tra i dati, meno ricaricamenti**
+- **Assistente interno** (sempre sul dispositivo, senza rete, mai le password): ora incrocia Carte, Vault, Conti e Scadenze. Prova: «Briefing di oggi», «Cosa scade nei prossimi 30 giorni?», «Dove accedo a Directa?», «Tutto su Coop», «Quali conti non hanno accessi salvati?», «Password deboli sui miei conti», «Quanto ho in Fineco?», «Collegamenti dei miei dati». Tollera piccoli errori di battitura, ricorda di cosa parlavate («aprilo», «e la scadenza?») e ha più pulsanti per risposta. «Cosa sai fare?» elenca gli esempi.
+- **Collegamenti tra i dati**: nuova «mappa dei collegamenti» (dall'assistente) con le voci dei Conti senza accessi, gli accessi dei Conti con password deboli/ripetute/vecchie, le carte che hanno un account nel Vault e i **collegamenti suggeriti** per nome o sito, che salvi con un tocco su «Collega». Il dettaglio di una voce del Vault e di una carta mostra i collegamenti trovati.
+- **Meno «refresh»**: disattivato il gesto «tira verso il basso» di Chrome, che ricaricava la pagina. Dopo uno sblocco l'app torna alla sezione in cui eri (entro 15 minuti; viene ricordato solo il nome della sezione). In Impostazioni → App e informazioni → Aggiornamento e diagnostica ora vedi quanti avvii ci sono stati nell'ultima ora e di che tipo: se continua, dimmi cosa vedi lì.
+- Documentazione corretta: la ricerca dei loghi è attiva di default (non «dopo consenso»); vedi SICUREZZA.md.
+
+
 ## 2.19.0
 **Grafica rinnovata e codice QR sempre intero**
 - **QR non più tagliato**: aprendo una carta con QR, la carta girata diventa quadrata e il codice si vede per intero, con il suo margine bianco (prima ne perdeva circa un terzo e non si poteva scansionare). Il testo del QR passa sotto la carta. Le barre (EAN, Code128…) restano grandi come prima. Il codice sta sempre su bianco pieno, mai trasparente.

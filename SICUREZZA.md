@@ -77,7 +77,7 @@ L'attivazione rapida usa solo l'autenticatore del dispositivo (WebAuthn platform
 
 
 ## Loghi (v2.6.0)
-Il recupero dei loghi invia a icon.horse, Google o DuckDuckGo soltanto il nome del sito (es. netflix.com), mai password, codici o nomi utente. Parte solo dopo il tuo consenso (stessa impostazione della ricerca automatica) e puoi disattivarla da Impostazioni. I loghi scaricati sono salvati dentro la voce cifrata. Per le voci del Vault la ricerca avviene solo ad area protetta aperta.
+Il recupero dei loghi invia a icon.horse, Google o DuckDuckGo soltanto il nome del sito (es. netflix.com), mai password, codici o nomi utente. ATTENZIONE (corretto nella 2.20.0): non parte «dopo un consenso» come scritto nelle versioni precedenti, ma è attiva per impostazione iniziale (si disattiva in Impostazioni). Per le voci del Vault invia a quei tre servizi il dominio del tuo servizio (per esempio il sito della tua banca), che rivela quali servizi usi; con l'area protetta chiusa non parte per il Vault. I loghi scaricati sono salvati dentro la voce cifrata. Per le voci del Vault la ricerca avviene solo ad area protetta aperta.
 
 ## Biometria (v2.6.0)
 La passkey è creata come credenziale non rilevabile sul solo autenticatore del dispositivo (residentKey: discouraged, attachment: platform). Nessuna chiave resta nel gestore password di Google.
@@ -150,3 +150,6 @@ Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di
 ## Analisi interna del patrimonio (2.18.0)
 - Calcolata interamente sul dispositivo, su dati già decifrati in memoria con l'area protetta aperta. Non fa richieste di rete (verificato dai test) e non salva nulla di nuovo.
 - Canali esterni restanti per i Conti: solo Alpha Vantage (simbolo dei titoli e la tua chiave), se inserisci la chiave.
+
+## 2.20.0
+20. Assistente interno potenziato e collegamenti tra i dati: tutto calcolato sul dispositivo, nessuna richiesta di rete. L'assistente non scrive mai le password; i collegamenti suggeriti si salvano (cifrati, nella voce dei Conti) solo quando tocchi «Collega». L'app ricorda solo il nome dell'ultima sezione (non dati) in localStorage, per riprendere da lì dopo un ricaricamento; il registro degli avvii (ora e tipo) è solo locale.

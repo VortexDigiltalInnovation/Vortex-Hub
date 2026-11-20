@@ -1,5 +1,17 @@
 # Novità
 
+## 2.21.0
+**Home con i colori delle sezioni, pulsanti leggibili in scuro, elenchi più leggeri**
+- **Home a colori**: Carte arancio, Vault viola, Conti verde, Agenda e scadenze rosa (riquadri, titoli, pulsanti e riquadro «Entra con impronta»). Il riepilogo in alto resta blu, il colore della Home.
+- **Pulsanti principali in modalità scura**: prima il testo bianco stava su una tinta chiara (poco leggibile, ad esempio «Aggiungi una scadenza»); ora su colore pieno.
+- **Elenchi più leggeri**: le righe degli elenchi non usano più lo sfocato dello sfondo, costoso su telefoni modesti quando le righe sono tante. Effetto non misurato su Android reale.
+- Include la 2.20.1 (animazione doppia all'apertura delle sezioni corretta).
+
+## 2.20.1
+**Corretto il «doppio ricaricamento» all'apertura di una sezione**
+- Non era un vero ricaricamento della pagina: la sezione si animava due volte (all'ingresso e di nuovo ~1,2 secondi dopo, perché due regole grafiche si davano il cambio). Ora l'animazione parte una volta sola.
+- Notifiche: nessuna modifica. Gli avvisi delle carte e delle scadenze sono locali e compaiono solo quando l'app è aperta; con l'app chiusa arriva soltanto il promemoria settimanale generico (serve sincronizzazione + Worker con chiavi VAPID).
+
 ## 2.20.0
 **Assistente interno potenziato, collegamenti tra i dati, meno ricaricamenti**
 - **Assistente interno** (sempre sul dispositivo, senza rete, mai le password): ora incrocia Carte, Vault, Conti e Scadenze. Prova: «Briefing di oggi», «Cosa scade nei prossimi 30 giorni?», «Dove accedo a Directa?», «Tutto su Coop», «Quali conti non hanno accessi salvati?», «Password deboli sui miei conti», «Quanto ho in Fineco?», «Collegamenti dei miei dati». Tollera piccoli errori di battitura, ricorda di cosa parlavate («aprilo», «e la scadenza?») e ha più pulsanti per risposta. «Cosa sai fare?» elenca gli esempi.

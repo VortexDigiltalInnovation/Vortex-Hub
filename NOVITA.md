@@ -1,5 +1,14 @@
 # Novità
 
+## 2.22.0
+**Versione vicino al logo, meteo con consigli, animazioni per il tema chiaro**
+- **Versione vicino al logo**: era nascosta su schermi stretti (telefono). Ora «v2.22.0» è sempre accanto al nome dell'app.
+- **Meteo con consigli** (regole semplici calcolate sul dispositivo, NON un modello IA; dati da Open-Meteo con la stessa posizione approssimata di prima, nessun dato personale in più): pioggia con orario («dalle 14:00 alle 18:00»), abbigliamento in base alla temperatura percepita e al vento, sbalzi di temperatura, finestra migliore per uscire all'asciutto, UV, raffiche, tramonto.
+- **Dettagli meteo**: dal riquadro della Home, pulsante «Dettagli e consigli meteo» con grafico delle prossime 12 ore, alba/tramonto, domani.
+- **Assistente**: risposte mirate su pioggia («quando smette di piovere?»), tramonto/alba, UV e crema solare, oltre al riepilogo meteo.
+- **Icone meteo animate** (sole che ruota, nuvole, pioggia, neve, lampo).
+- **Tema chiaro più vivo**: luce che scorre sul riquadro dell'assistente, icone dei riquadri che «respirano», riflesso sui pulsanti principali. Il cielo animato del tema chiaro (nuvole, raggi, colline) esisteva già: se non lo vedi, controlla in Impostazioni → Aggiornamento e diagnostica la nuova riga «Animazioni» (Android può disattivarle con «Rimuovi animazioni»/risparmio energetico).
+
 ## 2.21.0
 **Home con i colori delle sezioni, pulsanti leggibili in scuro, elenchi più leggeri**
 - **Home a colori**: Carte arancio, Vault viola, Conti verde, Agenda e scadenze rosa (riquadri, titoli, pulsanti e riquadro «Entra con impronta»). Il riepilogo in alto resta blu, il colore della Home.

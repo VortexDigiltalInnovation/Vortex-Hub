@@ -1,5 +1,15 @@
 # Novità
 
+## 2.23.0
+**Pensioni integrative e versamenti automatici (anche per i PAC)**
+- **Nuova scheda «Pensioni»** in Conti: fondi pensione negoziali/aperti, PIP e altra previdenza integrativa, con posizione maturata, tuo versamento e contributo datore di lavoro + TFR. Il totale entra nel patrimonio, nell'export Excel e nel report; resta fuori dal ribilanciamento perché è vincolato fino alla pensione.
+- **Giorno di versamento + aggiornamento automatico**: per ogni pensione e ogni PAC scegli il giorno del mese (31 = ultimo giorno nei mesi corti) e se l'importo si aggiorna da solo. Per le pensioni anche frequenza mensile, trimestrale, semestrale o annuale.
+- **Come si applica**: all'apertura dell'area protetta (e quando l'app torna in primo piano) vengono applicate tutte le scadenze arrivate. Se l'app resta chiusa per giorni o settimane, i versamenti mancanti sono recuperati uno per uno. Pensione: si somma alla posizione. PAC con valore manuale: si somma al valore. PAC collegato a un ETF: si aggiunge un acquisto di quote all'ultimo prezzo noto (stima: l'acquisto reale può avere un prezzo diverso).
+- **Nessun doppio conteggio**: quando attivi l'automatismo ciò che è già passato si considera già nel valore inserito. Se vuoi includere versamenti già fatti usa «Recupera i versamenti già effettuati dal».
+- **Registro**: gli ultimi versamenti applicati si vedono in fondo alle schede PAC e Pensioni.
+- Limiti: i rendimenti dei fondi pensione non sono calcolati (aggiorna il valore con l'estratto conto); il versamento non viene scalato da un conto bancario.
+- Le pensioni hanno anche scadenza facoltativa, credenziali del Vault e ricerca, come le altre voci.
+
 ## 2.22.0
 **Versione vicino al logo, meteo con consigli, animazioni per il tema chiaro**
 - **Versione vicino al logo**: era nascosta su schermi stretti (telefono). Ora «v2.22.0» è sempre accanto al nome dell'app.

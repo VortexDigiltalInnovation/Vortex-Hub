@@ -1,13 +1,6 @@
-# Vortex Hub 2.25.2
+# Vortex Hub 2.25.3
 
-## Miglioramento backup su cartella
-- Messaggi più espliciti quando la cartella viene selezionata ma la prima scrittura fallisce, per evitare un attivazione apparentemente riuscita senza copia.
-- Testo del fallback download chiarito: informa che il salvataggio alternativo è stato avviato e che va scelta la destinazione, senza dichiarare prematuramente una copia completata.
-- Cache Service Worker aggiornata alla release 2.25.2.
-
-## Verifiche
-- Verifica sintattica del codice JavaScript inline tramite script di controllo incluso.
-- Test su dispositivo Android fisico non eseguito.
-
-## Note
-Il fallback browser non garantisce che il file sia stato effettivamente salvato: l'utente deve completare il dialogo di salvataggio/download.
+- Corretto il digest SHA-256 nella Content Security Policy (CSP) per lo script inline: la release 2.25.2 aveva un hash non corrispondente, che poteva bloccare l'intero JavaScript e impedire l'avvio.
+- Aggiornata la cache del Service Worker.
+- Nessuna modifica ai dati locali o alla struttura del database.
+- Verifiche: sintassi JavaScript inline, Service Worker e OCR frame; hash CSP ricalcolato e verificato. Non testato su dispositivo Android fisico.

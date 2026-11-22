@@ -1,5 +1,5 @@
 /* Vortex Hub – Service Worker: solo shell offline. Nessun dato utente passa dalla cache. */
-const VERSION = 'unica-v2-25-2';
+const VERSION = 'unica-v2-25-3';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './privacy.html', './ocr.html', './ocr-frame.js', './icons/icon-192x192.png', './icons/icon-512x512.png', './icons/maskable-192x192.png', './icons/maskable-512x512.png', './icons/apple-touch-icon.png', './icons/favicon.png'];
 /* Icone di riserva: se sul tuo hosting mancano i file in icons/, il service worker li fornisce da solo
    (serve per l'installazione). Il modo giusto resta caricare l'intera cartella icons/. */

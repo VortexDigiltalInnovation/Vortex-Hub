@@ -1,0 +1,5366 @@
+'use strict';
+/* ================= Vortex Hub – nucleo: cifratura, database locale, sessione ================= */
+const APP_NAME = 'Vortex Hub', LOGO = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAADcCAMAAAAshD+zAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJx9kK1Ow1AYhp8DS/gJBMEEAnHExAxkIAhiaogGRwok61DtWVeztc1pCTcADoHFkRnuYLsF3EhIECguYSEBTU4bcmbKq568ecT7fSBeAGotGMW5dp2O7Ho9ufKJQFDEV1lKdQT8vJfu294/XlXW+mGmgDnQ0F2vB6IO1KOSm4aDktuGb/I0B3FmWF+4JyD6QDNa4GCBVaqNfw+0R8NrZXezEcaX58AqsEuGi0PH3F8qyRiOv2H5wXbBI0zvYOfDdo0n2LqFycx29iepr/2iqgFLgwF8PcOmB9uvsH7194iKbbLY5pCQEDEkRHJKjGIfySEtDjj6BabWPz+CHaivAAADAFBMVEXw9fDy8+0rd5QvlrIriaYnaInW9vnQaCwoV3TO6e5NmKwaVXlup7Ws2udLeI4xhJoZSWsbZopQhpgaWoKOucZumKnulzeqyNIvZHqv1NuSxtGy5O7WdTGIqLXp7ejnhzJPo7d1tceZ1+r46dAkXIMjS2ocdZc0ortNiqQypsJmiJj78tjy8+0ofaHvpEbE3OS2ZjaOs7zy17Hy9O5OqMNrqsPy9O3wojvMiE7z9O63dkt1srxHbITz9O7UmE6ku8ZGaHodiKjy8+3iei/J19fqmkPJl2/ZpFXoxpKa0troyKm48vjXhTeDna3SqIfWp3AVPFnatI7Id0VnjaJNkpzju4xvk5uOy+Pu3Mb447gxnMGziGkZQluza0MnRVl6w9Wpt7XcsnAcY3ub4fLit3gdlLfEi2TIXijRaR26glZIXWpUsspjfYy0XjDUxbIVPWFUc3l5yuLX492PlpSzk3Kym4fkikdFfaLv0podfaA2cn67cT2wwrzVchzIzcssPU1paWuSZVCwpJmpranGXR3dlDsXT4AcgZ4yUl1NVVNwe32keWTEn4fivaM8kp5asbqNeW6Ng3SGjIrgrow+sMx8iH+CamKIrcCFv+C5sJ2mz+PKuqne0bngbi4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACTHdIaAAABAHRSTlP+AP///////////////////////////////////////////////////////83///////8v//+M//+w////bf////9H/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVd7jzgAAPVlJREFUeNrVfQdj21aWLgIRMAACIAUBBkGKNCmKNk3JkagWNVuyo9iWEveauCdZp0x6Jju972zft+318l/fd869aCQluc7O3hk7tiyR+Hh6vcobr/ksnju9sjKLoySH/raycvrc4ut+b+X1vTRQrWUgjTqza8D4nw3c4unDYOUhnl78TwLu3Om1/VDopqnv929rr4GErxjc/sAU3fFty7J9Z198APhnC27x9AGsqJu2NcbHaukHseir5NBXBu70wUJWswpj8bHNg0Xw9J8XuHNrh+gM3SZUzR/9aGls7ETB1g/59rVzfzbgTh+uGf0S+PHRR7XaR4+aY2Olqn6oBj395wBuceUZlL1O8jZVqzmOU5siudP1w39oZfE/GNyh/CjO7thYoVWbcujUWkC3qz/Lj70sdyqvG5qum7VomQnH2JwpIl1z16mZ+uuG9xLgFg/VImZUbdkwbtbYibHmRxKcMyUsAmzeRnU3Ogzi2uJ/ALhDZE2vAZfVjfX/yQFwJ+hYdJq2v1vTX4/svSi4lYOBgVwFpo603CDdtzWnxlz5rfzKieZSswmIY+S3HEjBlT8puNMHsaJvdUsFwXj4vUv818KfmlNTU4TtoyZ5KRvMrviOZvPkyRP0zXb1AAKe/pOB21/YzGjD8koxL3ZJqiLH1HWdNOTS1EdTH3009SP8sYUvkaKpkrspmBT69CB8LyR6yqvjSHjGELIYWcFqZVitRkRstr79lmz4mGVmWDhqkcIBOkm//fhz5U8AbnEfd8SsBl4BTzcm0BWaeSJE3cS1HLOiAU5uCeqBRZvg1FY0Gt7s4usGN5psemQzN1pW13rUYrrVBr4lSjxnyxn68ZbVPLHUXILuZHj7kW/ltYIbTTY9DBhaoWv5kf4uMZ4XjSAtPTc9+IhX2AC65iPWstAxY1azar4C4j0XuHP7QCsBWqnk2aFJ/j94zKuO1qSOs49E4aesplXTSW5Js4IHRsM797rArYyEZhO0QslqCSGr4tm6/mEuWXxSugbgyCZ9OOaufRC8ldcCbhRL6lFA/Fgq4UHoSRtQi3gyjtdI2cdHQjFrTlStVn2ycnQ2NnyfbAX9bA2MSUF6Az/okAIFE9ujVMtzsOYzg1sc8Sk6tmDIIHkI3e7iIzeVKAQGOhs4rVYLIGDTbJa6/AG9ANOvTrUIz67eaDAhffqnfeAtvmpwI3wSs++phUIOmt4qjRW8qh71W9mzvLwMT4twCG04AiD/w4lmqklrDG/M2hhh10+/WnDD4qZXPbVUKKmWjKrZ4VgGT5Zsfc62lxkVSCdYMMbUtDdaYMzdSBwiL/49kPjwCTRTL7NG5g8/MyJsX3mV4Iax1WyG5vmsFPRa6Pdtm0TF8kz9cT+MIgRs8lAEHu0CEsVw+mAQDsmsOeBZgr+0xFwqAeoOVAtiB3uYeCuvDtzsKLIVCqqKt4WacKp91g/LbOGqihCb5zv8MsvNJTq2wEcfRJU8s1HEm31V4IawmbaqEtl28fa1Kvhqo8VKgcK30ZmtBgh4OGTTYnRClTL99NoGBxd27UXQKS+ALZJk08nmgmDLNnn/pt6C11wack3MnfDx43DHNBPzltiGIXRV68RJq7WLF7XBoTZFCSAeGQkiXuN50SnPbd50n8lmRboZthiZlBETjnMh0PPBXf9273afPBdAq9V2H7U2mvLAyrWgWWpZjOzeNHUKCm3WMQSvxkZiOFF9uMFTnte8mQGRrQRFEpKY2TYeXbyt7eEfokwEVLU9r1ePhMaZegSVGcfgycHzbzzaTQE6pCCrcTTfpNf3a/oUItola5g1F18S3CDdHGZJz4Epo3e2q0ldY85TSXlmqh6eV4+YZmaVCwUAc5KP/I/8ywkCGJlSU1lJuMc8z/DMd1tQpNZQODH7cuBy2MDzVWZJu8bva9dDM/2329ueb8Y5FEStJa8vuBHRuSTXyX3PCeSJBIl3m5bXTyMJspgke1WKiYa05uzLgJsdjEw0Fada8/GBBvWMa9RQwh4hbUBNwPGF8BWYi0A0mUfIIhnLHP6X/4oighAwgmd7qcdshgyvNTW1ROhaA1po9sXBxdhApyCwHdMmbIVHVWaWMP8235nCV65aBQ4SCDn9TSBLwFGupPA3x+moKv0O7xQG5OTSEuBZzRYZTj2Kcs75ht0CvG9hJIAOBr+14e+az4LuIHBriVXT6Kgeka3bIps2CA2kaxA4gkb+ZpWh+WSCTyYMeWKscPa4wHWqpIpTiA8B/BHg2btDJsIMN6CVl5m68KZFSleKgLL2YuCkzxW5auZYbH98c6STsdvkgFy1+PNn70KekyfHBLJTp1S1pJ5KwJVKRLoE4Am4yvZw7dX0yfDhxLr2pJUoz5UXASfjAEc8Q7crPmj2H0ZVfuEhbtDzQZdy4s5plsYy0Apn/+ZvCsfPZj8n4gc1f+izgcHeqA1n1jbs5hJX95bIiyH5a5qHxQjKYQaOeLFQRRVjapkpN8yRgnNqzJEgG1iSEpX8nGOk6ccE0UAv9XgCC2bDCuwNCvkofAVlLM8VfEoWe9iZRA4KGSTk5aFbPpr6ljh0Qz/E3CmHYAsrAMSVtVqtRZ/tyJpvGLLqIJb0iCWdTJEYX/yZYEd6dPrN9WD5h4o8VDaxA/4skeOzo2GurzYp9/kRpeVrUJ5p8Lf4nOBiRRlopPpFBaNm4Z2dYWhRP9I3BI4Si1u1lGIrsF6U4kXA6mEWVqORiyHg0oGEagm+13AGRYdALsXPMkVZiUNUpnJIAOdqWndKlmccIl04xJH1ulmT9Y5Sk1jSLo3lsMXowIr9nLjOzLTpzMiTZq6RKoTedIaCBiTi41rRR0sn0ghk5XnAJTk8s6KNW7Ik6tTugK3CwexXr687MTYKFGrNUhZaKmduJiECWAsLFy/e+pjOkycff3zr4sWfLrzfjhE6dc9D8lIf6IhoUq1IgmtB9egHZ/yUg71lBsflGTp3oMXDgcgOGZNdTpUXCJuSFTeStUQzuv2YzQjXrSdXzojzDg5+oz9euHDl44uEUGZoPC/vK1OCTIKDUvkR7IZ+sA+tHOx16a42XorBsUYxM3ZbjzwvSiSsQB9k5OXIJummubFlbLf3rl2RqI4OHsLIABkfwQucHFueiNkSj7SUC4xnnxVcNmMSFNXx1kcC3BRsnadnTasL3Zhiq1FFIIMtplolhjbT3rt8ZnV19Z0RwGJ8bwLhhSfAx+LseWGumeXEkvikqYQJq3BIVkU5JIQLK1CXd+gFa8gJqVo9wyXBz2/W9N0YWwm6IkO3jE0j6wGV2N67Qsj+8tixY0cPOm+9+eabFy58zOSLbLefCdS5yidOE+CcQ4I75ZBQQDgoLcC7Q4bANbPJBmBzKJdO8Mh2R56VZUmBTdZE2hfPr06+d0yeowefNwnfk4sEL/Tqeq6dZelbQPu2SYmj2iEBgnJwGk/32EPSKIojBqvGiQzkv0rAVkP0ffYvCA0UpePFRbhC6mFBLhqNmfat1cnJybePHUvRvZNnztzfiHgM7/0Zxbwdpy4aisNvgAQnvB/E5vnMw8rh4PJ5Bb8SPyX/5qeJFK9EvoiFDPPYXxBTAmhc3bcScau4IYuagIaTgANzTvI5ckT8dxJfBEBG9aYAJ+Hp9UsJv8S6+OQJcqMHqpiLh4LL1bujCnt7IuRxgygV7RLJmG6rhbP8bmDKmlUaVCWVG/RU7YXz1wW2GBljGj4M8eg7Mbq3WPiuXGwrv6yn6GwB7wTiIzjPOS9m7TBwuRIcDIGqIW/YDepBvZ+aYAJFMlYFttgKvBv7JRm6gZ8a7fY1gpbQbTSuBB8Qvsf43hKHqLcwswN0jbTBBadJv5A00g8q3g2Cy9G5XtS0UqtrBeZApVAdKyGuqZELz+gKVYQBlsSWBDCk59p759eZ694G3719MLIjCYtOHnsnhXfhwsX2zuPvBh6h1brTQvyQrwQeDC6nTSIDoQk6FDx/CBvpD/1mqXD27Fkm3LtVqUxSumkkbu1b1+Xjvj0S2eivTRIBge9oDO/JQvuXA3EI0E1RkSs6QKco+2sTs1LUirbvWT1zENsYtLC+AcIJiSvs1lDptxhbEn8ytisxtgNoNj8MmL8Z8vdWQr2F9k7e70PVb+qRxcXAfXWKsr82CcpaUXPg4fkDCWd4kVWygMDG4ArNd1setwNZhfEs3RaeXh8JbZ7O+vr606fn+Ty9dw9/+8UvfsFSl4F57Oibbx0V6C62h0lXQwxUyNmDtf3B5X2TslEpVqtq15vL1XeAjfp4dQq8z0qJczxRfiuMjwujUSFs/7R6fSSyB+v3Ll/bW7jbzp6FvWvXrgBjno5EPbJ7b7155uLMoNTZu1NEuv39FGU/30SvlI2ip3uea+dKFSqYslujP4iUDoGbsrsCnDYu8mQVELt9eX0IGxHs/LW9dnt0lWemfXfv8mfr8/Op8jwyeZRFD1pzAB1IZ79LPS85jTm7H7hz2UxdvWwYRi1Uu26U98bAlHh0s1uIwRWWqhKbsIeaVrFJ3CS2LLTPzu/dbQ83NeQB7l2+l8F3ZPK92KLfauejrWXbeXeoL+TcPuCyEmcaxnSnrgeuezsbB3haQYQ2LSKcUCdWi2vz1pI6LrH1gO38ADbQ7MqeCNUoW9K3g9uePDcDu1/NlnvaC5c/k/DY8Em/ZUDuqkhFI394YiynU9ZGgzuX1ybThqs7rudm1IkeEFMW8EnVONkoLLi1zOCWujE2eNd3z+c5EtwokFFxynO1Cs5AVs+7CYhxgRge23kSv9jsCYclz5km+NKhopfV2od0ymjCRSCcESp11/UytY66dpxdZJSrUolDFpVqaUtC4PCrEgHbfFbvza9fXmBkYeBWjEpFmItThdyh9BEaWtDWJgCS+Z9nszDJxHtrEJ2OfGAVkX9zLBcerI0Ct5iVuB6w9cCFrpsJ4CJtHOabaqemmkgc+rSolLW8TAI3Pj6uGXVge5AVtc+u3aUX/fX320ZyhOIBwiGIJWtDOnozCzFv47zDvuaFhQy6CKQzqSnOskcrTGWkcxIa2rRhKiG40syGP8fx7hSA1FXyTSQ4yuMvtyx+3HFiyvb5jD4H1e6KSslOuDM3NxeFYT/obQLftFQ/BDGTU2d81VoCL4vurTefvJ9RSChbRIpJ8u6MdFOUkV6la2hGAOZz3SD9ol0hE0e1U9NVTwnHi0WOsLVg3/A/EC6cOT+flbWFmZEttX0CKPCB3Bql0uOCAbijdFPmk9p799avC/IdJXQXPm5nVUoL1U4qkuXMwTC40znCTRsVE1zpuWFSd4w0EA5ZV4iEr6k/OyvVydhSSxBOxKaV28rlhG7zD0ZDi1PwwabkT8anSXwya3FTJl5SewmLd/StrNg5xJfI1Vr5FsjTQ+CyBrxXJMkBV7qpWwmmHCfC7cI8eceP/yzmyjG0CSH8IGhwmbVvvtuL6XYwNNlh5SbsOU4Cm9FT+BwlvL2nMe3IV8mIne4TX3KjYJZ0s4PgsnZgDgIBwpGuTNVJVVOPs43TKYSlNLIUOa5ldDUBrvK4vR5jW91rH95cY4ZuTD3Am5gYV1N0gCfSsndjySN0RzOMKfgSafaxQjTCGigj7EBQNsp1hXVlmIlbCQ26GEw9qHCOXLDPMnXntWQxSvumfV6YgPn1a88AjV95i+FNkzaK4SU5tJJIy4I12SL8itCd+elM2qRFfKlUyd0dYQ2UYXWCUMeAqiSuTI1cHYSjN3PgX0D4EsIVWgB3pysDncrjr9aFO3J+4dlbo5D/JOMwrk1MTwMcnO9MjegmN0i0r+F1KSSk9NGF9kxOX3JWrOQMqxRlWJ1QqENKsq4KXUnxvSkIB65sKFUj5cpCt+pXw6osI2rurz+7zpZtb+a5Or/MOiz7BMDF0peBV7KQEG3M7K0foYD3PSJdqlMg7uRBVSmXP6xSlCF1QjEqnBNokEy2q84SRy5zQwnG1ZQrrWo1dAJNBjp/uEzW+8HltvK8J0LpMQNuXDuVpq6pwt6eWfiM0P2KUp4X3s/YcSpBmlZuWCFWKcpQIOeDcC5+wHFdERDsiJIBvRt5J5Q1SsGBK8M7sgCsuf8HNunB+p7yAscM3G4X0bE0C1qOeASgvbB6RCgVQbrou9i/xH9bBXZ5B7wUZYgr3bJmEMV8zYV7oke3b4PsFXW8IEsdjsY9FlLkUPJ1lvFI46Qqv793/fr6vQXlhQ5SoZZtgTmFp6NlebNE9RymHQ7yfldAuv5tlCfJGBCoGrqPs9bgdAbcbN4OEOGopmojr0wsSjaOKFXYkHnamHBj1lQVYXiRnkXVtn9Yv77+AiyZ+A6eFbtxQnWOZ2xejdHJEIEsOfrZA79WXSZjQDWSnA82mwGXeYdLZTbgxH2a5RlFCmAcEC7mSi4kJ1zZdMIw1D4EJ8Hx+td7D9YvzygvflARs1pVq5KKXkI85O4J3brwMt+80oampK6UFjw/k1WKVfAH9aUyyJWbRaNCSZM5vPw0+K2IYJXqWDzxQS+D6gFMgUzGtpzQ8Q3WANrn99YfXFZe6kRUDZ+qwrVl9oTZG0/QeWTx9sgVQ2h+4afkmFBTNPpiHGg5cyARdjoBl7HgYcco9livCL/BQKrH1IrjiciZ/KEmIudEpmeIUOe3//Dg+eiGlu8oGphnAjqr+q5dQViiTbPZS8a6PGK7i+vX34OT+SbcFNOWfd8t6lNtjVnZRta1BFymLY+8E8oU19kpMioBegURAPF7sClB7waD+4Df0DHnnIrBCu7z//67f5xpjJgVdPaZ2sJsU6n0X6zmRnZ2IKwUlgr2uw55LUw8eCzJ9BZx5rXrKKpQYMetKWjXp444vAKVPTcG+FIZ8Cs3kRdy4HmRP1upUF2zodwoahPkE1G2Eil2Bhe/nWkCOoGrfP67HwazWtSNiByJOVI1cvNGgeDdTPoWGqSkaZprSg8MIh5ZhYkUnUnJGaCDTmFDrlcF9Sz0tjbzpu6cBLeSSy8Ym3pYMaZJqEVrKKz6+DgFzNwGG0hwTLkmupWJfym58Pm99tAUJHV2ldThqaUaQ7M2bOuRbd0cs25m+haCSoGLD6FbTPyVZKsD2bunq6vIOjwR70ahKqGjLF+zG+VDViUrcg3oyulyEIHRNBGuyrCclDJCZBJp70MtoRyyvaYSGPz5Gn9/N9NhjV6Zm4BFOYPqcBteRC0pG/Cqqh71M6MB/WZqpDjDRna75omPGOhOUasV/SJrvvcZke7CgkwSt5bEOEZrbClbFlmT4HIWHEkvjbBVhClnWpGM4RB/kYXA2/3sA1ncMXW3Igj3OCNm3OXkWRvUvVybqtr9HLa5iloShaPoG+6OjZo3M+giTUW9G1QCa04Ta45rUqucYMmYucw65WOhvKqtRy1KUFnWyXxFS4BbzFpwaChwg6HikSuCyPomuJLBdXVuTGHrKsDtii8Q4W6DblEdTaeei7SdF6Crl4cOLFIbapSv+lWCmMBxh0np532dO9jRb2uDdCepPwgsH0eysc68iVdaWCVLfkU4mFGrhSZhGiahTr5azgNTclbOL09P4/UMt1Y1NNlyEhkscijrc58J6/0YXI2Zls72HPkuhgF9VPH6aMVHliTw4oZK1c51f1SCMKlINeAS/y84wNRjX6Wmb0pvqISOcojVijaADkpj5iKM3TsyIndsHwF7DcQ7cbJpVXOWTslZuV4ZpDMMJBfqhuYmFUj2g9C1TK3MxRjcB0I3C3tITo2+XXGDgPrW0NfQp3yyEAb8urmRyh38u4pu/jrtk7p47ytq866S+uEuJMrRFGj6GAWccADdCXxDo32FSCey66ZP4KB+raWTJ7LZhjUGlzqW5jZRjr0vaOKe+OKNYqxP2MxJcIlqrrNOI280NCp+TU581HDwp3f51N7lvyXhYjEj9zMLVz473240kMymsvOJQovzNShJoFOTsgwJOuk3kNghQEBt8kq7wUbF92uiaT+fWZ9lcBmR6yDt1eG8CQxdkKT5hH/CvOXnwOn0KcA0GFuyyIxOFVdWAPLTcUnnp1IpV9L+toVrq6tPF2i0Sbdl5wAraLwQGlFPWrtKgi42CCQdM7eQg5b6MvSFm6DTDFg3zGoUJWvCtzrT05JgriAgVUQqAtyY2hoFDtpTFRwsaBjnWUncZAfzWPrUiA475V5sM9rXzq/+5eoVofamuGFAulCgY4FavsnTZ8YnlSnRIY+jMOkGwJkUGfhZM65k9QlVPypMWHOzIi1BxA4Ig/NHg1NV8a0knJm25UIpk4YkAyw/wHI5eYDf33sKcHvSrjM4do8bZAlPEboxamSuG9Kay9fC96BF4r13RLYhBkfdU1Y2sX4a4DL+iduZ7gQy11BhVsPDFDWhULgslweHEFLfBOE2+QOpl9mBzjRlC3ixmhPMWL/fCXUhGeHf3V14unpe6AWL8uiF+LtAusIpYkxSKvoNoaLHtULc1gnSrZ65xeCiBJxJQmBmfBQloyxNUdqRzCj/VD8YHMycKq1WDK7yIaREVHJKSYb8xNhNXcaLhvG32w0ij2vMKT/c2xNdXSUK2VpqrO5C9K0S6U6OQamYrjHO4WvMmA6kbvWMSGCm4PQAc5dORl0qGWUZdTRj25T6umJEsX/CDsrZwhC4ggCnVcIsOKNiY6jTJ3Y9LkhXYnxWAq5Xr9OMRb9suL2/+yHGVkArmW7XkwQ3CkBMOpotYaWSfqiktxdWzwgznoJDJsUqVTPqUskoyz7AucoAuJ4Eh2dsDZgCsrIAV3H1FBxeIYo7OpCC5pFdPjelNNQ7BocaivkFlbK+b8d082o12O+kIcOWUkfqXSexGx9PNSYs/cy11SsLA+AGMnxvKIu5hGXnktBkAhz90UWCRIKzYy86R7lKbDMYnBHXvCKXJ38w+ymNnYxKEQ0H9MKNeuS4tyNuuLVAW2DLNqpS9R2RyAfkMLfIgy1mdQoxEUiXBwc1JGvasQOmnMsVrjpbKeXEj7hFRHMSnE7/INz0D6TFMbdj4QS46QmN6G3OhWb/YU9n76u2awdyCDWSgs2UDiM0UvKopn6TTEZNt3Lg2JAXxggd2vljaxeTDu/cPr96cYByyDWIVIi0BUrGEmwamuRFwmA4/M4I5iYEOJFlENx/6qR8CwQFMa0IXBFsvfP59t/e3sYr9Svqh34tVixjpUCqZHwajYbpFQ1uE9Up46QCW8nKhUY+2xPWRXChFZvtgSpJR3WPa5/doicNqwk49MaMlVLf+bSyklGW0A1mFhy3oxQnKMkQRwV6hWKQ8eMnEzsXu2kAVyxSAWWnh9KpI6pBldpGpVSVrcLi4bfKxLo6ZLkCPwFxDVKFlYhYMw/O5OkXBldwOKGvpqSjusfCZ9eIA+pVfy5pvMlNBK9kwFGt2FVScJEENz4twZVMZlMG90H8tD0jVnCX7gtwylyAIUg0EVL6tmZ/iM+9dTzuXsfZNq7Wldts8Yu+bpO6rSrULNfNB7VMUZoIEv4w5UvxFUk6MuT3rpAS8VJwil0Yy6jLFWVWpC4arOUTKoD7hFLTt4vFogSnEqP2hLpMQp7bD2N37tJVAa7/uVdxv/l8h6JOrWZpnlOjQVfMeUqVcrWnw8AYGmL6Spex6dwJmJM59lIIHA3gcas2dSQnpCOVcvnHxL1uVdYoCQKQp30bswyOHVcTb0jVnUYGHH3OAFccJztXUKnDORDgOIdC7BL8rZmCK5cDZeuh74nPCJGL5mxU4jG5pG2/jxAbJsO0RfbFqJp93T5+9qyXp5xQSGM0XMiko5kpTRRkKAWtK1/dQ1zga6106me30BxrJhM1s5Jy+haSy4jp42QONLwMTDbLKeU28J1+MY1WKRK/9LmSBac5RnDjqp/02QbvenFDTaUeO8w91FpIuuESq8Cmf3NbAbhCaSDX4rMm4uHJsZoi3NiYL2E6lLs/ZnDJ4h+9Zov2CjkEJyln9jpoY0OesFIRreD6dhwVuGXiSwHOImbJhOJUWKl/kwVXLBpaIFLW1P1AXfvv0n6X3d0pJ05P6kjUELbHPRAD/rnuwfIBXKk0kAOESiF3ky35RiJ1MjkFMrR/aNMXu9XMGLbsHjEFOPEq5aLBILIhTyCMeHliojjBrTAsNCbnYCdOieyXojy+ndTwrhIHG13N8LgkBbJQCwAqeHT8OHtnuveRjMA2g/79nh7hIwzQn69Yx88eVwcTnAHX/2munGcITDcTk1NE/sNdqtXL4XQUbcbG4l6ITOMy1VKNLkoKXShMEaz2KBJvMAsRaFUIHdcK2JM+HnvOv0x6AsgUTOCTQHut6dQ3izKwi8ME4aQ1gK1YNhxnGwkbyJ0JdamOE7jCMDhfGEgmXVWUQAmc+GDhgj2+y4It5Ccskc/0qPqI1qikm11Dqkj7DqUGWpRmcFhvSDczKE8IoSNwYZxTmRiP8wzh44Qtv2ZwExN4CfDBtPAokrlAVhd44atGuePUDIOyUcamaYLXAC6gEZJBcOBLIh0LXZNLgxkvBQbtKwGuHxtw6xFhwNwgWkJji9DrTBtiunGqtgz+JH6sFysiG1Av0/NKjSK9ywk4LQVpC3bCLDiBbkL8gWMwOdNTiMF9US53ohpyDVTChTHVERwR5cbVYXCSL2lGgjUz6oSplwJjsMNsKVJrYckqEDa52TUmHaSo2E3WhmrlMvlTgGDwfNEWnCqcUxz0CAcMzuaEEDp8euZ3qcwZ5bJEx0dUtsZlykHK5hdXOyGxSgyOAsIPA+UmfQpDU7h9tiECXItUtVApsdCZbQr81EDabyteoVlbgscgPinHmC7aMbiahWByjl2UTkj18KjDzyu6tXli1WNwzJcUBSU5dLPzdZkEFN8/zU0XExNpRqWk9YWhdX8TKt9cRToDTdQSHJnXmx+q2jDlQgkudodM2aQZJ4oanJpnnoDPHM+zOrVHhbhhKupMF5cHwZnbRgePs9MwDdYS4wKcLzK3MbjsRmYQuXP16tX75fSw9iQqoRFDmJiG8veQ0e37RsdQwof4pwhRgnG/h2xbJQ6Us0LH4lqg7DrzpSLmpo7HHhiFhW6JOE330O8zAtwcU07O/9W6ZZEj6hWRISeudhONAnBdjnoYL/NG3h3cqY88/b7vJ8PlROjw8dbWlmI+9re2TGXL9/uhEvb9/tbARoTvyEnh9NkHH/BSTPCpUL0FmWyQfgzhQA6mmQPnSKNqFNWaWBsKmSuWZaLO+EJRvtohjUKcpsbupTB9UugKjvLajvmY+o6ZcicoNiB9GWXB7Uqlw0p8o5QuHP6oKao2MqMHvuR5whr+LAwdrBDM+VdfQbUUSf3RvNVZ0pcNDtxivvRfI7g6dTHF4KTQsQsmLJ30/20xNBQhC7OE+VP8jwgnBGaWNIpRLC4zuGXkvwTr+0aHwF1DmFeUvjNRjj6QOWZL1lkDMdirBYdWA0wvlJLsINlfFjpNjQMD1qhsC/QAiHi1wdQjOCokcsK35DBTDZaX3eL0dEf8DMBBxd5FW4nL4CaIdAVSKSa8FtLznGooma8NnAMtSDM1LHQUGlRjh1U7LvqK4jGOQHw7ZVBo8owes586zr1yhwBMF1EquCRdH41is7s/vktcyKQ7dYoWLBDpQqTdZdhTqh7WT0mnmju78uQ3Rw33bbhUzRKJzw9oSwy8SbJ0WgzOluZCxlKhl3RJq5IpRchTJ/s7Tb5XXAS1XcTLiHb3WDsy6VSCp/mcTkV0LvjSPrDlqf/zSi4DnVgt2WV7ELgq7J7uiaT1B7ScwxIaJa74SHBR7LYqTkD1GiSuvb4uooIVEavOXXKp80NLci3BjfIWgbs2A+3I6DTCJtwon8BNHB/Lb/YdPhSwSc+ZgZUK2W0bh9DdV2uc9aMfOhm/lcmvlgU358oZaFEpQh4rXgAR51Aa4kmSHAoiloBC8fa9H7dprIdJd0olvuQ+RQgnSJcpy4wmHDy1iicGfWR6D6vM6LfmP/8zbQE78FoGm+xOkC031EQEnAdnusmAN628KKXcsBKn9hochk5X4nSEeSOg1PHMeTQY7gi+LKqn2EkUrqdBPpmM6fYVOMTzgU6O+rujzgbHTPvfcaBO5UdPSk482z0ALvbbmM5RJrV3LpPam5b5PPrLjYDN4OV5VGd70mWUc38+OzCydekgYwC/sRjxxPJgQZLy6zVU5A744VqJmDYLjrIaSgxOZsBz4ExIqFfLJGUXc0nZji8d4bkbAc9BX6Nu5fA+U64Yh51z5JBC7ATpavuDQ1xXtcuUCsxWtUolsRLgYHDY+YDgPQeuGif8CNwIyjlu6plwOv2NbLl/uhxIcNENiwahlb356xjs2i4LQy5JR07wjU5MOv8gcBXHL1JId5zmkGCF7ESnlKofHQjOLgAcD8bKnzjB4OyEcjICJ3Bzad0ryBZCMiUsVJfKbtLY2WU/fmF+Hr2N8MUmMqQjxqRi3kRRPZAv8T010y5SkE0WMuKFZdazgaOxUYBrpSNRMtVQScBVBymHEaNMU8hsrvi41UH4IQPrsNtlyrXX51cX2o3tsgivY+5yqBYFcBQblGr7g6vo1C8gmNLR/dtBlVdVCHC1g8A58BXRWLWcmfca82Nw/EW5dwbgtLk40VnINJqt5crGcwRu08yDezp//d/byFQVc6QjY0cZugn1gwP0JcCZaEXiJUTYQEGuU8Wn1QfPAI5asnd5QUI630Nv1E/AyUmCFJwDic4sgFrJF/wrSKaUgww4nPPzqyCdlDqhMKlXO+D0hJC6fZ9QN7aZcpRKQc6cH8vTq2KihcGNNgWwS2aXVD8ta6LvleD8HDipOlK2tONMTVrwP5draysaKNHhxaXMsUZZxeQKddDG6I6L9DG+hiAWJZFCVWnsA84IIXPcVWggK8RUz4Hb93OpMr+jizLj1DC4uiZXn8WyPhdvaUFOIqdPzuWbbMhFZrEzGRxb87sPJpl0PRGzxhqTJ8G5bnAA6QDOMKtFUSoPa7QNQavo1Qoz2oHgdL5iBIvPrDTiGQAXF4gjCc6h/LTazzfZJOoS5CpTZoeVigQHH+XpPPpg2uQ+i5ydFnNmBF+oSMHBvi6ijk63miguaJuO2et5N72eyctNC8iHHwCuWmI1bPKofeKJ+rEpYHB+rP/ZcSbuzK19nR1obIPqniiK7q9ImoKGcvnLt/+SpsXqgjEJHTUq4DeH0nzT8J/3swZEuZpPRrwoOEcMhcOxImVXramlfX7QtNj3QQ9ZNwuOq0xGDK4qKQI55nWwan6N0NpgSyKyI9Scahh2olBg6Y4cQydMQ9nuCHATSYLcpLbhiWJhP9LpRrHsCHBBIpYQ6I3jHPbuD47uBUNu3DSd0iC4nqSc6NulXCaCVb0q91Ragy2Jizmhm1BplM3AYM0NOVZ57xOQ7laiUzLWDvqqT1/MOT3D4KBTBTisE+JErz2OZYpqa+r4PuBoaTKFDLXanRw4R9SxNAIXlzJhueH5xE9UH2wmzWgUpDDLbpXagLGHNO4LuPzl5LH3SKdkGDM2dw6nKMYLJX+0nStfZXATwsDUZV2sPk5Z2v3BtUpyIsPxsxEg0UrEc6VC6orYvHoRnxZtt4oG24AzQkdlOcN0qBMPM1iS1/bmj7x97L3z7Tg6SJQK5M6NdJvRebXR4DZ1n1LsAtxWRTQbETjsSpsaV28OgxM7omhpU/V/O8uZaA5lZdGOxVwp/JMGZf8AznO9KWtQ5AZb78l3Rgqovqn+5CeYWGUmaq9/ifVB711rN8ztHDrOQ1V1op1aGhV2mp2OGfEnIsDp2yIhIMBtTH2oevqo+0JK8YTXHUuAK6Tr7gw5qycNN61noc2SgUk9IcFw63224xLgqHSIPQNAt0l75EhfYqLyPWjMxpwxiA5ONGiDrO4onWI+NPTt+2QeucsBlBRpQwb34X7gongtwh1aNS9WucbtGahay7SF+EmzTlGU6qL+iGJedoLh3OC4CzNSh6o7cH+IMbVNmglZeHCEGRNiFxmsMididOyJodsbtn2ETjEfdqhoS+Auieq0GM1mQ7wfOEpAyk0krVZmMl6OXRqislLpi2FXzg1wHTXI18BGDSohGUTNng2aWKVDLXm0joAY8wrELkQJg+rIRdEWy4VhteqgO0UdZkyAk5QrBrlQjdmyvzsS3GMhcdAnuH8j2WowJttnvIo0RA4NmQvtwh8rGfFg1KDS6VSYwWJo0yXbCGPQJXSoHl+c/4QZk6ajYRBg2shXmRDlqeO0c86BJzY81mJ2HppzQZlrySH2Msw5Dn6rhZzk+bDvjAL3VY/WUJE+weYAKwXHrXqiO0tyZSiyhgWPqzGQPc1PfdzTo4YDTVCG+XIO4BzfdTe3sQFkdf4TbCRbXaXG261ObBGmk6ZfTW0ta9rQNUpg8m2TTUFRLtOgYpas2aFQPQxu5v/+W7xo0SJwGWysT0JJOOwB4r4q9DvKXIqX05XK6LHOHs+YIebwupj7met72EvTvoZ1C8cIHY1IbxkxumIm4WotdzXPGQTXuR/2r3IkWCzHusjg+RhIDQYqB8DN7P34v0lwhSWsfMgtE7E5VBXgeBwTH6ePy2k53WDmdeXs6IHcLRQGXa7Mu3wxktn/BlK3Soucjh1778wCRuRCoTMnsuhOaWrXUl1nKEEUhlc7cTGSguGirEiiAYUoN4jtX29jMSGJ3Bjdd5MFx/1LnlQnNvX80yZXVAj4TalwF44eyF3MsZLRoT5S3+2KZqmdHbSlzmfR7SQWIXXFZFU/GmDLcqBH6AqmgoG4rUb+B0ff+FDzEn9TrMBc/94T4ArWsp1yJYMz5dilUCc7bIUV2tZI/zDAlYv7DMEHX4t+hsiNvUt2ML8kc0DoLkJnzrnlTowutyK8lDd3MPplD8NLdOyB00dzjdbLkO39W2fW79XVs3/B4JrNIM+VCIBQBhGEg09vinWnmBcKxFqM7NLU2f3WF8x1OkVSKWavm6HDP9GSE0YHHxrzopcesuNBv7LEK6k5ixBc7UDWrpa/LuePlNhkio2HQz4+M7n+e+8sgyvwZZg5wsFx0m8IcD93kp2JXpdFDoTTzP3WF+Rn6HiphnLJ87bSWSnYuk+OHCNzR+gaWbWSJ56aUStoFxrEJcChYXjCKBop4WZ+CmzzPwbhCFyBwXVLWXCOaLLhvGlmzJDj01DLfnFw8UTWjkOlYLQT/8UdH6k7u4C1Fn9FthzorrxPrPlFJ9Er4ym8U5mbQoBuKzBIkwT1+qX01KmOUtSC5BaOmfcvvvnO5OT6Y492G50do57jbrdQynElJYfE+0SpWaa4C1O1mloJ918ZMjCUS+XVnV63l2ExbN/5RKIjT4yIty0ZjFIrMbxTdGVPdjHjNvo3Hg64ZuH9DvVnpFurnzC2r6gERbuNREt1Fhx5CLrwSH5uZ4slFPqgHKF5Byx7yaoUJGc583wjt4oOwcGRTz6ZJMZ8j9UKbOElg6nHuRWZOUIJjzLn8dZ6KKZ+fbAJAwTF2Ykn6BaeXAC2I/OXI1otfDbGYxXSnVIcmoaJjUsyty4ZAL1XyRFu9sAFS9tlSvApdS+79UvZewBwfzV5bJI4c/Xa+zNwxuZ63BIlZG88WeRF8ILomXoBZhZuXSBsk9fPt+l6kbMpuBSbyAYFmuxJzbRPkb9ObourHLRgKatS0EBe3qRVNl5ub+c/whwc+SuxsBhzQrxmGcxrlLOyx5Vz4iPAq5rJ9SHDISl/GQN0gMbY7rX7akFyJJW1S1Z6gQinMUQPiuaZuUbhAPueMJXiH7gaK7fUbFPM+fdoNVYj1Zj/gNjnk08nxUpf6JUFXlIfCepNpJpTbGEjxWmH+TsXGvmFiKDamaNvvXNs8sj19QW5Bq4wJn7YGjueEs5OCRflW7xD6sGLJ272XWq2mOvi4v1RdVpqlj5PY+93ZA+OSHQg3jXAa3CvPVwslH24m21ck5e28F7r7n6XMs+0f/rkAi+mpi2W61/J/kM+VJ5uldRU5Gpy7XLWVFNYBq6kWW6jesg6utwCKSTW0Yayg5BnJ3spBDNmgk7A4zsGsKCM8MX9luOx8iThQ1k1sP0Q91aaOzgxtItPLpyhraPHPsUrrl+jmCWBdoquyNEScJwMEu01ucX0HunK/0Gd7vohiwRz1oCiNjTv9XKLBAGPGDODDvjOPBHweAUiK0+eNS/KcT5NuC1gp0ple/ub73/5nbRroNqbRLa3edvUZW6nkdiYQi17XCoUMWYecmNE1n/kgRiH3E1j69AVkBnSNTjy6cF5dnMvp9z93bpYWZZs04ZZuHIxxrfj045HYdyLaQBHzfcVt1cPd+QlE7euXBB7mo9NfsrY2qaXB6di0OJU2jKjE/Px7vb8ts0AIwpqpXf48s781jb04mP+EuDyNuqrf3l6hOQuQ7z33sMQ4kVcECFXQYR+HZpoc3ObaIUX8HpY3x2Ka8pm2u8vXLxyQUI7eow/qF9ca+upwAkX1XdipizxknaaW41HLJMOI1TjajR56TzD2tXcvr1LX1PSkVRKfgjlD/fYy8zBI/KdoQsUkjs++B7E+KS3nbz/04t0zYRYrn30mFjYTGuLNlL5Ev6pbifgVOwDiZgB8qEtviPQ0bZbsZ9lYW5uQ5a+DT+lbro/cQeuPPn+h2QNYmZFP9NPXPEBiO30rhZCxbgWLn4MFZLenkHQsHR8kvbW+QPY1FCP2ZTa2mHKjIpWyUsIdjiqDrYs5OVw8dmWVIfIlXScQdLh/Mvvrz1I9yxnzx9BwDNXnuCmlgWc9+ksvL/A17g8uXLhzB//mN5IcExu8//FZyggVcGHWWxol6iqiTUPBVMaFWegwQh3bsHbNMJnW1KdX716AwnaTVptNkC6xm8f760fGQWPnhqOJyzEGXFbCyh14cyI605Ij0xO/j+Q7fwCF6HydHPNhHBkBrB8Bqaskk8/1dSuWg3E6uFnWy+ec1PMz8GYgT9Mup3fPl7IbMpO4B0leOL/4vxx5B0Zx97+1adyjTGvUsxgE843fKlqInE0OkojmZXcR9yged/A19JxxsMXw+eXr1L7eMdG9nLwFqWdv/t9bm/sZEy4w+7+kESLz1NKplVTbMfjaw702K8sIfuj94ax8d0lvpqL5Q9d6T+wzBljEEZAZcgB1zf8zffti7k155MC3LHDkP3qVwm2ByhGN/SMYzIu7/AxU4mjMA6zkZUcT2LglWyc3dWSVULPdhlDfvH9JqJordv1hi7ACh/+GxaIDy5xPxAbLpn4FCfepSsWlxJ3FcS641NSmWB+VUxKFsSSGJ/84rmBC81AuC4trtvUn+cajbxOIVMOdBC7Xu/SVvYypfA3v0Ubx+rAXQOTfFXGMCzkXo58+umR3AJk2qOFS1s5AKTwfVyMbGGejjpraHy+RGuVQ3JuzGxfcR03F1piPa8RZuOMxee8usandA7W0nFKddPPBg4PP0ey9tYgvCOf8k5waQHj6yU+Hfim9St8Y1LoqqK3mLGxr20ETJakLE3jg5mgkm6MTneSGPXnvLpm4NKh3tc8e0TgUN0KzCy6h1ix0L719MH8kec68xIaX/7JsS2ai+X1P0ZPJ20isdV4+i3IDJPUs2m2ivfclw4N3KWxic09yFSh3IOA7X6Q2/b8G/fXcsf5syOjPeptek6q9ZwSR177Q/f4mNSoJ61dhP1KRjargLRCge+fLAmunHv+66LyjBnQUoJlmoVZhuq8n40Vd7YfGnQfEDbwr87PPxu01ctMNVykpUm6Adu45DTGVk0uGcFmLGM7zA1l4fCzIJJVtZz9XXn+K9q4714Tk4M1H+kEw8xNJj7sbG6JLeBXVh/Mf/nJgcCADHv9qS5AV7fKXBlhk/dTkJeo12Jskd43jPzdKz0KF8Sz3CHi1ZTnv6It35liFIOaGGJygnL5fj4C6nU6nS9CueX8Gvhz/ssvhyHyfSdPL9P1GQ3evqym1aEEG5x+wuZJnnQQqVXq+YUGKl+rnN6F5ysvcLlexpSjF8G448gJrTvI+wd5g4fWko7RkwNkFIZePr+6/mBengcPcNvJ+tPzl28tkObnVVZhoKWDFCk0OInAZlqxLkEm3o3yGSXq8o0v13SmKIhVXuBaxIzYYcRUI6KJS9+M8tdfDA2lIHgw3Ppckvdp313Y27v175dxrv3THt/iksQ/c75XMTKlBS3BxkqRsJExR90L/Tjm0IiIWkou13SsUlptXHmxq0h7AHdnKj7T5fIXg1lIDISDdQlflH2aRgIpuWwUWRYhW+PjCbSJccZncOJRbA+h7o/6w97ciPmXUgZcNy2lzr7gJbLB1XK5Jek25ctR5EFfDNW6adqyt3kDy+hGdoFhx2e954oClEgcEUY5kEytZqFY/si+ZWR+sR2OeBFmyxjbFPJG9Re8RDZGR0VfV2Jzuqglds1RY3wGjzlRUqji3qhvIWOSnCjs2z1XrRgCkLx3VdPSieQiKUWMk7kVjgnMx3/fH73oGQrFSgaK05tDF1/44ubtcqccMOlqy3BWprWhAIhIOUfLHXjVpqx4a5uu7GNBQ6nxYXolwXHBj8m4tYZtyr64x6/C13ru1P8wsqnYsVmRtsQoeIvG6s0Xvbg5VipbD5Fsdf07d/5nlwqptMIsmBvFM4gg0H6TaAha5TtNk7zjcqO2gHdcSFp86KNg6TKDCg2PBc4O5f8aI5iDIgVC16T7J6n7Rva9rLzMZemXuBthGoO63Df0E6Bz66N4c4sCpJTZRhyGl5mSp6KzYARcyYBgx0U1cnTjZui5lKIVeghlSUpli/r02stdc1/vlDvCccazox7ahaPp9UfD42/MT/lPxMDG87gYm8tFWCIbNZWYw8USsVQYFztB3LqZgCCuvb/wNfcxuvCLDh0jcEHB4nRgu7TocZB6pPAbIVV8BgFm8CR/JpbFJmWG1t82KmpcQ97ZGeriw/t11S6aeKBWvUB07Vmhcii2Q8DF5m6nf+kS1hjpARU7ykH1BqkLr56XvQY/nrnVY/L99V9P/DUBKoueh+yZmIDDamyKHzfraGCFjdSlJdzeGobmqe5yS6Xu5MDUnSqG6mVh82Bsh4HLB3ekXmDOOp4DGcCFRG5asiduevyFCNbn6lQREUeW7eLDHUTg8M0glP2S2w+3xas0SGm4+awywLKjaTvLvOs272sehu1QcIsDYhAZV9HztB3p/g1W9b3khvAGFSsDP4yTAb3tBGFZ9H6JY1RQERFLNMPvv/nmdhhLGvknbiXTeWf6PYYW4Jp2gmYMNlIvviS4NxYHaGf2rpIziXVk1UCYsiDZuxW6N270ErYyd7bq+JZKcv9VZRuVnr5w0hrf/foP39cf72Q+uqrG9bfEV8NtZ1ycdfSQN0u7A02Bs4dhOxzcEGdCe3bI9EXk4LsxPqEGgi76oKJBz2tuh1q95jKOWeM7VCEHtCJ1JsRNCSA8mB5f8OqYOOZd1cbAfaiH8uSzgRtCFxpXAa8DdanPYdk2w/MCIgnufkSTl5lVoLmM3L79DdxlTnNoiHrmwkAgc2/4fINOeRRLPgO2ZwI3hM50r8LqXWU+MR2f6EfjtpAlG+AsXx/c648Hxl2Btz2sed6nQq5wu3LXCeuEzKNfrEFN2n6vdVznBbA9G7h8VkUadopSBauYoN8NhtflmfDArvvxqdeD4AbVIpNNwa53w/bhWs8Rn+oSvCnmVbjxmMHZrGf0Pq7VxGzRpcH3X3nj1YEbRocYFXrl6uexcjbpI2d8BA/t0cytm/gf0sIy1E46gGGHNze55BqfrkvplAJ5B5LDZSwF41HeDF8M27OCyzUYxQmGryF599k3bMh191CPgRjo7wpNs8nANgEFtePQCf2glxCRgeBTYIpT7pL8nqCemM7ohpFhD2VUi9ArAjdwzzjb6h4sOhRLL8yv0fCIcnZd9pBiTY8fhnNm5pIGfAQ9Bi7CIsLW7Z5yu0BvptfdBRQjdjrDEdah5u35wQ0ZPPJXPv+6Q4vus/DQJkgP6x/S+AUdw73BdByLhc3JaFiCBmErbw/HH7PPjO05wI0QPGrbQ1d2J4YnNL9e97oDFyIffDCfAWwZR5WpNoGtdSNCq5XneODnAZcv3mXh4WN2/czuvk3PHR3zmcMGzkRt0dW2nTR2Y4YEtFFB8bk3Xhe4UazJCZQywdsOkv1XAUnT4LNF8Kfgfw1+FV2zyJpHuYsSKd10Y8QukudgyecHN4o1E3jQLUhfCstVr7iUD8k2agV09RvtHc9pvzo5neXNOamMbiClgkRTuTIylbHynA/7vOBGEo8G7iiapdY9V+hyGt1AgjxKnRrKfk3H1wMnl19Rj1mZb1aZ6/fIxwbROtujWPp5yfYi4EYTj2PwDksfB2t0AS0bM0kB2qA9PkGTNxxO63E6t4j4zsBGwNB26Sen6Td3a2QeZeX5n/QFwL2xuDZau2+5gMf06xie73c1eeGUzqvHixhSxe5JuomvWGeVWOFEynRAKXbe78SE3xn54muLb/xpwI3yV6Rdr3OKSOST4iIAcSoIJLLySBVTOQ7zXfgSlTWL2nSZFRLVpVOV9II+yasAtw9vimWCnGMwxLZBbIMkglAkbjuinlJbplSYTCFRby1N3YPW7qVwv0VUKy/4kC8K7o3Flf29jy3c60v8aUwLfNzdfUeuKnTuUJKvKHBPQ+ogqNs9f27fl1tZfONPDW5f0ZMMmk2i0BioNjUlVp9OTam0tpWzKoTLvbS1c8DusLXFF3/ClwAHj2XtkFV0CAI2GSLy7HdibFPYSQv/A35Jr74VHbyrb+3cyzzfS4E7FJ4IZcMtXFxESyYFuFZx3AhygcLrgfbS4A6UveyUIK7Ii8uzhYnpyrPsVlxZfNlne2lwZBhmD31Q2pbeZca80y0OtKONPLOnX8GDvQpwz8Cd2ACKq9+6mB+GMTcOJdzL8uMrBXc4+SKjLGdxsQkofP1Ee7XgIH0H4nOoOMkbNN3wQGSLr+6JXiE4pt/aAftvKbMOc70/T66dfrVP84rBkfztDxCzPOb+wM698kd59eAEh67NKs98ZtdeJS++dnCShCuHQZxdW3kNBPtTgJNEBMaVWZwMJJwVoFp83e/9/wGxsjlbR/ziWgAAAABJRU5ErkJggg==';
+const APP_VERSION = '2.25.0';
+const KDF_ITER = 600000;
+const MAX_FILE = 15 * 1024 * 1024;
+const PROT_FRESH_MS = 120000;       // verifica "recente" per entrare nell'area protetta
+const APP_IDLE_MS = 15 * 60000;     // blocco dell'intera app per inattività
+const CLIP_MS = 30000;              // pulizia appunti dopo la copia di una password
+
+const te = new TextEncoder(), td = new TextDecoder();
+const b64e = u8 => { u8 = u8 instanceof Uint8Array ? u8 : new Uint8Array(u8); let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+const b64d = t => Uint8Array.from(atob(t), c => c.charCodeAt(0));
+const rnd = n => crypto.getRandomValues(new Uint8Array(n));
+const cat = (...a) => { const o = new Uint8Array(a.reduce((n, x) => n + x.length, 0)); let p = 0; a.forEach(x => { o.set(x, p); p += x.length; }); return o; };
+const uid = () => b64e(rnd(12)).replace(/[+/=]/g, c => ({ '+': '-', '/': '_', '=': '' }[c]));
+
+/* --- chiavi --- */
+async function kekPw(pw, salt, iter) {
+  const m = await crypto.subtle.importKey('raw', te.encode(String(pw).normalize('NFKC')), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: iter }, m, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function kekHkdf(raw, info) {
+  const m = await crypto.subtle.importKey('raw', raw, 'HKDF', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'HKDF', hash: 'SHA-256', salt: new Uint8Array(32), info: te.encode(info) }, m, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+const dataKey = raw => crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);
+function gcmParams(iv, aad) { const p = { name: 'AES-GCM', iv }; if (aad) p.additionalData = te.encode(aad); return p; }
+async function seal(key, bytes, aad) { const iv = rnd(12); const ct = new Uint8Array(await crypto.subtle.encrypt(gcmParams(iv, aad), key, bytes)); return { iv: b64e(iv), ct: b64e(ct) }; }
+async function unseal(key, o, aad) { return new Uint8Array(await crypto.subtle.decrypt(gcmParams(b64d(o.iv), aad), key, b64d(o.ct))); }
+
+/* --- codice di recupero: 24 parole (11 bit ciascuna = 264 bit) --- */
+const SYL = ['ba', 'ce', 'di', 'fo', 'gu', 'la', 'me', 'ni', 'po', 'ra', 'si', 'to', 'vu'];
+const wordOf = i => SYL[Math.floor(i / 169)] + SYL[Math.floor(i / 13) % 13] + SYL[i % 13];
+const WORDS = Array.from({ length: 2048 }, (_, i) => wordOf(i));
+const WIDX = new Map(WORDS.map((w, i) => [w, i]));
+function newRecovery() {
+  const out = [], lim = 65536 - (65536 % 2048); // 65536 e' multiplo di 2048: nessun bias
+  const r = new Uint16Array(24); crypto.getRandomValues(r);
+  r.forEach(v => out.push(WORDS[v % 2048])); void lim; return out;
+}
+function recoveryBytes(words) { const o = new Uint8Array(words.length * 2); words.forEach((w, i) => { const x = WIDX.get(w); o[i * 2] = x >> 8; o[i * 2 + 1] = x & 255; }); return o; }
+function parseRecovery(text) {
+  const w = String(text).toLowerCase().split(/[^a-z]+/).filter(Boolean);
+  if (w.length !== 24) throw new Error('Il codice di recupero ha 24 parole (ne hai inserite ' + w.length + ').');
+  const bad = w.findIndex(x => !WIDX.has(x));
+  if (bad >= 0) throw new Error('La parola n. ' + (bad + 1) + ' non è valida.');
+  return w;
+}
+const kekRec = words => kekHkdf(recoveryBytes(words), 'unica-recovery-v1');
+
+/* --- database locale (IndexedDB): solo dati cifrati e metadati minimi --- */
+const DB = {
+  db: null,
+  open() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open('unica', 2);
+      r.onupgradeneeded = () => { const d = r.result, has = n => d.objectStoreNames.contains(n); if (!has('meta')) d.createObjectStore('meta'); if (!has('items')) d.createObjectStore('items', { keyPath: 'id' }); if (!has('blobs')) d.createObjectStore('blobs', { keyPath: 'id' }); if (!has('dev')) d.createObjectStore('dev'); if (!has('snaps')) d.createObjectStore('snaps', { keyPath: 'id' }); };
+      r.onsuccess = () => { DB.db = r.result; res(); };
+      r.onerror = () => rej(r.error);
+    });
+  },
+  tx(store, mode, fn) { return new Promise((res, rej) => { const t = DB.db.transaction(store, mode); const s = t.objectStore(store); let out; const rq = fn(s); if (rq) rq.onsuccess = () => { out = rq.result; }; t.oncomplete = () => res(out); t.onerror = t.onabort = () => rej(t.error); }); },
+  get: (s, k) => DB.tx(s, 'readonly', st => st.get(k)),
+  put: (s, v, k) => DB.tx(s, 'readwrite', st => k === undefined ? st.put(v) : st.put(v, k)),
+  del: (s, k) => DB.tx(s, 'readwrite', st => st.delete(k)),
+  all: s => DB.tx(s, 'readonly', st => st.getAll()),
+  clear: s => DB.tx(s, 'readwrite', st => st.clear()),
+};
+
+/* --- sessione in memoria --- */
+const S = {
+  meta: null,            // metadati dell'account (chiavi avvolte)
+  kc: null, kcKey: null, // chiave "carte" (livello 1)
+  kp: null, kpKey: null, // chiave "area protetta" (livello 2)
+  verifiedAt: 0, protOpen: false, last: Date.now(),
+  items: new Map(),      // elementi decifrati (solo con area protetta aperta)
+  cards: new Map(),      // carte fedeltà decifrate (livello 1)
+  idleMin: parseInt(localStorage.getItem('unica_idle') || '5', 10),
+};
+function wipe(u8) { if (u8 && u8.fill) u8.fill(0); }
+async function setKeys(kc, kp) {
+  S.kc = kc; S.kcKey = kc ? await dataKey(kc) : null;
+  if (kp) { S.kp = kp; S.kpKey = await dataKey(kp); S.verifiedAt = Date.now(); }
+}
+function dropProt() { const pa = document.getElementById('printArea'); if (pa) pa.remove(); wipe(S.kp); S.kp = null; S.kpKey = null; S.protOpen = false; S.items = new Map(); S.verifiedAt = 0; }
+function dropAll() { dropProt(); S.cards = new Map(); S.devs = new Map(); S.dls = new Map(); wipe(S.kc); S.kc = null; S.kcKey = null; }
+
+/* --- limite tentativi con attesa crescente --- */
+async function rlLeft() { const r = await DB.get('meta', 'rl'); return r && r.until > Date.now() ? r.until - Date.now() : 0; }
+async function rlFail() { const r = (await DB.get('meta', 'rl')) || { n: 0 }; r.n++; r.until = r.n >= 3 ? Date.now() + Math.min(300000, 1000 * Math.pow(2, r.n - 3)) : 0; await DB.put('meta', r, 'rl'); }
+async function rlOk() { await DB.del('meta', 'rl'); }
+
+/* --- sblocco con master password / codice di recupero --- */
+async function unwrapWithPassword(pw) {
+  const m = S.meta;
+  const kek = await kekPw(pw, b64d(m.kdf.salt), m.kdf.iter);
+  return unseal(kek, m.wrapPw, 'wrapPw');       // lancia errore se errata
+}
+async function unwrapWithRecovery(words) { return unseal(await kekRec(words), S.meta.wrapRec, 'wrapRec'); }
+async function applyM(M, full) { await setKeys(M.slice(0, 32), M.slice(32)); wipe(M); }
+
+/* --- elementi cifrati --- */
+const aadOf = (id, type, ver) => id + '|' + type + '|' + ver;
+async function putItem(id, type, data, prev, k) {
+  k = k || 'p'; const key = k === 'c' ? S.kcKey : S.kpKey; if (!key) throw new Error('Chiave non disponibile');
+  const ver = (prev ? prev.ver : 0) + 1;
+  const rec = { id, type: 'x', t: type, k, ver, ts: Date.now(), ...(await seal(key, te.encode(JSON.stringify(data)), aadOf(id, type, ver))) };
+  await DB.put('items', rec);
+  (k === 'c' ? S.cards : S.items).set(id, { id, type, ver, ts: rec.ts, data });
+  return rec;
+}
+async function delItem(id, k) {
+  k = k || 'p'; const map = k === 'c' ? S.cards : S.items, prev = map.get(id);
+  await DB.put('items', { id, type: 'tomb', t: 'tomb', k, ver: (prev ? prev.ver : 0) + 1, ts: Date.now() });   // lapide per la futura sincronizzazione
+  map.delete(id);
+  if (k === 'p') await DB.del('blobs', id);
+}
+async function loadItems() {
+  S.items = new Map();
+  for (const r of await DB.all('items')) {
+    if (r.t === 'tomb' || (r.k || 'p') !== 'p') continue;
+    try { const d = JSON.parse(td.decode(await unseal(S.kpKey, r, aadOf(r.id, r.t, r.ver)))); S.items.set(r.id, { id: r.id, type: r.t, ver: r.ver, ts: r.ts, data: d }); }
+    catch (e) { console.warn('Elemento non decifrabile', r.id); }
+  }
+}
+async function loadCards() {
+  S.cards = new Map(); S.devs = new Map(); S.dls = new Map(); if (!S.kcKey) return;
+  for (const r of await DB.all('items')) {
+    if (r.t === 'tomb' || r.k !== 'c') continue;
+    try { const d = JSON.parse(td.decode(await unseal(S.kcKey, r, aadOf(r.id, r.t, r.ver)))); (r.t === 'devinfo' ? S.devs : r.t === 'deadline' ? S.dls : S.cards).set(r.id, { id: r.id, type: r.t, ver: r.ver, ts: r.ts, data: d }); }
+    catch (e) { console.warn('Carta non decifrabile', r.id); }
+  }
+}
+async function putBlob(id, bytes) { const o = await seal(S.kpKey, bytes, 'blob|' + id); await DB.put('blobs', { id, ...o }); }
+async function getBlob(id) { const r = await DB.get('blobs', id); if (!r) throw new Error('File mancante'); return unseal(S.kpKey, r, 'blob|' + id); }
+
+/* --- creazione account --- */
+async function buildAccount(pw) {
+  const kc = rnd(32), kp = rnd(32), M = cat(kc, kp), salt = rnd(16);
+  const words = newRecovery();
+  const kp_ = await dataKey(kp);
+  const meta = {
+    v: 1, created: Date.now(), kdf: { salt: b64e(salt), iter: KDF_ITER },
+    wrapPw: await seal(await kekPw(pw, salt, KDF_ITER), M, 'wrapPw'),
+    wrapRec: await seal(await kekRec(words), M, 'wrapRec'),
+    recEnc: await seal(kp_, te.encode(words.join(' ')), 'recEnc'),
+  };
+  return { meta, kc, kp, words };
+}
+
+/* --- passkey (WebAuthn + estensione PRF) --- */
+const pkSupported = () => !!(window.PublicKeyCredential && navigator.credentials && window.isSecureContext);
+async function pkCreate() {
+  const salt = rnd(32);
+  const mkBase = () => ({ rp: { name: APP_NAME, id: location.hostname }, user: { id: rnd(16), name: 'utente@unica', displayName: 'Utente ' + APP_NAME }, challenge: rnd(32), pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], timeout: 120000 });
+  const SEL = { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged', requireResidentKey: false };
+  // Alcuni telefoni (gestore credenziali di Android) rifiutano le opzioni avanzate con «unknown error»: si riprova con richieste via via più semplici.
+  const variants = [
+    o => ({ ...o, authenticatorSelection: SEL, hints: ['client-device'], extensions: { prf: { eval: { first: salt } } } }),
+    o => ({ ...o, authenticatorSelection: SEL, extensions: { prf: {} } }),
+    o => ({ ...o, authenticatorSelection: SEL })
+  ];
+  let cred, lastE;
+  for (const v of variants) { try { cred = await navigator.credentials.create({ publicKey: v(mkBase()) }); break; } catch (e) { lastE = e; if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) throw e; } }
+  if (!cred && lastE) throw lastE;
+  if (!cred) throw new Error('Registrazione annullata');
+  const ext = cred.getClientExtensionResults ? cred.getClientExtensionResults() : {};
+  let prf = ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null;
+  const id = new Uint8Array(cred.rawId);
+  if (!prf && ext.prf && ext.prf.enabled !== false) { const r = await pkAssert({ id: b64e(id), salt: b64e(salt) }); prf = r && r.prf; }
+  return { id: b64e(id), salt: b64e(salt), prf };
+}
+async function pkAssert(pk) {
+  pk = pk || S.meta.pk;
+  const idb = b64d(pk.id), vs = [
+    () => ({ challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: idb, transports: ['internal'] }], hints: ['client-device'], userVerification: 'required', timeout: 120000, extensions: { prf: { eval: { first: b64d(pk.salt) } } } }),
+    () => ({ challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: idb }], userVerification: 'required', timeout: 120000, extensions: { prf: { eval: { first: b64d(pk.salt) } } } }),
+    () => ({ challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: idb }], userVerification: 'required', timeout: 120000 })
+  ];
+  let a, lastE;
+  for (const v of vs) { try { a = await navigator.credentials.get({ publicKey: v() }); break; } catch (e) { lastE = e; if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) throw e; } }
+  if (!a && lastE) throw lastE;
+  if (!a) return null;
+  const ext = a.getClientExtensionResults ? a.getClientExtensionResults() : {};
+  return { prf: ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null };
+}
+async function enablePasskey() {
+  const M = cat(S.kc, S.kp);
+  const r = await pkCreate();
+  const devKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  await DB.put('dev', devKey, 'k');
+  S.meta.pk = { id: r.id, salt: r.salt, prf: !!r.prf };
+  S.meta.wrapDev = await seal(devKey, S.kc, 'wrapDev');
+  if (r.prf) S.meta.wrapPk = await seal(await kekHkdf(r.prf, 'unica-pk-v1'), M, 'wrapPk'); else delete S.meta.wrapPk;
+  wipe(M);
+  await DB.put('meta', S.meta, 'acct');
+  return !!r.prf;
+}
+async function disablePasskey() { delete S.meta.pk; delete S.meta.wrapPk; delete S.meta.wrapDev; await DB.del('dev', 'k'); await DB.put('meta', S.meta, 'acct'); }
+
+/* --- sicurezza password --- */
+function strength(p) {
+  if (!p) return { lv: 0, bits: 0, label: '—' };
+  let pool = 0; if (/[a-z]/.test(p)) pool += 26; if (/[A-Z]/.test(p)) pool += 26; if (/\d/.test(p)) pool += 10; if (/[^A-Za-z0-9]/.test(p)) pool += 33;
+  let bits = p.length * Math.log2(pool || 1);
+  if (/(.)\1{2,}/.test(p)) bits -= 10; if (/(0123|1234|2345|abcd|qwer|asdf|pass|admin|ciao|amore)/i.test(p)) bits -= 18;
+  if (new Set(p).size < p.length / 2) bits -= 12; bits = Math.max(0, bits);
+  const lv = bits < 40 ? 0 : bits < 60 ? 1 : bits < 80 ? 2 : 3;
+  return { lv, bits, label: ['Debole', 'Discreta', 'Buona', 'Ottima'][lv] };
+}
+async function sha1hex(s) { return [...new Uint8Array(await crypto.subtle.digest('SHA-1', te.encode(s)))].map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase(); }
+/* k-anonymity: dal dispositivo escono solo i primi 5 caratteri dell'hash SHA-1. Ritorna il numero di violazioni, o null se non verificabile. */
+async function pwnedCount(p) {
+  try {
+    const h = await sha1hex(p);
+    const r = await fetch('https://api.pwnedpasswords.com/range/' + h.slice(0, 5), { headers: { 'Add-Padding': 'true' }, cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
+    if (!r.ok) return null;
+    for (const line of (await r.text()).split('\n')) { const [suf, n] = line.trim().split(':'); if (suf === h.slice(5)) return parseInt(n, 10) || 0; }
+    return 0;
+  } catch (e) { return null; }
+}
+function genPassword(o) {
+  const sets = []; const amb = /[Il1O0o]/g;
+  const L = 'abcdefghijklmnopqrstuvwxyz', U = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', D = '0123456789', Y = '!@#$%^&*()-_=+[]{};:,.?/';
+  const f = s => o.amb ? s.replace(amb, '') : s;
+  if (o.lower) sets.push(f(L)); if (o.upper) sets.push(f(U)); if (o.digits) sets.push(f(D)); if (o.symbols) sets.push(Y);
+  if (!sets.length) sets.push(f(L));
+  const all = sets.join(''), n = Math.max(sets.length, o.len);
+  const pick = s => { const lim = 4294967296 - (4294967296 % s.length); let x; do { x = crypto.getRandomValues(new Uint32Array(1))[0]; } while (x >= lim); return s[x % s.length]; };
+  const out = sets.map(pick); while (out.length < n) out.push(pick(all));
+  for (let i = out.length - 1; i > 0; i--) { const j = (() => { const lim = 4294967296 - (4294967296 % (i + 1)); let x; do { x = crypto.getRandomValues(new Uint32Array(1))[0]; } while (x >= lim); return x % (i + 1); })(); [out[i], out[j]] = [out[j], out[i]]; }
+  return out.join('');
+}
+
+/* --- backup cifrato unificato (.enc) --- */
+async function exportBackup() {
+  const m = S.meta;
+  const items = await DB.all('items'), blobs = await DB.all('blobs');
+  return { app: 'unica', format: 1, exported: new Date().toISOString(), meta: { v: m.v, created: m.created, mts: m.mts || 0, kdf: m.kdf, wrapPw: m.wrapPw, wrapRec: m.wrapRec, recEnc: m.recEnc }, items, blobs };
+}
+function validBackup(b) {
+  return b && b.app === 'unica' && b.format === 1 && b.meta && b.meta.kdf && b.meta.wrapPw && b.meta.wrapRec && Array.isArray(b.items) && Array.isArray(b.blobs);
+}
+
+/* --- importazione di un backup .enc del Vault (formato AES-GCM/PBKDF2 della v4.x) --- */
+async function decryptVaultBackup(payload, password) {
+  if (!payload || !Array.isArray(payload.salt) || !Array.isArray(payload.iv) || !Array.isArray(payload.ciphertext)) throw new Error('Non è un backup del Vault.');
+  const its = Number.isInteger(payload.iterations) ? [payload.iterations] : [600000, 100000];   // Financial Dashboard non scrive il campo: 600.000
+  if (its.some(i => i < 100000 || i > 5000000)) throw new Error('Parametri di cifratura non validi.');
+  let buf = null;
+  for (const iter of its) {
+    try { buf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: new Uint8Array(payload.iv) }, await kekPw(password, new Uint8Array(payload.salt), iter), new Uint8Array(payload.ciphertext)); break; } catch (e) { }
+  }
+  if (!buf) throw new Error('Password errata o file danneggiato.');
+  return JSON.parse(td.decode(buf));
+}
+
+/* ================= Codici: encoder EAN/Code128/Code39/QR e lettore 1D (nessuna libreria esterna) ================= */
+const BC = (() => {
+  const L = ['0001101', '0011001', '0010011', '0111101', '0100011', '0110001', '0101111', '0111011', '0110111', '0001011'];
+  const comp = s => s.replace(/[01]/g, c => c === '0' ? '1' : '0');
+  const R = L.map(comp), G = R.map(s => s.split('').reverse().join(''));
+  const PAR = ['LLLLLL', 'LLGLGG', 'LLGGLG', 'LLGGGL', 'LGLLGG', 'LGGLLG', 'LGGGLL', 'LGLGLG', 'LGLGGL', 'LGGLGL'];
+  const C128 = '212222,222122,222221,121223,121322,131222,122213,122312,132212,221213,221312,231212,112232,122132,122231,113222,123122,123221,223211,221132,221231,213212,223112,312131,311222,321122,321221,312212,322112,322211,212123,212321,232121,111323,131123,131321,112313,132113,132311,211313,231113,231311,112133,112331,132131,113123,113321,133121,313121,211331,231131,213113,213311,213131,311123,311321,331121,312113,312311,332111,314111,221411,431111,111224,111422,121124,121421,141122,141221,112214,112412,122114,122411,142112,142211,241211,221114,413111,241112,134111,111242,121142,121241,114212,124112,124211,411212,421112,421211,212141,214121,412121,111143,111341,131141,114113,114311,411113,411311,113141,114131,311141,411131,211412,211214,211232,2331112'.split(',');
+  const C39 = { '0': 'nnnwwnwnn', '1': 'wnnwnnnnw', '2': 'nnwwnnnnw', '3': 'wnwwnnnnn', '4': 'nnnwwnnnw', '5': 'wnnwwnnnn', '6': 'nnwwwnnnn', '7': 'nnnwnnwnw', '8': 'wnnwnnwnn', '9': 'nnwwnnwnn', A: 'wnnnnwnnw', B: 'nnwnnwnnw', C: 'wnwnnwnnn', D: 'nnnnwwnnw', E: 'wnnnwwnnn', F: 'nnwnwwnnn', G: 'nnnnnwwnw', H: 'wnnnnwwnn', I: 'nnwnnwwnn', J: 'nnnnwwwnn', K: 'wnnnnnnww', L: 'nnwnnnnww', M: 'wnwnnnnwn', N: 'nnnnwnnww', O: 'wnnnwnnwn', P: 'nnwnwnnwn', Q: 'nnnnnnwww', R: 'wnnnnnwwn', S: 'nnwnnnwwn', T: 'nnnnwnwwn', U: 'wwnnnnnnw', V: 'nwwnnnnnw', W: 'wwwnnnnnn', X: 'nwnnwnnnw', Y: 'wwnnwnnnn', Z: 'nwwnwnnnn', '-': 'nwnnnnwnw', '.': 'wwnnnnwnn', ' ': 'nwwnnnwnn', '*': 'nwnnwnwnn', $: 'nwnwnwnnn', '/': 'nwnwnnnwn', '+': 'nwnnnwnwn', '%': 'nnnwnwnwn' };
+
+  const eanCheck = d => { const n = d.length; let s = 0; for (let i = 0; i < n - 1; i++) { const v = +d[i]; s += (n === 13 ? (i % 2 ? 3 : 1) : (i % 2 ? 1 : 3)) * v; } return (10 - s % 10) % 10; };
+  const eanValid = d => /^\d{8}$|^\d{13}$/.test(d) && eanCheck(d) === +d[d.length - 1];
+
+  function ean13(d) { const p = PAR[+d[0]]; let s = '101'; for (let i = 1; i <= 6; i++) s += (p[i - 1] === 'L' ? L : G)[+d[i]]; s += '01010'; for (let i = 7; i <= 12; i++) s += R[+d[i]]; return s + '101'; }
+  function ean8(d) { let s = '101'; for (let i = 0; i < 4; i++) s += L[+d[i]]; s += '01010'; for (let i = 4; i < 8; i++) s += R[+d[i]]; return s + '101'; }
+  function widthsToBits(w) { let s = '', bar = true; for (const c of w) { s += (bar ? '1' : '0').repeat(+c); bar = !bar; } return s; }
+  function code128(txt) {
+    const allDig = /^\d+$/.test(txt) && txt.length % 2 === 0 && txt.length >= 4; const v = [];
+    if (allDig) { v.push(105); for (let i = 0; i < txt.length; i += 2) v.push(+txt.slice(i, i + 2)); }
+    else { v.push(104); for (const ch of txt) { const c = ch.charCodeAt(0); if (c < 32 || c > 126) throw new Error('Carattere non supportato da CODE-128'); v.push(c - 32); } }
+    let sum = v[0]; for (let i = 1; i < v.length; i++) sum += v[i] * i; v.push(sum % 103); v.push(106);
+    return v.map(x => widthsToBits(C128[x])).join('');
+  }
+  function code39(txt) {
+    const t = String(txt).toUpperCase(); if (!/^[0-9A-Z\-. $/+%]+$/.test(t)) throw new Error('Carattere non supportato da CODE-39');
+    return ('*' + t + '*').split('').map(ch => C39[ch].split('').map((x, k) => (k % 2 === 0 ? '1' : '0').repeat(x === 'w' ? 3 : 1)).join('')).join('0');
+  }
+  function bars(type, code) {
+    if (type === 'EAN13') { if (!/^\d{13}$/.test(code)) throw new Error('EAN-13 richiede 13 cifre'); return ean13(code); }
+    if (type === 'EAN8') { if (!/^\d{8}$/.test(code)) throw new Error('EAN-8 richiede 8 cifre'); return ean8(code); }
+    if (type === 'CODE39') return code39(code);
+    return code128(code);
+  }
+
+  /* ---------- QR (byte mode, livello di correzione L, versioni 1-10) ---------- */
+  const QDATA = [0, 19, 34, 55, 80, 108, 136, 156, 194, 232, 274], QEC = [0, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18], QBL = [0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4];
+  const QALIGN = [[], [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34], [6, 22, 38], [6, 24, 42], [6, 26, 46], [6, 28, 50]];
+  const EXP = new Uint8Array(512), LOG = new Uint8Array(256);
+  (() => { let x = 1; for (let i = 0; i < 255; i++) { EXP[i] = x; LOG[x] = i; x <<= 1; if (x & 256) x ^= 0x11d; } for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255]; })();
+  const gmul = (a, b) => a && b ? EXP[LOG[a] + LOG[b]] : 0;
+  function rsGen(n) { let g = [1]; for (let i = 0; i < n; i++) { const ng = new Array(g.length + 1).fill(0); for (let j = 0; j < g.length; j++) { ng[j] ^= g[j]; ng[j + 1] ^= gmul(g[j], EXP[i]); } g = ng; } return g; }
+  function rsRem(data, n) { const g = rsGen(n), r = new Array(n).fill(0); for (const d of data) { const f = d ^ r.shift(); r.push(0); if (f) for (let i = 0; i < n; i++) r[i] ^= gmul(g[i + 1], f); } return r; }
+  function qr(text) {
+    const bytes = [...new TextEncoder().encode(text)];
+    let ver = 1; const cap = v => Math.floor((QDATA[v] * 8 - 4 - (v < 10 ? 8 : 16)) / 8);
+    while (ver <= 10 && bytes.length > cap(ver)) ver++;
+    if (ver > 10) throw new Error('Testo troppo lungo per il QR (max 271 byte)');
+    const bits = []; const put = (v, n) => { for (let i = n - 1; i >= 0; i--) bits.push((v >>> i) & 1); };
+    put(4, 4); put(bytes.length, ver < 10 ? 8 : 16); bytes.forEach(b => put(b, 8));
+    const total = QDATA[ver] * 8; for (let i = 0; i < 4 && bits.length < total; i++) bits.push(0); while (bits.length % 8) bits.push(0);
+    const cw = []; for (let i = 0; i < bits.length; i += 8) cw.push(parseInt(bits.slice(i, i + 8).join(''), 2));
+    for (let p = 0; cw.length < QDATA[ver]; p++) cw.push(p % 2 ? 0x11 : 0xEC);
+    const nb = QBL[ver], short = Math.floor(QDATA[ver] / nb), nlong = QDATA[ver] % nb, blocks = []; let pos = 0;
+    for (let b = 0; b < nb; b++) { const len = short + (b >= nb - nlong ? 1 : 0); const d = cw.slice(pos, pos + len); pos += len; blocks.push({ d, e: rsRem(d, QEC[ver]) }); }
+    const out = []; const maxd = short + (nlong ? 1 : 0);
+    for (let i = 0; i < maxd; i++) blocks.forEach(b => { if (i < b.d.length) out.push(b.d[i]); });
+    for (let i = 0; i < QEC[ver]; i++) blocks.forEach(b => out.push(b.e[i]));
+    const size = 17 + 4 * ver, m = Array.from({ length: size }, () => new Array(size).fill(false)), fn = Array.from({ length: size }, () => new Array(size).fill(false));
+    const set = (x, y, d) => { m[y][x] = d; fn[y][x] = true; };
+    const finder = (cx, cy) => { for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) { const x = cx + dx, y = cy + dy; if (x < 0 || y < 0 || x >= size || y >= size) continue; const d = Math.max(Math.abs(dx), Math.abs(dy)); set(x, y, d !== 2 && d !== 4); } };
+    finder(3, 3); finder(size - 4, 3); finder(3, size - 4);
+    for (let i = 0; i < size; i++) { if (!fn[6][i]) set(i, 6, i % 2 === 0); if (!fn[i][6]) set(6, i, i % 2 === 0); }
+    const al = QALIGN[ver];
+    for (const cy of al) for (const cx of al) { if ((cx === 6 && cy === 6) || (cx === 6 && cy === size - 7) || (cx === size - 7 && cy === 6)) continue; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) set(cx + dx, cy + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1); }
+    const fmt = mask => {
+      const data = (1 << 3) | mask; let rem = data; for (let i = 0; i < 10; i++) rem = (rem << 1) ^ ((rem >>> 9) * 0x537);
+      const b = ((data << 10) | rem) ^ 0x5412, bit = i => ((b >>> i) & 1) !== 0;
+      for (let i = 0; i <= 5; i++) set(8, i, bit(i)); set(8, 7, bit(6)); set(8, 8, bit(7)); set(7, 8, bit(8)); for (let i = 9; i < 15; i++) set(14 - i, 8, bit(i));
+      for (let i = 0; i < 8; i++) set(size - 1 - i, 8, bit(i)); for (let i = 8; i < 15; i++) set(8, size - 15 + i, bit(i)); set(8, size - 8, true);
+    };
+    fmt(0);
+    if (ver >= 7) { let rem = ver; for (let i = 0; i < 12; i++) rem = (rem << 1) ^ ((rem >>> 11) * 0x1F25); const b = (ver << 12) | rem; for (let i = 0; i < 18; i++) { const bt = ((b >>> i) & 1) !== 0, a = size - 11 + i % 3, c = Math.floor(i / 3); set(a, c, bt); set(c, a, bt); } }
+    let i = 0; const nbits = out.length * 8;
+    for (let right = size - 1; right >= 1; right -= 2) { if (right === 6) right = 5; for (let v = 0; v < size; v++) for (let j = 0; j < 2; j++) { const x = right - j, up = ((right + 1) & 2) === 0, y = up ? size - 1 - v : v; if (!fn[y][x] && i < nbits) { m[y][x] = ((out[i >> 3] >>> (7 - (i & 7))) & 1) !== 0; i++; } } }
+    const MASK = [(x, y) => (x + y) % 2 === 0, (x, y) => y % 2 === 0, (x, y) => x % 3 === 0, (x, y) => (x + y) % 3 === 0, (x, y) => (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0, (x, y) => x * y % 2 + x * y % 3 === 0, (x, y) => (x * y % 2 + x * y % 3) % 2 === 0, (x, y) => ((x + y) % 2 + x * y % 3) % 2 === 0];
+    const apply = k => { for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) if (!fn[y][x] && MASK[k](x, y)) m[y][x] = !m[y][x]; };
+    const penalty = () => {
+      let p = 0;
+      for (let a = 0; a < size; a++) for (const row of [true, false]) { let run = 1; for (let b = 1; b < size; b++) { const cur = row ? m[a][b] : m[b][a], prev = row ? m[a][b - 1] : m[b - 1][a]; if (cur === prev) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else run = 1; } }
+      for (let y = 0; y < size - 1; y++) for (let x = 0; x < size - 1; x++) if (m[y][x] === m[y][x + 1] && m[y][x] === m[y + 1][x] && m[y][x] === m[y + 1][x + 1]) p += 3;
+      let dark = 0; m.forEach(r => r.forEach(v => { if (v) dark++; })); p += Math.floor(Math.abs(dark * 20 - size * size * 10) / (size * size)) * 10; return p;
+    };
+    let best = 0, bp = Infinity; for (let k = 0; k < 8; k++) { apply(k); fmt(k); const p = penalty(); if (p < bp) { bp = p; best = k; } apply(k); }
+    apply(best); fmt(best); return m;
+  }
+
+  /* ---------- Disegno su canvas ---------- */
+  function draw(canvas, card, o) {
+    o = o || {}; const type = card.type, code = card.code, target = o.width || 320, ctx = canvas.getContext('2d');
+    if (type === 'QR') {
+      const m = qr(code), q = 4, mod = Math.max(2, Math.floor(target / (m.length + 2 * q)) || 2), n = (m.length + 2 * q) * mod;
+      canvas.width = n; canvas.height = n; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, n, n); ctx.fillStyle = '#000';
+      m.forEach((r, y) => r.forEach((v, x) => { if (v) ctx.fillRect((x + q) * mod, (y + q) * mod, mod, mod); })); return;
+    }
+    const bits = bars(type, code), q = 10, mod = Math.max(2, Math.floor(target / (bits.length + 2 * q))), w = (bits.length + 2 * q) * mod;
+    const bh = o.height || 90, th = o.text ? 26 : 0; canvas.width = w; canvas.height = bh + th + 6;
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#000';
+    for (let i = 0; i < bits.length; i++) if (bits[i] === '1') ctx.fillRect((i + q) * mod, 3, mod, bh);
+    if (o.text) { ctx.font = '600 ' + Math.max(14, Math.min(22, mod * 6)) + 'px ui-monospace,Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.fillText(code, w / 2, bh + 22); }
+  }
+
+  /* ---------- Lettore 1D (EAN-13/EAN-8/Code128) da una riga di pixel ---------- */
+  const runsOf = bits => { const r = bits.match(/(0+|1+)/g).map(s => s.length); return r; };
+  const EANL = L.map(s => runsOf(s)), EANG = G.map(s => runsOf(s)), EANR = R.map(s => runsOf(s)), C128R = C128.map(s => s.split('').map(Number));
+  function match(runs, pos, n, tab, total) {
+    let t = 0; for (let k = 0; k < n; k++) t += runs[pos + k]; if (t <= 0) return null;
+    let best = -1, be = 1e9; const f = total / t;
+    for (let i = 0; i < tab.length; i++) { const p = tab[i]; if (p.length !== n) continue; let e = 0; for (let k = 0; k < n; k++) { const d = runs[pos + k] * f - p[k]; e += d * d; } if (e < be) { be = e; best = i; } }
+    return best < 0 ? null : { i: best, e: be };
+  }
+  function decodeEAN(r) {
+    for (const n of [13, 8]) {
+      const need = n === 13 ? 59 : 43;
+      for (let s = 0; s + need <= r.length; s += 2) {
+        const g = [r[s], r[s + 1], r[s + 2]], u = (g[0] + g[1] + g[2]) / 3; if (u < 1 || Math.max(...g) / Math.min(...g) > 2.0) continue;
+        if (s > 0 && r[s - 1] < 5 * u) continue;
+        let p = s + 3, digits = [], par = '', bad = false;
+        const half = n === 13 ? 6 : 4;
+        for (let k = 0; k < half && !bad; k++) {
+          const a = match(r, p, 4, EANL, 7), b = n === 13 ? match(r, p, 4, EANG, 7) : null;
+          if (!a || (a.e > 1.0 && (!b || b.e > 1.0))) { bad = true; break; }
+          if (b && b.e < a.e) { digits.push(b.i); par += 'G'; } else { digits.push(a.i); par += 'L'; } p += 4;
+        }
+        if (bad) continue; p += 5;
+        for (let k = 0; k < half && !bad; k++) { const a = match(r, p, 4, EANR, 7); if (!a || a.e > 1.0) { bad = true; break; } digits.push(a.i); p += 4; }
+        if (bad) continue;
+        { const e = [r[p], r[p + 1], r[p + 2]]; if (e.some(x => x < 0.5 * u || x > 2 * u)) continue; if (p + 3 < r.length && r[p + 3] < 4 * u) continue; }
+        let code;
+        if (n === 13) { const f = PAR.indexOf(par); if (f < 0) continue; code = f + digits.join(''); } else code = digits.join('');
+        if (eanValid(code)) return { code, type: n === 13 ? 'EAN13' : 'EAN8' };
+      }
+    }
+    return null;
+  }
+  function decode128(r) {
+    for (let s = 0; s + 6 + 6 + 7 <= r.length; s += 2) {
+      const st = match(r, s, 6, C128R.slice(0, 106).map(x => x.length === 6 ? x : [0]), 11); if (!st || st.e > 1.0 || st.i < 103) continue;
+      { const u = (r[s] + r[s + 1] + r[s + 2] + r[s + 3] + r[s + 4] + r[s + 5]) / 11; if (s > 0 && r[s - 1] < 5 * u) continue; }
+      const vals = [st.i]; let p = s + 6, ok = false;
+      while (p + 6 <= r.length) {
+        if (p + 7 <= r.length && vals.length >= 3) { const sp = match(r, p, 7, [C128R[106]], 13); if (sp && sp.e < 2) { const u = r.slice(p, p + 7).reduce((a, b) => a + b, 0) / 13; if (p + 7 >= r.length || r[p + 7] >= 4 * u) { ok = true; break; } } }
+        const m = match(r, p, 6, C128R.slice(0, 106), 11); if (!m || m.e > 1.2) break; vals.push(m.i); p += 6;
+      }
+      if (!ok) continue;
+      const chk = vals.pop(); let sum = vals[0]; for (let i = 1; i < vals.length; i++) sum += vals[i] * i; if (sum % 103 !== chk) continue;
+      let set = vals[0] === 105 ? 'C' : vals[0] === 104 ? 'B' : 'A', out = '', shift = null, bad = false;
+      for (let i = 1; i < vals.length; i++) { const v = vals[i];
+        if (set === 'C' && v < 100) out += String(v).padStart(2, '0');
+        else if (v === 99) set = 'C'; else if (v === 100) set = 'B'; else if (v === 101) set = 'A'; else if (v === 102) { /* FNC1 */ } else if (v >= 103) { bad = true; break; }
+        else if (v < 96) out += String.fromCharCode(set === 'A' ? (v < 64 ? v + 32 : v - 64) : v + 32); else { /* FNC/shift ignorati */ } }
+      if (!bad && out) return { code: out, type: 'CODE128' };
+    }
+    return null;
+  }
+  function decodeRow(row) {
+    const w = row.length, sm = new Float32Array(w); for (let i = 0; i < w; i++) sm[i] = (row[Math.max(0, i - 1)] + row[i] + row[Math.min(w - 1, i + 1)]) / 3;
+    const win = Math.max(12, w >> 4), bits = new Array(w);
+    for (let i = 0; i < w; i++) { let lo = 255, hi = 0; for (let k = Math.max(0, i - win); k <= Math.min(w - 1, i + win); k++) { const v = sm[k]; if (v < lo) lo = v; if (v > hi) hi = v; } bits[i] = hi - lo > 40 && sm[i] < (lo + hi) / 2 ? '1' : '0'; }
+    const s = bits.join(''); let t = s.replace(/^0+/, ''); if (t.length < 40) return null; if (t.endsWith('1')) t += '0';
+    const r = runsOf(t);   // inizia con una barra e termina con uno spazio
+    const back = r.slice(0, -1).reverse();   // lettura al contrario: parte dall'ultima barra
+    return decodeEAN(r) || decodeEAN(back) || decode128(r) || decode128(back) || null;
+  }
+  /* Cerca un codice in un'immagine (ImageData): prova più righe attorno al centro */
+  function decodeImage(img) {
+    const { data, width: w, height: h } = img;
+    const rows = [0.5, 0.45, 0.55, 0.4, 0.6, 0.35, 0.65, 0.3, 0.7, 0.25, 0.75, 0.2, 0.8];
+    for (const f of rows) { const y = Math.min(h - 1, Math.floor(h * f)), row = new Uint8Array(w); for (let x = 0; x < w; x++) { const i = (y * w + x) * 4; row[x] = (data[i] * 299 + data[i + 1] * 587 + data[i + 2] * 114) / 1000; } const r = decodeRow(row); if (r) return r; }
+    return null;
+  }
+  /* ---------- Rilevamento del tipo ---------- */
+  function detectType(code) {
+    if (/^\d{13}$/.test(code)) return 'EAN13';
+    if (/^\d{8}$/.test(code) && eanValid(code)) return 'EAN8';
+    if (/^https?:\/\//i.test(code) || code.length > 40 || /[^\x20-\x7e]/.test(code)) return 'QR';
+    return 'CODE128';
+  }
+  return { bars, qr, draw, decodeRow, decodeImage, detectType, eanValid, eanCheck };
+})();
+
+/* ================= Vortex Hub – interfaccia ================= */
+const $ = id => document.getElementById(id);
+const h = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const P = {
+  search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12Z"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>',
+  vol: '<path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a9 9 0 0 1 0 12"/>',
+  cal: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+  eyeoff: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><path d="m3 3 18 18"/>',
+  copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>', back: '<path d="m15 18-6-6 6-6"/>',
+  gear: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  key: '<path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/><circle cx="7.5" cy="15.5" r="5.5"/>',
+  file: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/>',
+  note: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+  star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  trash: '<path d="M3 6h18M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+  edit: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  dl: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  up: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  warn: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/>',
+  pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/>',
+  install: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 6v7m-3-3 3 3 3-3M10 18h4"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  scan: '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/>',
+  chart: '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
+};
+const ic = n => '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + (P[n] || '') + '</svg>';
+const U = { route: 'boot', q: '', cat: '', sort: 'recent', pending: null, form: null };
+let toastT;
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 3200); }
+const fmtSize = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+const fmtDate = ts => new Date(ts).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' });
+
+/* --- modali --- */
+function modal(html, opts) {
+  opts = opts || {};
+  const ov = document.createElement('div'); ov.className = 'ov';
+  ov.innerHTML = '<div class="sheet" role="dialog" aria-modal="true">' + html + '</div>';
+  document.body.appendChild(ov);
+  const close = () => { ov.remove(); if (opts.onClose) opts.onClose(); };
+  ov.addEventListener('click', e => { if (e.target === ov && !opts.sticky) close(); });
+  ov._close = close;
+  const first = ov.querySelector('input,textarea,select,button.pri'); if (first && !opts.noFocus) setTimeout(() => first.focus(), 30);
+  return { el: ov, close, q: s => ov.querySelector(s) };
+}
+const closeTop = () => { const all = document.querySelectorAll('.ov'); if (all.length) all[all.length - 1]._close(); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTop(); });
+function ask(title, msg, o) {
+  o = o || {};
+  return new Promise(res => {
+    const m = modal('<h2>' + h(title) + '</h2><p class="' + (o.html ? '' : 'mut') + '">' + (o.html ? msg : h(msg)) + '</p><div class="gap"><span class="sp"></span><button class="btn" data-r="0">' + h(o.cancel || 'Annulla') + '</button><button class="btn ' + (o.danger ? 'dan' : 'pri') + '" data-r="1">' + h(o.ok || 'OK') + '</button></div>', { sticky: true });
+    m.el.addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (b) { m.close(); res(b.dataset.r === '1'); } });
+  });
+}
+function pwField(id, label, auto) {
+  return '<label class="f" for="' + id + '">' + h(label) + '</label><div class="pw"><input class="in" id="' + id + '" type="password" autocomplete="' + (auto || 'current-password') + '" autocapitalize="off" spellcheck="false"><button type="button" class="btn" data-act="eye" data-for="' + id + '" aria-label="Mostra o nascondi">' + ic('eye') + '</button></div>';
+}
+function meterHtml(id) { return '<div class="meter m0" id="' + id + '" role="img" aria-label="Robustezza"><i></i></div><p class="sm mut" id="' + id + 'L"></p>'; }
+function setMeter(id, pw) {
+  const s = strength(pw), m = $(id); if (!m) return;
+  m.className = 'meter m' + s.lv; m.firstChild.style.width = pw ? Math.max(8, Math.min(100, s.bits)) + '%' : '0';
+  $(id + 'L').textContent = pw ? 'Robustezza: ' + s.label : '';
+}
+async function pickFile(accept) { return new Promise(res => { const i = document.createElement('input'); i.type = 'file'; if (accept) i.accept = accept; i.onchange = () => res(i.files[0] || null); i.oncancel = () => res(null); i.click(); }); }
+async function download(name, blob) { try { if (window.showSaveFilePicker && blob instanceof Blob) { const handle = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: 'Backup Vortex Hub', accept: { 'application/octet-stream': ['.enc', '.json'] } }] }); const stream = await handle.createWritable(); await stream.write(blob); await stream.close(); toast('Copia salvata nella cartella scelta'); return; } } catch (e) { if (e && e.name === 'AbortError') return; } const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); }
+function copy(text, label) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    toast(label + ' copiato' + (label === 'Password' ? ' (appunti puliti tra 30 s)' : ''));
+    if (label === 'Password') { clearTimeout(copy.t); copy.t = setTimeout(() => navigator.clipboard.writeText('').catch(() => {}), CLIP_MS); }
+  }).catch(() => toast('Copia non riuscita'));
+}
+const busy = (b, on, txt) => { if (!b) return; if (on) { b.dataset.t = b.innerHTML; b.disabled = true; b.innerHTML = '<span class="spin"></span> ' + (txt || 'Attendere…'); } else { b.disabled = false; if (b.dataset.t) b.innerHTML = b.dataset.t; } };
+
+/* --- navigazione --- */
+function go(r) { U.route = r; render(); window.scrollTo(0, 0); }
+const nav = () => '<nav class="nav" aria-label="Principale"><div class="in2">' +
+  [['home', 'home', 'Home'], ['cards', 'card', 'Carte'], ['fin', 'chart', 'Conti'], ['vault', 'lock', 'Vault'], ['settings', 'gear', 'Impostazioni']].map(t => '<button class="tab" data-act="nav" data-r="' + t[0] + '"' + (U.route === t[0] ? ' aria-current="page"' : '') + '>' + ic(t[1]) + t[2] + '</button>').join('') + '</div></nav>';
+const hdr = (t, right) => '<header class="hdr"><h1>' + h(t) + '</h1>' + (typeof hdrFix === 'function' ? hdrFix(right || '') : (right || '')) + '</header>';
+
+function render() {
+  const app = $('app'); const r = U.route; const v = V[r];
+  app.innerHTML = v ? v() : '';
+  if (POST[r]) POST[r]();
+  if (['home', 'cards', 'fin', 'vault', 'settings', 'agenda', 'scadenze'].includes(r)) app.insertAdjacentHTML('beforeend', nav());
+}
+const V = {}, POST = {};
+
+/* ---------- 1. Benvenuto ---------- */
+V.welcome = () => '<main class="center"><div class="logo"><img src="' + LOGO + '" alt="Vortex Hub"></div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Carte, conti e password in un’unica app personale, cifrata sul tuo dispositivo.</p><div class="stack" style="margin-top:12px"></div>' +
+  '<button class="btn pri blk" data-act="toCreate">Crea un nuovo account</button><div style="height:10px"></div><button class="btn blk" data-act="restore">Ripristina da un backup</button><div style="height:10px"></div><button class="btn blk" data-act="syLink">Ho già Vortex Hub su un altro dispositivo</button>' +
+  '<p class="sm mut c" style="margin-top:18px">I dati restano sul tuo dispositivo e sono cifrati con AES-256-GCM. Nessun server vede le tue password.</p></main>';
+
+/* ---------- 2. Creazione account ---------- */
+V.create = () => '<main class="center"><button class="btn sm" data-act="toWelcome" style="align-self:flex-start">' + ic('back') + ' Indietro</button><h1>Crea la master password</h1><p class="mut">È la chiave di tutto. Scegline una lunga (almeno 12 caratteri) che non usi altrove.</p>' +
+  '<form data-form="create">' + pwField('cp1', 'Master password', 'new-password') + meterHtml('cm') + pwField('cp2', 'Ripeti la password', 'new-password') +
+  '<div class="alert">Se perdi la master password <b>e</b> il codice di recupero, i dati non si possono recuperare: nessuno può farlo per te.</div>' +
+  '<p class="sm mut" id="cerr" role="alert"></p><button class="btn pri blk" type="submit">Continua</button></form></main>';
+POST.create = () => { $('cp1').addEventListener('input', e => setMeter('cm', e.target.value)); };
+
+/* ---------- 3. Codice di recupero ---------- */
+V.recovery = () => {
+  const p = U.pending; const a = 3, b = 17;
+  return '<main class="center" style="max-width:560px"><h1>Codice di recupero</h1><p class="mut">Scrivi queste 24 parole su carta e conservale offline. Servono se dimentichi la master password. <b>Vengono mostrate ora; potrai rivederle in Impostazioni dopo aver verificato l’identità.</b></p>' +
+    '<div class="words" aria-label="24 parole del codice di recupero">' + p.words.map((w, i) => '<div class="w1"><small>' + (i + 1) + '</small><b class="mono">' + w + '</b></div>').join('') + '</div>' +
+    '<form data-form="recovery"><label class="f" for="rw1">Conferma: scrivi la parola n. ' + a + '</label><input class="in" id="rw1" autocapitalize="off" autocomplete="off" spellcheck="false">' +
+    '<label class="f" for="rw2">e la parola n. ' + b + '</label><input class="in" id="rw2" autocapitalize="off" autocomplete="off" spellcheck="false">' +
+    '<label class="chk"><input type="checkbox" id="rck"><span>Ho salvato il codice di recupero in un posto sicuro, offline.</span></label><p class="sm bad" id="rerr" role="alert"></p><button class="btn pri blk" type="submit">Ho salvato il codice</button></form></main>';
+};
+
+/* ---------- 4. Passkey ---------- */
+V.pkask = () => '<main class="center"><div class="logo">' + ic('key') + '</div><h1 class="c">Sblocco rapido</h1><p class="c mut">Attiva una passkey per entrare con impronta o Face ID, senza digitare la master password. È facoltativa, ma consigliata.</p>' +
+  '<p class="sm mut c" id="pknote"></p><button class="btn pri blk" data-act="pkOn">Attiva la passkey</button><div style="height:10px"></div><button class="btn blk" data-act="toMigrate">Più tardi</button></main>';
+
+/* ---------- 5. Migrazione guidata ---------- */
+V.migrate = () => '<main class="center"><h1>Porta qui i tuoi dati</h1><p class="mut">Importa una app alla volta. I dati vengono cifrati subito.</p>' +
+  '<button class="tile" data-act="impVault"><span class="ti">' + ic('lock') + '</span><span class="t"><b>Vault</b><br><span class="sm mut">Backup cifrato .enc del Vault</span></span></button>' +
+  '<button class="tile" data-act="impFin"><span class="ti">' + ic('chart') + '</span><span class="t"><b>Financial Dashboard</b><br><span class="sm mut">Backup cifrato .enc</span></span></button>' +
+  '<button class="tile" data-act="impFidelity"><span class="ti">' + ic('card') + '</span><span class="t"><b>Fidelity Wallet</b><br><span class="sm mut">File JSON dei backup</span></span></button>' +
+  '<button class="btn pri blk" data-act="toHome">Continua</button></main>';
+
+/* ---------- 6. Sblocco ---------- */
+V.lock = () => '<main class="center"><div class="logo"><img src="' + LOGO + '" alt="Vortex Hub"></div><h1 class="c">' + APP_NAME + '</h1><p class="c mut">Sblocca per continuare</p>' +
+  (S.meta.pk ? '<button class="btn pri blk" data-act="pkUnlock">' + ic('key') + ' Sblocca con impronta / Face ID</button><p class="sm mut c">oppure con la master password:</p>' : '') +
+  '<form data-form="unlock">' + pwField('up', 'Master password') + '<p class="sm bad" id="uerr" role="alert"></p><button class="btn ' + (S.meta.pk ? '' : 'pri') + ' blk" type="submit">Sblocca</button></form>' +
+  '<p class="c"><button class="btn sm" data-act="forgot" style="border:0">Password dimenticata? Usa il codice di recupero</button></p></main>';
+
+/* ---------- 7. Home ---------- */
+V.home = () => hdr(APP_NAME, '<button class="ib" data-act="palette" aria-label="Cerca ovunque">' + ic('search') + '</button><button class="ib" data-act="assist" aria-label="Assistente">' + ic('chat') + '</button><button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button>') +
+  '<main class="wrap">' + bkBanner() + agendaHtml() + '<h2 data-s="cards">Carte</h2><button class="tile" data-s="cards" data-act="nav" data-r="cards"><span class="ti">' + ic('card') + '</span><span class="t"><b>Carte fedeltà</b><br><span class="sm mut">' + S.cards.size + ' ' + (S.cards.size === 1 ? 'carta' : 'carte') + ' · scanner, ricerca, condivisione</span></span></button>' +
+  '<h2 data-s="vault" style="margin-top:20px">Area protetta ' + ic('lock') + '</h2><button class="tile" data-s="vault" data-act="enterProt"><span class="ti">' + ic('lock') + '</span><span class="t"><b>Vault</b><br><span class="sm mut">Password, note e file cifrati</span></span></button>' +
+  '<button class="tile" data-s="fin" data-act="enterFin"><span class="ti">' + ic('chart') + '</span><span class="t"><b>Conti e dashboard</b><br><span class="sm mut">Patrimonio, spese, budget, report</span></span></button>' +
+  '<p class="sm mut">L’area protetta chiede una verifica recente (impronta o master password) e si blocca da sola dopo ' + S.idleMin + ' min di inattività.</p></main>';
+
+/* ---------- Verifica per area protetta ---------- */
+function ensureProt() {
+  if (S.kp && (S.protOpen || Date.now() - S.verifiedAt < PROT_FRESH_MS)) return Promise.resolve(true);
+  return new Promise(res => {
+    const bio = S.meta.wrapPk || bioOk();
+    const m = modal('<h2>' + ic('lock') + ' Area protetta</h2><p class="mut">Conferma la tua identità per continuare.</p>' + (bio ? '<button class="btn pri blk" data-act="pkVerify">' + ic('key') + ' Impronta / Face ID</button><p class="sm mut c">oppure</p>' : '') +
+      '<form data-form="verify">' + pwField('vp', 'Master password') + '<p class="sm bad" id="verr" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Verifica</button></div></form>', { sticky: true, onClose: () => res(!!S.kp) });
+    U.verify = { m, done: () => { m.close(); } };
+  });
+}
+async function openProt() { if (!(await ensureProt())) return false; if (!S.items.size) await loadItems(); await ensureVMeta(); S.protOpen = true; return true; }
+async function ensureVMeta() { if (!S.items.has('vault-meta')) await putItem('vault-meta', 'vmeta', { cats: ['Banche', 'Ufficio', 'Personale', 'Siti/Altri'], owners: ['Utente 1', 'Utente 2', 'Condiviso'] }); }
+
+/* ---------- Vault ---------- */
+const VT = { login: ['key', 'Accesso'], passkey: ['shield', 'Passkey'], note: ['note', 'Nota'], file: ['file', 'File'] };
+const vmeta = () => S.items.get('vault-meta').data;
+const vitems = () => [...S.items.values()].filter(i => VT[i.type] && !i.data.parent);
+const titleOf = i => i.data.service || i.data.title || 'Senza nome';
+const avCls = s => 'a' + ([...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 8);
+function vlist() {
+  const q = U.q.trim().toLowerCase();
+  let a = vitems().filter(i => (!U.cat || i.data.category === U.cat) && (!q || [i.data.service, i.data.title, i.data.username, i.data.domain, i.data.fname].some(x => x && String(x).toLowerCase().includes(q))));
+  a.sort((x, y) => (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) || (U.sort === 'az' ? titleOf(x).localeCompare(titleOf(y), 'it') : y.ts - x.ts));
+  if (!a.length) return '<div class="card c mut">' + (vitems().length ? 'Nessun risultato.' : 'Il Vault è vuoto. Aggiungi una voce con il pulsante + oppure importa il backup del vecchio Vault dalle Impostazioni.') + '</div>';
+  return a.map(i => '<button class="row" data-act="detail" data-id="' + h(i.id) + '"><span class="av ' + avCls(titleOf(i)) + (i.data.logo ? ' lg' : '') + '">' + (i.data.logo ? '<img src="' + h(i.data.logo) + '" alt="">' : h(titleOf(i).charAt(0).toUpperCase())) + '</span><span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm mut">' + h(i.type === 'login' ? (i.data.username || i.data.domain || '') : i.type === 'file' ? i.data.fname + ' · ' + fmtSize(i.data.size) : 'Nota') + '</span></span>' +
+    (i.data.fav ? '<span class="ok" aria-label="Preferito">' + ic('star') + '</span>' : '') + '<span class="tag">' + VT[i.type][1] + '</span></button>').join('');
+}
+POST.vault = () => {
+  const q = $('vq'); if (!q) return;
+  q.addEventListener('input', () => { U.q = q.value; $('vlist').innerHTML = vlist(); });
+  $('vs').addEventListener('change', e => { U.sort = e.target.value; $('vlist').innerHTML = vlist(); });
+};
+
+function kv(k, v, o) {
+  o = o || {};
+  return '<div class="kv"><div class="k">' + h(k) + '</div><div class="v"><span' + (o.id ? ' id="' + o.id + '"' : '') + '>' + (o.secret ? '••••••••' : h(v)) + '</span>' +
+    (o.secret ? '<button class="ib" data-act="reveal" data-t="' + o.id + '" data-id="' + o.item + '" data-f="' + o.f + '" aria-label="Mostra o nascondi ' + h(k) + '">' + ic('eye') + '</button>' : '') +
+    (o.copy ? '<button class="ib" data-act="cp" data-id="' + o.item + '" data-f="' + o.f + '" data-l="' + h(k) + '" aria-label="Copia ' + h(k) + '">' + ic('copy') + '</button>' : '') + '</div></div>';
+}
+function openDetail(id) {
+  const it = S.items.get(id); if (!it) return; const d = it.data;
+  let b = '';
+  if (it.type === 'login') b = kv('Utente', d.username, { copy: 1, item: id, f: 'username' }) + kv('Password', '', { secret: 1, copy: 1, id: 'sv', item: id, f: 'password' }) + (d.domain ? kv('Sito', d.domain) : '') + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
+  else if (it.type === 'passkey') b = kv('Utente', d.username, { copy: 1 }) + kv('Salvata in', d.where) + (d.device ? kv('Dispositivo', d.device) : '') + (d.domain ? kv('Sito', d.domain) : '') + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
+  else if (it.type === 'note') b = kv('Testo', '', { secret: 1, copy: 1, id: 'sv', item: id, f: 'text' });
+  else b = kv('File', d.fname) + kv('Dimensione', fmtSize(d.size)) + (d.notes ? kv('Note', '', { secret: 1, id: 'sn', item: id, f: 'notes' }) : '');
+  const m = modal('<div class="gap">' + avHtml(it) + '<h2 class="sp" style="margin:0">' + h(titleOf(it)) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+    '<p class="sm mut">' + h(d.category || '') + (d.owner ? ' · ' + h(d.owner) : '') + ' · modificato ' + fmtDate(it.ts) + '</p><div class="card">' + b + '</div><div class="gap">' +
+    (it.type === 'file' ? '<button class="btn pri" data-act="dlFile" data-id="' + h(id) + '">' + ic('dl') + ' Scarica</button>' : '') +
+    linkBtns(it) + (it.type === 'login' && d.password ? '<button class="btn" data-act="chk1" data-id="' + h(id) + '">' + ic('shield') + ' Controlla violazioni</button>' : '') +
+    '<button class="btn" data-act="edit" data-id="' + h(id) + '">' + ic('edit') + ' Modifica</button><button class="btn dan" data-act="del" data-id="' + h(id) + '">' + ic('trash') + ' Elimina</button></div><p class="sm mut" id="chk1r" role="status"></p>');
+  return m;
+}
+function openForm(id, type) {
+  const it = id ? S.items.get(id) : null; type = it ? it.type : (type || 'login'); const d = it ? it.data : {};
+  U.form = { id, type };
+  const vm = vmeta(), sel = (arr, v) => arr.map(x => '<option' + (x === v ? ' selected' : '') + '>' + h(x) + '</option>').join('');
+  const body = type === 'login'
+    ? '<label class="f" for="f_t">Servizio</label><input class="in" id="f_t" required value="' + h(d.service) + '" autocomplete="off"><label class="f" for="f_u">Utente / email</label><input class="in" id="f_u" value="' + h(d.username) + '" autocomplete="off" autocapitalize="off">' +
+      '<label class="f" for="f_p">Password</label><div class="pw"><input class="in mono" id="f_p" type="password" value="' + h(d.password) + '" autocomplete="new-password" autocapitalize="off" spellcheck="false"><button type="button" class="btn" data-act="eye" data-for="f_p" aria-label="Mostra o nascondi">' + ic('eye') + '</button><button type="button" class="btn" data-act="genfor" aria-label="Genera password">' + ic('refresh') + '</button></div>' + meterHtml('fm') +
+      '<label class="f" for="f_d">Sito web</label><input class="in" id="f_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off">'
+    : type === 'passkey' ? '<p class="sm mut">Una passkey vera resta nel dispositivo o nel gestore che l’ha creata e Vortex Hub non può contenerla né usarla. Qui annoti dove si trova e come recuperarla, così non la perdi.</p><label class="f" for="f_t">Servizio</label><input class="in" id="f_t" required value="' + h(d.service) + '" autocomplete="off"><label class="f" for="f_u">Utente / email</label><input class="in" id="f_u" value="' + h(d.username) + '" autocomplete="off" autocapitalize="off"><label class="f" for="f_pw">Dove è salvata</label><select class="in" id="f_pw">' + sel(['iCloud / Portachiavi Apple', 'Google Password Manager', 'Windows Hello', 'Chiave di sicurezza (YubiKey…)', 'Altro gestore di password', 'Telefono / altro dispositivo'], d.where) + '</select><label class="f" for="f_pi">Dispositivo o nome della chiave</label><input class="in" id="f_pi" value="' + h(d.device || '') + '" autocomplete="off" placeholder="es. iPhone di Mario"><label class="f" for="f_d">Sito web</label><input class="in" id="f_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off">'
+    : type === 'note' ? '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '"><label class="f" for="f_x">Testo</label><textarea class="in" id="f_x" rows="6">' + h(d.text) + '</textarea>'
+    : '<label class="f" for="f_t">Titolo</label><input class="in" id="f_t" required value="' + h(d.title) + '">' + (it ? '<p class="sm mut">File: ' + h(d.fname) + ' (' + fmtSize(d.size) + ')</p>' : '<label class="f" for="f_f">File (max ' + fmtSize(MAX_FILE) + ')</label><input class="in" id="f_f" type="file" required>');
+  const m = modal('<h2>' + (it ? 'Modifica voce' : 'Nuova voce') + '</h2>' + (it ? '' : '<div class="seg" role="group" aria-label="Tipo">' + Object.keys(VT).map(k => '<button type="button" data-act="ftype" data-t="' + k + '" aria-pressed="' + (k === type) + '">' + VT[k][1] + '</button>').join('') + '</div>') +
+    '<form data-form="item">' + body + '<label class="f" for="f_c">Categoria</label><select class="in" id="f_c">' + sel(vm.cats, d.category) + '</select><label class="f" for="f_o">Proprietario</label><select class="in" id="f_o">' + sel(vm.owners, d.owner) + '</select>' +
+    vxFields(d) + (type !== 'note' ? '<label class="f" for="f_n">Note</label><textarea class="in" id="f_n" rows="3">' + h(d.notes) + '</textarea>' : '') +
+    '<label class="chk"><input type="checkbox" id="f_fav"' + (d.fav ? ' checked' : '') + '><span>Preferito</span></label><p class="sm bad" id="ferr" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true, noFocus: !!it });
+  const p = m.q('#f_p'); if (p) { p.addEventListener('input', () => setMeter('fm', p.value)); setMeter('fm', p.value); }
+}
+function openGen(cb) {
+  const o = JSON.parse(localStorage.getItem('unica_gen') || 'null') || { len: 20, lower: true, upper: true, digits: true, symbols: true, amb: true };
+  const m = modal('<h2>Generatore di password</h2><div class="card"><div class="mono b" id="go" style="word-break:break-all;font-size:1.1rem" aria-live="polite"></div></div>' + meterHtml('gm') +
+    '<label class="f" for="gl">Lunghezza: <span id="glv"></span></label><input type="range" id="gl" min="8" max="64" value="' + o.len + '">' +
+    [['lower', 'Minuscole'], ['upper', 'Maiuscole'], ['digits', 'Numeri'], ['symbols', 'Simboli'], ['amb', 'Evita caratteri ambigui (I l 1 O 0)']].map(x => '<label class="chk"><input type="checkbox" data-g="' + x[0] + '"' + (o[x[0]] ? ' checked' : '') + '><span>' + x[1] + '</span></label>').join('') +
+    '<div class="gap"><button class="btn" id="gr">' + ic('refresh') + ' Rigenera</button><button class="btn" id="gc">' + ic('copy') + ' Copia</button><span class="sp"></span>' + (cb ? '<button class="btn pri" id="gu">Usa</button>' : '<button class="btn pri" data-act="close">Chiudi</button>') + '</div>');
+  const upd = () => { o.len = +m.q('#gl').value; m.el.querySelectorAll('[data-g]').forEach(c => o[c.dataset.g] = c.checked); localStorage.setItem('unica_gen', JSON.stringify(o)); m.q('#glv').textContent = o.len; m.q('#go').textContent = genPassword(o); setMeter('gm', m.q('#go').textContent); };
+  m.el.addEventListener('input', upd); m.q('#gr').onclick = upd; m.q('#gc').onclick = () => copy(m.q('#go').textContent, 'Password');
+  if (cb) m.q('#gu').onclick = () => { cb(m.q('#go').textContent); m.close(); }; upd();
+}
+async function audit() {
+  const logins = vitems().filter(i => i.type === 'login' && i.data.password);
+  const m = modal('<h2>Controllo password</h2><p class="mut sm">Verifica deboli, ripetute e compromesse. Per le violazioni esce dal dispositivo solo il prefisso di 5 caratteri dell’hash (k-anonymity).</p><div id="ar"><span class="spin"></span> Analisi di ' + logins.length + ' password…</div><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div>');
+  const dup = new Map(); logins.forEach(i => { const k = i.data.password; dup.set(k, (dup.get(k) || []).concat(i)); });
+  const res = []; let offline = false;
+  for (const i of logins) {
+    const s = strength(i.data.password), n = offline ? null : await pwnedCount(i.data.password); if (n === null) offline = true;
+    const issues = []; if (s.lv === 0) issues.push('debole'); if (dup.get(i.data.password).length > 1) issues.push('ripetuta'); if (n > 0) issues.push('compromessa (' + n.toLocaleString('it-IT') + ' violazioni)');
+    if (issues.length) res.push('<button class="row" data-act="detail" data-id="' + h(i.id) + '"><span class="bad">' + ic('warn') + '</span><span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm bad">' + h(issues.join(', ')) + '</span></span></button>');
+  }
+  const el = m.q('#ar'); if (!el) return;
+  el.innerHTML = (offline ? '<div class="alert">Controllo violazioni non eseguito (nessuna connessione): vengono mostrati solo i controlli locali.</div>' : '') + (res.length ? '<p class="b">' + res.length + ' da sistemare:</p>' + res.join('') : '<div class="alert o">' + ic('check') + ' Nessun problema trovato su ' + logins.length + ' password.</div>');
+}
+
+/* ---------- Impostazioni ---------- */
+const seg = (name, cur, opts) => '<div class="seg" role="group">' + opts.map(o => '<button data-act="pref" data-k="' + name + '" data-v="' + o[0] + '" aria-pressed="' + (String(cur) === String(o[0])) + '">' + o[1] + '</button>').join('') + '</div>';
+V.settings = () => hdr('Impostazioni') + '<main class="wrap">' +
+  '<div class="card"><h3>Aspetto</h3><p class="sm mut">Dimensione del testo</p>' + seg('fs', localStorage.getItem('unica_fs') || 16, [[14, 'Piccolo'], [16, 'Medio'], [19, 'Grande'], [22, 'Molto grande']]) +
+  '<p class="sm mut" style="margin-top:12px">Dimensione delle icone</p>' + seg('ic', localStorage.getItem('unica_ic') || 22, [[18, 'Piccole'], [22, 'Medie'], [28, 'Grandi'], [34, 'Molto grandi']]) +
+  '<p class="sm mut" style="margin-top:12px">Tema</p>' + seg('theme', localStorage.getItem('unica_theme') || 'auto', [['auto', 'Auto'], ['light', 'Chiaro'], ['dark', 'Scuro']]) + '</div>' +
+  '<div class="card"><h3>Carte</h3><div class="stack"><button class="btn blk" data-act="impFidelity">' + ic('up') + ' Importa il JSON di Fidelity Wallet</button><button class="btn blk" data-act="cardImpEnc">' + ic('lock') + ' Importa una carta cifrata ricevuta</button><label class="chk"><input type="checkbox" data-act="webToggle"' + (lsg('unica_web') !== '0' ? ' checked' : '') + '><span>Cerca automaticamente sito e logo mentre scrivi il nome. Vengono inviati solo il nome del negozio a Wikidata e il dominio ai servizi di icone.</span></label><label class="chk"><input type="checkbox" data-act="nearToggle"' + (nearOn() ? ' checked' : '') + '><span>Cerca automaticamente i negozi vicini (a OpenStreetMap invia un’area approssimata di ~100 m e i nomi dei negozi)</span></label></div></div>' +
+  '<div class="card"><h3>Sicurezza</h3><p class="sm mut">Blocco automatico dell’area protetta dopo</p>' + seg('idle', S.idleMin, [[1, '1 min'], [5, '5 min'], [15, '15 min'], [30, '30 min']]) + '<p class="sm mut" style="margin-top:12px">Blocco dell’intera app dopo</p>' + seg('appidle', appIdleMin(), [[5, '5 min'], [15, '15 min'], [30, '30 min'], [60, '1 ora']]) + '<p class="sm mut" style="margin-top:12px">Blocca quando esco dall’app, dopo</p>' + seg('lockhide', lockHideSec(), [[0, 'Mai'], [30, '30 s'], [120, '2 min']]) +
+  '<div class="stack" style="margin-top:14px">' + (pkSupported() ? (S.meta.pk ? '<div class="gap"><span class="sp">Passkey attiva' + (S.meta.pk.prf ? ' (impronta anche per l’area protetta)' : ' (solo per le carte: l’area protetta chiede la master password)') + '</span><button class="btn sm dan" data-act="pkOff">Rimuovi</button></div>' : '<button class="btn blk" data-act="pkOn2">' + ic('key') + ' Attiva la passkey</button>') : '<p class="sm mut">Passkey non disponibile in questo contesto (serve https o localhost).</p>') +
+  '<button class="btn blk" data-act="chpw">Cambia master password</button><button class="btn blk" data-act="showRec">Mostra il codice di recupero</button><button class="btn blk" data-act="rotate">Cambia le chiavi di cifratura</button><button class="btn blk" data-act="audit2">' + ic('shield') + ' Controlla password compromesse</button></div></div>' +
+  '<div class="card"><h3>Backup</h3><p class="sm mut">File .enc cifrato con la tua master password e il tuo codice di recupero. Contiene tutto: carte, Vault e conti.</p>' + bkStatus() + '<div class="stack"><button class="btn blk" data-act="exp">' + ic('dl') + ' Esporta backup cifrato</button><button class="btn blk" data-act="restore">' + ic('up') + ' Ripristina da backup (sostituisce i dati)</button><button class="btn blk" data-act="impVault">' + ic('up') + ' Importa backup del vecchio Vault</button><button class="btn blk" data-act="impFin">' + ic('up') + ' Importa backup di Financial Dashboard</button><button class="btn blk" data-act="verifyBk">' + ic('shield') + ' Verifica un file di backup</button></div>' + driveCard() + '</div>' +
+  snapCard() + folderCard() + syCard() + devCard() +
+  '<div class="card"><h3>Privacy</h3><p class="sm">I tuoi dati sono cifrati sul dispositivo con AES-256-GCM; le chiavi derivano dalla master password (PBKDF2, 600.000 iterazioni) e non lasciano mai il dispositivo. Non ci sono analytics né script di terze parti. Per impostazione iniziale, la ricerca automatica invia il nome del negozio a Wikidata e il dominio ai servizi di icone; la ricerca di vicinanza invia a OpenStreetMap un’area approssimata (~100 m) e i nomi dei negozi. Puoi disattivare entrambe in Impostazioni. Il controllo password compromesse invia solo i primi 5 caratteri dell’hash. Il riconoscimento vocale online parte solo se lo autorizzi. Il backup su Google Drive è facoltativo e resta cifrato.</p></div>' +
+  '<div class="card"><h3>Info</h3><p class="sm mut">' + APP_NAME + ' ' + APP_VERSION + ' — carte, Vault, conti e backup</p><div class="stack"><button class="btn blk" data-act="lockNow">' + ic('lock') + ' Blocca ora</button><button class="btn blk dan" data-act="wipeAll">' + ic('trash') + ' Elimina tutti i dati da questo dispositivo</button></div></div></main>';
+
+/* ---------- logica ---------- */
+const afterUnlock = async () => { S.last = Date.now(); await loadCards(); go('home'); devTouch().catch(() => { }); setTimeout(bkNag, 1500); if (U.incoming) setTimeout(offerIncoming, 300); if (U.go) setTimeout(applyGo, 350); if (U.openCard) { const id = U.openCard; U.openCard = null; setTimeout(() => { if (S.cards.get(id)) cardOpen(id); }, 400); } };
+async function commitAccount(p) {
+  S.meta = p.meta; await DB.put('meta', p.meta, 'acct'); await setKeys(p.kc, p.kp); await ensureVMeta(); S.items = new Map(); S.cards = new Map(); S.protOpen = false; U.pending = null;
+}
+async function newPasswordFlow(M, pw) { // riavvolge la chiave con una nuova master password
+  const salt = rnd(16); S.meta.kdf = { salt: b64e(salt), iter: KDF_ITER }; S.meta.wrapPw = await seal(await kekPw(pw, salt, KDF_ITER), M, 'wrapPw'); S.meta.mts = Date.now(); await DB.put('meta', S.meta, 'acct');
+}
+async function validateNewPw(p1, p2, errEl) {
+  if (p1.length < 12) return errEl.textContent = 'Servono almeno 12 caratteri.', false;
+  if (p1 !== p2) return errEl.textContent = 'Le due password non coincidono.', false;
+  if (strength(p1).lv < 1) return errEl.textContent = 'Password troppo debole: usa più caratteri o una frase lunga.', false;
+  errEl.textContent = 'Controllo password compromesse…'; const n = await pwnedCount(p1); errEl.textContent = '';
+  if (n > 0 && !(await ask('Password compromessa', 'Questa password compare in ' + n.toLocaleString('it-IT') + ' violazioni note. Ti consigliamo di sceglierne un’altra.', { ok: 'Usala comunque', cancel: 'Cambia', danger: true }))) return false;
+  if (n === null) toast('Controllo violazioni non eseguito (offline)');
+  return true;
+}
+function parseRestore(text) { try { const b = JSON.parse(text); return validBackup(b) ? b : null; } catch (e) { return null; } }
+
+const FORMS = {
+  async create(f) {
+    const e = $('cerr'), b = f.querySelector('button[type=submit]'); e.textContent = ''; e.className = 'sm bad';
+    const p1 = $('cp1').value, p2 = $('cp2').value;
+    if (!(await validateNewPw(p1, p2, e))) return;
+    busy(b, true, 'Creo le chiavi…'); await new Promise(r => setTimeout(r, 30));
+    try { U.pending = await buildAccount(p1); go('recovery'); } catch (x) { e.textContent = 'Errore: ' + x.message; } busy(b, false);
+  },
+  async recovery() {
+    const p = U.pending, e = $('rerr');
+    if ($('rw1').value.trim().toLowerCase() !== p.words[2] || $('rw2').value.trim().toLowerCase() !== p.words[16]) return e.textContent = 'Le parole non corrispondono: controlla di aver scritto il codice.';
+    if (!$('rck').checked) return e.textContent = 'Conferma di aver salvato il codice.';
+    await commitAccount(p); go(pkSupported() ? 'pkask' : 'migrate');
+  },
+  async unlock(f) {
+    const e = $('uerr'), b = f.querySelector('button[type=submit]'), pw = $('up').value; if (!pw) return;
+    const left = await rlLeft(); if (left) return e.textContent = 'Troppi tentativi. Riprova tra ' + Math.ceil(left / 1000) + ' s.';
+    busy(b, true, 'Verifica…'); await new Promise(r => setTimeout(r, 30));
+    try { const M = await unwrapWithPassword(pw); await rlOk(); await applyM(M); await afterUnlock(); }
+    catch (x) { await rlFail(); const l = await rlLeft(); e.textContent = 'Password errata.' + (l ? ' Attendi ' + Math.ceil(l / 1000) + ' s prima di riprovare.' : ''); busy(b, false); $('up').value = ''; $('up').focus(); }
+  },
+  async verify(f) {
+    const e = $('verr'), b = f.querySelector('button[type=submit]'), pw = $('vp').value; if (!pw) return;
+    const left = await rlLeft(); if (left) return e.textContent = 'Troppi tentativi. Riprova tra ' + Math.ceil(left / 1000) + ' s.';
+    busy(b, true, 'Verifica…'); await new Promise(r => setTimeout(r, 30));
+    try { const M = await unwrapWithPassword(pw); await rlOk(); await applyM(M); U.verify.done(); }
+    catch (x) { await rlFail(); e.textContent = 'Password errata.'; busy(b, false); }
+  },
+  async item(f) {
+    const { id, type } = U.form, e = $('ferr'), prev = id ? S.items.get(id) : null, old = prev ? prev.data : {};
+    const d = { category: $('f_c').value, owner: $('f_o').value, fav: $('f_fav').checked, notes: $('f_n') ? $('f_n').value : '' };
+    if (type === 'login') Object.assign(d, { service: $('f_t').value.trim(), username: $('f_u').value.trim(), password: $('f_p').value, domain: $('f_d').value.trim() });
+    else if (type === 'passkey') Object.assign(d, { service: $('f_t').value.trim(), username: $('f_u').value.trim(), where: $('f_pw').value, device: $('f_pi').value.trim(), domain: $('f_d').value.trim() });
+    else if (type === 'note') Object.assign(d, { title: $('f_t').value.trim(), text: $('f_x').value });
+    else Object.assign(d, { title: $('f_t').value.trim(), fname: old.fname, size: old.size, mime: old.mime });
+    Object.assign(d, vxExtra());
+    if (!(d.service || d.title)) return e.textContent = 'Inserisci un nome.';
+    const nid = id || uid();
+    try {
+      if (type === 'file' && !id) {
+        const file = $('f_f').files[0]; if (!file) return e.textContent = 'Scegli un file.'; if (file.size > MAX_FILE) return e.textContent = 'File troppo grande (max ' + fmtSize(MAX_FILE) + ').';
+        Object.assign(d, { fname: file.name, size: file.size, mime: file.type || 'application/octet-stream' }); await putBlob(nid, new Uint8Array(await file.arrayBuffer()));
+      }
+      await putItem(nid, type, d, prev); closeTop(); if (id) closeTop(); render(); toast('Salvato');
+    } catch (x) { e.textContent = 'Errore: ' + x.message; }
+  },
+};
+document.addEventListener('submit', e => { e.preventDefault(); const f = FORMS[e.target.dataset.form]; if (f) f(e.target); });
+
+const ACT = {
+  nav: t => go(t.dataset.r === 'vault' ? (S.protOpen ? 'vault' : (ACT.enterProt(), U.route)) : t.dataset.r === 'fin' ? (S.protOpen && S.items.has('fin-db') ? 'fin' : (ACT.enterFin(), U.route)) : t.dataset.r),
+  toWelcome: () => go('welcome'), toCreate: () => go('create'), toMigrate: () => go('migrate'), toHome: () => go('home'),
+  close: () => closeTop(),
+  eye: t => { const i = $(t.dataset.for); i.type = i.type === 'password' ? 'text' : 'password'; },
+  async enterProt() { if (await openProt()) go('vault'); },
+  lockNow: () => lockAll(),
+  async pkOn(t) {
+    busy(t, true, 'In attesa…');
+    try { const prf = await enablePasskey(); toast(prf ? 'Passkey attiva' : 'Passkey attiva (solo per le carte su questo dispositivo)'); go('migrate'); } catch (e) { toast('Passkey non attivata: ' + (e.name === 'NotAllowedError' ? 'operazione annullata' : e.message)); busy(t, false); }
+  },
+  async pkOn2() { if (!(await ensureProt())) return; try { const prf = await enablePasskey(); toast(prf ? 'Passkey attiva' : 'Passkey attiva (limitata alle carte)'); render(); } catch (e) { toast('Passkey non attivata'); } },
+  async pkOff() { if (await ask('Rimuovere la passkey?', 'Dovrai usare la master password per sbloccare.', { ok: 'Rimuovi', danger: true })) { await disablePasskey(); render(); } },
+  async forgot() {
+    const m = modal('<h2>Recupero con il codice</h2><p class="mut sm">Inserisci le 24 parole e scegli una nuova master password. I dati restano intatti.</p><form data-form="x"><label class="f" for="fw">Codice di recupero</label><textarea class="in mono" id="fw" rows="4" autocapitalize="off" spellcheck="false"></textarea>' + pwField('fn1', 'Nuova master password', 'new-password') + meterHtml('fnm') + pwField('fn2', 'Ripeti', 'new-password') + '<button type="button" class="btn sm" data-act="emgJoin" data-to="fw">Ho le parti di emergenza</button><p class="sm bad" id="ferr2" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Recupera</button></div></form>', { sticky: true });
+    m.q('#fn1').addEventListener('input', e => setMeter('fnm', e.target.value));
+    m.q('form').onsubmit = async ev => { ev.preventDefault(); const e = m.q('#ferr2'), b = m.q('button[type=submit]'); e.textContent = '';
+      try { const w = parseRecovery(m.q('#fw').value); if (!(await validateNewPw(m.q('#fn1').value, m.q('#fn2').value, e))) return; busy(b, true, 'Recupero…');
+        const M = await unwrapWithRecovery(w).catch(() => { throw new Error('Codice di recupero non corretto.'); }); await newPasswordFlow(M, m.q('#fn1').value); await applyM(M); m.close(); toast('Nuova master password impostata'); afterUnlock();
+      } catch (x) { e.textContent = x.message; busy(b, false); } };
+  },
+  async chpw() {
+    if (!(await ensureProt())) return;
+    const m = modal('<h2>Cambia master password</h2><form data-form="x">' + pwField('o1', 'Password attuale') + pwField('n1', 'Nuova password', 'new-password') + meterHtml('nm') + pwField('n2', 'Ripeti la nuova', 'new-password') + '<p class="sm bad" id="cerr3" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Cambia</button></div></form>', { sticky: true });
+    m.q('#n1').addEventListener('input', e => setMeter('nm', e.target.value));
+    m.q('form').onsubmit = async ev => { ev.preventDefault(); const e = m.q('#cerr3'), b = m.q('button[type=submit]'); e.textContent = '';
+      try { busy(b, true, 'Verifica…'); const M = await unwrapWithPassword(m.q('#o1').value).catch(() => { throw new Error('Password attuale errata.'); }); busy(b, false);
+        if (!(await validateNewPw(m.q('#n1').value, m.q('#n2').value, e))) return; busy(b, true, 'Ricifro…'); await newPasswordFlow(M, m.q('#n1').value); wipe(M); m.close(); toast('Master password cambiata. Il codice di recupero resta valido.');
+      } catch (x) { e.textContent = x.message; busy(b, false); } };
+  },
+  async showRec() {
+    if (!(await ensureProt())) return;
+    const w = td.decode(await unseal(S.kpKey, S.meta.recEnc, 'recEnc')).split(' ');
+    modal('<h2>Codice di recupero</h2><p class="mut sm">Non fotografarlo e non salvarlo in cloud. Conservalo su carta.</p><div class="words">' + w.map((x, i) => '<div class="w1"><small>' + (i + 1) + '</small><b class="mono">' + x + '</b></div>').join('') + '</div><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn pri" data-act="close">Chiudi</button></div>');
+  },
+  pref(t) {
+    const k = t.dataset.k, v = t.dataset.v;
+    if (k === 'idle') { S.idleMin = +v; localStorage.setItem('unica_idle', v); } else { localStorage.setItem('unica_' + k, v); applyPrefs(); }
+    render();
+  },
+  audit: () => audit(), async audit2() { if (await openProt()) audit(); },
+  gen: () => openGen(), genfor: () => openGen(pw => { $('f_p').value = pw; $('f_p').type = 'text'; setMeter('fm', pw); }),
+  newItem: () => openForm(null, 'login'),
+  ftype: t => { closeTop(); openForm(null, t.dataset.t); },
+  cat: t => { U.cat = t.dataset.c; render(); },
+  detail: t => openDetail(t.dataset.id),
+  edit: t => { openForm(t.dataset.id); },
+  async del(t) { if (await ask('Eliminare la voce?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { await delItem(t.dataset.id); closeTop(); render(); toast('Voce eliminata'); } },
+  reveal(t) { const el = $(t.dataset.t); const it = S.items.get(t.dataset.id); if (el.dataset.on) { el.textContent = '••••••••'; delete el.dataset.on; el.className = ''; } else { el.textContent = it.data[t.dataset.f] || '—'; el.dataset.on = 1; el.className = t.dataset.f === 'password' ? 'mono' : ''; el.style.whiteSpace = 'pre-wrap'; } },
+  cp(t) { const it = S.items.get(t.dataset.id); copy(it.data[t.dataset.f], t.dataset.l); },
+  async dlFile(t) { try { const it = S.items.get(t.dataset.id); download(it.data.fname, new Blob([await getBlob(it.id)], { type: it.data.mime })); } catch (e) { toast('Errore: ' + e.message); } },
+  async chk1(t) { const el = $('chk1r'); el.textContent = 'Controllo…'; const n = await pwnedCount(S.items.get(t.dataset.id).data.password); el.textContent = n === null ? 'Controllo non riuscito (offline?).' : n === 0 ? 'Nessuna violazione nota per questa password.' : 'Attenzione: password comparsa in ' + n.toLocaleString('it-IT') + ' violazioni. Cambiala.'; },
+  async exp() { const b = await exportBackup(); download('vortexhub-backup-' + new Date().toISOString().slice(0, 10) + '.enc', new Blob([JSON.stringify(b)], { type: 'application/octet-stream' })); toast('Backup esportato'); },
+  async restore(t) {
+    let txt = typeof t === 'string' ? t : null;
+    if (txt === null) SY.pend = null;
+    if (txt === null) { const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return; txt = await f.text(); }
+    const bk = parseRestore(txt); if (!bk) return toast('Non è un backup di ' + APP_NAME);
+    if (S.meta && !(await ask('Sostituire i dati?', 'Tutti i dati attuali su questo dispositivo saranno sostituiti da quelli del backup.', { ok: 'Sostituisci', danger: true }))) return;
+    const m = modal('<h2>Ripristino</h2><p class="mut sm">Inserisci la master password del backup oppure le 24 parole del codice di recupero.</p><form data-form="x"><label class="f" for="rs">Master password o codice di recupero</label><textarea class="in" id="rs" rows="3" autocapitalize="off" spellcheck="false"></textarea><button type="button" class="btn sm" data-act="emgJoin" data-to="rs">Ho le parti di emergenza</button><p class="sm bad" id="rse" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Ripristina</button></div></form>', { sticky: true });
+    m.q('form').onsubmit = async ev => { ev.preventDefault(); const e = m.q('#rse'), b = m.q('button[type=submit]'), s = m.q('#rs').value; if (!s.trim()) return; busy(b, true, 'Verifica…'); await new Promise(r => setTimeout(r, 30));
+      try {
+        if (S.meta && S.kcKey) await snapSave('Prima del ripristino');
+        const saved = S.meta; S.meta = bk.meta; let M, viaRec = false;
+        try { M = await (/\s/.test(s.trim()) && s.trim().split(/\s+/).length >= 20 ? (viaRec = true, unwrapWithRecovery(parseRecovery(s))) : unwrapWithPassword(s)); } catch (x) { S.meta = saved; throw new Error('Password o codice non corretti.'); }
+        dropAll(); for (const st of ['items', 'blobs', 'dev']) await DB.clear(st); await DB.clear('meta');
+        for (const r of bk.items) await DB.put('items', r); for (const r of bk.blobs) await DB.put('blobs', r);
+        S.meta = { ...bk.meta }; await DB.put('meta', S.meta, 'acct'); m.close();
+        if (viaRec) { const np = await newPw(); if (np) await newPasswordFlow(M, np); }
+        await applyM(M); await loadCards(); await syAdopt(); toast('Backup ripristinato'); if (pkSupported()) go('pkask'); else go('home');
+      } catch (x) { e.textContent = x.message; busy(b, false); } };
+  },
+  async impVault() {
+    if (!(await openProt())) return;
+    const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return;
+    let payload; try { payload = JSON.parse(await f.text()); } catch (e) { return toast('File non valido'); }
+    const pw = await askText('Password del backup', 'Inserisci la password con cui hai cifrato il backup del Vault (di solito la sua password master).'); if (!pw) return;
+    const t = toast('Decifro…'); let data;
+    try { data = await decryptVaultBackup(payload, pw); } catch (e) { return toast(e.message); }
+    const creds = Array.isArray(data) ? data : Array.isArray(data.credentials) ? data.credentials : null; if (!creds) return toast('Formato del Vault non riconosciuto');
+    const key = c => [c.service, c.username, c.domain].map(x => String(x || '').trim().toLowerCase()).join('|');
+    const have = new Set(vitems().filter(i => i.type === 'login').map(i => key(i.data))); const add = creds.filter(c => c && (c.service || c.username) && !have.has(key(c)));
+    if (!(await ask('Importare dal Vault?', 'Trovate ' + creds.length + ' voci: ' + add.length + ' da importare, ' + (creds.length - add.length) + ' già presenti.', { ok: 'Importa' }))) return;
+    const vm = vmeta(); const cs = v => String(v == null ? '' : v);
+    const cats = new Set(vm.cats), owners = new Set(vm.owners); (Array.isArray(data.categories) ? data.categories : []).forEach(c => cats.add(cs(c))); (Array.isArray(data.owners) ? data.owners : []).forEach(o => owners.add(cs(o)));
+    add.forEach(c => { if (c.category) cats.add(cs(c.category)); if (c.owner) owners.add(cs(c.owner)); });
+    await putItem('vault-meta', 'vmeta', { cats: [...cats], owners: [...owners] }, S.items.get('vault-meta'));
+    for (const c of add) await putItem(uid(), 'login', { service: cs(c.service).slice(0, 200), username: cs(c.username), password: cs(c.password), domain: cs(c.domain), notes: cs(c.notes), category: cs(c.category) || [...cats][0], owner: cs(c.owner) || [...owners][0], fav: false });
+    toast('Importate ' + add.length + ' voci'); if (U.route === 'migrate') return; render();
+  },
+  async wipeAll() {
+    const t = await askText('Elimina tutti i dati', 'Cancella tutto da questo dispositivo, senza possibilità di recupero (a meno di un backup). Scrivi ELIMINA per confermare.', true); if (t !== 'ELIMINA') return;
+    dropAll(); for (const st of ['meta', 'items', 'blobs', 'dev', 'snaps']) await DB.clear(st); ['unica_idle', 'unica_gen', 'unica_syon', 'unica_sylast', 'unica_sydirty', 'unica_snapat', 'unica_snapdirty', 'unica_lastbk'].forEach(k => localStorage.removeItem(k)); location.reload();
+  },
+};
+function askText(title, msg, plain) {
+  return new Promise(res => {
+    const m = modal('<h2>' + h(title) + '</h2><p class="mut sm">' + h(msg) + '</p><form data-form="x">' + (plain ? '<input class="in" id="at" autocomplete="off" autocapitalize="off">' : pwField('at', 'Password')) + '<div class="gap" style="margin-top:12px"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">OK</button></div></form>', { sticky: true, onClose: () => res(null) });
+    m.q('form').onsubmit = ev => { ev.preventDefault(); const v = m.q('#at').value; m.el._close = () => m.el.remove(); m.el.remove(); res(v); };
+  });
+}
+function newPw() {
+  return new Promise(res => {
+    const m = modal('<h2>Nuova master password</h2><p class="mut sm">Hai usato il codice di recupero: scegli una nuova master password.</p><form data-form="x">' + pwField('r1', 'Nuova password', 'new-password') + meterHtml('rm') + pwField('r2', 'Ripeti', 'new-password') + '<p class="sm bad" id="re" role="alert"></p><div class="gap"><span class="sp"></span><button class="btn pri" type="submit">Imposta</button></div></form>', { sticky: true });
+    m.q('#r1').addEventListener('input', e => setMeter('rm', e.target.value));
+    m.q('form').onsubmit = async ev => { ev.preventDefault(); if (await validateNewPw(m.q('#r1').value, m.q('#r2').value, m.q('#re'))) { const v = m.q('#r1').value; m.el.remove(); res(v); } };
+  });
+}
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const a = ACT[t.dataset.act]; if (!a) return;
+  try { await a(t, e); } catch (x) { console.error(x); toast('Errore: ' + x.message); }
+});
+
+/* ---------- blocco automatico ---------- */
+function lockAll() { document.querySelectorAll('.ov').forEach(o => o.remove()); U.selmode = false; U.sel = new Set(); dropAll(); U.q = ''; U.cat = ''; if (S.meta) go('lock'); }
+function lockProt(msg) { const was = S.protOpen; U.selmode = false; U.sel = new Set(); dropProt(); if (['vault'].includes(U.route)) go('home'); else if (U.route === 'home') render(); if (was && msg) toast(msg); }
+function idleCheck() {
+  if (!S.kc && !S.kp) return; const idle = Date.now() - S.last;
+  if (S.protOpen && idle > S.idleMin * 60000) lockProt('Area protetta bloccata per inattività');
+  if (!S.protOpen && S.kp && Date.now() - S.verifiedAt > PROT_FRESH_MS) { wipe(S.kp); S.kp = null; S.kpKey = null; }
+  if (idle > appIdleMin() * 60000) lockAll();
+}
+['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(ev => document.addEventListener(ev, () => { S.last = Date.now(); }, { passive: true, capture: true }));
+setInterval(idleCheck, 5000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') idleCheck(); });
+
+/* ---------- preferenze e avvio ---------- */
+function applyPrefs() {
+  const r = document.documentElement, g = k => localStorage.getItem('unica_' + k);
+  r.style.setProperty('--fs', (g('fs') || 16) + 'px'); r.style.setProperty('--ic', (g('ic') || 22) + 'px');
+  if (g('theme') && g('theme') !== 'auto') r.setAttribute('data-theme', g('theme')); else r.removeAttribute('data-theme');
+}
+
+/* ================= Carte fedeltà (chiave di livello 1: disponibili dopo lo sblocco rapido) ================= */
+P.grid = '<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>';
+const CCOL = ['#0f766e', '#14659f', '#c2410c', '#1d4ed8', '#0e7490', '#4d7c0f', '#b45309', '#475569'];
+const CTYPES = { EAN13: 'EAN-13', EAN8: 'EAN-8', CODE128: 'CODE-128', CODE39: 'CODE-39', QR: 'QR code' };
+const cardsArr = () => [...S.cards.values()].filter(c => c.type === 'card');
+const cSort = () => localStorage.getItem('unica_csort') || 'recent';
+const nearOn = () => localStorage.getItem('unica_near') !== '0';
+const hex = c => /^#[0-9a-f]{6}$/i.test(c) ? c : CCOL[0];
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+const cleanCode = s => String(s || '').trim();
+
+function sortedCards() {
+  const q = norm(U.cq || ''), mode = cSort(), near = U.near || new Set();
+  let a = cardsArr().filter(c => !q || norm(c.data.name).includes(q) || (c.data.code || '').includes(U.cq.trim()));
+  const key = c => mode === 'used' ? (c.data.uses || 0) : mode === 'added' ? -(c.data.added || 0) : (c.data.last || c.data.added || 0);
+  a.sort((x, y) => (near.has(y.id) ? 1 : 0) - (near.has(x.id) ? 1 : 0) || (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) ||
+    (mode === 'az' ? x.data.name.localeCompare(y.data.name, 'it') : key(y) - key(x)));
+  return a;
+}
+function cardTile(c) {
+  const d = c.data, near = U.near && U.near.has(c.id);
+  return '<button class="ccard" data-act="cardOpen" data-id="' + h(c.id) + '" style="background:' + hex(d.color) + '"><span class="cn">' + (d.logo ? '<img src="' + h(d.logo) + '" alt="" class="clogo">' : '') + '<b>' + h(d.name) + '</b>' + (d.fav ? '<span aria-label="Preferita">' + ic('star') + '</span>' : '') + '</span>' +
+    (near ? '<span class="tag">Qui vicino</span>' : '') + '<canvas class="bc mini" data-id="' + h(c.id) + '" aria-hidden="true"></canvas></button>';
+}
+const cview = () => localStorage.getItem('unica_cview') === 'icons' ? 'icons' : 'cards';
+function iconTile(c) {
+  const d = c.data, near = U.near && U.near.has(c.id), ini = (String(d.name || '?').trim()[0] || '?').toUpperCase();
+  return '<button class="itile" data-act="cardOpen" data-id="' + h(c.id) + '" aria-label="' + h(d.name) + (near ? ', qui vicino' : '') + '"><span class="ibox" style="background:' + hex(d.color) + '">' + (d.logo ? '<img src="' + h(d.logo) + '" alt="">' : '<i>' + h(ini) + '</i>') + (d.fav ? '<span class="istar">' + ic('star') + '</span>' : '') + (near ? '<span class="idot" aria-hidden="true"></span>' : '') + '</span><span class="iname">' + h(d.name) + '</span></button>';
+}
+function cardsList() {
+  const a = sortedCards();
+  if (!a.length) return '<div class="card c mut">' + (cardsArr().length ? 'Nessun risultato.' : '<svg class="empt" viewBox="0 0 120 80" aria-hidden="true"><rect x="14" y="18" width="92" height="56" rx="10" fill="none" stroke="currentColor" stroke-width="2" opacity=".35"/><rect x="6" y="8" width="92" height="56" rx="10" fill="url(#eg)" opacity=".9"/><defs><linearGradient id="eg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset=".55" stop-color="#1f78b4"/><stop offset="1" stop-color="#f28c28"/></linearGradient></defs><path d="M18 44h30M18 52h18" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg><div><b>Nessuna carta</b><br>Tocca + per aggiungerne una, oppure ' + ic('scan') + ' per scansionarla. Puoi anche importare il JSON di Fidelity Wallet dalle Impostazioni.</div>') + '</div>';
+  return cview() === 'icons' ? '<div class="igrid">' + a.map(iconTile).join('') + '</div>' : '<div class="cgrid">' + a.map(cardTile).join('') + '</div>';
+}
+function drawMinis() {
+  document.querySelectorAll('canvas.mini').forEach(cv => { const c = S.cards.get(cv.dataset.id); if (!c) return; try { BC.draw(cv, c.data, { width: 260, height: 38 }); } catch (e) { cv.remove(); } });
+}
+V.cards = () => hdr('Carte', '<button class="ib" data-act="cview" aria-label="' + (cview() === 'icons' ? 'Vista a schede' : 'Vista a icone') + '" aria-pressed="' + (cview() === 'icons') + '">' + ic(cview() === 'icons' ? 'card' : 'grid') + '</button><button class="ib" data-act="near" aria-label="Carte dei negozi vicini">' + ic('pin') + '</button><button class="ib" data-act="scan" aria-label="Scansiona una carta">' + ic('scan') + '</button><button class="ib" data-act="newCard" aria-label="Nuova carta">' + ic('plus') + '</button>') +
+  '<main class="wrap"><div class="gap"><input class="in sp" id="cq" type="search" placeholder="Cerca una carta…" aria-label="Cerca" value="' + h(U.cq || '') + '"><select class="in" id="cs" style="width:auto" aria-label="Ordina">' +
+  [['recent', 'Recenti'], ['used', 'Più usate'], ['added', 'Come aggiunte'], ['az', 'A–Z']].map(o => '<option value="' + o[0] + '"' + (cSort() === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></div><div id="clist" class="mt">' + cardsList() + '</div></main>';
+POST.cards = () => {
+  const q = $('cq'); drawMinis();
+  q.addEventListener('input', () => { U.cq = q.value; U.cfav = false; $('clist').innerHTML = cardsList(); drawMinis(); });
+  $('cs').addEventListener('change', e => { localStorage.setItem('unica_csort', e.target.value); $('clist').innerHTML = cardsList(); drawMinis(); });
+};
+
+/* --- apertura carta --- */
+let wake = null;
+async function cardOpen(id) {
+  const c = S.cards.get(id); if (!c) return; const d = c.data;
+  buzz(25);
+  try { if (navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); } catch (e) { }
+  const m = modal('<div class="gap"><h2 class="sp" style="margin:0">' + h(d.name) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+    '<div class="cview"><canvas id="cvb" class="bc big" aria-label="Codice della carta ' + h(d.name) + '"></canvas><p class="mono b c" id="cvt">' + h(d.code) + '</p></div>' +
+    (d.holder || d.notes || d.address || d.domain ? '<div class="card sm">' + (d.holder ? '<div><span class="mut">Intestatario:</span> ' + h(d.holder) + '</div>' : '') + (d.domain ? '<div><span class="mut">Sito:</span> ' + h(d.domain) + '</div>' : '') + (d.address ? '<div><span class="mut">Negozio:</span> ' + h(d.address) + '</div>' : '') + (d.notes ? '<div><span class="mut">Note:</span> ' + h(d.notes) + '</div>' : '') + '</div>' : '') +
+    (d.domain ? '<div class="gap"><button class="btn blk" data-act="cardVault" data-id="' + h(id) + '">' + ic('key') + ' Credenziali nel Vault</button></div>' : '') + '<div class="gap"><button class="btn" data-act="cardFav" data-id="' + h(id) + '">' + ic('star') + (d.fav ? ' Togli preferita' : ' Preferita') + '</button><button class="btn" data-act="cardShare" data-id="' + h(id) + '">' + ic('up') + ' Condividi</button><button class="btn" data-act="cardEdit" data-id="' + h(id) + '">' + ic('edit') + ' Modifica</button><button class="btn dan" data-act="cardDel" data-id="' + h(id) + '">' + ic('trash') + ' Elimina</button></div>',
+    { onClose: () => { if (wake) { wake.release().catch(() => { }); wake = null; } } });
+  const cv = m.q('#cvb'); try { BC.draw(cv, d, { width: Math.min(420, window.innerWidth - 56), height: 110, text: false }); } catch (e) { cv.replaceWith(Object.assign(document.createElement('p'), { className: 'alert d', textContent: 'Codice non rappresentabile: ' + e.message })); }
+  putItem(id, 'card', { ...d, uses: (d.uses || 0) + 1, last: Date.now() }, c, 'c').catch(() => { });
+}
+
+/* --- modulo carta --- */
+function openCardForm(id, pre) {
+  const it = id ? S.cards.get(id) : null, d = it ? it.data : (pre || {}); U.cform = { id, typeTouched: !!(it || (pre && pre.type)) };
+  const m = modal('<h2>' + (it ? 'Modifica carta' : 'Nuova carta') + '</h2><form data-form="card"><label class="f" for="c_n">Nome del negozio</label><input class="in" id="c_n" required value="' + h(d.name) + '" autocomplete="off">' +
+    '<label class="f" for="c_c">Codice</label><div class="pw"><input class="in mono" id="c_c" required value="' + h(d.code) + '" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text"><button type="button" class="btn" data-act="scanfor" aria-label="Scansiona il codice">' + ic('scan') + '</button></div>' +
+    '<label class="f" for="c_t">Tipo di codice</label><select class="in" id="c_t">' + Object.keys(CTYPES).map(k => '<option value="' + k + '"' + (k === (d.type || 'CODE128') ? ' selected' : '') + '>' + CTYPES[k] + '</option>').join('') + '</select>' +
+    '<p class="sm mut" id="c_hint" role="status"></p>' +
+    '<label class="f">Colore</label><div class="gap" id="c_cols">' + CCOL.map(c => '<button type="button" class="sw" data-act="swatch" data-c="' + c + '" style="background:' + c + '" aria-label="Colore ' + c + '" aria-pressed="' + (hex(d.color) === c) + '"></button>').join('') + '</div>' +
+    '<label class="f" for="c_h">Intestatario (facoltativo)</label><input class="in" id="c_h" value="' + h(d.holder) + '" autocomplete="off">' +
+    '<label class="f" for="c_d">Sito web (facoltativo)</label><div class="pw"><input class="in" id="c_d" value="' + h(d.domain) + '" autocomplete="off" autocapitalize="off"><button type="button" class="btn" data-act="findSite">' + ic('search') + ' Cerca</button></div>' +
+    '<label class="f" for="c_x">Scadenza della carta (mese, facoltativa)</label><input class="in" id="c_x" type="month" value="' + h(d.exp) + '">' + (window.dueHtml ? window.dueHtml(d.due) : '') + '<label class="f" for="c_o">Note</label><textarea class="in" id="c_o" rows="2">' + h(d.notes) + '</textarea>' +
+    '<p class="sm bad" id="c_err" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">' + ic('x') + ' Annulla</button><button class="btn pri" type="submit">' + ic('check') + ' Salva</button></div></form>', { sticky: true, noFocus: !!it || !!d.code });
+  m.el.dataset.color = hex(d.color);
+  const code = m.q('#c_c'), type = m.q('#c_t');
+  const hint = () => { const c = cleanCode(code.value), t = type.value; let msg = '';
+    try { BC.bars(t === 'QR' ? 'CODE128' : t, t === 'QR' ? 'x' : c); } catch (e) { if (c) msg = '⚠ ' + e.message + ': scegli un altro tipo.'; }
+    if (t === 'EAN13' && /^\d{13}$/.test(c) && !BC.eanValid(c)) msg = '⚠ La cifra di controllo dell’EAN-13 non torna (dovrebbe essere ' + BC.eanCheck(c) + '). Controlla il codice.';
+    m.q('#c_hint').textContent = msg; };
+  code.addEventListener('input', () => { if (!U.cform.typeTouched) type.value = BC.detectType(cleanCode(code.value)); hint(); });
+  type.addEventListener('change', () => { U.cform.typeTouched = true; hint(); }); hint();
+}
+FORMS.card = async () => {
+  const { id } = U.cform, e = $('c_err'), prev = id ? S.cards.get(id) : null, old = prev ? prev.data : {};
+  const name = $('c_n').value.trim(); let code = cleanCode($('c_c').value); let type = $('c_t').value; if (type === 'EAN13' && /^\d{12}$/.test(code)) code = '0' + code;
+  if (!name || !code) return e.textContent = 'Nome e codice sono obbligatori.';
+  try { type === 'QR' ? BC.qr(code) : BC.bars(type, code); } catch (x) { return e.textContent = x.message; }
+  if (type === 'EAN13' && !BC.eanValid(code) && !(await ask('Cifra di controllo errata', 'L’EAN-13 ha una cifra di controllo che non torna: la carta potrebbe non essere letta alla cassa. Salvare comunque?', { ok: 'Salva comunque' }))) return;
+  const dup = cardsArr().find(c => c.id !== id && c.data.code === code);
+  if (dup && !(await ask('Codice già presente', 'Esiste già la carta «' + dup.data.name + '» con lo stesso codice. Salvare comunque?', { ok: 'Salva' }))) return;
+  const col = (document.querySelector('#c_cols [aria-pressed=true]') || {}).dataset;
+  const d = { ...old, name, code, type, color: col ? col.c : CCOL[0], holder: $('c_h').value.trim(), domain: $('c_d').value.trim().replace(/^https?:\/\//i, '').replace(/\/.*$/, ''), notes: $('c_o').value, exp: ($('c_x') && /^\d{4}-\d{2}$/.test($('c_x').value)) ? $('c_x').value : undefined, due: window.dueRead ? window.dueRead() : old.due, added: old.added || Date.now(), uses: old.uses || 0 };
+  if (U.cform.logo) d.logo = U.cform.logo;
+  if (U.cform.place !== undefined) { if (U.cform.place) { d.lat = U.cform.place.lat; d.lng = U.cform.place.lng; d.address = U.cform.place.address || d.address || ''; } else { delete d.lat; delete d.lng; } }
+  await putItem(id || uid(), 'card', d, prev, 'c'); closeTop(); if (id) closeTop(); render(); toast('Carta salvata');
+};
+
+/* --- scanner (BarcodeDetector nativo, altrimenti lettore 1D integrato) --- */
+const NATIVE = { ean_13: 'EAN13', ean_8: 'EAN8', upc_a: 'EAN13', code_128: 'CODE128', code_39: 'CODE39', qr_code: 'QR' };
+function mapNative(r) {
+  const t = NATIVE[r.format]; let code = r.rawValue;
+  if ((r.format === 'upc_a' || r.format === 'ean_13') && /^\d+$/.test(code) && code.length < 13) code = code.padStart(13, '0');
+  else if (r.format === 'ean_8' && /^\d+$/.test(code) && code.length < 8) code = code.padStart(8, '0');
+  return { code, type: t || BC.detectType(code), unsupported: !t };
+}
+async function detectNative(src) {
+  if (!('BarcodeDetector' in window)) return null;
+  try { if (!detectNative.d) detectNative.d = new BarcodeDetector({ formats: Object.keys(NATIVE) }); const r = await detectNative.d.detect(src); return r[0] ? mapNative(r[0]) : null; } catch (e) { return null; }
+}
+function openScanner(cb) {
+  let stream = null, alive = true, busyF = false;
+  const m = modal('<div class="gap"><h2 class="sp" style="margin:0">Scansiona</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><div class="vidbox"><video id="sv" playsinline muted></video><div class="vidline"></div></div><p class="sm mut c" id="smsg" role="status">Inquadra il codice a barre o il QR della carta.</p>' +
+    '<div class="gap"><button class="btn" id="sf">' + ic('file') + ' Da immagine</button><button class="btn" id="sm">Scrivi il codice</button></div>', { sticky: true, onClose: () => { alive = false; if (stream) stream.getTracks().forEach(t => t.stop()); } });
+  const done = r => { if (!alive) return; alive = false; try { navigator.vibrate && navigator.vibrate(60); } catch (e) { } m.close(); cb(r); };
+  const msg = t => { const el = m.q('#smsg'); if (el) el.textContent = t; };
+  m.q('#sm').onclick = () => { m.close(); cb(null); };
+  m.q('#sf').onclick = async () => {
+    const f = await pickFile('image/*'); if (!f) return; msg('Analizzo l’immagine…');
+    try { const bmp = await createImageBitmap(f), cv = document.createElement('canvas'), sc = Math.min(1, 1600 / bmp.width); cv.width = Math.round(bmp.width * sc); cv.height = Math.round(bmp.height * sc);
+      const cx = cv.getContext('2d', { willReadFrequently: true }); cx.drawImage(bmp, 0, 0, cv.width, cv.height);
+      const r = (await detectNative(cv)) || BC.decodeImage(cx.getImageData(0, 0, cv.width, cv.height)); if (r) done(r); else msg('Nessun codice riconosciuto. Riprova con un’immagine più nitida o scrivi il codice.'); } catch (e) { msg('Immagine non leggibile.'); }
+  };
+  (async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return msg('Fotocamera non disponibile qui: usa “Da immagine” o scrivi il codice.');
+    try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 } }, audio: false }); } catch (e) { return msg('Accesso alla fotocamera negato: usa “Da immagine” o scrivi il codice.'); }
+    if (!alive) { stream.getTracks().forEach(t => t.stop()); return; }
+    const v = m.q('#sv'); v.srcObject = stream; await v.play().catch(() => { });
+    const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+    const loop = async () => {
+      if (!alive) return; if (!busyF && v.videoWidth) { busyF = true;
+        try { let r = await detectNative(v); if (!r) { const sc = Math.min(1, 960 / v.videoWidth); cv.width = Math.round(v.videoWidth * sc); cv.height = Math.round(v.videoHeight * sc); cx.drawImage(v, 0, 0, cv.width, cv.height); r = BC.decodeImage(cx.getImageData(0, 0, cv.width, cv.height)); } if (r) return done(r); } catch (e) { }
+        busyF = false; }
+      setTimeout(loop, 180);
+    };
+    msg(('BarcodeDetector' in window) ? 'Inquadra il codice a barre o il QR della carta.' : 'Inquadra il codice a barre (su questo browser i QR si leggono da immagine o a mano).'); loop();
+  })();
+}
+function afterScan(r) {
+  if (!r) return openCardForm(null, {});
+  if (r.unsupported) toast('Formato non standard: salvato come ' + CTYPES[r.type]);
+  const ex = cardsArr().find(c => c.data.code === r.code);
+  if (ex) { toast('Carta già presente: ' + ex.data.name); return cardOpen(ex.id); }
+  openCardForm(null, { code: r.code, type: r.type });
+}
+
+/* --- condivisione --- */
+const b64u = u8 => b64e(u8).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const unb64u = t => b64d(t.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((t.length + 3) % 4));
+function shareLink(d) { const o = { n: d.name, c: d.code, t: d.type, k: d.color }; if (d.holder) o.h = d.holder; if (d.domain) o.d = d.domain; return location.origin + location.pathname + '#c=' + b64u(te.encode(JSON.stringify(o))); }
+function parseShared(hash) {
+  try { const o = JSON.parse(td.decode(unb64u(hash.slice(3)))); if (typeof o.n !== 'string' || typeof o.c !== 'string' || !o.n || !o.c || o.n.length > 100 || o.c.length > 300) return null;
+    return { name: o.n, code: o.c, type: CTYPES[o.t] ? o.t : BC.detectType(o.c), color: hex(o.k), holder: String(o.h || '').slice(0, 100), domain: String(o.d || '').slice(0, 100) }; } catch (e) { return null; }
+}
+async function offerIncoming() {
+  const p = U.incoming; if (!p) return; U.incoming = null;
+  if (!(await ask('Carta condivisa', 'Aggiungere «' + p.name + '» (' + p.code + ') alle tue carte?', { ok: 'Aggiungi' }))) return;
+  await putItem(uid(), 'card', { ...p, notes: '', added: Date.now(), uses: 0 }, null, 'c'); toast('Carta aggiunta'); if (U.route === 'cards') render(); else go('cards');
+}
+async function cardShare(id) {
+  const d = S.cards.get(id).data, link = shareLink(d);
+  const m = modal('<h2>Condividi «' + h(d.name) + '»</h2><p class="mut sm">Il link contiene nome e codice della carta e si apre in Vortex Hub: chi lo riceve può aggiungerla. Non viene inviato a nessun server, ma chiunque abbia il link vede il codice.</p><div class="c"><canvas id="shq" class="bc big"></canvas></div><div class="gap" style="margin-top:12px"><button class="btn pri" id="shs">' + ic('up') + ' Condividi con…</button><button class="btn" id="shc">' + ic('copy') + ' Copia link</button><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div><h3>Modo più sicuro: file cifrato con codice monouso</h3><p class="sm mut">Il file si apre solo con un codice che comunichi a parte; vale 48 ore e funziona una sola volta sul dispositivo che lo riceve.</p><div id="shfa"><button type="button" class="btn blk" id="shf">' + ic('lock') + ' Crea file cifrato</button></div>');
+  m.q('#shf').onclick = () => cardShareFile(id, m);
+  try { BC.draw(m.q('#shq'), { type: 'QR', code: link }, { width: 280 }); } catch (e) { m.q('#shq').replaceWith(Object.assign(document.createElement('p'), { className: 'sm mut', textContent: 'Link troppo lungo per un QR: usa Condividi o Copia.' })); }
+  m.q('#shc').onclick = () => copy(link, 'Link');
+  m.q('#shs').onclick = async () => { if (navigator.share) { try { await navigator.share({ title: 'Carta ' + d.name, text: 'Carta fedeltà ' + d.name, url: link }); } catch (e) { } } else copy(link, 'Link'); };
+}
+
+/* --- ricerca sito (Wikidata, solo il nome del brand) e negozi vicini (OpenStreetMap, opzionale) --- */
+async function findSite() {
+  const name = $('c_n').value.trim(); if (name.length < 2) return toast('Scrivi prima il nome del negozio');
+  toast('Cerco il sito…');
+  try {
+    const j = await (await fetch('https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbsearchentities&language=it&limit=5&search=' + encodeURIComponent(name), { credentials: 'omit', referrerPolicy: 'no-referrer' })).json();
+    const ids = (j.search || []).map(x => x.id).join('|'); if (!ids) return toast('Nessun sito trovato');
+    const e = await (await fetch('https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbgetentities&props=claims&ids=' + ids, { credentials: 'omit', referrerPolicy: 'no-referrer' })).json();
+    const urls = []; Object.values(e.entities || {}).forEach(en => ((en.claims || {}).P856 || []).forEach(c => { const v = c.mainsnak && c.mainsnak.datavalue && c.mainsnak.datavalue.value; if (typeof v === 'string' && /^https?:\/\//i.test(v)) urls.push(v); }));
+    const hosts = urls.map(u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (x) { return null; } }).filter(Boolean);
+    const pick = hosts.find(x => x.endsWith('.it')) || hosts[0]; if (!pick) return toast('Nessun sito trovato'); $('c_d').value = pick; toast('Sito: ' + pick);
+  } catch (e) { toast('Ricerca non riuscita (offline?)'); }
+}
+async function nearStores() {
+  if (!nearOn()) { if (await ask('Negozi vicini', 'Per trovare le tue carte dei negozi qui intorno, Vortex Hub usa la tua posizione (approssimata a ~100 m) e invia a OpenStreetMap solo quell’area e i nomi dei negozi. Attivare questa funzione?', { ok: 'Attiva' })) localStorage.setItem('unica_near', '1'); else return; }
+  if (!navigator.geolocation) return toast('Posizione non disponibile');
+  toast('Cerco i negozi vicini…');
+  const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 })).catch(() => null);
+  if (!pos) return toast('Posizione non disponibile o negata');
+  const lat = (Math.round(pos.coords.latitude * 1000) / 1000).toFixed(3), lng = (Math.round(pos.coords.longitude * 1000) / 1000).toFixed(3);
+  const q = '[out:json][timeout:15];(nwr["shop"](around:400,' + lat + ',' + lng + ');nwr["amenity"~"^(fuel|pharmacy|restaurant|cafe|fast_food)$"](around:400,' + lat + ',' + lng + '););out tags;';
+  let els = null; try { els = (await gOverpass(q)).elements || []; } catch (e) { }
+  if (!els) return toast('Servizio mappe non raggiungibile');
+  U.near = new Set(cardsArr().filter(c => els.some(e => !gIgnored(e.tags || {}) && gNameMatch(c.data.name, e.tags || {}))).map(c => c.id));
+  toast(U.near.size ? 'Trovate ' + U.near.size + ' carte qui vicino' : 'Nessuna tua carta nei negozi vicini'); if (U.route === 'cards') render();
+}
+
+/* --- importazione da Fidelity Wallet (JSON) --- */
+async function importFidelity() {
+  const f = await pickFile('.json,application/json'); if (!f) return;
+  let arr; try { arr = JSON.parse(await f.text()); } catch (e) { return toast('File non valido'); }
+  if (arr && !Array.isArray(arr) && Array.isArray(arr.cards)) arr = arr.cards;
+  if (!Array.isArray(arr)) return toast('Non è un backup di Fidelity Wallet');
+  const have = new Set(cardsArr().map(c => c.data.code + '|' + norm(c.data.name))), s = (v, n) => String(v == null ? '' : v).slice(0, n);
+  let n = 0, skip = 0;
+  for (const x of arr) {
+    if (!x || typeof x !== 'object' || !x.name || x.code == null || x.code === '') { skip++; continue; }
+    const code = s(x.code, 300).trim(), name = s(x.name, 100).trim(); if (have.has(code + '|' + norm(name))) { skip++; continue; }
+    let type = CTYPES[x.type] ? x.type : BC.detectType(code);
+    const ok = t => { try { t === 'QR' ? BC.qr(code) : BC.bars(t, code); return true; } catch (e) { return false; } };
+    if (!ok(type)) type = ok('CODE128') ? 'CODE128' : ok('QR') ? 'QR' : null;
+    if (!type) { skip++; continue; }
+    const br = typeof detectBrand === 'function' ? detectBrand(code, name) : null, d = { name, code, type, color: x.color ? hex(x.color) : (br ? br.color : hex(x.color)), holder: s(x.holder, 100), domain: s(x.domain, 100) || (br ? br.domain : ''), address: s(x.address, 200), notes: '', fav: !!(x.favorite || x.fav), added: Date.now() - (arr.length - n), uses: 0 };
+    if (typeof x.logo === 'string' && /^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(x.logo) && x.logo.length < 80000) d.logo = x.logo;
+    await putItem(uid(), 'card', d, null, 'c'); have.add(code + '|' + norm(name)); n++;
+  }
+  toast('Importate ' + n + ' carte' + (skip ? ' (' + skip + ' saltate)' : '')); if (U.route === 'cards') render();
+  return n;
+}
+
+/* --- azioni --- */
+Object.assign(ACT, {
+  cardOpen: t => cardOpen(t.dataset.id), cview: () => { localStorage.setItem('unica_cview', cview() === 'icons' ? 'cards' : 'icons'); render(); }, newCard: () => openCardForm(null, {}),
+  scan: () => openScanner(afterScan), scanfor: () => openScanner(r => { if (r) { $('c_c').value = r.code; $('c_t').value = r.type; U.cform.typeTouched = true; $('c_c').dispatchEvent(new Event('input')); $('c_t').value = r.type; } }),
+  swatch: t => { t.parentNode.querySelectorAll('.sw').forEach(b => b.setAttribute('aria-pressed', b === t)); },
+  findSite: () => findSite(), near: () => nearStores(),
+  cardEdit: t => openCardForm(t.dataset.id), cardShare: t => cardShare(t.dataset.id),
+  async cardFav(t) { const c = S.cards.get(t.dataset.id); await putItem(c.id, 'card', { ...c.data, fav: !c.data.fav }, c, 'c'); closeTop(); render(); },
+  async cardDel(t) { if (await ask('Eliminare la carta?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { await delItem(t.dataset.id, 'c'); closeTop(); render(); toast('Carta eliminata'); } },
+  impFidelity: async () => { await importFidelity(); },
+  webToggle: t => { lss('unica_web', t.checked ? '1' : '0'); },
+  nearToggle: t => { localStorage.setItem('unica_near', t.checked ? '1' : '0'); if (t.checked) { GEO.backoff = 0; gQuery(true); } },
+});
+
+/* ================= Conti e dashboard (area protetta) =================
+   L'intero archivio finanziario è UN elemento cifrato ("fin-db") con la stessa struttura di Financial Dashboard v3.x:
+   così l'import del vecchio backup .enc conserva tutti i dati, anche quelli dei moduli non ancora riportati (BTP, PAC, Poste...). */
+const DEF_BUDGETS = { 'Alimentari & Supermercato': 500, 'Utenze & Casa': 300, 'Trasporti & Carburante': 200, 'Svago & Ristoranti': 250, 'Salute & Persona': 150, 'Varie / Altro': 200 };
+const FIN_ARR = ['assets', 'btps', 'cashflows', 'pacItems', 'posteItems', 'bankAccounts', 'expenses', 'history', 'wealthEvents', 'priceAlerts', 'goals', 'recIgnore', 'pensionItems'];
+const EUR = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' });
+const eur = n => EUR.format(+n || 0);
+const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : 0; };
+const MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+const monthKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+const monthLabel = k => { const [y, m] = k.split('-'); return MESI[+m - 1].charAt(0).toUpperCase() + MESI[+m - 1].slice(1) + ' ' + y; };
+const shiftMonth = (k, n) => { const [y, m] = k.split('-').map(Number); return monthKey(new Date(y, m - 1 + n, 1)); };
+const PAL = ['#0f766e', '#14659f', '#c2410c', '#1d4ed8', '#0e7490', '#4d7c0f', '#b45309', '#475569', '#0891b2', '#0369a1'];
+const INC_CAT = 'Stipendio / Entrata';
+U.fin = { tab: 'ov', month: monthKey(), cat: '' };
+
+const FIN = () => S.items.get('fin-db').data;
+function normFin(d) {
+  FIN_ARR.forEach(k => { if (!Array.isArray(d[k])) d[k] = []; });
+  if (!d.budgets || typeof d.budgets !== 'object' || Array.isArray(d.budgets) || !Object.keys(d.budgets).length) d.budgets = { ...DEF_BUDGETS };
+  if (!d.targets || typeof d.targets !== 'object') d.targets = { obbligazionario: 70, azionario: 20, liquidita: 10 };
+  if (!d.wealthSettings || typeof d.wealthSettings !== 'object') d.wealthSettings = {};
+  return d;
+}
+async function ensureFin() {
+  await ensureVMeta();
+  if (!S.items.has('fin-db')) await putItem('fin-db', 'findb', normFin({}));
+  normFin(FIN());
+  await autoContribRun();
+}
+async function finSave() { checkAlerts(); snapshot(); await putItem('fin-db', 'findb', FIN(), S.items.get('fin-db')); }
+
+/* ================= Versamenti automatici (PAC e pensioni integrative) =================
+   Ogni voce ha: payDay (giorno del mese, 1-31; se il mese è più corto vale l'ultimo giorno), payEvery (1/3/6/12 mesi),
+   payMonth (mese di riferimento 0-11 per le frequenze non mensili), autoPay (sì/no) e lastPaid (ultima scadenza già applicata).
+   Le scadenze si applicano quando l'archivio viene aperto (o l'app torna in primo piano): se l'app resta chiusa
+   per giorni, le scadenze passate vengono recuperate una per una. Nessun dato esce dal dispositivo. */
+const ymdLocal = (y, m, d) => y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+const todayLocal = () => { const n = new Date(); return ymdLocal(n.getFullYear(), n.getMonth(), n.getDate()); };
+const addDaysISO = (s, k) => { const [y, m, d] = s.split('-').map(Number), x = new Date(y, m - 1, d + k); return ymdLocal(x.getFullYear(), x.getMonth(), x.getDate()); };
+const PAY_EVERY = [['1', 'Ogni mese'], ['3', 'Ogni 3 mesi'], ['6', 'Ogni 6 mesi'], ['12', 'Una volta all’anno']];
+const payEveryTxt = n => ({ 1: 'al mese', 3: 'ogni 3 mesi', 6: 'ogni 6 mesi', 12: 'all’anno' }[n] || 'al mese');
+/* scadenze della voce nell'intervallo (after, upto], in ordine cronologico */
+function payDates(r, after, upto) {
+  const every = [1, 3, 6, 12].includes(+r.payEvery) ? +r.payEvery : 1, pm = ((Math.round(num(r.payMonth)) % 12) + 12) % 12;
+  const day = Math.min(31, Math.max(1, Math.round(num(r.payDay)) || 1)), out = [];
+  const [ay, am] = after.split('-').map(Number), [uy, um] = upto.split('-').map(Number);
+  for (let n = ay * 12 + am - 1, e = uy * 12 + um - 1; n <= e && out.length < 240; n++) {
+    const y = Math.floor(n / 12), m = n % 12; if (((m - pm) % every + every) % every) continue;
+    const s = ymdLocal(y, m, Math.min(day, new Date(y, m + 1, 0).getDate()));
+    if (s > after && s <= upto) out.push(s);
+  }
+  return out;
+}
+const latestDue = (r, upto) => { const l = payDates(r, (+upto.slice(0, 4) - 2) + upto.slice(4), upto); return l.length ? l[l.length - 1] : ''; };
+const nextDue = r => { const t = todayLocal(), from = r.lastPaid && r.lastPaid > t ? r.lastPaid : t; return payDates(r, from, (+from.slice(0, 4) + 2) + from.slice(4))[0] || ''; };
+const itDate = s => { const [y, m, d] = s.split('-'); return d + '/' + m + '/' + y; };
+const round2 = v => Math.round(v * 100) / 100;
+function payTag(r) {
+  if (!r.payDay) return '';
+  const nx = r.autoPay ? nextDue(r) : '';
+  return ' · il ' + r.payDay + (r.autoPay ? ' · auto' + (nx ? ' · prossimo ' + itDate(nx) : '') : '');
+}
+/* applica UN versamento; restituisce l'importo effettivamente aggiunto */
+function applyPay(d, kind, r, date) {
+  if (kind === 'pen') { const a = num(r.monthly) + num(r.employer); if (a <= 0) return 0; r.balance = round2(num(r.balance) + a); return a; }
+  const a = num(r.monthly); if (a <= 0) return 0;
+  if (!r.linkedAssetId) { r.currentVal = round2(num(r.currentVal) + a); return a; }
+  const as = d.assets.find(x => x.pacLinkId === r.linkedAssetId); if (!as) return 0;
+  const lots = as.lots && as.lots.length ? as.lots.slice() : (num(as.quantity) > 0 ? [{ quantity: num(as.quantity), buyPrice: num(as.buyPrice) }] : []);
+  const price = num(as.lastPrice) || (lots.length ? num(lots[lots.length - 1].buyPrice) : 0) || num(r.etfLastPrice) || num(r.etfBuyPrice);
+  if (price > 0) {
+    lots.push({ quantity: a / price, buyPrice: price, date, auto: 1 });
+    const q = sum(lots, l => l.quantity), cost = sum(lots, l => num(l.quantity) * num(l.buyPrice));
+    as.lots = lots; as.quantity = q; as.buyPrice = q ? cost / q : 0; if (!num(as.lastPrice)) as.lastPrice = price;
+    r.etfQuantity = q; r.etfBuyPrice = as.buyPrice; r.picAmount = round2(cost);
+  } else { as.value = round2(num(as.value) + a); r.picAmount = round2(num(r.picAmount) + a); }
+  return a;
+}
+function autoContrib(d) {
+  const today = todayLocal(); let n = 0, tot = 0, dirty = false; if (!Array.isArray(d.autoLog)) d.autoLog = [];
+  [['pacItems', 'pac'], ['pensionItems', 'pen']].forEach(g => (d[g[0]] || []).forEach(r => {
+    if (!r.autoPay || !r.payDay) return;
+    if (!r.lastPaid) { r.lastPaid = latestDue(r, today) || today; dirty = true; return; }
+    payDates(r, r.lastPaid, today).forEach(ds => {
+      const a = applyPay(d, g[1], r, ds); r.lastPaid = ds; dirty = true;
+      if (a > 0) { n++; tot += a; d.autoLog.push({ date: ds, kind: g[1], name: r.name, amount: round2(a) }); }
+    });
+  }));
+  if (d.autoLog.length > 80) d.autoLog = d.autoLog.slice(-80);
+  return { n, tot, dirty };
+}
+async function autoContribRun() {
+  try {
+    const r = autoContrib(FIN()); if (!r.dirty) return;
+    await finSave();
+    if (r.n) { toast('Versamenti automatici applicati: ' + r.n + ' (' + eur(r.tot) + ')'); if (U.route === 'fin') render(); }
+  } catch (e) { }
+}
+/* campi comuni dei form PAC / pensione */
+function payFields(r, freq) {
+  const f = [{ id: 'pd', label: 'Giorno del mese del versamento (1-31)', type: 'number', step: 1, value: r.payDay || '' }];
+  if (freq) f.push({ id: 'pe', label: 'Frequenza', type: 'select', options: PAY_EVERY, value: String(r.payEvery || 1) }, { id: 'pm', label: 'Mese di riferimento (per frequenze non mensili)', type: 'select', options: MESI.map((m, i) => [String(i), m.charAt(0).toUpperCase() + m.slice(1)]), value: String(r.payMonth || 0) });
+  f.push({ id: 'pa', label: 'Aggiornamento automatico dell’importo', type: 'select', options: [['0', 'No: solo promemoria del giorno'], ['1', 'Sì: aggiungi il versamento nel giorno indicato']], value: r.autoPay ? '1' : '0' },
+    { id: 'ps', label: 'Recupera i versamenti già effettuati dal (facoltativo)', type: 'date', value: '' });
+  return f;
+}
+function payRead(rec, prev, freq) {
+  const raw = gv('pd').trim(), day = Math.round(num(raw)), auto = gv('pa') === '1', today = todayLocal();
+  if ((raw || auto) && !(day >= 1 && day <= 31)) throw new Error('Indica il giorno del mese del versamento, da 1 a 31.');
+  rec.payDay = raw ? day : 0; rec.autoPay = auto && rec.payDay > 0; rec.payEvery = freq ? (parseInt(gv('pe')) || 1) : 1; rec.payMonth = freq ? (parseInt(gv('pm')) || 0) : 0;
+  const since = gv('ps');
+  if (since && since > today) throw new Error('La data da cui recuperare i versamenti deve essere nel passato.');
+  if (!rec.autoPay) { delete rec.lastPaid; return; }
+  if (since) { rec.lastPaid = addDaysISO(since, -1); return; } /* le scadenze da quella data in poi vengono applicate subito dopo il salvataggio */
+  /* senza arretrati: ciò che è già passato è già nel valore inserito; se in questo periodo era già stato applicato un versamento, non lo si ripete */
+  let base = latestDue(rec, today) || today; if (prev && prev.lastPaid && prev.lastPaid > base) base = prev.lastPaid;
+  const nd = payDates(rec, base, (+base.slice(0, 4) + 2) + base.slice(4))[0];
+  if (nd && prev && prev.lastPaid && nd.slice(0, 7) === prev.lastPaid.slice(0, 7)) base = nd;
+  rec.lastPaid = base;
+}
+function autoLogCard(kind) {
+  const L = (FIN().autoLog || []).filter(x => x.kind === kind).slice(-5).reverse(); if (!L.length) return '';
+  return '<div class="card"><h3>Ultimi versamenti applicati in automatico</h3>' + L.map(x => '<div class="kv"><div class="gap"><span class="sp"><b>' + h(x.name) + '</b><br><span class="sm mut">' + h(itDate(x.date)) + '</span></span><b>+ ' + h(eur(x.amount)) + '</b></div></div>').join('') + '</div>';
+}
+
+/* --- calcoli (stessi criteri di Financial Dashboard) --- */
+function assetValue(a) {
+  const q = a.lots && a.lots.length ? a.lots.reduce((s, l) => s + num(l.quantity), 0) : num(a.quantity);
+  const price = num(a.lastPrice) || (q > 0 ? num(a.value) / q : num(a.value));
+  return q > 0 ? q * price : num(a.value);
+}
+function btpValue(b) {
+  const nom = b.lots && b.lots.length ? b.lots.reduce((s, l) => s + num(l.nominal), 0) : num(b.nominal);
+  return nom * (num(b.currentPrice) || num(b.buyPrice) || 100) / 100;
+}
+function breakdown(d) {
+  return [['Conti e liquidità', d.bankAccounts.reduce((s, x) => s + num(x.balance), 0)], ['Azioni / ETF', d.assets.reduce((s, x) => s + assetValue(x), 0)], ['BTP e obbligazioni', d.btps.reduce((s, x) => s + btpValue(x), 0)], ['Poste', d.posteItems.reduce((s, x) => s + num(x.capital), 0)], ['PAC', d.pacItems.reduce((s, x) => s + num(x.currentVal), 0)], ['Previdenza integrativa', d.pensionItems.reduce((s, x) => s + num(x.balance), 0)]];
+}
+const grand = d => breakdown(d).reduce((s, x) => s + x[1], 0);
+/* valore mostrato di un PAC: se collegato a un titolo è il valore di quel titolo (nei totali conta una volta sola, dal titolo) */
+function pacValue(p) { if (p.linkedAssetId) { const a = FIN().assets.find(x => x.pacLinkId === p.linkedAssetId); return a ? assetValue(a) : 0; } return num(p.currentVal); }
+function snapshot() { const d = FIN(), k = monthKey(), t = grand(d), i = d.history.findIndex(x => x.date === k); if (i >= 0) d.history[i].total = t; else { d.history.push({ date: k, total: t }); d.history.sort((a, b) => String(a.date).localeCompare(String(b.date))); } }
+const monthExp = (d, m) => d.expenses.map((e, i) => ({ ...e, i })).filter(e => String(e.date || '').startsWith(m));
+function spentBy(d, m) { const o = {}; monthExp(d, m).forEach(e => { o[e.category] = (o[e.category] || 0) + num(e.amount); }); return o; }
+const allMonths = d => [...new Set([monthKey(), ...d.expenses.map(e => String(e.date || '').slice(0, 7)).filter(x => /^\d{4}-\d{2}$/.test(x))])].sort().reverse();
+
+/* --- grafici SVG --- */
+function donut(items) {
+  const tot = items.reduce((s, x) => s + x.v, 0); if (!tot) return '<p class="mut sm c">Nessun dato per il grafico.</p>';
+  let off = 0; const R = 15.9155, arcs = items.map((x, i) => { const p = x.v / tot * 100, a = '<circle cx="21" cy="21" r="' + R + '" fill="none" stroke="' + PAL[i % PAL.length] + '" stroke-width="6" stroke-dasharray="' + p + ' ' + (100 - p) + '" stroke-dashoffset="' + (25 - off) + '"/>'; off += p; return a; }).join('');
+  return '<div class="gap"><svg viewBox="0 0 42 42" width="140" height="140" role="img" aria-label="Spese per categoria">' + arcs + '<text x="21" y="22.5" text-anchor="middle" font-size="4.4" font-weight="700" fill="currentColor">' + h(eur(tot)) + '</text></svg><ul class="legend sp">' +
+    items.map((x, i) => '<li><i class="dot" style="background:' + PAL[i % PAL.length] + '"></i><span>' + h(x.l) + '</span><b>' + Math.round(x.v / tot * 100) + '%</b></li>').join('') + '</ul></div>';
+}
+function lineChart(pts) {
+  if (pts.length < 2) return '<p class="mut sm c">Servono almeno due mesi di storico per il grafico.</p>';
+  const W = 300, H = 110, P = 8, ys = pts.map(p => p.y), lo = Math.min(...ys), hi = Math.max(...ys), sp = hi - lo || 1;
+  const xy = pts.map((p, i) => [P + i * (W - 2 * P) / (pts.length - 1), H - P - (p.y - lo) / sp * (H - 2 * P)]);
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="chart" role="img" aria-label="Andamento del patrimonio"><polyline fill="none" stroke="#0f766e" stroke-width="2.5" stroke-linejoin="round" points="' + xy.map(p => p.join(',')).join(' ') + '"/>' + xy.map(p => '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.8" fill="#0f766e"/>').join('') + '</svg><div class="gap sm mut"><span>' + h(monthLabel(pts[0].x)) + ' · ' + h(eur(pts[0].y)) + '</span><span class="sp"></span><span>' + h(monthLabel(pts[pts.length - 1].x)) + ' · ' + h(eur(pts[pts.length - 1].y)) + '</span></div>';
+}
+const bar = (p, cls) => '<div class="pbar ' + (cls || '') + '" role="progressbar" aria-valuenow="' + Math.round(p) + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + Math.min(100, Math.max(0, p)) + '%"></i></div>';
+
+/* --- avvisi di prezzo --- */
+const keyOf = x => String((x && (x.ticker || x.name)) || '').trim().toUpperCase();
+function assetPrice(a) { const lp = num(a.lastPrice); if (lp > 0) return lp; const q = a.lots && a.lots.length ? a.lots.reduce((t, l) => t + num(l.quantity), 0) : num(a.quantity), v = num(a.value); return q > 0 && v > 0 ? v / q : null; }
+function btpPrice(b) { const c = num(b.currentPrice); if (c > 0) return c; const p = num(b.buyPrice); return p > 0 ? p : null; }
+function ownedItems() {
+  const d = FIN(), o = [];
+  d.assets.forEach((a, i) => { const p = assetPrice(a); if (p !== null) o.push({ kind: 'asset', idx: i, ref: keyOf(a), label: a.name + (a.ticker ? ' [' + a.ticker + ']' : ''), price: p }); });
+  d.btps.forEach((b, i) => { const p = btpPrice(b); if (p !== null) o.push({ kind: 'btp', idx: i, ref: keyOf(b), label: b.name, price: p }); });
+  return o;
+}
+function checkAlerts() {
+  const hits = [], items = ownedItems();
+  FIN().priceAlerts.forEach(al => { if (al.status !== 'active') return; const it = items.find(o => o.kind === al.kind && o.ref === al.ref); if (!it) return;
+    if (al.dir === 'up' ? it.price >= al.target : it.price <= al.target) { al.status = 'hit'; al.hitAt = new Date().toISOString(); al.hitPrice = it.price; hits.push({ al, it }); } });
+  if (hits.length) { try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) { } toast('Avviso di prezzo: ' + hits.map(x => x.it.label + ' ' + eur(x.it.price)).join(', ')); }
+}
+
+/* --- categorie e CSV --- */
+const KW = [
+  ['Alimentari & Supermercato', ['CONAD', 'LIDL', 'ESSELUNGA', 'COOP', 'SPESA', 'SUPERMERCATO', 'MD', 'EUROSPIN', 'CARREFOUR', 'PAM', 'IPER', 'TIGOTA', 'ALDI']],
+  ['Utenze & Casa', ['ENEL', 'HERA', 'ACEA', 'ENI', 'GAS', 'LUCE', 'ACQUA', 'AFFITTO', 'MUTUO', 'CONDOMINIO', 'TELECOM', 'VODAFONE', 'WIND', 'FASTWEB', 'ILIAD']],
+  ['Trasporti & Carburante', ['AUTOGRILL', 'Q8', 'IP', 'TAMOIL', 'BENZINA', 'AUTOSTRADE', 'TELEPASS', 'PARCHEGGIO', 'TRENITALIA', 'ITALO', 'ATM', 'AUTOBUS']],
+  ['Svago & Ristoranti', ['RISTORANTE', 'PIZZERIA', 'BAR', 'PIZZA', 'MCDONALD', 'DELIVEROO', 'JUSTEAT', 'NETFLIX', 'SPOTIFY', 'AMAZON', 'PRIME', 'APPLE', 'GOOGLE', 'CINEMA', 'HOTEL', 'BOOKING']],
+  ['Salute & Persona', ['FARMACIA', 'MEDICO', 'OSPEDALE', 'VISITA', 'PARAFARMACIA', 'DENTISTA', 'HEALTH']]];
+const hasWord = (up, w) => new RegExp('(^|[^A-Z0-9])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^A-Z0-9]|$)').test(up);
+function categorize(desc) {
+  const up = String(desc || '').toUpperCase(), d = FIN();
+  if (['STIPENDIO', 'EMOLUMENTI', 'BONIFICO DA', 'ACCREDITO', 'RIMBORSO'].some(w => up.includes(w))) return { cat: INC_CAT, income: true };
+  for (const c of Object.keys(d.budgets)) if (up.includes(c.toUpperCase())) return { cat: c };
+  for (const [c, ws] of KW) if (ws.some(w => hasWord(up, w))) return { cat: c };
+  return { cat: 'Varie / Altro' };
+}
+const BANKS = { generic: ['Standard / Generico', ';', 0, 1, 2], intesa: ['Intesa Sanpaolo', ';', 0, 2, 5], unicredit: ['UniCredit', ',', 1, 3, 4], mediolanum: ['Banca Mediolanum', ';', 0, 2, 3], fideuram: ['Fideuram', ';', 0, 3, 4], directa: ['Directa SIM', ';', 0, 1, 2] };
+function parseAmount(raw) { let r = String(raw || '').replace(/[€\s]/g, ''); if (r.includes('.') && r.includes(',')) r = r.indexOf('.') < r.indexOf(',') ? r.replace(/\./g, '').replace(',', '.') : r.replace(/,/g, ''); else if (r.includes(',')) r = r.replace(',', '.'); const n = parseFloat(r); return isFinite(n) ? n : NaN; }
+function parseDate(s) { s = String(s || '').trim(); let m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s); if (m) return m[1] + '-' + m[2] + '-' + m[3]; m = /(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/.exec(s); if (m) return (m[3].length === 2 ? '20' + m[3] : m[3]) + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0'); return ''; }
+function importCsv(text, bank) {
+  const d = FIN(), [, delim, di, ds, am] = BANKS[bank] || BANKS.generic; let n = 0, inc = 0, bad = 0;
+  text.split(/\r?\n/).forEach(line => {
+    line = line.trim(); if (!line || line.startsWith('#')) return; const low = line.toLowerCase(); if (/data valuta|operazione|descrizione|importo/.test(low) && !/\d{2}[\/.\-]\d{2}/.test(low)) return;
+    const p = line.split(delim).map(c => c.replace(/^["']|["']$/g, '').trim()); if (p.length <= Math.max(di, ds, am)) return;
+    const date = parseDate(p[di]), amount = parseAmount(p[am]); if (!date || isNaN(amount)) { bad++; return; }
+    const desc = (p[ds] || 'Movimento bancario').slice(0, 200), c = categorize(desc);
+    if (c.income || amount > 0) { inc++; return; }
+    if (d.budgets[c.cat] === undefined) d.budgets[c.cat] = 150;
+    d.expenses.unshift({ date, desc, category: c.cat, amount: Math.abs(amount) }); n++;
+  });
+  return { n, inc, bad };
+}
+
+/* --- viste --- */
+const FTABS = [['ov', 'Panoramica'], ['acc', 'Conti'], ['exp', 'Spese'], ['bud', 'Budget'], ['alr', 'Avvisi']];
+V.fin = () => {
+  if (!S.protOpen || !S.items.has('fin-db')) return '';
+  const f = U.fin; let body = '';
+  const tabs = '<div class="chips" role="tablist">' + FTABS.map(t => '<button class="chip" role="tab" data-act="ftab" data-t="' + t[0] + '" aria-pressed="' + (f.tab === t[0]) + '">' + t[1] + '</button>').join('') + '</div>';
+  body = FV[f.tab]();
+  return hdr('Conti', '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button><button class="ib" data-act="finReport" aria-label="Report">' + ic('dl') + '</button>') + '<main class="wrap">' + tabs + body + '</main>';
+};
+const monthPicker = () => '<select class="in" id="fmon" aria-label="Mese" style="width:auto">' + allMonths(FIN()).map(m => '<option value="' + m + '"' + (m === U.fin.month ? ' selected' : '') + '>' + monthLabel(m) + '</option>').join('') + '</select>';
+const FV = {
+  ov() {
+    const d = FIN(), br = breakdown(d), tot = br.reduce((s, x) => s + x[1], 0), hist = d.history.filter(x => /^\d{4}-\d{2}$/.test(x.date)).slice(-12);
+    const prev = d.history.filter(x => x.date < monthKey()).slice(-1)[0], delta = prev ? tot - num(prev.total) : null;
+    const m = monthKey(), sp = spentBy(d, m), spent = Object.values(sp).reduce((a, b) => a + b, 0), bud = Object.values(d.budgets).reduce((a, b) => a + num(b), 0);
+    const alerts = d.priceAlerts.filter(a => a.status === 'hit' && !a.seen);
+    return (alerts.length ? '<div class="alert">' + ic('warn') + ' ' + alerts.length + ' avviso/i di prezzo raggiunto/i. <button class="btn sm" data-act="ftab" data-t="alr">Vedi</button></div>' : '') +
+      '<div class="card"><p class="sm mut" style="margin:0">Patrimonio totale</p><p class="big">' + h(eur(tot)) + '</p>' + (delta !== null ? '<p class="sm ' + (delta >= 0 ? 'ok' : 'bad') + '">' + (delta >= 0 ? '▲ ' : '▼ ') + h(eur(Math.abs(delta))) + ' rispetto a ' + h(monthLabel(prev.date)) + '</p>' : '') + lineChart(hist.map(x => ({ x: x.date, y: num(x.total) }))) + '</div>' +
+      '<div class="card"><h3>Composizione</h3>' + (br.filter(x => x[1] !== 0).map(x => '<div class="kv"><div class="gap"><span class="sp">' + h(x[0]) + '</span><b>' + h(eur(x[1])) + '</b><span class="mut sm">' + (tot ? Math.round(x[1] / tot * 100) : 0) + '%</span></div>' + bar(tot ? x[1] / tot * 100 : 0) + '</div>').join('') || '<p class="mut sm">Aggiungi i tuoi conti nella scheda Conti.</p>') + '</div>' +
+      '<div class="card"><h3>Spese di ' + h(monthLabel(m)) + '</h3><p><b>' + h(eur(spent)) + '</b> <span class="mut sm">su ' + h(eur(bud)) + ' di budget</span></p>' + bar(bud ? spent / bud * 100 : 0, spent > bud ? 'over' : '') + '</div>' +
+      '<div class="card"><h3>Chiedi ai tuoi dati</h3><p class="sm mut">Assistente locale: risponde solo con i tuoi numeri, sul dispositivo. Es.: «quanto ho speso in alimentari a ottobre?», «quanto resta del budget?», «patrimonio», «analisi del patrimonio».</p><form data-form="ask" class="pw"><input class="in" id="aq" aria-label="Domanda" autocomplete="off"><button class="btn pri" type="submit">Chiedi</button></form><div id="aa" class="mt" role="status" aria-live="polite"></div></div>';
+  },
+  exp() {
+    const d = FIN(), m = U.fin.month; let ex = monthExp(d, m); const sp = spentBy(d, m), total = Object.values(sp).reduce((a, b) => a + b, 0);
+    if (U.fin.cat) ex = ex.filter(e => e.category === U.fin.cat);
+    return '<div class="gap">' + monthPicker() + '<span class="sp"></span><button class="btn sm" data-act="csvImp">' + ic('up') + ' CSV</button><button class="btn sm pri" data-act="expNew">' + ic('plus') + ' Spesa</button></div>' +
+      '<div class="card mt"><p style="margin:0"><b>' + h(eur(total)) + '</b> <span class="mut sm">spesi in ' + h(monthLabel(m)) + '</span></p>' + donut(Object.entries(sp).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).map(x => ({ l: x[0], v: x[1] }))) + monthBars() + recatLine(sp) + '</div>' +
+      '<div class="chips"><button class="chip" data-act="fcat" data-c="" aria-pressed="' + (!U.fin.cat) + '">Tutte</button>' + Object.keys(sp).map(c => '<button class="chip" data-act="fcat" data-c="' + h(c) + '" aria-pressed="' + (U.fin.cat === c) + '">' + h(c) + '</button>').join('') + '</div>' +
+      (ex.length ? ex.sort((a, b) => String(b.date).localeCompare(String(a.date))).map(e => '<button class="row" data-act="expEdit" data-i="' + e.i + '"><span class="t"><b>' + h(e.desc) + '</b><span class="sm mut">' + h(e.date) + ' · ' + h(e.category) + '</span></span><b>' + h(eur(e.amount)) + '</b></button>').join('') : '<div class="card c mut">Nessuna spesa in questo mese.</div>');
+  },
+  bud() {
+    const d = FIN(), m = U.fin.month, sp = spentBy(d, m), cats = [...new Set([...Object.keys(d.budgets), ...Object.keys(sp)])].filter(c => c !== INC_CAT);
+    return '<div class="gap">' + monthPicker() + '<span class="sp"></span><button class="btn sm pri" data-act="catNew">' + ic('plus') + ' Categoria</button></div><div class="mt">' +
+      cats.map(c => { const b = num(d.budgets[c]), s = sp[c] || 0, p = b ? s / b * 100 : (s ? 100 : 0); return '<button class="row" data-act="catEdit" data-c="' + h(c) + '"><span class="t"><b>' + h(c) + '</b>' + bar(p, s > b ? 'over' : '') + '<span class="sm ' + (s > b ? 'bad' : 'mut') + '">' + h(eur(s)) + ' / ' + h(eur(b)) + (s > b ? ' · sforato di ' + h(eur(s - b)) : ' · restano ' + h(eur(b - s))) + '</span></span></button>'; }).join('') + '</div>';
+  },
+  alr() {
+    const d = FIN(), items = ownedItems();
+    return '<div class="gap"><h2 class="sp">Avvisi di prezzo</h2><button class="btn sm pri" data-act="alrNew"' + (items.length ? '' : ' disabled') + '>' + ic('plus') + ' Avviso</button></div><p class="sm mut">Scattano quando aggiorni il prezzo di un titolo o BTP posseduto e superi (o scendi sotto) la soglia.</p>' +
+      (d.priceAlerts.length ? d.priceAlerts.map(a => { const it = items.find(o => o.kind === a.kind && o.ref === a.ref); return '<div class="row"><span class="av ' + (a.status === 'hit' ? 'a2' : 'a0') + '">' + ic('warn') + '</span><span class="t"><b>' + h(a.label) + '</b><span class="sm ' + (a.status === 'hit' ? 'bad' : 'mut') + '">' + (a.dir === 'up' ? 'sale a ' : 'scende a ') + h(eur(a.target)) + (a.status === 'hit' ? ' · raggiunto a ' + h(eur(a.hitPrice)) : it ? ' · ora ' + h(eur(it.price)) : ' · titolo non trovato') + '</span></span>' + (a.status === 'hit' ? '<button class="btn sm" data-act="alrRearm" data-id="' + h(a.id) + '">Riattiva</button>' : '') + '<button class="ib" data-act="alrDel" data-id="' + h(a.id) + '" aria-label="Elimina avviso">' + ic('trash') + '</button></div>'; }).join('') : '<div class="card c mut">Nessun avviso.</div>');
+  },
+};
+POST.fin = () => {
+  const mo = $('fmon'); if (mo) mo.addEventListener('change', () => { U.fin.month = mo.value; U.fin.cat = ''; render(); });
+  if (U.fin.tab === 'alr') { let ch = false; FIN().priceAlerts.forEach(a => { if (a.status === 'hit' && !a.seen) { a.seen = true; ch = true; } }); if (ch) finSave(); }
+};
+
+/* --- assistente locale (regole, nessuna IA generativa) --- */
+const fold = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+function answer(q) {
+  const d = FIN(), t = fold(q), now = new Date(); let m = monthKey();
+  const mi = MESI.findIndex(x => t.includes(x)); if (mi >= 0) { let y = now.getFullYear(); const y4 = /\b(20\d{2})\b/.exec(t); if (y4) y = +y4[1]; else if (mi > now.getMonth()) y--; m = y + '-' + String(mi + 1).padStart(2, '0'); }
+  else if (/mese scorso|mese precedente/.test(t)) m = shiftMonth(m, -1);
+  const cats = Object.keys(d.budgets), cat = cats.find(c => fold(c).split(/[^a-z]+/).filter(w => w.length > 3).some(w => t.includes(w.slice(0, 6))));
+  const sp = spentBy(d, m);
+  if (typeof simAnswer === 'function') { const sa = simAnswer(q); if (sa) return sa; }
+  if (/patrimonio|quanto valgo|quanto ho in totale/.test(t)) return 'Il tuo patrimonio totale è ' + eur(grand(d)) + '. ' + breakdown(d).filter(x => x[1]).map(x => x[0] + ': ' + eur(x[1])).join('; ') + '.';
+  if (/budget|rimane|restano|resta/.test(t)) { if (cat) return 'In ' + monthLabel(m) + ' per «' + cat + '» hai speso ' + eur(sp[cat] || 0) + ' su ' + eur(d.budgets[cat]) + ': ' + ((sp[cat] || 0) > num(d.budgets[cat]) ? 'sforato di ' + eur((sp[cat] || 0) - num(d.budgets[cat])) : 'restano ' + eur(num(d.budgets[cat]) - (sp[cat] || 0))) + '.'; const b = Object.values(d.budgets).reduce((a, x) => a + num(x), 0), s = Object.values(sp).reduce((a, x) => a + x, 0); return 'Budget di ' + monthLabel(m) + ': spesi ' + eur(s) + ' su ' + eur(b) + ', ' + (s > b ? 'sforato di ' + eur(s - b) : 'restano ' + eur(b - s)) + '.'; }
+  if (/maggior|piu cara|piu alta|piu grande/.test(t)) { const e = monthExp(d, m).sort((a, b) => num(b.amount) - num(a.amount))[0]; return e ? 'La spesa più alta di ' + monthLabel(m) + ' è «' + e.desc + '»: ' + eur(e.amount) + ' (' + e.date + ').' : 'Nessuna spesa in ' + monthLabel(m) + '.'; }
+  if (/ultim[ae]/.test(t)) { const e = d.expenses.slice().sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 5); return e.length ? 'Ultime spese: ' + e.map(x => x.date + ' ' + x.desc + ' ' + eur(x.amount)).join(' · ') : 'Non ci sono spese registrate.'; }
+  if (/spes|spend|speso|costat/.test(t)) { const list = monthExp(d, m).filter(e => !cat || e.category === cat), s = list.reduce((a, e) => a + num(e.amount), 0); return 'In ' + monthLabel(m) + (cat ? ' per «' + cat + '»' : '') + ' hai speso ' + eur(s) + ' (' + list.length + ' movimenti).'; }
+  return 'Non ho capito. Prova: «quanto ho speso in alimentari a ottobre?», «quanto resta del budget?», «spesa più alta», «ultime spese», «patrimonio».';
+}
+
+/* --- report: XLSX (writer proprio) e PDF (stampa) --- */
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = t[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }; })();
+function zipStore(files) {
+  const parts = [], cd = []; let off = 0; const u16 = n => [n & 255, n >> 8 & 255], u32 = n => [n & 255, n >> 8 & 255, n >> 16 & 255, n >>> 24 & 255];
+  for (const [name, str] of files) {
+    const nb = te.encode(name), db = te.encode(str), crc = CRC(db);
+    const lh = new Uint8Array([0x50, 0x4b, 3, 4, 20, 0, 0, 8, 0, 0, 0, 0, 0x21, 0, ...u32(crc), ...u32(db.length), ...u32(db.length), ...u16(nb.length), 0, 0]);
+    parts.push(lh, nb, db);
+    cd.push(new Uint8Array([0x50, 0x4b, 1, 2, 20, 0, 20, 0, 0, 8, 0, 0, 0, 0, 0x21, 0, ...u32(crc), ...u32(db.length), ...u32(db.length), ...u16(nb.length), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...u32(off)]), nb);
+    off += lh.length + nb.length + db.length;
+  }
+  const cdl = cd.reduce((s, x) => s + x.length, 0), end = new Uint8Array([0x50, 0x4b, 5, 6, 0, 0, 0, 0, ...u16(files.length), ...u16(files.length), ...u32(cdl), ...u32(off), 0, 0]);
+  return new Blob([...parts, ...cd, end], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+const xe = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, '');
+const colName = i => String.fromCharCode(65 + i);
+function sheetXml(rows) {
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>' + rows.map((r, ri) => '<row r="' + (ri + 1) + '">' + r.map((v, ci) => typeof v === 'number' && isFinite(v) ? '<c r="' + colName(ci) + (ri + 1) + '"><v>' + v + '</v></c>' : '<c r="' + colName(ci) + (ri + 1) + '" t="inlineStr"><is><t>' + xe(v == null ? '' : v) + '</t></is></c>').join('') + '</row>').join('') + '</sheetData></worksheet>';
+}
+function buildXlsx() {
+  const d = FIN(), m = monthKey(), sp = spentBy(d, m);
+  const sheets = [
+    ['Riepilogo', [['Patrimonio al ' + new Date().toLocaleDateString('it-IT'), ''], ...breakdown(d).map(x => [x[0], Math.round(x[1] * 100) / 100]), ['Totale', Math.round(grand(d) * 100) / 100]]],
+    ['Conti', [['Nome', 'Tipo', 'Intestatario', 'Saldo'], ...d.bankAccounts.map(a => [a.name, a.type, a.owner, num(a.balance)])]],
+    ['Investimenti', [['Nome', 'Ticker', 'Categoria', 'Valore'], ...d.assets.map(a => [a.name, a.ticker, a.category, Math.round(assetValue(a) * 100) / 100]), ...d.btps.map(b => [b.name, b.ticker, 'BTP', Math.round(btpValue(b) * 100) / 100]), ...d.posteItems.map(p => [p.name, '', 'Poste', num(p.capital)]), ...d.pacItems.filter(p => !p.linkedAssetId).map(p => [p.name, '', 'PAC', num(p.currentVal)]), ...d.pensionItems.map(p => [p.name, '', 'Pensione integrativa', num(p.balance)])]],
+    ['Spese', [['Data', 'Descrizione', 'Categoria', 'Importo'], ...d.expenses.slice().sort((a, b) => String(b.date).localeCompare(String(a.date))).map(e => [e.date, e.desc, e.category, num(e.amount)])]],
+    ['Budget ' + m, [['Categoria', 'Budget', 'Speso', 'Residuo'], ...Object.keys(d.budgets).map(c => [c, num(d.budgets[c]), Math.round((sp[c] || 0) * 100) / 100, Math.round((num(d.budgets[c]) - (sp[c] || 0)) * 100) / 100])]],
+  ];
+  const files = [
+    ['[Content_Types].xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' + sheets.map((s, i) => '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('') + '</Types>'],
+    ['_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+    ['xl/workbook.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' + sheets.map((s, i) => '<sheet name="' + xe(s[0].slice(0, 31)) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>').join('') + '</sheets></workbook>'],
+    ['xl/_rels/workbook.xml.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + sheets.map((s, i) => '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>').join('') + '</Relationships>'],
+    ...sheets.map((s, i) => ['xl/worksheets/sheet' + (i + 1) + '.xml', sheetXml(s[1])]),
+  ];
+  return zipStore(files);
+}
+function printReport() {
+  const d = FIN(), m = U.fin.month, sp = spentBy(d, m), tot = grand(d);
+  const tbl = (head, rows) => '<table><thead><tr>' + head.map(x => '<th>' + h(x) + '</th>').join('') + '</tr></thead><tbody>' + rows.map(r => '<tr>' + r.map(x => '<td>' + h(x) + '</td>').join('') + '</tr>').join('') + '</tbody></table>';
+  let el = $('printArea'); if (!el) { el = document.createElement('div'); el.id = 'printArea'; document.body.appendChild(el); } window.addEventListener('afterprint', () => { const x = document.getElementById('printArea'); if (x) x.remove(); }, { once: true });
+  el.innerHTML = '<h1>Report finanziario</h1><p>Generato il ' + h(new Date().toLocaleDateString('it-IT')) + ' · ' + h(APP_NAME) + '</p><h2>Patrimonio: ' + h(eur(tot)) + '</h2>' + tbl(['Voce', 'Valore'], breakdown(d).map(x => [x[0], eur(x[1])])) +
+    '<h2>Conti</h2>' + tbl(['Conto', 'Tipo', 'Saldo'], d.bankAccounts.map(a => [a.name, a.type || '', eur(a.balance)])) +
+    '<h2>Budget ' + h(monthLabel(m)) + '</h2>' + tbl(['Categoria', 'Budget', 'Speso', 'Residuo'], Object.keys(d.budgets).map(c => [c, eur(d.budgets[c]), eur(sp[c] || 0), eur(num(d.budgets[c]) - (sp[c] || 0))])) +
+    '<h2>Spese di ' + h(monthLabel(m)) + '</h2>' + tbl(['Data', 'Descrizione', 'Categoria', 'Importo'], monthExp(d, m).map(e => [e.date, e.desc, e.category, eur(e.amount)]));
+  window.print();
+}
+
+/* --- moduli e azioni --- */
+const catOpts = (sel) => Object.keys(FIN().budgets).map(c => '<option' + (c === sel ? ' selected' : '') + '>' + h(c) + '</option>').join('');
+function expForm(i) {
+  const e = i != null ? FIN().expenses[i] : { date: new Date().toISOString().slice(0, 10), desc: '', category: 'Varie / Altro', amount: '' }; U.ff = { i };
+  modal('<h2>' + (i != null ? 'Modifica spesa' : 'Nuova spesa') + '</h2><form data-form="finexp"><label class="f" for="e_d">Data</label><input class="in" type="date" id="e_d" required value="' + h(e.date) + '"><label class="f" for="e_s">Descrizione</label><input class="in" id="e_s" required value="' + h(e.desc) + '" autocomplete="off"><label class="f" for="e_c">Categoria</label><select class="in" id="e_c">' + catOpts(e.category) + '</select><label class="f" for="e_a">Importo (€)</label><input class="in" id="e_a" type="number" step="0.01" min="0" required inputmode="decimal" value="' + h(e.amount) + '"><p class="sm bad" id="e_err" role="alert"></p><div class="gap">' + (i != null ? '<button type="button" class="btn dan" data-act="expDel">' + ic('trash') + '</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true });
+}
+Object.assign(FORMS, {
+  async finexp() {
+    const e = { date: $('e_d').value, desc: $('e_s').value.trim().slice(0, 200), category: $('e_c').value, amount: Math.abs(num($('e_a').value)) };
+    if (!e.date || !e.desc || !e.amount) return $('e_err').textContent = 'Compila data, descrizione e importo.';
+    const d = FIN(); if (U.ff.i != null) d.expenses[U.ff.i] = e; else d.expenses.unshift(e); await finSave(); closeTop(); render(); toast('Spesa salvata');
+  },
+  async finacc() {
+    const a = { name: $('a_n').value.trim().slice(0, 100), type: $('a_t').value.trim().slice(0, 60), owner: $('a_o').value.trim().slice(0, 60), balance: num($('a_b').value) }; if (!a.name) return;
+    const d = FIN(); if (U.ff.i != null) d.bankAccounts[U.ff.i] = { ...d.bankAccounts[U.ff.i], ...a }; else d.bankAccounts.push(a); await finSave(); closeTop(); render(); toast('Conto salvato');
+  },
+  async finprice() {
+    const d = FIN(), { k, i } = U.ff, p = num($('p_v').value); if (p <= 0) return;
+    if (k === 'asset') { const a = d.assets[i], q = a.lots && a.lots.length ? a.lots.reduce((s, l) => s + num(l.quantity), 0) : num(a.quantity); a.lastPrice = p; if (q > 0) a.value = q * p; } else d.btps[i].currentPrice = p;
+    await finSave(); closeTop(); render();
+  },
+  async fincat() {
+    const d = FIN(), name = $('k_n').value.trim().slice(0, 60), bud = Math.max(0, num($('k_b').value)), old = U.ff.c; if (!name) return;
+    if (Object.keys(d.budgets).some(c => c.toLowerCase() === name.toLowerCase() && c !== old)) return $('k_err').textContent = 'Esiste già una categoria con questo nome.';
+    if (old && old !== name) { const nb = {}; Object.keys(d.budgets).forEach(c => { nb[c === old ? name : c] = c === old ? bud : d.budgets[c]; }); d.budgets = nb; d.expenses.forEach(e => { if (e.category === old) e.category = name; }); } else d.budgets[name] = bud;
+    await finSave(); closeTop(); render();
+  },
+  async finalr() {
+    const items = ownedItems(), it = items[+$('l_i').value], target = num($('l_t').value); if (!it || target <= 0) return $('l_err').textContent = 'Scegli un titolo e una soglia valida.';
+    FIN().priceAlerts.push({ id: uid(), kind: it.kind, ref: it.ref, label: it.label, dir: $('l_d').value, target, created: new Date().toISOString(), status: 'active' }); await finSave(); closeTop(); render();
+  },
+  ask() { const q = $('aq').value.trim(); if (q) $('aa').innerHTML = '<div class="alert o">' + h(answer(q)) + '</div>'; },
+});
+Object.assign(ACT, {
+  ftab: t => { U.fin.tab = t.dataset.t; render(); }, fcat: t => { U.fin.cat = t.dataset.c; render(); },
+  async enterFin() { if (!(await openProt())) return; await ensureFin(); snapshot(); go('fin'); },
+  expNew: () => expForm(null), expEdit: t => expForm(+t.dataset.i),
+  async expDel() { if (await ask('Eliminare la spesa?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { FIN().expenses.splice(U.ff.i, 1); await finSave(); closeTop(); render(); } },
+  accNew: () => { U.ff = { i: null }; accForm({}); }, accEdit: t => { U.ff = { i: +t.dataset.i }; accForm(FIN().bankAccounts[+t.dataset.i]); },
+  async accDel() { if (await ask('Eliminare il conto?', 'Il saldo non verrà più contato nel patrimonio.', { ok: 'Elimina', danger: true })) { FIN().bankAccounts.splice(U.ff.i, 1); await finSave(); closeTop(); render(); } },
+  priceEdit: t => { const k = t.dataset.k, i = +t.dataset.i, it = k === 'asset' ? FIN().assets[i] : FIN().btps[i]; U.ff = { k, i }; modal('<h2>' + h(it.name) + '</h2><form data-form="finprice"><label class="f" for="p_v">' + (k === 'asset' ? 'Prezzo unitario (€)' : 'Corso (% del nominale)') + '</label><input class="in" id="p_v" type="number" step="0.0001" min="0" required inputmode="decimal" value="' + h((k === 'asset' ? assetPrice(it) : btpPrice(it)) || '') + '"><div class="gap" style="margin-top:12px"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Aggiorna</button></div></form>', { sticky: true }); },
+  catNew: () => catForm(null), catEdit: t => catForm(t.dataset.c),
+  async catDel() { const d = FIN(), c = U.ff.c, n = d.expenses.filter(e => e.category === c).length; if (c === 'Varie / Altro') return toast('Questa categoria non si può eliminare'); if (await ask('Eliminare «' + c + '»?', n ? n + ' spese verranno spostate in «Varie / Altro».' : 'Nessuna spesa collegata.', { ok: 'Elimina', danger: true })) { d.expenses.forEach(e => { if (e.category === c) e.category = 'Varie / Altro'; }); delete d.budgets[c]; if (d.budgets['Varie / Altro'] === undefined) d.budgets['Varie / Altro'] = 200; await finSave(); closeTop(); render(); } },
+  alrNew: () => { const items = ownedItems(); modal('<h2>Nuovo avviso</h2><form data-form="finalr"><label class="f" for="l_i">Titolo</label><select class="in" id="l_i">' + items.map((o, i) => '<option value="' + i + '">' + h(o.label) + ' (' + h(eur(o.price)) + ')</option>').join('') + '</select><label class="f" for="l_d">Avvisami quando</label><select class="in" id="l_d"><option value="up">sale a</option><option value="down">scende a</option></select><label class="f" for="l_t">Soglia (€)</label><input class="in" id="l_t" type="number" step="0.0001" min="0" required inputmode="decimal"><p class="sm bad" id="l_err" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Crea</button></div></form>', { sticky: true }); },
+  async alrDel(t) { const d = FIN(); d.priceAlerts = d.priceAlerts.filter(a => a.id !== t.dataset.id); await finSave(); render(); },
+  async alrRearm(t) { const a = FIN().priceAlerts.find(x => x.id === t.dataset.id); if (a) { a.status = 'active'; delete a.hitAt; delete a.hitPrice; await finSave(); render(); } },
+  async csvImp() {
+    const f = await pickFile('.csv,text/csv,text/plain'); if (!f) return;
+    const m = modal('<h2>Importa estratto conto</h2><p class="mut sm">Scegli il formato della tua banca. Le entrate vengono ignorate; le uscite diventano spese, categorizzate per parole chiave.</p><label class="f" for="b_k">Banca</label><select class="in" id="b_k">' + Object.keys(BANKS).map(k => '<option value="' + k + '">' + BANKS[k][0] + '</option>').join('') + '</select><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-act="close">Annulla</button><button class="btn pri" id="b_go">Importa</button></div>', { sticky: true });
+    m.q('#b_go').onclick = async () => { const r = importCsv(await f.text(), m.q('#b_k').value); await finSave(); m.close(); render(); toast('Importate ' + r.n + ' spese (' + r.inc + ' entrate ignorate' + (r.bad ? ', ' + r.bad + ' righe non lette' : '') + ')'); };
+  },
+  finReport: () => modal('<h2>Report</h2><div class="stack"><button class="btn pri blk" id="r_x">' + ic('dl') + ' Scarica Excel (.xlsx)</button><button class="btn blk" id="r_p">' + ic('file') + ' PDF (stampa o salva come PDF)</button></div><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-act="close">Chiudi</button></div>'),
+  async impFin() {
+    if (!(await openProt())) return;
+    const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return;
+    let payload; try { payload = JSON.parse(await f.text()); } catch (e) { return toast('File non valido'); }
+    const pw = await askText('Password del backup', 'Inserisci la master password di Financial Dashboard con cui hai cifrato il backup.'); if (!pw) return;
+    toast('Decifro…'); let data; try { data = await decryptVaultBackup(payload, pw); } catch (e) { return toast(e.message); }
+    if (!data || typeof data !== 'object' || Array.isArray(data) || !(Array.isArray(data.expenses) || Array.isArray(data.bankAccounts) || Array.isArray(data.assets))) return toast('Formato di Financial Dashboard non riconosciuto');
+    await ensureFin(); const cur = FIN(), has = cur.expenses.length + cur.bankAccounts.length + cur.assets.length + cur.btps.length > 0;
+    if (!(await ask('Importare Financial Dashboard?', 'Trovati ' + (data.bankAccounts || []).length + ' conti, ' + (data.assets || []).length + ' titoli, ' + (data.btps || []).length + ' BTP e ' + (data.expenses || []).length + ' spese.' + (has ? ' I dati finanziari attuali verranno sostituiti.' : ''), { ok: 'Importa', danger: has }))) return;
+    const clean = JSON.parse(JSON.stringify(data)); normFin(clean);
+    await putItem('fin-db', 'findb', clean, S.items.get('fin-db')); snapshot(); await finSave(); toast('Dati finanziari importati'); if (U.route === 'fin') render();
+  },
+});
+function catForm(c) {
+  U.ff = { c }; const b = c ? FIN().budgets[c] : '';
+  modal('<h2>' + (c ? 'Modifica categoria' : 'Nuova categoria') + '</h2><form data-form="fincat"><label class="f" for="k_n">Nome</label><input class="in" id="k_n" required value="' + h(c || '') + '" autocomplete="off"><label class="f" for="k_b">Budget mensile (€)</label><input class="in" id="k_b" type="number" step="1" min="0" inputmode="decimal" value="' + h(b) + '"><p class="sm bad" id="k_err" role="alert"></p><div class="gap">' + (c ? '<button type="button" class="btn dan" data-act="catDel">' + ic('trash') + '</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true });
+}
+/* pulsanti del modale Report (collegati dopo l'apertura) */
+document.addEventListener('click', e => {
+  if (e.target.closest('#r_x')) { download('report-finanziario-' + new Date().toISOString().slice(0, 10) + '.xlsx', buildXlsx()); closeTop(); }
+  else if (e.target.closest('#r_p')) { closeTop(); setTimeout(printReport, 150); }
+});
+
+/* ================= Conti – schede complete: Titoli, BTP, Poste, PAC, Ribilanciamento, Flussi, Simulazione, Piano ================= */
+const ASSET_CATS = ['Azionario / ETF', 'Obbligazionario / BTP', 'Immobili / Fisico', 'Altro'];
+const PEN_TYPES = ['Fondo pensione negoziale', 'Fondo pensione aperto', 'PIP (piano individuale pensionistico)', 'Fondo pensione preesistente', 'Altra previdenza integrativa'];
+const POSTE_TYPES = ['Conto Deposito Vincolato', 'Buono Postale Fruttifero (BPF)', 'Libretto Postale'];
+const BA_TYPES = ['Conto Corrente Operativo', 'Fondo Emergenza / Riserva', 'Liquidità Broker / Trading'];
+const MON = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
+const todayISO = () => new Date().toISOString().slice(0, 10);
+const daysTo = s => Math.ceil((new Date(s) - new Date()) / 864e5);
+const sum = (a, f) => a.reduce((s, x) => s + (num(f(x))), 0);
+const pct = n => n.toLocaleString('it-IT', { maximumFractionDigits: 1 }) + '%';
+
+/* --- calcoli --- */
+const assetQty = a => a.lots && a.lots.length ? sum(a.lots, l => l.quantity) : num(a.quantity);
+const assetCost = a => a.lots && a.lots.length ? sum(a.lots, l => num(l.quantity) * num(l.buyPrice)) : num(a.quantity) * num(a.buyPrice);
+const btpNominal = b => b.lots && b.lots.length ? sum(b.lots, l => l.nominal) : num(b.nominal);
+const btpInvested = b => b.lots && b.lots.length ? sum(b.lots, l => num(l.nominal) * (num(l.buyPrice) || 100) / 100) : num(b.nominal) * (num(b.buyPrice) || 100) / 100;
+function btpTir(nominal, invested, couponRate, maturity, frequency) {
+  const years = (new Date(maturity) - new Date()) / 31557600000;
+  if (!(nominal > 0) || !(invested > 0) || !(years > 0)) return null;
+  const freq = Math.max(1, parseInt(frequency) || 2), periods = Math.max(1, Math.ceil(years * freq)), coupon = nominal * num(couponRate) / 100 / freq * 0.875, redemption = nominal - Math.max(0, nominal - invested) * 0.125;
+  const pv = r => { let t = 0; for (let k = 1; k <= periods; k++) t += (coupon + (k === periods ? redemption : 0)) / Math.pow(1 + r / freq, k); return t; };
+  let lo = -0.9, hi = 1; for (let i = 0; i < 100; i++) { const mid = (lo + hi) / 2; if (pv(mid) > invested) lo = mid; else hi = mid; }
+  return ((lo + hi) / 2) * 100;
+}
+function modDuration(c, years, f, price) {
+  if (!isFinite(years) || years <= 0) return 0; const n = Math.max(1, Math.ceil(years * f)), cp = 100 * c / f, y = c / f; let pv = 0, w = 0;
+  for (let k = 1; k <= n; k++) { const v = (cp + (k === n ? 100 : 0)) / Math.pow(1 + y, k); pv += v; w += k / f * v; }
+  return Math.max(0, (pv > 0 ? w / pv : years) / (1 + Math.max(-0.99, c) / f));
+}
+const posteNet = p => num(p.capital) + num(p.capital) * num(p.rate) / 100 * (String(p.type).includes('Buono Postale') ? 0.875 : 0.74);
+function classTotals(d) {
+  const has = (v, t) => String(v || '').toLowerCase().includes(t.toLowerCase());
+  const obbl = sum(d.btps, btpValue) + sum(d.assets.filter(a => has(a.category, 'Obbligazionario')), assetValue) + sum(d.posteItems.filter(p => has(p.type, 'Buono Postale') || has(p.type, 'Conto Deposito')), p => p.capital);
+  const az = sum(d.pacItems.filter(p => !p.linkedAssetId), p => num(p.currentVal)) + sum(d.assets.filter(a => has(a.category, 'Azionario') || has(a.category, 'ETF')), assetValue);
+  const liq = sum(d.bankAccounts, b => b.balance) + sum(d.assets.filter(a => has(a.category, 'Liquidità')), assetValue);
+  const tot = grand(d) - sum(d.pensionItems, p => p.balance); /* la previdenza integrativa è vincolata: non entra nel ribilanciamento */
+  return { obbl, az, liq, other: Math.max(0, tot - obbl - az - liq), tot };
+}
+
+/* --- grafico a due serie (PAC) --- */
+function lineChart2(series) {
+  const W = 300, H = 120, P = 8, all = series.flatMap(s => s.v), lo = Math.min(0, ...all), hi = Math.max(...all) || 1, n = series[0].v.length;
+  const xy = v => v.map((y, i) => [P + i * (W - 2 * P) / Math.max(1, n - 1), H - P - (y - lo) / (hi - lo || 1) * (H - 2 * P)].join(',')).join(' ');
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="chart" role="img" aria-label="Proiezione">' + series.map(s => '<polyline fill="none" stroke="' + s.c + '" stroke-width="2.5"' + (s.dash ? ' stroke-dasharray="5 4"' : '') + ' stroke-linejoin="round" points="' + xy(s.v) + '"/>').join('') + '</svg><div class="gap sm">' + series.map(s => '<span><i class="dot" style="background:' + s.c + '"></i> ' + h(s.l) + '</span>').join('') + '</div>';
+}
+const rc = (t, v, d) => '<div class="card rc"><p class="sm mut" style="margin:0">' + h(t) + '</p><p class="rv">' + h(v) + '</p>' + (d ? '<p class="sm mut" style="margin:0">' + h(d) + '</p>' : '') + '</div>';
+
+/* --- modulo generico a campi --- */
+function genForm(o) {
+  U.gen = o;
+  const f = o.fields.map(x => {
+    if (x.type === 'lots') return '<label class="f">' + h(x.label) + '</label><div id="g_lots">' + (x.value.length ? x.value : [{}]).map(l => lotRow(x, l)).join('') + '</div><button type="button" class="btn sm" data-act="lotAdd">' + ic('plus') + ' Aggiungi</button><p class="sm mut" id="g_sum" role="status"></p>';
+    if (x.type === 'vlinks') { U.vl = (x.value || []).slice(); return '<label class="f">' + h(x.label) + '</label><div id="g_vl" role="list"></div><div class="gap" style="margin-top:6px"><select class="in sp" id="g_vlsel" aria-label="Aggiungi una credenziale esistente"></select><button type="button" class="btn sm" data-act="vlAdd">' + ic('plus') + ' Collega</button></div><button type="button" class="btn sm" data-act="vlNew" style="margin-top:6px">' + ic('key') + ' Nuova credenziale nel Vault</button>'; }
+    if (x.type === 'select') return '<label class="f" for="g_' + x.id + '">' + h(x.label) + '</label><select class="in" id="g_' + x.id + '">' + x.options.map(op => { const v = Array.isArray(op) ? op[0] : op, t = Array.isArray(op) ? op[1] : op; return '<option value="' + h(v) + '"' + (String(v) === String(x.value) ? ' selected' : '') + '>' + h(t) + '</option>'; }).join('') + '</select>';
+    return '<label class="f" for="g_' + x.id + '">' + h(x.label) + '</label><input class="in" id="g_' + x.id + '" type="' + (x.type || 'text') + '"' + (x.type === 'number' ? ' step="' + (x.step || 'any') + '" inputmode="decimal"' : '') + (x.req ? ' required' : '') + ' value="' + h(x.value == null ? '' : x.value) + '" autocomplete="off">';
+  }).join('');
+  const m = modal('<h2>' + h(o.title) + '</h2><form data-form="gen">' + f + '<p class="sm bad" id="g_err" role="alert"></p><div class="gap" style="margin-top:8px">' + (o.onDelete ? '<button type="button" class="btn dan" data-act="genDel" aria-label="Elimina">' + ic('trash') + '</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true, noFocus: !!o.noFocus });
+  m.el.addEventListener('input', () => { if (o.onInput) o.onInput(); }); if (o.onInput) o.onInput();
+  vlRender();
+}
+const lotRow = (x, l) => '<div class="lot"><input class="in lot-d" type="date" aria-label="Data" value="' + h(l.date || '') + '"><input class="in lot-q" type="number" step="any" inputmode="decimal" aria-label="' + h(x.cols[0]) + '" placeholder="' + h(x.cols[0]) + '" value="' + h(l[x.keys[0]] == null ? '' : l[x.keys[0]]) + '"><input class="in lot-p" type="number" step="any" inputmode="decimal" aria-label="' + h(x.cols[1]) + '" placeholder="' + h(x.cols[1]) + '" value="' + h(l[x.keys[1]] == null ? '' : l[x.keys[1]]) + '"><button type="button" class="ib" data-act="lotDel" aria-label="Rimuovi">' + ic('x') + '</button></div>';
+const gv = id => { const e = $('g_' + id); return e ? e.value : ''; };
+const readLots = (k0, k1) => [...document.querySelectorAll('#g_lots .lot')].map(r => ({ [k0]: num(r.querySelector('.lot-q').value), [k1]: num(r.querySelector('.lot-p').value), date: r.querySelector('.lot-d').value })).filter(l => l[k0] > 0);
+/* --- credenziali del Vault collegate agli asset (più di una per asset) --- */
+const VL_KINDS = [['bankAccounts', 'acc', 'Conto'], ['assets', 'tit', 'Titolo'], ['btps', 'btp', 'BTP'], ['posteItems', 'poste', 'Poste'], ['pacItems', 'pac', 'PAC'], ['pensionItems', 'pen', 'Pensione']];
+function vlOf(r) { const a = Array.isArray(r.vaultIds) ? r.vaultIds.slice() : []; if (r.vaultId && !a.includes(r.vaultId)) a.push(r.vaultId); return a.filter(id => S.items.has(id)); }
+function vlBack(id) { const o = []; if (!finLoaded()) return o; VL_KINDS.forEach(k => (FIN()[k[0]] || []).forEach(r => { if (vlOf(r).includes(id)) o.push({ tab: k[1], kind: k[2], rec: r }); })); return o; }
+const vkTag = r => { const n = vlOf(r).length; return n ? ' · ' + n + (n === 1 ? ' credenziale' : ' credenziali') : ''; };
+function vkeyBtn(k, i, a) { const n = vlOf(a).length; return n ? '<button class="ib" data-act="vlList" data-k="' + k + '" data-i="' + i + '" aria-label="Credenziali di ' + h(a.name) + ' nel Vault (' + n + ')">' + ic('key') + (n > 1 ? '<sup class="sm">' + n + '</sup>' : '') + '</button>' : ''; }
+function vlRender() {
+  const el = $('g_vl'); if (!el) return; const ids = U.vl = (U.vl || []).filter(id => S.items.has(id));
+  el.innerHTML = ids.length ? ids.map(id => { const it = S.items.get(id); return '<div class="gap" role="listitem" style="align-items:center;margin:4px 0"><span class="sp"><b>' + h(titleOf(it)) + '</b><br><span class="sm mut">' + h(VT[it.type] ? VT[it.type][1] : '') + (it.data.username ? ' · ' + h(it.data.username) : '') + '</span></span><button type="button" class="ib" data-act="vlOpen" data-id="' + h(id) + '" aria-label="Apri nel Vault">' + ic('key') + '</button><button type="button" class="ib" data-act="vlDel" data-id="' + h(id) + '" aria-label="Scollega">' + ic('x') + '</button></div>'; }).join('') : '<p class="sm mut">Nessuna credenziale collegata.</p>';
+  const s = $('g_vlsel'); if (s) s.innerHTML = '<option value="">Aggiungi dal Vault…</option>' + vitems().filter(i => !ids.includes(i.id)).sort((a, b) => titleOf(a).localeCompare(titleOf(b), 'it')).map(i => '<option value="' + h(i.id) + '">' + h(titleOf(i)) + ' · ' + h(VT[i.type][1]) + '</option>').join('');
+}
+FORMS.gen = async () => { const o = U.gen; try { const r = await o.onSubmit(); if (r === false) return; } catch (e) { return $('g_err').textContent = e.message; } await finSave(); closeTop(); render(); toast('Salvato'); await autoContribRun(); };
+
+/* --- viste --- */
+Object.assign(FV, {
+  acc() {
+    const d = FIN();
+    return '<div class="gap"><h2 class="sp">Conti bancari</h2><button class="btn sm pri" data-act="accNew">' + ic('plus') + ' Conto</button></div>' +
+      (d.bankAccounts.length ? d.bankAccounts.map((a, i) => '<div class="gap" style="align-items:stretch"><button class="row sp" data-act="accEdit" data-i="' + i + '"><span class="av a0">' + ic('card') + '</span><span class="t"><b>' + h(a.name) + '</b><span class="sm mut">' + h([a.type, a.owner].filter(Boolean).join(' · ')) + '</span></span><b>' + h(eur(a.balance)) + '</b></button>' + vkeyBtn('bankAccounts', i, a) + '</div>').join('') + '<p class="c"><b>Totale: ' + h(eur(sum(d.bankAccounts, a => a.balance))) + '</b></p>' : '<div class="card c mut">Nessun conto. Aggiungine uno o importa il backup di Financial Dashboard.</div>');
+  },
+  tit() {
+    const d = FIN(); const tv = sum(d.assets, assetValue), tc = sum(d.assets, a => a.lots && a.lots.length ? assetCost(a) : (assetCost(a) || 0));
+    return '<div class="gap"><h2 class="sp">Titoli e ETF</h2><button class="btn sm" data-act="quotes">Quote JSON</button><button class="btn sm pri" data-act="astEdit" data-i="-1">' + ic('plus') + ' Titolo</button></div><div class="gap" style="margin:6px 0"><button class="btn sm pri" data-act="quotesNow">' + ic('refresh') + ' Aggiorna prezzi</button><button class="btn sm" data-act="anaPf">' + ic('chart') + ' Analisi</button><button class="ib" data-act="qKey" aria-label="Chiave per le quotazioni">' + ic('key') + '</button><span class="sp"></span><span class="sm mut">' + (d.qAt ? 'agg. ' + h(new Date(d.qAt).toLocaleString('it-IT', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' })) : 'prezzi manuali') + '</span></div>' +
+      (d.assets.length ? d.assets.map((a, i) => { const v = assetValue(a), c = assetCost(a), g = c > 0 ? v - c : null; return '<button class="row" data-act="astEdit" data-i="' + i + '"><span class="av a3">' + h((a.ticker || a.name || '?').charAt(0)) + '</span><span class="t"><b>' + h(a.name) + (a.ticker ? ' [' + h(a.ticker) + ']' : '') + '</b><span class="sm mut">' + h(a.category) + vkTag(a) + (assetQty(a) ? ' · ' + assetQty(a).toLocaleString('it-IT', { maximumFractionDigits: 4 }) + ' quote @ ' + eur(assetPrice(a)) : '') + '</span>' + (g !== null ? '<span class="sm ' + (g >= 0 ? 'ok' : 'bad') + '">' + (g >= 0 ? '▲ ' : '▼ ') + h(eur(Math.abs(g))) + ' (' + pct(g / c * 100) + ')</span>' : '') + '</span><b>' + h(eur(v)) + '</b></button>'; }).join('') + '<p class="c"><b>Totale: ' + h(eur(tv)) + '</b></p>' : '<div class="card c mut">Nessun titolo registrato.</div>');
+  },
+  btp() {
+    const d = FIN(), mc = new Array(12).fill(0); let net = 0; const near = [];
+    const rows = d.btps.map((b, i) => {
+      const nom = btpNominal(b), inv = btpInvested(b), pmc = nom > 0 ? inv / nom * 100 : num(b.buyPrice), cur = num(b.currentPrice) || pmc, an = nom * num(b.couponRate) / 100 * 0.875; net += an;
+      const md = new Date(b.maturity); if (!isNaN(md)) { const mm = md.getMonth(); if (parseInt(b.freq) === 2) { mc[(mm + 6) % 12] += an / 2; mc[mm] += an / 2; } else mc[mm] += an; }
+      const dd = daysTo(b.maturity); if (dd >= 0 && dd <= 90) near.push(b.name + ' (' + b.maturity + ')'); const tir = btpTir(nom, inv, b.couponRate, b.maturity, b.freq);
+      return '<button class="row" data-act="btpEdit" data-i="' + i + '"><span class="av a5">B</span><span class="t"><b>' + h(b.name) + (b.ticker ? ' [' + h(b.ticker) + ']' : '') + '</b><span class="sm mut">Nominale ' + h(eur(nom)) + ' · cedola ' + h(b.couponRate) + '% · scad. ' + h(b.maturity) + vkTag(b) + '</span><span class="sm mut">PMC ' + pmc.toFixed(2) + ' · mercato ' + cur.toFixed(2) + (tir !== null ? ' · TIR netto ~' + tir.toFixed(2) + '%' : '') + '</span></span><b>' + h(eur(nom * cur / 100)) + '</b></button>';
+    });
+    return (near.length ? '<div class="alert">' + ic('warn') + ' In scadenza entro 90 giorni: ' + h(near.join(' • ')) + '</div>' : '') + '<div class="gap"><h2 class="sp">BTP</h2><button class="btn sm pri" data-act="btpEdit" data-i="-1">' + ic('plus') + ' BTP</button></div>' + (rows.join('') || '<div class="card c mut">Nessun BTP registrato.</div>') +
+      '<div class="card"><h3>Cedole nette annue stimate: ' + h(eur(net)) + '</h3><p class="sm mut">Calendario mensile (tassazione 12,5%)</p><div class="mgrid">' + MON.map((m, i) => '<div class="mcell"><span class="sm mut">' + m + '</span><b>' + h(eur(mc[i])) + '</b></div>').join('') + '</div></div>';
+  },
+  poste() {
+    const d = FIN(), near = d.posteItems.filter(p => { const x = daysTo(p.maturity); return x >= 0 && x <= 90; }).map(p => p.name + ' (' + p.maturity + ')');
+    return (near.length ? '<div class="alert">' + ic('warn') + ' In scadenza entro 90 giorni: ' + h(near.join(' • ')) + '</div>' : '') + '<div class="gap"><h2 class="sp">Poste e depositi</h2><button class="btn sm pri" data-act="poEdit" data-i="-1">' + ic('plus') + ' Strumento</button></div>' +
+      (d.posteItems.length ? d.posteItems.map((p, i) => { const ty = String(p.type), isB = ty.includes('Buono Postale'), isL = ty.includes('Libretto'), cls = isB ? 'a5' : isL ? 'a2' : 'a4', icon = isB ? '✦' : isL ? '▤' : '◈', label = isB ? 'BUONO' : isL ? 'LIBRETTO' : 'DEPOSITO'; return '<button class="row poRow po' + (isB ? 'Buono' : isL ? 'Libretto' : 'Deposito') + '" data-act="poEdit" data-i="' + i + '"><span class="av ' + cls + '" style="font-size:1.25em">' + icon + '</span><span class="t"><b>' + h(p.name) + '</b><span class="sm mut">' + h(p.type) + ' · ' + h(p.rate) + '% · scad. ' + h(p.maturity) + vkTag(p) + '</span><span class="sm ok">Netto stimato a scadenza ' + h(eur(posteNet(p))) + '</span></span><span class="poLabel">' + label + '</span><b>' + h(eur(p.capital)) + '</b></button>'; }).join('') + '<p class="c"><b>Totale: ' + h(eur(sum(d.posteItems, p => p.capital))) + '</b></p>' : '<div class="card c mut">Nessuno strumento registrato.</div>');
+  },
+  pen() {
+    const d = FIN(), tot = sum(d.pensionItems, p => p.balance);
+    return '<div class="gap"><h2 class="sp">Pensioni integrative</h2><button class="btn sm pri" data-act="penEdit" data-i="-1">' + ic('plus') + ' Pensione</button></div>' +
+      (d.pensionItems.length ? d.pensionItems.map((p, i) => { const v = num(p.monthly) + num(p.employer); return '<button class="row" data-act="penEdit" data-i="' + i + '"><span class="av a7">P</span><span class="t"><b>' + h(p.name) + '</b><span class="sm mut">' + h([p.type, p.owner].filter(Boolean).join(' · ')) + (v > 0 ? ' · versa ' + h(eur(v)) + ' ' + payEveryTxt(+p.payEvery || 1) : '') + h(payTag(p)) + vkTag(p) + '</span></span><b>' + h(eur(p.balance)) + '</b></button>'; }).join('') + '<p class="c"><b>Totale: ' + h(eur(tot)) + '</b></p>' : '<div class="card c mut">Nessuna pensione integrativa registrata.</div>') +
+      autoLogCard('pen') + '<p class="sm mut">Il totale entra nel patrimonio ma non nel ribilanciamento (è vincolato fino alla pensione). Con l’aggiornamento automatico il versamento si somma alla posizione nel giorno scelto; i rendimenti del fondo non sono calcolati: aggiorna il valore quando ricevi l’estratto conto.</p>';
+  },
+  pac() {
+    const d = FIN();
+    return '<div class="gap"><h2 class="sp">Piani di accumulo</h2><button class="btn sm pri" data-act="pacEdit" data-i="-1">' + ic('plus') + ' PAC</button></div>' +
+      (d.pacItems.length ? d.pacItems.map((p, i) => '<button class="row" data-act="pacEdit" data-i="' + i + '"><span class="av a1">P</span><span class="t"><b>' + h(p.name) + '</b><span class="sm mut">Versamento ' + h(eur(p.monthly)) + '/mese' + h(payTag(p)) + (p.etfTicker ? ' · ETF ' + h(p.etfTicker) : '') + (p.linkedAssetId ? ' · collegato a Titoli/ETF' : '') + vkTag(p) + '</span></span><b>' + h(eur(pacValue(p))) + '</b></button>').join('') : '<div class="card c mut">Nessun PAC registrato.</div>') +
+      autoLogCard('pac') + '<p class="sm mut">Con l’aggiornamento automatico, nel giorno scelto il versamento viene aggiunto al piano: se il PAC è collegato a un ETF le quote si calcolano all’ultimo prezzo noto (stima: l’acquisto reale può differire), altrimenti cresce il valore manuale. Se l’app resta chiusa, i versamenti mancanti vengono recuperati alla prossima apertura.</p><p class="sm mut">Gli ETF collegati sono registrati anche in Titoli/ETF per quotazioni e rendimento. Il patrimonio li conteggia una sola volta: il PIC è capitale investito, non liquidità aggiuntiva.</p>' + '<div class="card"><h3>Simulatore</h3>' + [['pi', 'Capitale iniziale (€)', 0], ['pm', 'Versamento mensile (€)', 200], ['pr', 'Rendimento annuo (%)', 5], ['py', 'Anni', 10]].map(x => '<label class="f" for="' + x[0] + '">' + x[1] + '</label><input class="in" id="' + x[0] + '" type="number" step="any" inputmode="decimal" value="' + x[2] + '">').join('') + '<div id="pres" class="mt" aria-live="polite"></div></div>';
+  },
+  reb() {
+    const t = FIN().targets, s = num(t.obbligazionario) + num(t.azionario) + num(t.liquidita);
+    return '<h2>Ribilanciamento</h2><p class="sm mut">Imposta l’allocazione obiettivo: ti dico quanto comprare o vendere per tornare in linea.</p><div class="card">' + [['ro', 'Obbligazionario / BTP / Poste (%)', t.obbligazionario], ['ra', 'Azionario / ETF (%)', t.azionario], ['rl', 'Liquidità e conti (%)', t.liquidita]].map(x => '<label class="f" for="' + x[0] + '">' + x[1] + '</label><input class="in" id="' + x[0] + '" type="number" step="1" min="0" max="100" inputmode="decimal" value="' + h(x[2]) + '">').join('') + '<p class="sm b mt" id="rsum" role="status"></p></div><div id="rres"></div>';
+  },
+  cf() {
+    const d = FIN(), me = c => c.freq === 'ANNUAL' ? num(c.amount) / 12 : num(c.amount), inc = sum(d.cashflows.filter(c => c.type === 'INCOME'), me), out = sum(d.cashflows.filter(c => c.type !== 'INCOME'), me);
+    return '<div class="gap"><h2 class="sp">Flussi ricorrenti</h2><button class="btn sm pri" data-act="cfEdit" data-i="-1">' + ic('plus') + ' Voce</button></div>' +
+      '<div class="card"><div class="kv"><div class="gap"><span class="sp">Entrate mensili</span><b class="ok">' + h(eur(inc)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Uscite mensili</span><b class="bad">' + h(eur(out)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Saldo mensile</span><b class="' + (inc - out >= 0 ? 'ok' : 'bad') + '">' + h(eur(inc - out)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Saldo annuo</span><b>' + h(eur((inc - out) * 12)) + '</b></div></div></div>' +
+      (d.cashflows.length ? d.cashflows.map((c, i) => '<button class="row" data-act="cfEdit" data-i="' + i + '"><span class="av ' + (c.type === 'INCOME' ? 'a5' : 'a2') + '">' + (c.type === 'INCOME' ? '+' : '−') + '</span><span class="t"><b>' + h(c.name) + '</b><span class="sm mut">' + (c.freq === 'ANNUAL' ? 'Annuale' : 'Mensile') + ' · ' + h(eur(me(c))) + '/mese</span></span><b>' + h(eur(c.amount)) + '</b></button>').join('') : '<div class="card c mut">Nessuna voce.</div>');
+  },
+  sim() {
+    return '<h2>Simulazioni</h2><div class="card"><h3>Proiezione del patrimonio</h3>' + [['sm', 'Versamento mensile (€)', 0], ['sy', 'Anni (1-40)', 15], ['sc', 'Capitale di partenza (vuoto = patrimonio attuale)', '']].map(x => '<label class="f" for="' + x[0] + '">' + x[1] + '</label><input class="in" id="' + x[0] + '" type="number" step="any" inputmode="decimal" value="' + x[2] + '">').join('') + '<div id="sres" class="mt"></div></div>' +
+      '<div class="card"><h3>Stress test sui BTP</h3><label class="f" for="xi">Inflazione (%)</label><input class="in" id="xi" type="number" step="any" inputmode="decimal" value="2"><label class="f" for="xr">Variazione tassi (punti base)</label><input class="in" id="xr" type="number" step="any" inputmode="decimal" value="100"><div id="xres" class="mt"></div></div>' +
+      '<div class="card"><h3>Nuovo investimento</h3><p class="sm mut">Come ripartire una somma secondo i tuoi target.</p><label class="f" for="ia">Importo (€)</label><input class="in" id="ia" type="number" step="any" inputmode="decimal" value="10000"><div id="ires" class="mt"></div></div>' +
+      '<div class="card"><h3>Scadenze dei prossimi 12 mesi</h3>' + timeline() + '</div>';
+  },
+  piano() {
+    const s = wset(), F = (id, l, t) => '<label class="f" for="' + id + '">' + l + '</label><input class="in" id="' + id + '" data-ws="1" type="' + (t || 'number') + '" ' + (t ? '' : 'step="any" inputmode="decimal" ') + 'value="' + h(s[id]) + '">';
+    return '<h2>Piano patrimoniale</h2><div class="card"><h3>Rendimento</h3><p class="sm mut">Confronta il patrimonio attuale con quanto hai messo.</p>' + F('wInitial', 'Capitale iniziale (€)') + F('wContrib', 'Versamenti successivi (€)') + F('wIncome', 'Cedole/interessi incassati (€)') + F('wWithdraw', 'Prelievi (€)') + '<div id="w1" class="mt"></div></div>' +
+      '<div class="card"><h3>Piano a 5, 10 e 15 anni</h3>' + F('wPlanCapital', 'Capitale di partenza (0 = patrimonio attuale)') + F('wPlanPac', 'PAC mensile (€)') + F('wPlanCoupons', 'Cedole reinvestite al mese (€)') + F('wPlanRate', 'Rendimento lordo annuo (%)') + F('wPlanDrag', 'Costi e tasse (% annuo)') + F('wPlanInflation', 'Inflazione (%)') + '<div id="w2" class="mt"></div></div>' +
+      '<div class="card"><h3>Eventi pianificati</h3><div id="w3"></div><button class="btn sm" data-act="evAdd">' + ic('plus') + ' Evento</button></div>' +
+      '<div class="card"><h3>Rischio</h3>' + F('wShockEquity', 'Shock azionario (%)') + F('wShockBond', 'Shock obbligazionario (%)') + '<div id="w4" class="mt"></div></div>' +
+      '<div class="card"><h3>Budget familiare</h3>' + F('wSalary', 'Entrate mensili (€)') + F('wExpenses', 'Spese mensili (€)') + F('wCash', 'Liquidità immediata (€)') + F('wEmergencyMonths', 'Mesi di fondo emergenza') + '<div id="w5" class="mt"></div></div>';
+  },
+});
+FTABS.splice(0, FTABS.length, ['ov', 'Panoramica'], ['acc', 'Conti'], ['tit', 'Titoli'], ['btp', 'BTP'], ['poste', 'Poste'], ['pac', 'PAC'], ['pen', 'Pensioni'], ['reb', 'Ribilancia'], ['cf', 'Flussi'], ['sim', 'Simula'], ['piano', 'Piano'], ['exp', 'Spese'], ['bud', 'Budget'], ['alr', 'Avvisi']);
+
+function timeline() {
+  const d = FIN(), now = new Date(), end = new Date(); end.setFullYear(end.getFullYear() + 1); const ev = [];
+  d.btps.forEach(b => { const x = new Date(b.maturity); if (x >= now && x <= end) ev.push({ d: x, t: 'Scadenza BTP: ' + b.name, a: btpNominal(b) }); });
+  d.posteItems.forEach(p => { const x = new Date(p.maturity); if (x >= now && x <= end) ev.push({ d: x, t: 'Svincolo ' + p.type + ': ' + p.name, a: posteNet(p) }); });
+  ev.sort((a, b) => a.d - b.d);
+  return ev.length ? ev.map(e => '<div class="kv"><div class="gap"><span class="sp"><b>' + h(e.t) + '</b><br><span class="sm mut">' + e.d.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: 'numeric' }) + '</span></span><b>' + h(eur(e.a)) + '</b></div></div>').join('') : '<p class="sm mut">Nessuna scadenza nei prossimi 12 mesi.</p>';
+}
+const WDEF = { wInitial: 0, wContrib: 0, wIncome: 0, wWithdraw: 0, wPlanCapital: 0, wPlanPac: 200, wPlanCoupons: 0, wPlanRate: 5, wPlanInflation: 2, wPlanDrag: 0.5, wSalary: 2000, wExpenses: 1750, wCash: 20000, wEmergencyMonths: 6, wShockEquity: -30, wShockBond: -10, wPlanStart: '2027-07', wPlanEnd: '2029-08', wPlanTransfer: 0 };
+const wset = () => { const s = FIN().wealthSettings, o = {}; Object.keys(WDEF).forEach(k => { o[k] = s[k] !== undefined && s[k] !== null && s[k] !== '' ? s[k] : WDEF[k]; }); return o; };
+const wn = id => { const e = $(id); return e ? num(e.value) : num(wset()[id]); };
+
+/* --- aggiornamenti live dei risultati --- */
+const LIVE = {
+  pac() {
+    const P = wn('pi'), M = wn('pm'), r = wn('pr') / 100 / 12, y = Math.min(60, Math.max(1, Math.round(wn('py')))); let b = P, dep = P; const val = [P], inv = [P];
+    for (let i = 1; i <= y * 12; i++) { b = (b + M) * (1 + r); dep += M; if (i % 12 === 0) { val.push(Math.round(b)); inv.push(dep); } }
+    $('pres').innerHTML = '<div class="kv"><div class="gap"><span class="sp">Capitale versato</span><b>' + h(eur(dep)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Interessi</span><b class="ok">' + h(eur(b - dep)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Valore finale</span><b>' + h(eur(b)) + '</b></div></div>' + lineChart2([{ v: val, c: '#1d4ed8', l: 'Valore' }, { v: inv, c: '#0f766e', l: 'Versato', dash: 1 }]);
+  },
+  reb() {
+    const d = FIN(); d.targets = { obbligazionario: wn('ro'), azionario: wn('ra'), liquidita: wn('rl') }; const s = wn('ro') + wn('ra') + wn('rl');
+    $('rsum').textContent = 'Totale target: ' + s + '%' + (s === 100 ? ' ✓' : ' (deve essere 100%)'); $('rsum').className = 'sm b mt ' + (s === 100 ? 'ok' : 'bad');
+    const c = classTotals(d), T = d.targets, cl = [['Obbligazionario / BTP / Poste', c.obbl, T.obbligazionario], ['Azionario / ETF', c.az, T.azionario], ['Liquidità e conti', c.liq, T.liquidita], ['Altri / non classificati', c.other, 0]];
+    $('rres').innerHTML = cl.map(x => { const cp = c.tot ? x[1] / c.tot * 100 : 0, tv = c.tot * x[2] / 100, df = tv - x[1], act = Math.abs(df) < 50 ? '<span class="mut">In target</span>' : df > 0 ? '<span class="ok">Acquista ' + h(eur(df)) + '</span>' : '<span class="bad">Vendi ' + h(eur(-df)) + '</span>'; return '<div class="card"><div class="gap"><b class="sp">' + h(x[0]) + '</b><b>' + h(eur(x[1])) + '</b></div><p class="sm mut" style="margin:4px 0">Attuale ' + pct(cp) + ' · target ' + pct(num(x[2])) + '</p>' + bar(cp) + bar(num(x[2]), 'tgt') + '<p class="sm" style="margin:0">' + act + '</p></div>'; }).join('');
+    saveSoon();
+  },
+  sim() {
+    const d = FIN(), init = wn('sc') > 0 ? wn('sc') : grand(d), m = Math.max(0, wn('sm')), y = Math.min(40, Math.max(1, Math.round(wn('sy'))));
+    $('sres').innerHTML = [3, 5, 7].map(rate => { const r = Math.pow(1 + rate / 100, 1 / 12) - 1, n = y * 12, fv = init * Math.pow(1 + r, n) + (r ? m * ((Math.pow(1 + r, n) - 1) / r) : m * n); return '<div class="kv"><div class="gap"><span class="sp">Scenario ' + rate + '% annuo</span><b>' + h(eur(fv)) + '</b></div></div>'; }).join('') + '<p class="sm mut">Capitale di partenza: ' + h(eur(init)) + ' · ipotesi illustrative, non previsioni.</p>';
+    const infl = wn('xi'), bps = wn('xr'); const rows = d.btps.map(b => { const years = Math.max(0, (new Date(b.maturity) - new Date()) / 31557600000), price = num(b.currentPrice) || num(b.buyPrice) || 100; return { v: btpNominal(b) * price / 100, dur: modDuration(num(b.couponRate) / 100, years, parseInt(b.freq) || 2, price) }; });
+    const bv = sum(rows, r => r.v), wd = bv > 0 ? rows.reduce((a, r) => a + r.v * r.dur, 0) / bv : 0, imp = -rows.reduce((a, r) => a + r.v * r.dur * (bps / 10000), 0), real = ((1.05) / (1 + infl / 100) - 1) * 100;
+    $('xres').innerHTML = '<div class="kv"><div class="gap"><span class="sp">Impatto stimato sui BTP (duration media ' + wd.toFixed(1) + ' anni)</span><b class="' + (imp >= 0 ? 'ok' : 'bad') + '">' + (imp >= 0 ? '+' : '') + h(eur(imp)) + '</b></div></div><div class="kv"><div class="gap"><span class="sp">Rendimento reale (ipotesi nominale 5%)</span><b>' + (real >= 0 ? '+' : '') + real.toFixed(2) + '%</b></div></div>';
+    const a = wn('ia'), T = d.targets, w = [num(T.obbligazionario), num(T.azionario), num(T.liquidita)], sw = w.reduce((x, y2) => x + y2, 0) || 1, lab = ['Obbligazionario', 'Azionario / ETF', 'Liquidità'];
+    $('ires').innerHTML = w.map((x, i) => '<div class="kv"><div class="gap"><span class="sp">' + lab[i] + ' · ' + pct(x / sw * 100) + '</span><b>' + h(eur(a * x / sw)) + '</b></div></div>').join('');
+  },
+  piano() {
+    const d = FIN(), cur = grand(d), s = wset(), gv2 = id => wn(id);
+    const gain = cur - gv2('wInitial') - gv2('wContrib') + gv2('wWithdraw'), base = gv2('wInitial') + gv2('wContrib');
+    $('w1').innerHTML = rc('Patrimonio attuale', eur(cur), 'Letto dalle altre schede') + rc('Variazione stimata', eur(gain), pct(base > 0 ? gain / base * 100 : 0) + ' su capitale e flussi') + rc('Cedole/interessi dichiarati', eur(gv2('wIncome')), 'Dato inserito da te');
+    const init = Math.max(0, gv2('wPlanCapital') || cur), rate = (gv2('wPlanRate') - gv2('wPlanDrag')) / 100, inf = Math.max(0, gv2('wPlanInflation')) / 100, contrib = Math.max(0, gv2('wPlanPac')) + Math.max(0, gv2('wPlanCoupons'));
+    $('w2').innerHTML = [5, 10, 15].map(y => { const r = Math.pow(1 + rate, 1 / 12) - 1; let b = init; for (let i = 0; i < y * 12; i++) b = b * (1 + r) + contrib; return rc(y + ' anni', eur(b), 'Valore reale odierno ' + eur(b / Math.pow(1 + inf, y)) + ' · nuovi flussi ' + eur(contrib * y * 12)); }).join('');
+    const ev = (d.wealthEvents || []).slice().sort((a, b) => String(a.date).localeCompare(String(b.date))), inc = sum(ev.filter(e => e.type === 'IN'), e => e.amount), out = sum(ev.filter(e => e.type === 'OUT'), e => e.amount);
+    $('w3').innerHTML = (ev.length ? ev.map((e, i) => '<div class="kv"><div class="gap"><span class="sp"><b>' + h(e.name) + '</b><br><span class="sm mut">' + h(e.date) + '</span></span><b class="' + (e.type === 'IN' ? 'ok' : 'bad') + '">' + (e.type === 'IN' ? '+' : '−') + h(eur(e.amount)) + '</b><button class="ib" data-act="evDel" data-i="' + d.wealthEvents.indexOf(e) + '" aria-label="Elimina evento">' + ic('trash') + '</button></div></div>').join('') + '<p class="sm mut">Entrate pianificate ' + h(eur(inc)) + ' · uscite ' + h(eur(out)) + ' · saldo ' + h(eur(inc - out)) + '</p>' : '<p class="sm mut">Nessun evento.</p>');
+    const bt = sum(d.btps, btpValue), eq = sum(d.pacItems.filter(p => !p.linkedAssetId), p => num(p.currentVal)) + sum(d.assets, assetValue), tot = cur, eqS = Math.min(0, gv2('wShockEquity')) / 100, bS = Math.min(0, gv2('wShockBond')) / 100, loss = bt * bS + eq * eqS;
+    $('w4').innerHTML = rc('Obbligazioni', eur(bt), tot ? pct(bt / tot * 100) : '') + rc('Titoli e PAC', eur(eq), tot ? pct(eq / tot * 100) : '') + '<p class="sm">Perdita teorica nello scenario: <b class="bad">' + h(eur(loss)) + '</b> · patrimonio dopo lo shock: <b>' + h(eur(tot + loss)) + '</b> (' + (tot ? pct(loss / tot * 100) : '0%') + ')</p>';
+    const sal = Math.max(0, gv2('wSalary')), exp = Math.max(0, gv2('wExpenses')), cash = Math.max(0, gv2('wCash')), mo = Math.max(1, gv2('wEmergencyMonths'));
+    $('w5').innerHTML = rc('Avanzo / disavanzo mensile', eur(sal - exp), sal >= exp ? 'Margine teorico' : 'Spese superiori alle entrate') + rc('Copertura liquidità', (exp ? cash / exp : 0).toFixed(1) + ' mesi', 'Liquidità / spese') + rc('Fondo emergenza obiettivo', eur(exp * mo), 'Differenza ' + eur(cash - exp * mo));
+  },
+};
+let saveT; function saveSoon() { clearTimeout(saveT); saveT = setTimeout(() => { if (S.protOpen && S.items.has('fin-db')) finSave().catch(() => { }); }, 700); }
+const _postFin = POST.fin;
+POST.fin = () => {
+  _postFin();
+  const t = U.fin.tab, key = { pac: 'pac', reb: 'reb', sim: 'sim', piano: 'piano' }[t]; if (!key) return;
+  const main = document.querySelector('main.wrap'), run = () => { try { LIVE[key](); } catch (e) { console.warn(e); } };
+  main.addEventListener('input', e => { if (e.target.dataset.ws) { FIN().wealthSettings[e.target.id] = e.target.value; saveSoon(); } run(); }); run();
+};
+
+/* --- azioni --- */
+Object.assign(ACT, {
+  lotAdd() { const x = U.gen.fields.find(f => f.type === 'lots'); $('g_lots').insertAdjacentHTML('beforeend', lotRow(x, {})); U.gen.onInput && U.gen.onInput(); },
+  lotDel(t) { t.parentElement.remove(); U.gen.onInput && U.gen.onInput(); },
+  async genDel() { if (await ask('Eliminare?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { await U.gen.onDelete(); await finSave(); closeTop(); render(); } },
+  astEdit(t) {
+    const d = FIN(), i = +t.dataset.i, a = i >= 0 ? d.assets[i] : { category: ASSET_CATS[0], lots: [] };
+    genForm({ title: i >= 0 ? 'Modifica titolo' : 'Nuovo titolo', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: a.name }, { id: 't', label: 'Ticker', value: a.ticker }, { id: 'qs', label: 'Simbolo per le quotazioni (es. VWCE.DEX; vuoto = ticker)', value: a.qsym || '' }, { id: 'c', label: 'Categoria', type: 'select', options: [...new Set([...ASSET_CATS, a.category].filter(Boolean))], value: a.category }, { id: 'o', label: 'Intestatario', value: a.owner }, { type: 'lots', label: 'Acquisti (data, quote, prezzo €)', cols: ['Quote', 'Prezzo €'], keys: ['quantity', 'buyPrice'], value: (a.lots || []) }, { id: 'p', label: 'Prezzo attuale (€, facoltativo)', type: 'number', value: a.lastPrice || '' }, { id: 'v', label: 'Valore totale (€, solo se senza quote)', type: 'number', value: a.lots && a.lots.length ? '' : a.value }],
+      onInput() { const l = readLots('quantity', 'buyPrice'), q = sum(l, x => x.quantity), c = sum(l, x => x.quantity * x.buyPrice), pmc = q ? c / q : 0, cp = num(gv('p')) || pmc; const s = $('g_sum'); if (s) s.textContent = q ? q.toLocaleString('it-IT', { maximumFractionDigits: 4 }) + ' quote @ ' + eur(pmc) + ' → valore ' + eur(q * cp) : ''; },
+      onSubmit() { const l = readLots('quantity', 'buyPrice'), q = sum(l, x => x.quantity), pmc = q ? sum(l, x => x.quantity * x.buyPrice) / q : 0, mp = num(gv('p')) || null, name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.');
+        const rec = { ...a, name: name.slice(0, 100), ticker: gv('t').trim().toUpperCase().slice(0, 20), qsym: gv('qs').trim().toUpperCase().slice(0, 24), category: gv('c'), owner: gv('o').trim().slice(0, 60), lots: l, quantity: q, buyPrice: pmc, lastPrice: mp, value: q > 0 ? q * (mp || pmc) : num(gv('v')) }; if (i >= 0) d.assets[i] = rec; else d.assets.push(rec); },
+      onDelete: i >= 0 ? () => { d.assets.splice(i, 1); } : null });
+  },
+  btpEdit(t) {
+    const d = FIN(), i = +t.dataset.i, b = i >= 0 ? d.btps[i] : { freq: 2, lots: [] };
+    genForm({ title: i >= 0 ? 'Modifica BTP' : 'Nuovo BTP', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: b.name }, { id: 't', label: 'ISIN / ticker', value: b.ticker }, { type: 'lots', label: 'Acquisti (data, nominale €, prezzo)', cols: ['Nominale €', 'Prezzo'], keys: ['nominal', 'buyPrice'], value: b.lots && b.lots.length ? b.lots : (b.nominal ? [{ nominal: b.nominal, buyPrice: b.buyPrice }] : []) }, { id: 'cp', label: 'Corso attuale (% del nominale)', type: 'number', value: b.currentPrice || '' }, { id: 'cr', label: 'Cedola annua (%)', type: 'number', req: 1, value: b.couponRate }, { id: 'f', label: 'Cedole all’anno', type: 'select', options: [['2', 'Semestrale (2)'], ['1', 'Annuale (1)']], value: b.freq }, { id: 'm', label: 'Scadenza', type: 'date', req: 1, value: b.maturity }],
+      onInput() { const l = readLots('nominal', 'buyPrice'), nom = sum(l, x => x.nominal), inv = sum(l, x => x.nominal * (x.buyPrice || 100) / 100), s = $('g_sum'); if (s) s.textContent = nom ? 'Nominale ' + eur(nom) + ' · investito ' + eur(inv) + ' · PMC ' + (inv / nom * 100).toFixed(2) : ''; },
+      onSubmit() { const l = readLots('nominal', 'buyPrice').map(x => ({ ...x, buyPrice: x.buyPrice || 100 })), nom = sum(l, x => x.nominal), inv = sum(l, x => x.nominal * x.buyPrice / 100), pmc = nom ? inv / nom * 100 : 100, name = gv('n').trim(); if (!name || !nom || !gv('m')) throw new Error('Nome, almeno un acquisto e scadenza sono obbligatori.');
+        const rec = { ...b, name: name.slice(0, 100), ticker: gv('t').trim().toUpperCase().slice(0, 20), lots: l, nominal: nom, buyPrice: pmc, currentPrice: num(gv('cp')) || pmc, couponRate: num(gv('cr')), freq: parseInt(gv('f')) || 2, maturity: gv('m') }; if (i >= 0) d.btps[i] = rec; else d.btps.push(rec); },
+      onDelete: i >= 0 ? () => { d.btps.splice(i, 1); } : null });
+  },
+  poEdit(t) {
+    const d = FIN(), i = +t.dataset.i, p = i >= 0 ? d.posteItems[i] : { type: POSTE_TYPES[0], startDate: todayISO() };
+    genForm({ title: i >= 0 ? 'Modifica strumento' : 'Nuovo strumento', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: p.name }, { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...POSTE_TYPES, p.type].filter(Boolean))], value: p.type }, { id: 'o', label: 'Intestatario', value: p.owner }, { id: 'c', label: 'Capitale (€)', type: 'number', req: 1, value: p.capital }, { id: 'r', label: 'Tasso annuo lordo (%)', type: 'number', value: p.rate }, { id: 's', label: 'Data di inizio', type: 'date', value: p.startDate }, { id: 'm', label: 'Scadenza / svincolo', type: 'date', value: p.maturity }],
+      onSubmit() { const name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.'); const rec = { ...p, name: name.slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), capital: num(gv('c')), rate: num(gv('r')), startDate: gv('s'), maturity: gv('m') }; if (i >= 0) d.posteItems[i] = rec; else d.posteItems.push(rec); },
+      onDelete: i >= 0 ? () => { d.posteItems.splice(i, 1); } : null });
+  },
+  penEdit(t) {
+    const d = FIN(), i = +t.dataset.i, p = i >= 0 ? d.pensionItems[i] : { type: PEN_TYPES[0] };
+    genForm({ title: i >= 0 ? 'Modifica pensione integrativa' : 'Nuova pensione integrativa', noFocus: i >= 0, fields: [
+      { id: 'n', label: 'Nome del fondo / piano', req: 1, value: p.name },
+      { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...PEN_TYPES, p.type].filter(Boolean))], value: p.type },
+      { id: 'o', label: 'Intestatario', value: p.owner },
+      { id: 'b', label: 'Posizione maturata attuale (€)', type: 'number', value: p.balance },
+      { id: 'm', label: 'Tuo versamento a ogni scadenza (€)', type: 'number', value: p.monthly },
+      { id: 'e', label: 'Contributo datore di lavoro + TFR a ogni scadenza (€, facoltativo)', type: 'number', value: p.employer || '' },
+      ...payFields(p, true)
+    ],
+      onSubmit() {
+        const name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.');
+        const rec = { ...p, name: name.slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), balance: num(gv('b')), monthly: Math.abs(num(gv('m'))), employer: Math.abs(num(gv('e'))) };
+        payRead(rec, p, true);
+        if (i >= 0) d.pensionItems[i] = rec; else d.pensionItems.push(rec);
+      },
+      onDelete: i >= 0 ? () => { d.pensionItems.splice(i, 1); } : null });
+  },
+  pacEdit(t) {
+    const d = FIN(), i = +t.dataset.i, p = i >= 0 ? d.pacItems[i] : {};
+    genForm({ title: i >= 0 ? 'Modifica PAC' : 'Nuovo PAC', noFocus: i >= 0, fields: [
+      { id: 'n', label: 'Nome del piano', req: 1, value: p.name },
+      { id: 'm', label: 'Versamento mensile (€)', type: 'number', value: p.monthly },
+      ...payFields(p, false),
+      { id: 'v', label: 'Valore attuale manuale (€) — per PAC senza ETF', type: 'number', value: p.linkedAssetId ? '' : p.currentVal },
+      { id: 'et', label: 'Ticker ETF reale (es. VWCE, SWDA)', value: p.etfTicker || '' },
+      { id: 'qs', label: 'Simbolo per le quotazioni (es. VWCE.DEX)', value: p.qsym || '' },
+      { id: 'is', label: 'ISIN (facoltativo)', value: p.etfIsin || '' },
+      { id: 'pic', label: 'PIC iniziale investito (€)', type: 'number', value: p.picAmount || '' },
+      { id: 'qty', label: 'Quote ETF acquistate', type: 'number', value: p.etfQuantity || '' },
+      { id: 'buy', label: 'Prezzo medio di acquisto per quota (€)', type: 'number', value: p.etfBuyPrice || '' },
+      { id: 'price', label: 'Ultima quotazione ETF (€)', type: 'number', value: p.etfLastPrice || '' }
+    ],
+      onSubmit() {
+        const name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.');
+        const ticker = gv('et').trim().toUpperCase().slice(0, 24), isin = gv('is').trim().toUpperCase().slice(0, 16);
+        const pic = num(gv('pic')), qty = num(gv('qty')), buy = num(gv('buy')), last = num(gv('price'));
+        const rec = { ...p, name: name.slice(0, 100), monthly: num(gv('m')), etfTicker: ticker, etfIsin: isin, qsym: gv('qs').trim().toUpperCase().slice(0, 24), picAmount: pic, etfQuantity: qty, etfBuyPrice: buy, etfLastPrice: last };
+        if (ticker || isin || qty || pic || buy || last) {
+          const linkId = p.linkedAssetId || ('pac-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8));
+          rec.linkedAssetId = linkId;
+          const shares = qty > 0 ? qty : (buy > 0 && pic > 0 ? pic / buy : 0);
+          const lots = shares > 0 ? [{ quantity: shares, buyPrice: buy || (pic / shares) }] : [];
+          let asset = d.assets.find(a => a.pacLinkId === linkId);
+          const ar = { ...(asset || {}), pacLinkId: linkId, name: name.slice(0, 100), ticker: ticker || isin, isin, qsym: rec.qsym, category: 'Azionario / ETF', lots, quantity: shares, buyPrice: shares > 0 ? (buy || pic / shares) : 0, lastPrice: last || buy || null, value: shares > 0 ? shares * (last || buy || 0) : pic };
+          if (asset) Object.assign(asset, ar); else d.assets.push(ar);
+          rec.currentVal = 0; // Il valore è contabilizzato una sola volta nella schermata Titoli/ETF.
+        } else {
+          rec.linkedAssetId = '';
+          rec.currentVal = num(gv('v'));
+          // Se si rimuove il collegamento, rimuove anche il titolo creato esclusivamente da questo PAC.
+          d.assets = d.assets.filter(a => !a.pacLinkId || a.pacLinkId !== p.linkedAssetId);
+        }
+        payRead(rec, p, false);
+        if (i >= 0) d.pacItems[i] = rec; else d.pacItems.push(rec);
+      },
+      onDelete: i >= 0 ? () => { const old = d.pacItems[i]; if (old && old.linkedAssetId) d.assets = d.assets.filter(a => a.pacLinkId !== old.linkedAssetId); d.pacItems.splice(i, 1); } : null });
+  },
+  cfEdit(t) {
+    const d = FIN(), i = +t.dataset.i, c = i >= 0 ? d.cashflows[i] : { type: 'INCOME', freq: 'MONTHLY' };
+    genForm({ title: i >= 0 ? 'Modifica voce' : 'Nuova voce', noFocus: i >= 0, fields: [{ id: 'n', label: 'Descrizione', req: 1, value: c.name }, { id: 't', label: 'Tipo', type: 'select', options: [['INCOME', 'Entrata'], ['EXPENSE', 'Uscita']], value: c.type }, { id: 'a', label: 'Importo (€)', type: 'number', req: 1, value: c.amount }, { id: 'f', label: 'Frequenza', type: 'select', options: [['MONTHLY', 'Mensile'], ['ANNUAL', 'Annuale']], value: c.freq }],
+      onSubmit() { const name = gv('n').trim(); if (!name) throw new Error('Inserisci la descrizione.'); const rec = { ...c, name: name.slice(0, 100), type: gv('t'), amount: Math.abs(num(gv('a'))), freq: gv('f') }; if (i >= 0) d.cashflows[i] = rec; else d.cashflows.push(rec); },
+      onDelete: i >= 0 ? () => { d.cashflows.splice(i, 1); } : null });
+  },
+  evAdd() {
+    const d = FIN(); genForm({ title: 'Nuovo evento', fields: [{ id: 'd', label: 'Data', type: 'date', req: 1, value: todayISO() }, { id: 'n', label: 'Descrizione', req: 1, value: '' }, { id: 't', label: 'Tipo', type: 'select', options: [['IN', 'Entrata'], ['OUT', 'Uscita']], value: 'IN' }, { id: 'a', label: 'Importo (€)', type: 'number', req: 1, value: '' }],
+      onSubmit() { const a = Math.abs(num(gv('a'))), n = gv('n').trim(); if (!gv('d') || !n || a <= 0) throw new Error('Inserisci data, descrizione e importo.'); d.wealthEvents.push({ date: gv('d'), name: n.slice(0, 100), type: gv('t'), amount: a }); d.wealthEvents.sort((x, y) => String(x.date).localeCompare(String(y.date))); } });
+  },
+  async evDel(t) { if (await ask('Eliminare l’evento?', '', { ok: 'Elimina', danger: true })) { FIN().wealthEvents.splice(+t.dataset.i, 1); await finSave(); render(); } },
+});
+/* accountForm aggiornato: tipo a scelta */
+function accForm(a) {
+  genForm({ title: U.ff.i != null ? 'Modifica conto' : 'Nuovo conto', fields: [{ id: 'n', label: 'Nome', req: 1, value: a.name }, { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...BA_TYPES, a.type].filter(Boolean))], value: a.type || BA_TYPES[0] }, { id: 'o', label: 'Intestatario', value: a.owner }, { id: 'b', label: 'Saldo (€)', type: 'number', value: a.balance }, { id: 'v', label: 'Credenziali nel Vault (facoltativo)', type: 'select', options: [['', '— nessuna —'], ...vitems().filter(i => i.type === 'login').map(i => [i.id, titleOf(i)])], value: a.vaultId || '' }],
+    onSubmit() { const d = FIN(), rec = { ...a, name: gv('n').trim().slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), balance: num(gv('b')), vaultId: gv('v') || undefined }; if (!rec.name) throw new Error('Inserisci il nome.'); if (U.ff.i != null) d.bankAccounts[U.ff.i] = rec; else d.bankAccounts.push(rec); },
+    onDelete: U.ff.i != null ? () => { FIN().bankAccounts.splice(U.ff.i, 1); } : null });
+}
+/* assistente: ripartizione di un importo secondo i target */
+function simAnswer(q) {
+  const t = fold(q); if (!/invest|versare|mettere|da investire|ripartir/.test(t)) return null;
+  const m = /(\d[\d.,]*)\s*(?:€|euro)?/.exec(t.replace(/\s/g, '')); if (!m) return null; let v = m[1]; v = v.includes(',') && v.includes('.') ? v.replace(/\./g, '').replace(',', '.') : v.includes(',') ? v.replace(',', '.') : (v.match(/\./g) || []).length > 1 || /\.\d{3}$/.test(v) ? v.replace(/\./g, '') : v;
+  const a = parseFloat(v); if (!(a > 0)) return null; const T = FIN().targets, w = [num(T.obbligazionario), num(T.azionario), num(T.liquidita)], s = w.reduce((x, y) => x + y, 0) || 1;
+  return 'Con i tuoi target, ' + eur(a) + ' si ripartiscono così: obbligazionario ' + eur(a * w[0] / s) + ' (' + pct(w[0] / s * 100) + '), azionario ' + eur(a * w[1] / s) + ' (' + pct(w[1] / s * 100) + '), liquidità ' + eur(a * w[2] / s) + ' (' + pct(w[2] / s * 100) + '). È un calcolo, non una consulenza.';
+}
+
+/* ---------- Backup: promemoria, verifica, Google Drive (facoltativo) ---------- */
+const LB = 'unica_lastbk', GC = 'unica_gcid', GSCOPE = 'https://www.googleapis.com/auth/drive.appdata', GFILE = 'unica-backup.enc';
+const lsGet = k => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+const bkAge = () => { const t = +lsGet(LB); return t ? Math.floor((Date.now() - t) / 864e5) : null; };
+const markBk = () => { lsSet(LB, String(Date.now())); lsSet('unica_bkchg', '0'); };
+function bkStatus() { const a = bkAge(); return '<p class="sm ' + (a === null || (bkDays() && a > bkDays()) ? 'bad' : 'mut') + '">' + (a === null ? 'Nessun backup eseguito da questo dispositivo.' : 'Ultimo backup: ' + (a === 0 ? 'oggi' : a + (a === 1 ? ' giorno fa' : ' giorni fa')) + '.') + '</p>'; }
+function bkBanner() { const d = bkDue(); if (!d) return ''; return '<div class="alert bkn" role="alert"><span class="sp">' + ic('shield') + ' ' + h(d.why) + '</span><span class="bkb"><button class="btn sm pri" data-act="exp">Backup ora</button><button class="btn sm" data-act="nav" data-r="settings">Opzioni</button></span></div>'; }
+
+/* --- ritorno dal login Google (popup): passa il token alla finestra principale e si chiude --- */
+const GBC = typeof BroadcastChannel === 'function' ? new BroadcastChannel('unica-gauth') : null;
+if (/[#&]access_token=/.test(location.hash) && /state=/.test(location.hash)) {
+  const q = new URLSearchParams(location.hash.slice(1));
+  if (GBC) GBC.postMessage({ state: q.get('state'), token: q.get('access_token'), exp: +q.get('expires_in') || 3000 });
+  history.replaceState(null, '', location.pathname); window.__POPUP = true;
+  document.body.innerHTML = '<main class="center"><p class="c">Accesso completato. Puoi chiudere questa finestra.</p></main>'; setTimeout(() => window.close(), 300);
+}
+let GTOK = null;
+function gAuth() {
+  if (GTOK && GTOK.exp > Date.now() + 60000) return Promise.resolve(GTOK.t);
+  const cid = lsGet(GC); if (!cid) return Promise.reject(new Error('Imposta prima l’ID client Google.'));
+  if (!GBC) return Promise.reject(new Error('Browser non supportato.'));
+  const st = Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+  return new Promise((res, rej) => {
+    const to = setTimeout(() => { GBC.onmessage = null; rej(new Error('Accesso scaduto o annullato.')); }, 180000);
+    GBC.onmessage = e => { const d = e.data; if (!d || d.state !== st || !d.token) return; clearTimeout(to); GBC.onmessage = null; GTOK = { t: d.token, exp: Date.now() + d.exp * 1000 }; res(d.token); };
+    const url = 'https://accounts.google.com/o/oauth2/v2/auth?' + new URLSearchParams({ client_id: cid, redirect_uri: location.origin + location.pathname, response_type: 'token', scope: GSCOPE, state: st });
+    if (!window.open(url, 'unica_g', 'width=480,height=660')) { clearTimeout(to); rej(new Error('Il browser ha bloccato la finestra di accesso.')); }
+  });
+}
+async function gApi(path, opt = {}, base = 'https://www.googleapis.com/drive/v3/') {
+  const t = await gAuth(); const r = await fetch(base + path, { ...opt, headers: { Authorization: 'Bearer ' + t, ...(opt.headers || {}) } });
+  if (r.status === 401) GTOK = null; if (!r.ok) throw new Error('Google Drive: errore ' + r.status);
+  return r;
+}
+const gList = async () => ((await (await gApi('files?spaces=appDataFolder&orderBy=' + encodeURIComponent('modifiedTime desc') + '&pageSize=100&fields=' + encodeURIComponent('files(id,name,modifiedTime,size,appProperties)'))).json()).files || []).filter(f => /^unica-.*\.enc$/.test(f.name));
+const gKeep = () => +lsGet('unica_gkeep') || 10;
+async function gSave() {
+  const body = JSON.stringify(await exportBackup()), d = new Date(), p2 = n => String(n).padStart(2, '0');
+  const name = 'unica-' + d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()) + '_' + p2(d.getHours()) + p2(d.getMinutes()) + '.enc', bd = 'unica' + Date.now();
+  await gApi('files?uploadType=multipart', { method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + bd }, body: '--' + bd + '\r\nContent-Type: application/json\r\n\r\n' + JSON.stringify({ name, parents: ['appDataFolder'] }) + '\r\n--' + bd + '\r\nContent-Type: application/octet-stream\r\n\r\n' + body + '\r\n--' + bd + '--' }, 'https://www.googleapis.com/upload/drive/v3/');
+  markBk();
+  try { const rot = (await gList()).filter(f => !(f.appProperties && f.appProperties.keep === '1')); for (const f of rot.slice(gKeep())) await gApi('files/' + f.id, { method: 'DELETE' }); } catch (e) { }
+}
+async function openDriveList() {
+  let L; try { toast('Leggo da Drive…'); L = await gList(); } catch (e) { return toast(e.message); }
+  const m = modal('<div id="gdb"></div>');
+  const draw = () => { m.q('#gdb').innerHTML = '<div class="gap"><h2 class="sp" style="margin:0">Backup su Drive</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><p class="sm mut">Le copie con nome non vengono mai eliminate dalla rotazione (si conservano le ultime ' + gKeep() + ' senza nome).</p>' +
+    (L.length ? L.map(f => { const ap = f.appProperties || {}; return '<div class="gap" style="align-items:center;margin:6px 0"><span class="t sp"><b>' + h(new Date(f.modifiedTime).toLocaleString('it-IT')) + '</b>' + (ap.label ? ' · ' + h(ap.label) : '') + (ap.keep === '1' ? ' ' + ic('star') : '') + '<br><span class="sm mut">' + h(fmtSize(+f.size || 0)) + '</span></span><button class="btn sm" data-gd="restore" data-id="' + h(f.id) + '">Ripristina</button><button class="ib" data-gd="label" data-id="' + h(f.id) + '" aria-label="Dai un nome e non eliminare mai">' + ic('star') + '</button><button class="ib" data-gd="del" data-id="' + h(f.id) + '" aria-label="Elimina">' + ic('trash') + '</button></div>'; }).join('') : '<p class="sm mut">Nessun backup su Drive.</p>'); };
+  m.el.addEventListener('click', async e => {
+    const t = e.target.closest('[data-gd]'); if (!t) return; const f = L.find(x => x.id === t.dataset.id); if (!f) return;
+    try {
+      if (t.dataset.gd === 'restore') { const txt = await (await gApi('files/' + f.id + '?alt=media')).text(); m.close(); SY.pend = null; await ACT.restore(txt); }
+      else if (t.dataset.gd === 'label') { const v = await askText('Nome del backup', 'I backup con nome non vengono mai eliminati dalla rotazione. Lascia vuoto per rimuovere il nome.'); if (v === undefined) return; const lb = v.trim().slice(0, 60); await gApi('files/' + f.id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ appProperties: { label: lb, keep: lb ? '1' : '' } }) }); f.appProperties = { label: lb, keep: lb ? '1' : '' }; draw(); }
+      else if (t.dataset.gd === 'del') { if (!(await ask('Eliminare da Drive?', 'Questo backup verrà eliminato.', { ok: 'Elimina', danger: true }))) return; await gApi('files/' + f.id, { method: 'DELETE' }); L = L.filter(x => x.id !== f.id); draw(); }
+    } catch (x) { toast(x.message); }
+  });
+  draw();
+}
+function driveCard() {
+  const cid = lsGet(GC), kp = lsGet('unica_gkeep') || 10;
+  return '<div style="margin-top:16px"><h4 style="margin:0 0 4px">Google Drive (facoltativo)</h4><p class="sm mut">Il file resta cifrato: Google vede solo dati illeggibili, in una cartella nascosta riservata a questa app. Serve un tuo ID client OAuth (tipo «Applicazione web») con origine e URI di reindirizzamento <b>' + h(location.origin + location.pathname) + '</b>.</p><div class="stack">' +
+    (cid ? '<button class="btn blk" data-act="gSave">' + ic('up') + ' Salva un backup su Drive</button><button class="btn blk" data-act="gList">' + ic('dl') + ' Gestisci e ripristina i backup su Drive</button><label class="f" for="gk">Backup su Drive da conservare (oltre a quelli con nome)</label><select class="in" id="gk" data-hub="gkeep">' + [3, 5, 10, 20].map(n => '<option' + (+kp === n ? ' selected' : '') + '>' + n + '</option>').join('') + '</select><button class="btn blk" data-act="gSet">Cambia o rimuovi l’ID client</button>' : '<button class="btn blk" data-act="gSet">Imposta l’ID client Google</button>') + '</div></div>';
+}
+Object.assign(ACT, {
+  async verifyBk() {
+    const f = await pickFile('.enc,application/json,application/octet-stream'); if (!f) return;
+    const bk = parseRestore(await f.text()); if (!bk) return toast('Non è un backup di ' + APP_NAME);
+    const s = await askText('Verifica backup', 'Inserisci la master password o le 24 parole di recupero. Nulla viene modificato.'); if (!s || !s.trim()) return;
+    const saved = S.meta; S.meta = bk.meta;
+    try { /\s/.test(s.trim()) && s.trim().split(/\s+/).length >= 20 ? await unwrapWithRecovery(parseRecovery(s)) : await unwrapWithPassword(s); toast('Backup valido: ' + bk.items.filter(i => i.t !== 'tomb').length + ' elementi, esportato il ' + new Date(bk.exported).toLocaleDateString('it-IT')); }
+    catch (e) { toast('Password o codice non corretti.'); } finally { S.meta = saved; }
+  },
+  async gSet() { const v = await askText('ID client Google', 'Incolla l’ID client OAuth (finisce con .apps.googleusercontent.com). Lascia vuoto per rimuoverlo.', true); if (v === undefined) return; const x = v.trim(); if (x && !/^[\w.-]+\.apps\.googleusercontent\.com$/.test(x)) return toast('ID client non valido.'); lsSet(GC, x); GTOK = null; render(); },
+  async gSave() { try { toast('Salvataggio su Drive…'); await gSave(); toast('Backup salvato su Drive'); render(); } catch (e) { toast(e.message); } },
+  gList: () => openDriveList(),
+});
+{ const _exp = ACT.exp; ACT.exp = async function () { await _exp.apply(this, arguments); markBk(); if (U.route === 'settings') render(); }; }
+
+/* ---------- Sincronizzazione (Cloudflare Worker + KV): sul server arrivano solo dati già cifrati ---------- */
+const SY = { cfg: null, busy: false, first: false, err: '', failAt: 0, dirtyAt: 0, pend: null };
+const SYNC_EVERY = 300000, SY_URL = /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*\.workers\.dev$/i;
+const syDirty = () => { lsSet('unica_sydirty', '1'); lsSet('unica_snapdirty', '1'); lsSet('unica_fbdirty', '1'); SY.dirtyAt = Date.now(); };
+const syCode = c => 'US1.' + b64u(te.encode(JSON.stringify({ u: c.u, i: c.i, t: c.t })));
+function syParse(code) {
+  try { const m = /^US1\.([A-Za-z0-9_-]+)$/.exec(String(code).trim()); if (!m) return null; const o = JSON.parse(td.decode(unb64u(m[1])));
+    if (!SY_URL.test(o.u) || !/^[A-Za-z0-9_-]{22,64}$/.test(o.i) || !/^[A-Za-z0-9_-]{32,128}$/.test(o.t)) return null; return { u: o.u, i: o.i, t: o.t, rev: 0, mts: 0, last: 0 }; } catch (e) { return null; }
+}
+async function syLoad() {
+  if (SY.cfg || !S.kcKey) return SY.cfg;
+  const r = await DB.get('meta', 'sync'); if (r) { try { SY.cfg = JSON.parse(td.decode(await unseal(S.kcKey, r, 'sync'))); } catch (e) { } }
+  return SY.cfg;
+}
+async function sySave(c) { SY.cfg = c; await DB.put('meta', await seal(S.kcKey, te.encode(JSON.stringify(c)), 'sync'), 'sync'); lsSet('unica_syon', '1'); lsSet('unica_sylast', String(c.last || 0)); }
+async function syAdopt() {   // dopo "collega con codice" + ripristino: salva la configurazione cifrata
+  if (!SY.pend || !S.kcKey) return; const c = SY.pend; SY.pend = null; c.mts = S.meta.mts || 0; c.last = Date.now(); await sySave(c); lsSet('unica_sydirty', '');
+}
+const syReq = (c, method, body, rev) => fetch(c.u + '/s/' + c.i, { method, headers: { Authorization: 'Bearer ' + c.t, ...(body ? { 'Content-Type': 'application/json', 'x-rev': String(rev) } : {}) }, body, cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
+const syErr = r => new Error(r.status === 403 ? 'Token non valido per questo spazio.' : r.status === 413 ? 'Dati troppo grandi per il server (20 MB).' : 'Errore del server di sincronizzazione (' + r.status + ').');
+
+async function syMerge(rem) {
+  if (!validBackup(rem)) throw new Error('Dati remoti non validi.');
+  if (rem.meta.created !== S.meta.created) throw new Error('Questo spazio appartiene a un altro account Vortex Hub.');
+  const loc = new Map((await DB.all('items')).map(r => [r.id, r])); let ch = false;
+  for (const r of rem.items) {
+    if (!r || typeof r.id !== 'string' || !Number.isInteger(r.ver) || !Number.isFinite(r.ts) || typeof r.t !== 'string' || (r.t !== 'tomb' && (typeof r.iv !== 'string' || typeof r.ct !== 'string'))) continue;
+    const l = loc.get(r.id);
+    if (!l || r.ver > l.ver || (r.ver === l.ver && r.ts > l.ts)) { await DB.put('items', r); ch = true; if (r.t === 'tomb') await DB.del('blobs', r.id); }
+  }
+  const have = new Set((await DB.all('blobs')).map(b => b.id));
+  for (const b of rem.blobs) { if (b && typeof b.id === 'string' && !have.has(b.id)) { const it = await DB.get('items', b.id); if (it && it.t !== 'tomb') { await DB.put('blobs', b); ch = true; } } }
+  if ((rem.meta.mts || 0) > (S.meta.mts || 0)) { S.meta = { ...S.meta, kdf: rem.meta.kdf, wrapPw: rem.meta.wrapPw, wrapRec: rem.meta.wrapRec, recEnc: rem.meta.recEnc, mts: rem.meta.mts }; await DB.put('meta', S.meta, 'acct'); }
+  return ch;
+}
+async function sySync() {
+  if (SY.busy) return; const c = await syLoad(); if (!c || !S.kcKey) return; SY.busy = true; SY.err = '';
+  try {
+    for (let n = 0; n < 3; n++) {
+      const g = await syReq(c, 'GET'); let rev = 0, ch = false, exists = false;
+      if (g.status === 200) { exists = true; rev = +g.headers.get('x-rev') || 0; ch = await syMerge(await g.json()); } else if (g.status === 404) { if (c.rev > 0) throw new Error('Lo spazio di sincronizzazione non esiste più (chiavi cambiate o dati eliminati): ricollega con il nuovo codice.'); } else throw syErr(g);
+      if (!exists || lsGet('unica_sydirty') === '1' || (S.meta.mts || 0) > (c.mts || 0)) {
+        const p = await syReq(c, 'PUT', JSON.stringify(await exportBackup()), rev);
+        if (p.status === 409) continue; if (!p.ok) throw syErr(p);
+        c.rev = +p.headers.get('x-rev') || rev + 1; c.mts = S.meta.mts || 0; lsSet('unica_sydirty', '');
+      } else c.rev = rev;
+      c.last = Date.now(); await sySave(c);
+      if (ch) { await loadCards(); if (S.kpKey) await loadItems(); if (!document.querySelector('.ov') && ['home', 'cards', 'vault', 'fin'].includes(U.route)) render(); }
+      break;
+    }
+  } catch (e) { SY.err = e.message || String(e); SY.failAt = Date.now(); }
+  finally { SY.busy = false; if (U.route === 'settings' && !document.querySelector('.ov')) render(); }
+}
+function syCard() {
+  const on = lsGet('unica_syon') === '1', last = +lsGet('unica_sylast');
+  return '<div class="card"><h3>Sincronizzazione (facoltativa)</h3><p class="sm mut">Tieni allineati più dispositivi tramite un tuo server gratuito (Cloudflare Worker, guida nella cartella <b>sync-server</b>). Il server riceve solo dati cifrati: non può leggerli.</p>' +
+    (on ? '<p class="sm ' + (SY.err ? 'bad' : 'mut') + '">' + (SY.busy ? 'Sincronizzo…' : SY.err ? h(SY.err) : last ? 'Ultima sincronizzazione: ' + new Date(last).toLocaleString('it-IT') : 'Attiva.') + '</p><div class="stack"><button class="btn blk" data-act="syNow">Sincronizza ora</button><button class="btn blk" data-act="syShow">Mostra il codice di collegamento</button><button class="btn blk" data-act="syOff">Disattiva su questo dispositivo</button><button class="btn blk dan" data-act="syWipe">Elimina i dati dal server</button></div>'
+      : '<div class="stack"><button class="btn blk" data-act="syOn">Attiva la sincronizzazione</button></div>') + '</div>';
+}
+async function syShowCode(c) {
+  const code = syCode(c);
+  const m = modal('<h2>Codice di collegamento</h2><p class="sm mut">Sull’altro dispositivo: schermata iniziale → «Ho già Vortex Hub su un altro dispositivo», poi incolla questo codice e inserisci la master password. Chi ha il codice può leggere (solo cifrati) e cancellare i dati sul server: non condividerlo.</p><textarea class="in" rows="5" readonly id="syc"></textarea><div class="gap"><span class="sp"></span><button class="btn" data-r="0">Chiudi</button><button class="btn pri" id="sycp">Copia</button></div>');
+  m.q('#syc').value = code; m.q('#sycp').onclick = () => copy(code, 'Codice'); m.el.addEventListener('click', e => { if (e.target.closest('[data-r]')) m.close(); });
+}
+Object.assign(ACT, {
+  async syOn() {
+    const u = await askText('Indirizzo del server', 'Incolla l’indirizzo del tuo Worker (es. https://unica-sync.nome.workers.dev).'); if (!u) return;
+    const url = u.trim().replace(/\/+$/, ''); if (!SY_URL.test(url)) return toast('Indirizzo non valido: deve finire con .workers.dev');
+    if (!(await ensureProt())) return;
+    const c = { u: url, i: b64u(rnd(16)), t: b64u(rnd(32)), rev: 0, mts: 0, last: 0 }; await sySave(c); lsSet('unica_sydirty', '1'); toast('Collego…'); await sySync();
+    if (SY.err) { const e = SY.err; await DB.del('meta', 'sync'); SY.cfg = null; lsSet('unica_syon', ''); SY.err = ''; toast(e); return render(); }
+    render(); await syShowCode(SY.cfg);
+  },
+  async syNow() { SY.err = ''; await sySync(); toast(SY.err || 'Sincronizzato'); },
+  async syShow() { if (!(await ensureProt())) return; const c = await syLoad(); if (c) await syShowCode(c); },
+  async syOff() { if (!(await ask('Disattivare?', 'Questo dispositivo smette di sincronizzare. I dati sul server restano.', { ok: 'Disattiva' }))) return; await DB.del('meta', 'sync'); SY.cfg = null; lsSet('unica_syon', ''); render(); toast('Sincronizzazione disattivata'); },
+  async syWipe() { if (!(await ask('Eliminare dal server?', 'Cancella i dati cifrati dal server e disattiva la sincronizzazione. Gli altri dispositivi tengono la loro copia locale.', { ok: 'Elimina', danger: true }))) return; const c = await syLoad(); try { if (c) { const r = await syReq(c, 'DELETE'); if (!r.ok) throw syErr(r); } await DB.del('meta', 'sync'); SY.cfg = null; lsSet('unica_syon', ''); render(); toast('Dati eliminati dal server'); } catch (e) { toast(e.message); } },
+  async syLink() {
+    const code = await askText('Collega con un codice', 'Incolla il codice di collegamento mostrato in Impostazioni → Sincronizzazione sull’altro dispositivo.'); if (!code) return;
+    const c = syParse(code); if (!c) return toast('Codice non valido');
+    try { toast('Scarico i dati…'); const r = await syReq(c, 'GET'); if (r.status === 404) return toast('Spazio vuoto: sull’altro dispositivo premi «Sincronizza ora».'); if (!r.ok) throw syErr(r); const txt = await r.text(); if (!parseRestore(txt)) return toast('Dati non validi'); c.rev = +r.headers.get('x-rev') || 1; SY.pend = c; await ACT.restore(txt); } catch (e) { toast(e.message); }
+  },
+});
+const _pi = putItem, _di = delItem, _pb = putBlob;
+putItem = async function () { const r = await _pi.apply(this, arguments); syDirty(); return r; };
+delItem = async function () { const r = await _di.apply(this, arguments); syDirty(); return r; };
+putBlob = async function () { const r = await _pb.apply(this, arguments); syDirty(); return r; };
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') SY.first = false; });
+setInterval(async () => {
+  if (!S.kcKey) { SY.cfg = null; SY.first = false; return; }
+  if (SY.busy || !navigator.onLine) return; const c = await syLoad(); if (!c) return;
+  if (SY.err && Date.now() - SY.failAt < 60000) return;
+  const due = !SY.first || (lsGet('unica_sydirty') === '1' && Date.now() - SY.dirtyAt > 3000) || Date.now() - (c.last || 0) > SYNC_EVERY;
+  if (due) { SY.first = true; await sySync(); }
+}, 4000);
+
+/* ---------- Integrazione tra le aree: promemoria, ricerca globale, assistente, backup interni, collegamenti ---------- */
+const MS_DAY = 864e5;
+const hap = () => lsGet('unica_hap') !== '0';
+function buzz(n) { if (hap()) try { navigator.vibrate && navigator.vibrate(n || 20); } catch (e) { } }
+{ const _t = toast; toast = function () { buzz(15); return _t.apply(this, arguments); }; }
+const bkDays = () => { const v = lsGet('unica_bkd'); return v === '' ? 30 : +v; };
+const domOf = s => String(s || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[\/?#:]/)[0];
+const sameDom = (a, b) => !!a && !!b && (a === b || a.endsWith('.' + b) || b.endsWith('.' + a));
+const finLoaded = () => S.protOpen && S.items.has('fin-db');
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && finLoaded()) autoContribRun(); });
+setInterval(() => { if (finLoaded() && document.visibilityState === 'visible') autoContribRun(); }, 3600e3);
+
+/* --- promemoria (Home) --- */
+function agenda() {
+  const L = [], a = bkAge(), bd = bkDays(); cardExpAgenda(L);
+  if (bd && (a === null || a > bd) && (S.cards.size || S.items.size)) L.push({ i: 'shield', t: a === null ? 'Non hai ancora fatto un backup' : 'Ultimo backup di ' + a + ' giorni fa', go: 'settings', w: 1 });
+  if (lsGet('unica_syon') === '1' && SY.err) L.push({ i: 'refresh', t: 'Sincronizzazione: ' + SY.err, go: 'settings', w: 1 });
+  if (!S.protOpen) { L.push({ i: 'lock', t: 'Sblocca l’area protetta per includere password e Conti negli avvisi', act: 'agendaUnlock' }); return L; }
+  const lg = vitems().filter(i => i.type === 'login' && i.data.password);
+  if (lg.length) {
+    const cnt = new Map(); lg.forEach(i => cnt.set(i.data.password, (cnt.get(i.data.password) || 0) + 1));
+    const weak = lg.filter(i => strength(i.data.password).lv === 0).length, rep = lg.filter(i => cnt.get(i.data.password) > 1).length, old = lg.filter(i => Date.now() - i.ts > 365 * MS_DAY).length;
+    if (weak || rep) L.push({ i: 'key', t: [weak && weak + ' password deboli', rep && rep + ' ripetute'].filter(Boolean).join(', '), act: 'audit', w: 1 });
+    if (old) L.push({ i: 'key', t: old + (old === 1 ? ' password non cambiata' : ' password non cambiate') + ' da oltre un anno', act: 'audit' });
+  }
+  if (finLoaded()) {
+    const d = FIN(), now = Date.now(), lim = now + 60 * MS_DAY, ev = [];
+    d.btps.forEach(b => { const x = new Date(b.maturity); if (x >= now && x <= lim) ev.push({ d: x, t: 'Scade il BTP ' + b.name + ' il ' + x.toLocaleDateString('it-IT'), tab: 'btp' }); });
+    d.posteItems.forEach(p => { const x = new Date(p.maturity); if (x >= now && x <= lim) ev.push({ d: x, t: 'Scade ' + p.type + ' ' + p.name + ' il ' + x.toLocaleDateString('it-IT'), tab: 'poste' }); });
+    ev.sort((x, y) => x.d - y.d).slice(0, 3).forEach(e => L.push({ i: 'cal', t: e.t, tab: e.tab }));
+    const sp = spentBy(d, monthKey()), over = Object.keys(d.budgets).filter(c => num(d.budgets[c]) > 0 && (sp[c] || 0) > num(d.budgets[c]));
+    if (over.length) L.push({ i: 'warn', t: 'Budget del mese superato: ' + over.slice(0, 3).join(', '), tab: 'bud', w: 1 });
+  }
+  return L;
+}
+function agendaHtml() {
+  /* nella Home backup, carte in scadenza e sincronizzazione sono già nell'avviso e nel riquadro dell'assistente: qui niente doppioni */
+  const L = agenda().filter(x => !/^Carta «/.test(x.t) && !(x.i === 'shield' && /backup/i.test(x.t)) && x.i !== 'refresh');
+  if (!L.length) return '';
+  return '<div class="card" data-s="agenda"><h3>' + ic('cal') + ' Promemoria</h3>' + L.map(x => '<button class="row" ' + (x.go ? 'data-act="nav" data-r="' + x.go + '"' : x.tab ? 'data-act="goFin" data-t="' + x.tab + '"' : 'data-act="' + x.act + '"') + '><span class="' + (x.w ? 'bad' : 'mut') + '">' + ic(x.i) + '</span><span class="t">' + h(x.t) + '</span></button>').join('') + '</div>';
+}
+
+/* --- collegamenti: carte ↔ Vault ↔ conti --- */
+function linkBtns(it) {
+  let s = ''; vlBack(it.id).slice(0, 6).forEach(x => { s += '<button class="btn" data-act="goFin" data-t="' + x.tab + '">' + ic('chart') + ' ' + x.kind + ': ' + h(x.rec.name) + '</button>'; });
+  if (it.type !== 'login') return s;
+  s += '<button class="btn" data-act="vshare" data-id="' + h(it.id) + '">' + ic('up') + ' Condividi</button>';
+  const dm = domOf(it.data.domain);
+  if (dm) [...S.cards.values()].filter(c => sameDom(domOf(c.data.domain), dm)).slice(0, 2).forEach(c => { s += '<button class="btn" data-act="cardOpen" data-id="' + h(c.id) + '">' + ic('card') + ' Carta: ' + h(c.data.name) + '</button>'; });
+  return s;
+}
+
+/* --- ricerca globale + comandi (Ctrl/Cmd+K) --- */
+function palResults(q) {
+  const t = fold(q.trim()), out = [], has = (...xs) => xs.some(x => fold(x).includes(t));
+  const row = (icon, title, sub, attrs) => '<button class="row" ' + attrs + '><span class="av a0">' + ic(icon) + '</span><span class="t"><b>' + h(title) + '</b>' + (sub ? '<span class="sm mut">' + h(sub) + '</span>' : '') + '</span></button>';
+  const add = (sec, rows) => { if (rows.length) out.push('<p class="sm mut" style="margin:10px 0 2px"><b>' + h(sec) + '</b></p>' + rows.join('')); };
+  const ACTS = [['Apri Carte', 'card', 'data-act="nav" data-r="cards"'], ['Apri Conti e dashboard', 'chart', 'data-act="enterFin"'], ['Apri Vault', 'lock', 'data-act="enterProt"'], ['Impostazioni', 'gear', 'data-act="nav" data-r="settings"'], ['Nuova carta', 'plus', 'data-act="newCard"'], ['Genera password', 'key', 'data-act="gen"'], ['Controllo password', 'shield', 'data-act="audit2"'], ['Esporta backup', 'dl', 'data-act="exp"'], ['Assistente', 'chat', 'data-act="assist"'], ['Blocca ora', 'lock', 'data-act="lockNow"']];
+  if (lsGet('unica_syon') === '1') ACTS.splice(8, 0, ['Sincronizza ora', 'refresh', 'data-act="syNow"']);
+  add('Azioni', ACTS.filter(a => !t || has(a[0])).slice(0, t ? 5 : 6).map(a => row(a[1], a[0], '', a[2])));
+  if (t.length < 2) return out.join('');
+  add('Carte', [...S.cards.values()].filter(c => has(c.data.name, c.data.domain, c.data.holder)).slice(0, 5).map(c => row('card', c.data.name, c.data.domain || c.data.holder || '', 'data-act="cardOpen" data-id="' + h(c.id) + '"')));
+  if (!S.protOpen) { out.push('<button class="row" data-act="palUnlock"><span class="av a0">' + ic('lock') + '</span><span class="t"><b>Cerca anche nel Vault e nei Conti</b><span class="sm mut">Richiede lo sblocco dell’area protetta</span></span></button>'); return out.join(''); }
+  add('Vault', vitems().filter(i => has(i.data.service, i.data.title, i.data.username, i.data.domain, i.data.category, i.data.fname)).slice(0, 6).map(i => row(VT[i.type][0], titleOf(i), i.data.username || i.data.category || '', 'data-act="detail" data-id="' + h(i.id) + '"')));
+  if (finLoaded()) {
+    const d = FIN(), R = [];
+    d.bankAccounts.filter(a => has(a.name, a.type, a.owner)).slice(0, 4).forEach(a => R.push(row('card', a.name, 'Conto · ' + eur(a.balance), 'data-act="goFin" data-t="acc"')));
+    d.assets.filter(a => has(a.name, a.ticker)).slice(0, 4).forEach(a => R.push(row('chart', a.name, 'Titolo' + (a.ticker ? ' · ' + a.ticker : ''), 'data-act="goFin" data-t="tit"')));
+    d.btps.filter(b => has(b.name, b.ticker)).slice(0, 3).forEach(b => R.push(row('chart', b.name, 'BTP', 'data-act="goFin" data-t="btp"')));
+    d.posteItems.filter(p => has(p.name, p.type)).slice(0, 3).forEach(p => R.push(row('chart', p.name, 'Poste · ' + p.type, 'data-act="goFin" data-t="poste"')));
+    d.pensionItems.filter(p => has(p.name, p.type)).slice(0, 3).forEach(p => R.push(row('chart', p.name, 'Pensione · ' + eur(p.balance), 'data-act="goFin" data-t="pen"')));
+    d.expenses.filter(e => has(e.description || e.desc, e.category)).sort((x, y) => String(y.date).localeCompare(String(x.date))).slice(0, 5).forEach(e => R.push(row('file', e.description || e.desc || 'Spesa', e.date + ' · ' + eur(e.amount), 'data-act="goFin" data-t="exp"')));
+    add('Conti', R);
+  }
+  return out.join('');
+}
+function openPalette(q0) {
+  const m = modal('<div class="gap"><input class="in sp" id="pq" type="search" placeholder="Cerca carte, Vault, conti, azioni…" aria-label="Cerca ovunque" autocomplete="off" spellcheck="false"><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><div id="pr" style="max-height:60vh;overflow:auto"></div><p class="sm mut">Le password non compaiono mai nei risultati. Scorciatoia: Ctrl/Cmd+K.</p>');
+  const inp = m.q('#pq'), res = m.q('#pr'), upd = () => { U.palq = inp.value; res.innerHTML = palResults(inp.value); };
+  inp.value = q0 || ''; inp.addEventListener('input', upd); upd();
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { const b = res.querySelector('button.row'); if (b) b.click(); } });
+  m.el.addEventListener('click', e => { if (e.target.closest('#pr [data-act]')) m.close(); });
+  inp.focus();
+}
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && String(e.key).toLowerCase() === 'k') { e.preventDefault(); if (document.getElementById('pq')) return closeTop(); if (S.kcKey && !document.querySelector('.ov')) openPalette(); }
+});
+
+/* --- assistente globale (testo + dettatura + lettura a voce, tutto locale) --- */
+const AS = { log: [], last: '' };
+function assist(q) {
+  const t = fold(q), R = (text, btn) => ({ t: text, btn });
+  const ws = t.split(/[^a-z0-9]+/).filter(w => w.length > 3);
+  const hit = arr => arr.find(x => { const n = fold(x.k); return n.length > 2 && (t.includes(n) || ws.some(w => n.includes(w))); });
+  if (/backup|copia di sicurezza/.test(t)) { const a = bkAge(); return R(a === null ? 'Non hai ancora fatto un backup da questo dispositivo.' : 'L’ultimo backup è di ' + (a === 0 ? 'oggi' : a + ' giorni fa') + '.', { l: 'Vai al backup', a: 'data-act="nav" data-r="settings"' }); }
+  if (/sincron/.test(t)) return R(lsGet('unica_syon') !== '1' ? 'La sincronizzazione non è attiva (Impostazioni → Sincronizzazione).' : SY.err ? 'Errore di sincronizzazione: ' + SY.err : 'Sincronizzazione attiva. Ultima: ' + (+lsGet('unica_sylast') ? new Date(+lsGet('unica_sylast')).toLocaleString('it-IT') : 'mai') + '.');
+  if (/scadenz|promemoria|cosa devo|agenda|da fare/.test(t)) { const L = agenda(); return R(L.length ? L.map(x => '• ' + x.t).join('\n') : 'Non ci sono promemoria.'); }
+  if (/quante carte|numero.*carte|quante tessere/.test(t)) return R('Hai ' + S.cards.size + ' carte fedeltà.');
+  if (/\b(carta|tessera|fedelta|mostra|apri|codice)\b/.test(t) && !/spes|budget|patrimonio/.test(t)) {
+    const c = hit([...S.cards.values()].map(c => ({ k: c.data.name, c })));
+    if (c) return R('Ecco «' + c.c.data.name + '».', { l: 'Mostra la carta', a: 'data-act="cardOpen" data-id="' + h(c.c.id) + '"' });
+    if (/carta|tessera|fedelta/.test(t)) return R('Non trovo quella carta. Ne hai ' + S.cards.size + (S.cards.size ? ': ' + [...S.cards.values()].slice(0, 5).map(c => c.data.name).join(', ') + (S.cards.size > 5 ? '…' : '.') : '.'));
+  }
+  const wantsVault = /password|vault|credenzial|accesso|login|nota|note|account/.test(t), wantsFin = /spes|budget|patrimonio|invest|btp|titol|etf|conto|conti|saldo|\bpac\b|poste|pension|previdenz|resta|rimane|ribilanc|stipendio|quanto ho|ultime/.test(t);
+  if ((wantsVault || wantsFin) && !S.protOpen) return R('Per questo serve l’area protetta: sbloccala e ti rispondo.', { l: 'Sblocca', a: 'data-act="asUnlock"' });
+  if (wantsVault) {
+    const lg = vitems().filter(i => i.type === 'login' && i.data.password);
+    if (/debol|ripetut|vecchi|sicurezza|violaz|quante/.test(t)) { const cnt = new Map(); lg.forEach(i => cnt.set(i.data.password, (cnt.get(i.data.password) || 0) + 1)); return R('Nel Vault ci sono ' + vitems().length + ' voci (' + lg.length + ' accessi). Password deboli: ' + lg.filter(i => strength(i.data.password).lv === 0).length + '; ripetute: ' + lg.filter(i => cnt.get(i.data.password) > 1).length + '; non cambiate da oltre un anno: ' + lg.filter(i => Date.now() - i.ts > 365 * MS_DAY).length + '.', { l: 'Controllo password', a: 'data-act="audit"' }); }
+    const v = hit(vitems().map(i => ({ k: titleOf(i), i })));
+    if (v) return R('Ho trovato «' + titleOf(v.i) + '»' + (v.i.data.username ? ' (utente ' + v.i.data.username + ')' : '') + '. Le password non le leggo ad alta voce.', { l: 'Apri', a: 'data-act="detail" data-id="' + h(v.i.id) + '"' });
+    return R('Nel Vault ci sono ' + vitems().length + ' voci. Chiedimi di una voce per nome o delle password deboli.');
+  }
+  if (wantsFin) { if (!finLoaded()) return R('Non ci sono ancora dati finanziari.'); return R(answer(q)); }
+  return R('Non ho capito. Prova: «mostra la carta Coop», «quando ho fatto l’ultimo backup?», «quante password deboli ho?», «quanto ho speso in alimentari?», «che scadenze ho?».', { l: 'Cerca ovunque', a: 'data-act="palette"' });
+}
+function asPush(q) { AS.last = q; AS.log.push({ w: 'me', t: q }); const r = assist(q); AS.log.push({ w: 'ai', t: r.t, btn: r.btn }); asDraw(); if ($('atts') && $('atts').checked) say(r.t); }
+/* indicatore "vocale in uso": l'attributo sul body evidenzia il microfono attivo (vc carte, vm Vault, am assistente) */
+function micMark(k) { try { if (k) document.body.dataset.mic = k; else delete document.body.dataset.mic; } catch (e) { } }
+function say(text) { try { const s = window.speechSynthesis; if (!s) return; const v = s.getVoices().find(v => /^it/i.test(v.lang) && v.localService); if (!v) return; s.cancel(); const u = new SpeechSynthesisUtterance(text.replace(/[•]/g, '')); u.lang = 'it-IT'; u.voice = v; u.onstart = () => { document.body.dataset.say = '1'; }; u.onend = u.onerror = () => { if (!s.speaking) delete document.body.dataset.say; }; s.speak(u); } catch (e) { } }
+function asDraw() {
+  const el = $('alog'); if (!el) return;
+  el.innerHTML = AS.log.map(x => '<div class="bub ' + x.w + '">' + h(x.t).replace(/\n/g, '<br>') + (x.btn ? '<div style="margin-top:6px"><button class="btn sm" ' + x.btn.a + '>' + h(x.btn.l) + '</button></div>' : '') + '</div>').join('') || '<p class="sm mut">Chiedimi di una carta, del Vault, dei conti, dei backup o delle scadenze.</p>';
+  el.scrollTop = el.scrollHeight;
+}
+function openAssistant() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const m = modal('<div class="gap"><h2 class="sp" style="margin:0">Assistente</h2><span class="vsp" role="img" aria-label="Lettura in corso" title="Lettura in corso">' + ic('vol') + '</span><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><div id="alog" role="log" aria-live="polite" style="max-height:44vh;overflow:auto;margin:8px 0"></div><form data-form="x" class="gap"><input class="in sp" id="aqi" placeholder="Scrivi una domanda…" aria-label="Domanda" autocomplete="off"><button type="button" class="ib" id="amic" aria-label="Detta la domanda"' + (SR ? '' : ' hidden') + '>' + ic('mic') + '</button><button class="btn pri">Invia</button></form><label class="sm"><input type="checkbox" id="atts"' + (lsGet('unica_tts') === '1' ? ' checked' : '') + '> Leggi le risposte ad alta voce (voce locale)</label><p class="sm mut">Risponde con i dati locali, senza IA esterne. La dettatura usa il riconoscimento vocale del browser: su alcuni browser l’audio può essere elaborato dal fornitore del browser.</p>', { onClose: () => { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) { } } });
+  m.q('form').onsubmit = ev => { ev.preventDefault(); const i = m.q('#aqi'), q = i.value.trim(); if (!q) return; i.value = ''; asPush(q); };
+  m.q('#atts').onchange = e => { lsSet('unica_tts', e.target.checked ? '1' : '0'); if (!e.target.checked) try { window.speechSynthesis.cancel(); } catch (x) { } };
+  if (SR) m.q('#amic').onclick = () => { if (window.__amr) { try { window.__amr.stop(); } catch (x) { } return; } try { const r = new SR(); window.__amr = r; r.lang = 'it-IT'; r.interimResults = false; r.onend = () => { window.__amr = null; micMark(''); }; r.onresult = e => { m.q('#aqi').value = e.results[0][0].transcript; m.q('form').requestSubmit(); }; r.onerror = () => toast('Dettatura non disponibile'); r.start(); micMark('am'); toast('Sto ascoltando… tocca di nuovo per fermare'); } catch (e) { window.__amr = null; micMark(''); toast('Dettatura non disponibile'); } };
+  asDraw(); m.q('#aqi').focus();
+}
+
+/* --- backup interni con rotazione --- */
+const SN = { list: null, loading: false };
+const snapKeep = () => +lsGet('unica_snapn') || 7;
+const snapList = async () => (await DB.all('snaps')).sort((a, b) => b.ts - a.ts);
+async function snapSave(label, auto) {
+  try {
+    const bk = await exportBackup(), json = JSON.stringify(bk); if (json.length > 25e6) return false;
+    const ts = Date.now(); await DB.put('snaps', { id: 's' + ts, ts, label: label || '', auto: !!auto, keep: false, n: bk.items.filter(i => i.t !== 'tomb').length, size: json.length, json });
+    lsSet('unica_snapat', String(ts)); lsSet('unica_snapdirty', '');
+    const rot = (await snapList()).filter(s => !s.keep); for (const s of rot.slice(snapKeep())) await DB.del('snaps', s.id);
+    SN.list = null; return true;
+  } catch (e) { return false; }
+}
+function snapCard() {
+  if (SN.list === null && !SN.loading) { SN.loading = true; snapList().then(l => { SN.list = l.map(({ json, ...r }) => r); SN.loading = false; if (U.route === 'settings' && !document.querySelector('.ov')) render(); }).catch(() => { SN.list = []; SN.loading = false; }); }
+  const L = SN.list || [], opt = (k, vals, def) => vals.map(v => '<option value="' + v[0] + '"' + (String(lsGet('unica_' + k) || def) === String(v[0]) ? ' selected' : '') + '>' + v[1] + '</option>').join('');
+  return '<div class="card"><h3>Backup interni e promemoria</h3><p class="sm mut">Copie cifrate automatiche (al massimo una al giorno, solo se qualcosa è cambiato) e una copia prima di ogni ripristino. Restano sul dispositivo: per sicurezza vera esporta anche un file. Per ripristinare serve la master password (o il codice di recupero) valida per quella copia.</p>' +
+    (L.length ? L.map(s => '<div class="gap" style="align-items:center;margin:6px 0"><span class="t sp"><b>' + h(new Date(s.ts).toLocaleString('it-IT')) + '</b>' + (s.label ? ' · ' + h(s.label) : s.auto ? ' · automatica' : '') + (s.keep ? ' ' + ic('star') : '') + '<br><span class="sm mut">' + s.n + ' elementi · ' + fmtSize(s.size) + '</span></span><button class="btn sm" data-act="snapRestore" data-id="' + h(s.id) + '">Ripristina</button><button class="ib" data-act="snapLabel" data-id="' + h(s.id) + '" aria-label="Dai un nome e non eliminare mai">' + ic('star') + '</button><button class="ib" data-act="snapDel" data-id="' + h(s.id) + '" aria-label="Elimina la copia">' + ic('trash') + '</button></div>').join('') : '<p class="sm mut">Nessuna copia ancora.</p>') +
+    '<div class="stack"><button class="btn blk" data-act="snapNow">Crea una copia ora</button></div>' +
+    '<label class="f" for="snk">Copie automatiche da conservare (le copie con nome restano sempre)</label><select class="in" id="snk" data-hub="snapn">' + opt('snapn', [[3, '3'], [5, '5'], [7, '7'], [10, '10'], [20, '20']], 7) + '</select>' +
+    '<label class="f" for="bkd">Promemoria backup su file</label><select class="in" id="bkd" data-hub="bkd">' + opt('bkd', [[0, 'Mai'], [7, 'Dopo 7 giorni'], [14, 'Dopo 14 giorni'], [30, 'Dopo 30 giorni'], [60, 'Dopo 60 giorni']], 30) + '</select>' +
+    '<label class="f" for="hap">Vibrazione (dove supportata)</label><select class="in" id="hap" data-hub="hap">' + opt('hap', [[1, 'Attiva'], [0, 'Disattivata']], 1) + '</select></div>';
+}
+document.addEventListener('change', e => { const k = e.target && e.target.dataset && e.target.dataset.hub; if (k) { lsSet('unica_' + k, e.target.value); if (k === 'bkd') toast('Salvato'); } });
+setInterval(() => { if (S.kcKey && lsGet('unica_snapdirty') === '1' && Date.now() - (+lsGet('unica_snapat') || 0) > MS_DAY) snapSave('', true); }, 60000);
+
+/* --- quote JSON ({"TICKER": prezzo}) per titoli e BTP --- */
+async function importQuotes() {
+  if (!(await openProt())) return; await ensureFin();
+  const f = await pickFile('.json,application/json'); if (!f) return;
+  let q; try { q = JSON.parse(await f.text()); } catch (e) { return toast('File JSON non valido'); }
+  if (!q || typeof q !== 'object' || Array.isArray(q)) return toast('Formato non valido: serve {"TICKER": prezzo}');
+  const Q = new Map(); Object.keys(q).forEach(k => { const v = parseFloat(q[k]); if (isFinite(v) && v > 0) Q.set(String(k).trim().toUpperCase(), v); });
+  const d = FIN(); let n = 0;
+  d.assets.forEach(a => { const keys = [a.ticker, a.isin, a.name].map(x => String(x || '').trim().toUpperCase()).filter(Boolean); const k = keys.find(x => Q.has(x)); if (k) { a.lastPrice = Q.get(k); if (a.pacLinkId) { const p = d.pacItems.find(x => x.linkedAssetId === a.pacLinkId); if (p) p.etfLastPrice = a.lastPrice; } n++; } });
+  d.btps.forEach(b => { const k = String(b.ticker || b.name || '').trim().toUpperCase(); if (Q.has(k)) { b.currentPrice = Q.get(k); n++; } });
+  await finSave(); toast('Aggiornati ' + n + ' prezzi'); render();
+}
+
+Object.assign(ACT, {
+  palette: () => openPalette(), assist: () => openAssistant(),
+  async palUnlock() { if (await openProt()) openPalette(U.palq); },
+  async asUnlock() { if (await openProt()) { if (AS.last) asPush(AS.last); } },
+  async agendaUnlock() { if (await openProt()) render(); },
+  async goFin(t) { U.fin.tab = t.dataset.t || 'ov'; closeTop(); await ACT.enterFin(); },
+  async cardVault(t) {
+    const c = S.cards.get(t.dataset.id); if (!c) return; closeTop(); if (!(await openProt())) return;
+    const dm = domOf(c.data.domain), hits = vitems().filter(i => i.type === 'login' && sameDom(domOf(i.data.domain), dm));
+    if (hits.length === 1) openDetail(hits[0].id); else if (hits.length) openPalette(dm); else toast('Nessuna credenziale per ' + dm + ' nel Vault.');
+  },
+  quotes: () => importQuotes(),
+  async snapNow() { if (await snapSave('', false)) { toast('Copia interna creata'); } else { try { const b = await exportBackup(), blob = new Blob([JSON.stringify(b)], { type: 'application/octet-stream' }); download('VortexHub-copia-' + new Date().toISOString().slice(0,10) + '.enc', blob); toast('Backup scaricato: salvalo in una cartella accessibile'); } catch (e) { toast('Copia non riuscita: ' + (e.message || e)); } } SN.list = null; render(); },
+  async snapRestore(t) { const s = await DB.get('snaps', t.dataset.id); if (s) await ACT.restore(s.json); },
+  async snapLabel(t) { const s = await DB.get('snaps', t.dataset.id); if (!s) return; const v = await askText('Nome della copia', 'Le copie con nome non vengono mai eliminate dalla rotazione. Lascia vuoto per rimuovere il nome.'); if (v === undefined) return; s.label = v.trim().slice(0, 60); s.keep = !!s.label; await DB.put('snaps', s); SN.list = null; render(); },
+  async snapDel(t) { if (!(await ask('Eliminare la copia?', 'Questa copia interna verrà eliminata.', { ok: 'Elimina', danger: true }))) return; await DB.del('snaps', t.dataset.id); SN.list = null; render(); },
+});
+
+/* ---------- Vault: viste, proprietari, aspetto personalizzato, selezione multipla, condivisione, ricerca vocale ---------- */
+const VCOL = ['#2f86c8', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#f59e3a', '#1f78b4', '#64748b'];
+const VEMO = ['🏦', '🛒', '📧', '🎮', '✈️', '🏥', '🏠', '🔧', '🎓', '📱', '💼', '🎬', '🚗', '⚡', '📦', '🔑'];
+const PHOTO_RE = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
+const vview = () => { const v = lsGet('unica_vview'); return ['cards', 'table', 'icons'].includes(v) ? v : 'cards'; };
+U.own = U.own || ''; U.selmode = false; U.sel = new Set();
+
+/* avatar */
+function avHtml(it, big) {
+  const d = it.data, t = titleOf(it), st = big ? ' style="width:64px;height:64px;font-size:1.6rem"' : '';
+  if (typeof d.photo === 'string' && PHOTO_RE.test(d.photo) && d.photo.length < 60000) return '<span class="av"' + st + '><img src="' + d.photo + '" alt="" style="width:100%;height:100%;border-radius:inherit;object-fit:cover"></span>';
+  if (typeof d.logo === 'string' && /^data:image\/(png|jpeg|webp|gif);base64,/.test(d.logo) && d.logo.length < 80000) return '<span class="av lg"' + st + '><img src="' + h(d.logo) + '" alt=""></span>';
+  const col = /^#[0-9a-f]{6}$/i.test(d.color || '') ? ' style="background:' + d.color + (big ? ';width:64px;height:64px;font-size:1.6rem' : '') + '"' : st;
+  return '<span class="av ' + (col.includes('background') ? '' : avCls(t)) + '"' + col + '>' + (VEMO.includes(d.icon) ? h(d.icon) : h(t.charAt(0).toUpperCase())) + '</span>';
+}
+
+/* stato della voce (password debole / ripetuta / vecchia) */
+function vstat() {
+  const lg = vitems().filter(i => i.type === 'login' && i.data.password), cnt = new Map(), o = new Map();
+  lg.forEach(i => cnt.set(i.data.password, (cnt.get(i.data.password) || 0) + 1));
+  lg.forEach(i => { const s = []; if (strength(i.data.password).lv === 0) s.push('debole'); if (cnt.get(i.data.password) > 1) s.push('ripetuta'); if (Date.now() - i.ts > 365 * MS_DAY) s.push('vecchia'); if (s.length) o.set(i.id, s); });
+  return o;
+}
+
+/* elenco filtrato */
+function vfiltered() {
+  const q = fold(U.q.trim());
+  const a = vitems().filter(i => (!U.cat || i.data.category === U.cat) && (!U.own || i.data.owner === U.own) && (!q || [i.data.service, i.data.title, i.data.username, i.data.domain, i.data.fname, i.data.category, i.data.owner].some(x => x && fold(x).includes(q))));
+  a.sort((x, y) => (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) || (U.sort === 'az' ? titleOf(x).localeCompare(titleOf(y), 'it') : y.ts - x.ts));
+  return a;
+}
+vlist = function () {
+  const a = vfiltered(), st = vstat(), view = vview(), sm = U.selmode;
+  if (!a.length) return '<div class="card c mut">' + (vitems().length ? 'Nessun risultato.' : 'Il Vault è vuoto. Aggiungi una voce con il pulsante + oppure importa il backup del vecchio Vault dalle Impostazioni.') + '</div>';
+  const act = i => sm ? 'data-act="vsel" data-id="' + h(i.id) + '"' : 'data-act="detail" data-id="' + h(i.id) + '"';
+  const chk = i => sm ? '<span class="vchk" aria-hidden="true">' + (U.sel.has(i.id) ? '☑' : '☐') + '</span>' : '';
+  const sel = i => sm && U.sel.has(i.id) ? ' sel' : '';
+  const badge = i => st.has(i.id) ? '<span class="tag bad" title="' + h(st.get(i.id).join(', ')) + '">' + h(st.get(i.id)[0]) + '</span>' : '';
+  if (view === 'table') return '<div style="overflow:auto"><table class="vt"><thead><tr>' + (sm ? '<th></th>' : '') + '<th>Voce</th><th>Utente</th><th>Categoria</th><th>Proprietario</th><th>Modificata</th></tr></thead><tbody>' +
+    a.map(i => '<tr class="' + sel(i).trim() + '" tabindex="0" role="button" ' + act(i) + '>' + (sm ? '<td>' + chk(i) + '</td>' : '') + '<td><b>' + (i.data.fav ? '★ ' : '') + h(titleOf(i)) + '</b> ' + badge(i) + '</td><td>' + h(i.data.username || '') + '</td><td>' + h(i.data.category || '') + '</td><td>' + h(i.data.owner || '') + '</td><td>' + fmtDate(i.ts) + '</td></tr>').join('') + '</tbody></table></div>';
+  if (view === 'icons') return '<div class="vgrid">' + a.map(i => '<button class="vtile' + sel(i) + '" ' + act(i) + '>' + chk(i) + avHtml(i, true) + '<b>' + h(titleOf(i)) + '</b>' + badge(i) + '</button>').join('') + '</div>';
+  return a.map(i => '<button class="row' + sel(i) + '" ' + act(i) + '>' + chk(i) + avHtml(i) + '<span class="t"><b>' + h(titleOf(i)) + '</b><span class="sm mut">' + h((i.type === 'login' || i.type === 'passkey') ? (i.data.username || i.data.domain || '') : i.type === 'file' ? (i.data.fname || '') : 'Nota cifrata') + (i.data.owner ? ' · ' + h(i.data.owner) : '') + '</span></span>' + (i.data.fav ? '<span class="ok" aria-label="Preferito">' + ic('star') + '</span>' : '') + badge(i) + '<span class="tag">' + VT[i.type][1] + '</span></button>').join('');
+};
+const vbar = () => {
+  if (!U.selmode) return '';
+  const n = U.sel.size;
+  return '<div class="card" role="toolbar" aria-label="Azioni sulla selezione"><div class="gap" style="flex-wrap:wrap"><b class="sp">' + n + (n === 1 ? ' selezionata' : ' selezionate') + '</b><button class="btn sm" data-act="vselAll">Tutte quelle visibili</button><button class="btn sm" data-act="vbCat"' + (n ? '' : ' disabled') + '>Categoria…</button><button class="btn sm" data-act="vbOwn"' + (n ? '' : ' disabled') + '>Proprietario…</button><button class="btn sm dan" data-act="vbDel"' + (n ? '' : ' disabled') + '>' + ic('trash') + ' Elimina</button></div></div>';
+};
+V.vault = () => {
+  if (!S.protOpen) return '';
+  const vm = vmeta(), SR = window.SpeechRecognition || window.webkitSpeechRecognition, view = vview();
+  const seg = (k, l) => '<button type="button" data-act="vview" data-v="' + k + '" aria-pressed="' + (view === k) + '">' + l + '</button>';
+  return hdr('Vault', '<button class="ib" data-act="lockNow" aria-label="Blocca ora">' + ic('lock') + '</button><button class="ib" data-act="audit" aria-label="Controllo password">' + ic('shield') + '</button><button class="ib" data-act="gen" aria-label="Generatore">' + ic('refresh') + '</button><button class="ib" data-act="newItem" aria-label="Nuova voce">' + ic('plus') + '</button>') +
+    '<main class="wrap"><div class="gap"><input class="in sp" id="vq" type="search" placeholder="Cerca…" aria-label="Cerca" value="' + h(U.q) + '">' + (SR ? '<button class="ib" data-act="vmic" aria-label="Ricerca vocale">' + ic('mic') + '</button>' : '') + '<select class="in" id="vs" style="width:auto" aria-label="Ordina"><option value="recent"' + (U.sort === 'recent' ? ' selected' : '') + '>Recenti</option><option value="az"' + (U.sort === 'az' ? ' selected' : '') + '>A–Z</option></select></div>' +
+    '<div class="gap" style="margin-top:8px;flex-wrap:wrap"><div class="seg" role="group" aria-label="Modalità di visualizzazione">' + seg('cards', 'Schede') + seg('table', 'Tabella') + seg('icons', 'Icone') + '</div><span class="sp"></span><button class="btn sm" data-act="vselMode" aria-pressed="' + U.selmode + '">' + (U.selmode ? 'Fine' : 'Seleziona') + '</button><button class="btn sm" data-act="vmeta" aria-label="Categorie e proprietari">Categorie</button><button class="btn sm" data-act="vimpCard" aria-label="Importa credenziale cifrata">Importa</button></div>' +
+    '<div class="chips" style="margin-top:8px" aria-label="Filtro per categoria"><button class="chip" data-act="cat" data-c="" aria-pressed="' + (!U.cat) + '">Tutte</button>' + vm.cats.map(c => '<button class="chip" data-act="cat" data-c="' + h(c) + '" aria-pressed="' + (U.cat === c) + '">' + h(c) + '</button>').join('') + '</div>' +
+    (vm.owners.length > 1 ? '<div class="chips" style="margin-top:6px" aria-label="Filtro per proprietario"><button class="chip" data-act="vown" data-o="" aria-pressed="' + (!U.own) + '">Tutti</button>' + vm.owners.map(o => '<button class="chip" data-act="vown" data-o="' + h(o) + '" aria-pressed="' + (U.own === o) + '">' + h(o) + '</button>').join('') + '</div>' : '') +
+    '<div style="margin-top:8px">' + vbar() + '</div><div id="vlist">' + vlist() + '</div></main>';
+};
+
+/* campi "aspetto" nel modulo di una voce */
+function vxFields(d) {
+  return '<label class="f">Aspetto (facoltativo)</label><div class="gap" style="flex-wrap:wrap" role="group" aria-label="Colore">' + VCOL.map(c => '<button type="button" class="sw" data-act="vxcol" data-c="' + c + '" aria-label="Colore ' + c + '" aria-pressed="' + (d.color === c) + '" style="background:' + c + '"></button>').join('') + '</div>' +
+    '<div class="gap" style="flex-wrap:wrap;margin-top:6px" role="group" aria-label="Icona">' + VEMO.map(e => '<button type="button" class="emo" data-act="vxico" data-i="' + e + '" aria-pressed="' + (d.icon === e) + '">' + e + '</button>').join('') + '</div>' +
+    '<div class="gap" style="margin-top:6px"><button type="button" class="btn sm" data-act="vxphoto">Scegli una foto…</button><button type="button" class="btn sm" data-act="vxnophoto">Togli foto, icona e colore</button><span id="vx_prev" class="sm mut"></span></div>' +
+    '<input type="hidden" id="f_ic" value="' + h(d.icon || '') + '"><input type="hidden" id="f_co" value="' + h(d.color || '') + '"><input type="hidden" id="f_ph" value="' + h(PHOTO_RE.test(d.photo || '') ? d.photo : '') + '">';
+}
+let vxExtra = () => ({ icon: $('f_ic') && $('f_ic').value || undefined, color: $('f_co') && $('f_co').value || undefined, photo: $('f_ph') && $('f_ph').value || undefined });
+async function photoData(file) {
+  const bmp = await createImageBitmap(file), s = Math.min(bmp.width, bmp.height), c = document.createElement('canvas'); c.width = c.height = 128;
+  c.getContext('2d').drawImage(bmp, (bmp.width - s) / 2, (bmp.height - s) / 2, s, s, 0, 0, 128, 128);
+  return c.toDataURL('image/jpeg', 0.75);
+}
+
+/* ---- condivisione di una credenziale ---- */
+function shText(it, S, step) {
+  const d = it.data, L = ['Credenziali per ' + titleOf(it)];
+  const full = !(S.split && S.pass);
+  if (step === 2 && !full) return 'Password per ' + titleOf(it) + ': ' + d.password;
+  if (S.site && d.domain) L.push('Sito: ' + d.domain); if (S.user && d.username) L.push('Utente: ' + d.username);
+  if (S.pass && full) L.push('Password: ' + d.password); if (S.notes && d.notes) L.push('Note: ' + d.notes);
+  return L.join('\n');
+}
+const shCode = () => { const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', b = crypto.getRandomValues(new Uint8Array(12)), c = Array.from(b, x => A[x & 31]).join(''); return c.slice(0, 4) + '-' + c.slice(4, 8) + '-' + c.slice(8); };
+function openShare(id) {
+  const it = S.items.get(id); if (!it) return;
+  const st = { site: true, user: true, pass: false, notes: false, split: false, step: 1, file: null, code: '' };
+  const m = modal('<div id="shb"></div>');
+  const draw = () => {
+    const txt = shText(it, st, st.step), prev = txt.replace(/(Password[^:]*: ).*/g, '$1••••••••');
+    const chk = (k, l, dis) => '<label class="chk"><input type="checkbox" data-sh="tg" data-k="' + k + '"' + (st[k] ? ' checked' : '') + (dis ? ' disabled' : '') + '><span>' + l + '</span></label>';
+    const app = (k, l) => '<button type="button" class="btn sm" data-sh="send" data-how="' + k + '">' + l + '</button>';
+    m.q('#shb').innerHTML = '<div class="gap"><h2 class="sp" style="margin:0">Condividi «' + h(titleOf(it)) + '»</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+      '<p class="sm mut">Scegli cosa inviare. La password è esclusa per impostazione predefinita.</p>' + chk('site', 'Sito', !it.data.domain) + chk('user', 'Utente', !it.data.username) + chk('pass', 'Password', !it.data.password) + chk('notes', 'Note', !it.data.notes) +
+      (st.pass ? '<label class="chk"><input type="checkbox" data-sh="split"' + (st.split ? ' checked' : '') + '><span>Invia la password in un secondo messaggio</span></label>' : '') +
+      (st.split && st.pass ? '<div class="seg" role="group" aria-label="Messaggio"><button type="button" data-sh="step" data-n="1" aria-pressed="' + (st.step === 1) + '">Messaggio 1</button><button type="button" data-sh="step" data-n="2" aria-pressed="' + (st.step === 2) + '">Messaggio 2 (password)</button></div>' : '') +
+      '<div class="card sm mono" style="white-space:pre-wrap">' + h(prev) + '</div><div class="gap" style="flex-wrap:wrap">' + app('copy', 'Copia') + app('wa', 'WhatsApp') + app('tg', 'Telegram') + app('sms', 'SMS') + app('mail', 'Email') + app('sys', 'Altre app…') + '</div>' +
+      '<p class="sm mut">I messaggi passano da app esterne e restano nelle loro chat: per le password è più sicuro il file cifrato.</p>' +
+      '<h3>Modo più sicuro: file cifrato con codice monouso</h3>' + (st.file ? '<div class="card c"><div class="mono b" style="font-size:1.2rem">' + h(st.code) + '</div><p class="sm mut">Invia il file e comunica questo codice a parte (voce, altra chat).</p></div><div class="gap"><button type="button" class="btn pri" data-sh="sendfile">Invia il file…</button><button type="button" class="btn" data-sh="copycode">Copia il codice</button></div>' : '<button type="button" class="btn blk" data-sh="mkfile">Crea file cifrato</button>');
+  };
+  m.el.addEventListener('click', async e => {
+    const t = e.target.closest('[data-sh]'); if (!t) return; const a = t.dataset.sh;
+    if (a === 'tg') { st[t.dataset.k] = t.checked; if (t.dataset.k === 'pass' && !st.pass) { st.split = false; st.step = 1; } st.file = null; st.code = ''; return draw(); }
+    if (a === 'split') { st.split = t.checked; st.step = 1; return draw(); }
+    if (a === 'step') { st.step = +t.dataset.n; return draw(); }
+    if (a === 'send') {
+      const how = t.dataset.how, text = shText(it, st, st.step), enc = encodeURIComponent(text), withPass = st.pass && (!st.split || st.step === 2);
+      if (how === 'copy') copy(text, withPass ? 'Password' : 'Messaggio');
+      else if (how === 'wa') window.open('https://wa.me/?text=' + enc, '_blank', 'noopener');
+      else if (how === 'tg') window.open('https://t.me/share/url?url=&text=' + enc, '_blank', 'noopener');
+      else if (how === 'sms') location.href = 'sms:?&body=' + enc;
+      else if (how === 'mail') location.href = 'mailto:?subject=' + encodeURIComponent('Credenziali ' + titleOf(it)) + '&body=' + enc;
+      else if (navigator.share) { try { await navigator.share({ text }); } catch (x) { if (x && x.name === 'AbortError') return; } } else copy(text, withPass ? 'Password' : 'Messaggio');
+      if (how !== 'copy' && st.split && st.pass && st.step === 1) setTimeout(() => { st.step = 2; if (m.q('#shb')) { draw(); toast('Ora invia la password (messaggio 2).'); } }, 600);
+    }
+    if (a === 'mkfile') {
+      t.disabled = true; t.textContent = 'Cifro…'; await new Promise(r => setTimeout(r, 30));
+      try {
+        const d = it.data, card = { service: titleOf(it), domain: st.site ? d.domain || '' : '', username: st.user ? d.username || '' : '', password: st.pass ? d.password || '' : '', notes: st.notes ? d.notes || '' : '' };
+        const code = shCode(), salt = rnd(16), key = await kekPw(code.replace(/-/g, ''), salt, KDF_ITER);
+        const pl = { unicaCard: 1, iter: KDF_ITER, salt: b64e(salt), ...(await seal(key, te.encode(JSON.stringify({ v: 1, card })), 'unica-card')) };
+        const slug = titleOf(it).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'voce';
+        st.code = code; st.file = new File([JSON.stringify(pl)], 'VortexHub_credenziale_' + slug + '.json', { type: 'application/json' });
+      } catch (x) { toast('Non sono riuscito a creare il file.'); } draw();
+    }
+    if (a === 'sendfile') { const f = st.file; try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Credenziale cifrata' }); return; } } catch (x) { if (x && x.name === 'AbortError') return; } download(f.name, f); toast('File salvato: invialo e comunica il codice a parte.'); }
+    if (a === 'copycode') copy(st.code, 'Codice');
+  });
+  draw();
+}
+async function importSharedCard() {
+  const f = await pickFile('.json,application/json'); if (!f) return;
+  let pl; try { pl = JSON.parse(await f.text()); } catch (e) { return toast('File non valido'); }
+  if (!pl || (!pl.unicaCard && !pl.vaultCard)) return toast('Non è una credenziale condivisa');
+  const code = await askText('Credenziale condivisa', 'Inserisci il codice che ti ha dato il mittente (es. ABCD-EFGH-JKLM).'); if (!code) return;
+  const k = code.toUpperCase().replace(/[^A-Z0-9]/g, ''); let card;
+  try { toast('Decifro…'); if (pl.unicaCard) { const key = await kekPw(k, b64d(pl.salt), Math.min(+pl.iter || KDF_ITER, 2000000)); card = JSON.parse(td.decode(await unseal(key, pl, 'unica-card'))).card; } else { const r = await decryptVaultBackup(pl, k); card = r && r.card; } } catch (e) { return toast('Codice errato o file non valido.'); }
+  if (!card || typeof card !== 'object') return toast('File non valido');
+  const s = (v, n) => String(v == null ? '' : v).slice(0, n), item = { service: s(card.service, 80), category: vmeta().cats[0], owner: vmeta().owners[0], username: s(card.username, 200), password: s(card.password, 300), domain: s(card.domain, 120), notes: s(card.notes, 1000) };
+  if (!item.service) return toast('File non valido');
+  if (!(await ask('Aggiungere al Vault?', 'Aggiungere «' + item.service + '»? Controlla poi categoria e proprietario.', { ok: 'Aggiungi' }))) return;
+  await putItem(uid(), 'login', item); render(); toast('Credenziale aggiunta');
+}
+
+/* ---- gestione categorie / proprietari ---- */
+function metaModal() {
+  const vm = vmeta(), sec = (k, t, arr) => '<h3>' + t + '</h3>' + arr.map(x => '<div class="gap" style="align-items:center"><span class="sp">' + h(x) + '</span><button class="ib" data-act="metaRen" data-k="' + k + '" data-n="' + h(x) + '" aria-label="Rinomina ' + h(x) + '">' + ic('edit') + '</button><button class="ib" data-act="metaDel" data-k="' + k + '" data-n="' + h(x) + '" aria-label="Elimina ' + h(x) + '"' + (arr.length < 2 ? ' disabled' : '') + '>' + ic('trash') + '</button></div>').join('') + '<button class="btn sm" data-act="metaAdd" data-k="' + k + '">' + ic('plus') + ' Aggiungi</button>';
+  closeTop(); modal('<div class="gap"><h2 class="sp" style="margin:0">Categorie e proprietari</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' + sec('cats', 'Categorie', vm.cats) + sec('owners', 'Proprietari', vm.owners));
+}
+async function metaSave(m) { await putItem('vault-meta', 'vmeta', m, S.items.get('vault-meta')); }
+async function metaRewrite(k, from, to) { const f = k === 'cats' ? 'category' : 'owner'; for (const i of vitems()) if (i.data[f] === from) await putItem(i.id, i.type, { ...i.data, [f]: to }, i); }
+const pickOne = (title, arr) => new Promise(res => { const m = modal('<h2>' + h(title) + '</h2><select class="in" id="pk1">' + arr.map(x => '<option>' + h(x) + '</option>').join('') + '</select><div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-r="0">Annulla</button><button class="btn pri" data-r="1">Applica</button></div>'); m.el.addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (b) { const v = m.q('#pk1').value; m.close(); res(b.dataset.r === '1' ? v : null); } }); });
+
+Object.assign(ACT, {
+  vshare: t => { closeTop(); openShare(t.dataset.id); },
+  vview: t => { lsSet('unica_vview', t.dataset.v); render(); },
+  vown: t => { U.own = t.dataset.o; render(); },
+  vselMode: () => { U.selmode = !U.selmode; U.sel = new Set(); render(); },
+  vsel: t => { const id = t.dataset.id; U.sel.has(id) ? U.sel.delete(id) : U.sel.add(id); render(); },
+  vselAll: () => { const a = vfiltered(); const all = a.length && a.every(i => U.sel.has(i.id)); a.forEach(i => all ? U.sel.delete(i.id) : U.sel.add(i.id)); render(); },
+  async vbDel() { const n = U.sel.size; if (!n || !(await ask('Eliminare ' + n + (n === 1 ? ' voce?' : ' voci?'), 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true }))) return; for (const id of [...U.sel]) await delItem(id); U.sel = new Set(); U.selmode = false; render(); toast(n + (n === 1 ? ' voce eliminata' : ' voci eliminate')); },
+  async vbCat() { const v = await pickOne('Sposta nella categoria', vmeta().cats); if (!v) return; for (const id of U.sel) { const i = S.items.get(id); if (i) await putItem(id, i.type, { ...i.data, category: v }, i); } toast('Categoria aggiornata'); render(); },
+  async vbOwn() { const v = await pickOne('Assegna al proprietario', vmeta().owners); if (!v) return; for (const id of U.sel) { const i = S.items.get(id); if (i) await putItem(id, i.type, { ...i.data, owner: v }, i); } toast('Proprietario aggiornato'); render(); },
+  vmeta: () => metaModal(), vimpCard: () => importSharedCard(),
+  async metaAdd(t) { const k = t.dataset.k, v = await askText(k === 'cats' ? 'Nuova categoria' : 'Nuovo proprietario', 'Nome:'); if (!v || !v.trim()) return; const m = JSON.parse(JSON.stringify(vmeta())), n = v.trim().slice(0, 40); if (m[k].some(x => fold(x) === fold(n))) return toast('Esiste già.'); m[k].push(n); await metaSave(m); metaModal(); render(); },
+  async metaRen(t) { const k = t.dataset.k, from = t.dataset.n, v = await askText('Rinomina', 'Nuovo nome per «' + from + '»:'); if (!v || !v.trim() || v.trim() === from) return; const n = v.trim().slice(0, 40), m = JSON.parse(JSON.stringify(vmeta())); if (m[k].some(x => x !== from && fold(x) === fold(n))) return toast('Esiste già.'); m[k] = m[k].map(x => x === from ? n : x); await metaSave(m); await metaRewrite(k, from, n); if (U.cat === from) U.cat = n; if (U.own === from) U.own = n; metaModal(); render(); },
+  async metaDel(t) { const k = t.dataset.k, from = t.dataset.n, m = JSON.parse(JSON.stringify(vmeta())); if (m[k].length < 2) return; const to = m[k].find(x => x !== from); if (!(await ask('Eliminare «' + from + '»?', 'Le voci collegate passeranno a «' + to + '».', { ok: 'Elimina', danger: true }))) return; m[k] = m[k].filter(x => x !== from); await metaSave(m); await metaRewrite(k, from, to); if (U.cat === from) U.cat = ''; if (U.own === from) U.own = ''; metaModal(); render(); },
+  vxcol: t => { $('f_co').value = $('f_co').value === t.dataset.c ? '' : t.dataset.c; document.querySelectorAll('[data-act=vxcol]').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === $('f_co').value)); },
+  vxico: t => { $('f_ic').value = $('f_ic').value === t.dataset.i ? '' : t.dataset.i; document.querySelectorAll('[data-act=vxico]').forEach(b => b.setAttribute('aria-pressed', b.dataset.i === $('f_ic').value)); },
+  async vxphoto() { const f = await pickFile('image/*'); if (!f) return; try { $('f_ph').value = await photoData(f); $('vx_prev').textContent = 'Foto scelta'; } catch (e) { toast('Immagine non valida'); } },
+  vxnophoto: () => { $('f_ph').value = ''; $('f_ic').value = ''; $('f_co').value = ''; document.querySelectorAll('[data-act=vxcol],[data-act=vxico]').forEach(b => b.setAttribute('aria-pressed', 'false')); $('vx_prev').textContent = 'Rimossi'; },
+  vmic() { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return; if (window.__vmr) { try { window.__vmr.stop(); } catch (e) { } return; } try { const r = new SR(); window.__vmr = r; r.onend = () => { window.__vmr = null; micMark(''); }; r.lang = 'it-IT'; r.interimResults = false; r.onresult = e => { U.q = e.results[0][0].transcript.replace(/[.,;!?]+$/, ''); const q = $('vq'); if (q) q.value = U.q; const l = $('vlist'); if (l) l.innerHTML = vlist(); }; r.onerror = e => toast(e.error === 'not-allowed' ? 'Microfono non consentito: abilitalo nelle impostazioni del browser' : e.error === 'no-speech' ? 'Non ho sentito nulla, riprova' : 'Ricerca vocale non disponibile (' + e.error + ')'); r.start(); micMark('vm'); toast('Sto ascoltando… tocca di nuovo per fermare'); } catch (e) { window.__vmr = null; micMark(''); toast('Ricerca vocale non disponibile'); } },
+});
+
+/* ---------- Backup automatico su cartella del dispositivo + schede comprimibili con «Vai a» ---------- */
+const FB_OK = typeof window.showDirectoryPicker === 'function', FB_RE = /^(?:Unica|VortexHub)_backup_\d{4}-\d\d-\d\d_\d{4}\.enc$/;
+const fbKeep = () => +lsGet('unica_fbkeep') || 10;
+let FBDIR = null;
+const fbGet = async () => FBDIR || (FBDIR = await DB.get('dev', 'fbdir').catch(() => null));
+async function fbPerm(dir, ask) {
+  if (!dir.queryPermission) return true;
+  if ((await dir.queryPermission({ mode: 'readwrite' })) === 'granted') return true;
+  return ask ? (await dir.requestPermission({ mode: 'readwrite' })) === 'granted' : false;
+}
+async function fbWrite(manual) {
+  const dir = await fbGet(); if (!dir) return false;
+  if (!(await fbPerm(dir, manual))) { lsSet('unica_fbstate', 'perm'); return false; }
+  const d = new Date(), p2 = n => String(n).padStart(2, '0'), name = 'VortexHub_backup_' + d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()) + '_' + p2(d.getHours()) + p2(d.getMinutes()) + '.enc';
+  const fh = await dir.getFileHandle(name, { create: true }), w = await fh.createWritable(); await w.write(JSON.stringify(await exportBackup())); await w.close();
+  const names = []; for await (const [n, e] of dir.entries()) if (e.kind === 'file' && FB_RE.test(n)) names.push(n);
+  names.sort().reverse(); for (const n of names.slice(fbKeep())) await dir.removeEntry(n);
+  lsSet('unica_fbat', String(Date.now())); lsSet('unica_fbdirty', ''); lsSet('unica_fbstate', 'ok'); markBk(); return true;
+}
+function folderCard() {
+  if (!FB_OK) return '<div class="card"><h3>Backup automatico su cartella</h3><p class="sm mut">Disponibile solo nei browser desktop basati su Chromium (Chrome, Edge). Su questo dispositivo usa il backup su file, i backup interni o Drive.</p></div>';
+  const on = lsGet('unica_fbon') === '1', at = +lsGet('unica_fbat'), perm = lsGet('unica_fbstate') === 'perm';
+  return '<div class="card"><h3>Backup automatico su cartella</h3><p class="sm mut">Salva una copia cifrata al giorno (solo se qualcosa è cambiato) in una cartella a tua scelta, ad esempio sincronizzata da OneDrive o Dropbox. Si conservano le ultime copie; i file di altro tipo nella cartella non vengono toccati.</p>' +
+    (on ? '<p class="sm ' + (perm ? 'bad' : 'mut') + '">' + (perm ? 'Serve riautorizzare l’accesso alla cartella.' : at ? 'Ultima copia: ' + new Date(at).toLocaleString('it-IT') + '.' : 'Attivo.') + '</p><div class="stack"><button class="btn blk" data-act="fbNow">' + (perm ? 'Riautorizza e salva ora' : 'Salva ora') + '</button><button class="btn blk" data-act="fbSet">Cambia cartella</button><button class="btn blk" data-act="fbOff">Disattiva</button></div><label class="f" for="fbk">Copie da conservare</label><select class="in" id="fbk" data-hub="fbkeep">' + [5, 10, 20, 30].map(n => '<option' + (fbKeep() === n ? ' selected' : '') + '>' + n + '</option>').join('') + '</select>' : '<div class="stack"><button class="btn blk" data-act="fbSet">Scegli la cartella</button></div>') + '</div>';
+}
+Object.assign(ACT, {
+  async fbSet() { try { const dir = await window.showDirectoryPicker({ id: 'unica-backup', mode: 'readwrite' }); FBDIR = dir; await DB.put('dev', dir, 'fbdir'); lsSet('unica_fbon', '1'); if (await fbWrite(true)) toast('Cartella impostata, prima copia salvata'); render(); } catch (e) { if (!e || e.name !== 'AbortError') toast('Impossibile usare quella cartella.'); } },
+  async fbNow() { try { toast(await fbWrite(true) ? 'Copia salvata' : 'Accesso alla cartella negato'); } catch (e) { toast('Salvataggio non riuscito: ' + (e.message || e)); } render(); },
+  async fbOff() { FBDIR = null; await DB.del('dev', 'fbdir'); lsSet('unica_fbon', ''); lsSet('unica_fbstate', ''); render(); toast('Backup su cartella disattivato'); },
+});
+setInterval(() => { if (S.kcKey && FB_OK && lsGet('unica_fbon') === '1' && lsGet('unica_fbdirty') === '1' && Date.now() - (+lsGet('unica_fbat') || 0) > MS_DAY) fbWrite(false).catch(() => lsSet('unica_fbstate', 'perm')); }, 60000);
+
+/* --- schede comprimibili + «Vai a» nelle sezioni Conti --- */
+const clSet = () => { try { return new Set(JSON.parse(lsGet('unica_cl') || '[]')); } catch (e) { return new Set(); } };
+function finEnhance() {
+  const app = $('app'); if (!app || U.route !== 'fin') return;
+  const cards = [...app.querySelectorAll('.card')].filter(c => c.firstElementChild && c.firstElementChild.tagName === 'H3');
+  const cl = clSet();
+  cards.forEach((c, i) => {
+    const hd = c.firstElementChild, key = U.fin.tab + ':' + hd.textContent.trim().slice(0, 40);
+    c.id = 'sec' + i; hd.dataset.cl = key; hd.setAttribute('role', 'button'); hd.tabIndex = 0; hd.style.cursor = 'pointer';
+    const shut = cl.has(key); c.classList.toggle('cl', shut); hd.setAttribute('aria-expanded', String(!shut));
+  });
+  if (cards.length >= 4 && !app.querySelector('#goto')) {
+    const sel = document.createElement('select'); sel.id = 'goto'; sel.className = 'in'; sel.setAttribute('aria-label', 'Vai a una sezione'); sel.style.margin = '8px 0';
+    sel.innerHTML = '<option value="">Vai a…</option>' + cards.map((c, i) => '<option value="sec' + i + '">' + h(c.firstElementChild.textContent.trim()) + '</option>').join('');
+    sel.onchange = () => { const t = $(sel.value); if (t) { t.classList.remove('cl'); t.firstElementChild.setAttribute('aria-expanded', 'true'); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); } sel.value = ''; };
+    const first = cards[0]; first.parentNode.insertBefore(sel, first);
+  }
+}
+function clToggle(hd) {
+  const c = hd.parentElement, s = clSet(), key = hd.dataset.cl, shut = !c.classList.contains('cl');
+  c.classList.toggle('cl', shut); hd.setAttribute('aria-expanded', String(!shut)); shut ? s.add(key) : s.delete(key); lsSet('unica_cl', JSON.stringify([...s]));
+}
+document.addEventListener('click', e => { const hd = e.target.closest && e.target.closest('h3[data-cl]'); if (hd && !e.target.closest('button,a,input,select')) clToggle(hd); });
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('h3[data-cl]')) { e.preventDefault(); clToggle(e.target); } });
+{ const _pf = POST.fin; POST.fin = function () { const r = _pf && _pf.apply(this, arguments); finEnhance(); return r; }; }
+
+/* ===== v1.4: funzioni restanti dalle app originali ===== */
+const lsg = k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, lss = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+
+/* --- 1. Assistente: analisi Vault (audit, duplicati, violazioni, statistiche, consigli, generatore) --- */
+function vaultAudit() {
+  const L = vitems().filter(i => i.type === 'login' && i.data.password);
+  if (!L.length) return 'Nel Vault non ci sono ancora password da analizzare.';
+  const by = new Map(); L.forEach(i => by.set(i.data.password, (by.get(i.data.password) || []).concat(titleOf(i))));
+  let sum = 0; const weak = [], short = [], old = [];
+  L.forEach(i => { const p = i.data.password, s = strength(p); let sc = 100; if (s.lv === 0) { sc -= 45; weak.push(titleOf(i)); } else if (s.lv === 1) sc -= 20; if (p.length < 10) { sc -= 25; short.push(titleOf(i)); } if (by.get(p).length > 1) sc -= 30; if (i.ts && Date.now() - i.ts > 365 * 864e5 * 2) old.push(titleOf(i)); sum += Math.max(0, sc); });
+  const dups = [...by.values()].filter(a => a.length > 1), score = Math.round(sum / L.length);
+  const lst = a => a.slice(0, 8).join(', ') + (a.length > 8 ? '… (+' + (a.length - 8) + ')' : '');
+  let r = 'Salute del Vault: ' + score + '% (' + L.length + ' accessi analizzati).';
+  if (dups.length) r += '\n\nPassword riutilizzate:\n' + dups.map(d => '• ' + lst(d)).join('\n');
+  if (weak.length) r += '\n\nPassword deboli: ' + lst(weak) + '.';
+  if (short.length) r += '\n\nPassword troppo corte (meno di 10 caratteri): ' + lst(short) + '.';
+  if (old.length) r += '\n\nNon modificate da più di 2 anni: ' + lst(old) + '.';
+  return r + (dups.length || weak.length || short.length ? '\n\nSostituiscile con il generatore integrato.' : '\n\nNessuna criticità: ottimo.');
+}
+function vaultStats() {
+  const A = vitems(), cnt = k => { const m = {}; A.forEach(i => { const v = i.data[k] || '—'; m[v] = (m[v] || 0) + 1; }); return Object.entries(m).map(e => '• ' + e[0] + ': ' + e[1]).join('\n') || '—'; };
+  return 'Voci nel Vault: ' + A.length + ' (' + A.filter(i => i.type === 'login').length + ' accessi, ' + A.filter(i => i.type === 'note').length + ' note, ' + A.filter(i => i.type === 'file').length + ' file).\n\nPer categoria:\n' + cnt('category') + '\n\nPer proprietario:\n' + cnt('owner') + '\n\nSenza sito: ' + A.filter(i => i.type === 'login' && !i.data.domain).length + '. Preferite: ' + A.filter(i => i.data.fav).length + '.';
+}
+const AS_TIPS = 'Consigli di igiene digitale:\n1. Una password diversa per ogni servizio.\n2. Almeno 16 caratteri casuali, oppure una frase di 4+ parole.\n3. Usa la passkey o la verifica in due passaggi dove possibile.\n4. Controlla periodicamente le violazioni (chiedimi «controlla violazioni»).\n5. Fai un backup cifrato e conserva il codice di recupero su carta.';
+const AS_HELP = 'Puoi chiedermi:\n• «mostra la carta Coop»\n• «analisi sicurezza» / «password duplicate»\n• «controlla violazioni»\n• «statistiche del vault»\n• «cerca amazon»\n• «genera una password»\n• «quanto ho speso in alimentari?»\n• «che scadenze ho?»\n• «che tempo fa?» / «devo portare l’ombrello?»\n• «cosa devo fare oggi?»\n• «punteggio di sicurezza»\n• «aggiungi scadenza passaporto 15 marzo 2027»\n• «accesso di emergenza»\n• «quando ho fatto l’ultimo backup?»\n• «consigli».';
+{
+  const base = assist;
+  assist = function (q) {
+    const t = fold(q), R = (text, btn) => ({ t: text, btn });
+    if (/cosa posso dire|aiuto|help|cosa sai fare/.test(t)) return R(AS_HELP);
+    if (/consigli|igiene/.test(t)) return R(AS_TIPS);
+    if (/genera.*password|nuova password|password casuale/.test(t)) { let p; try { p = genPassword(JSON.parse(lsg('unica_gen') || 'null') || { len: 20, lower: 1, upper: 1, digits: 1, symbols: 0, amb: 1 }); } catch (e) { p = genPassword({ len: 20, lower: 1, upper: 1, digits: 1, symbols: 0, amb: 1 }); } return R('Password generata (20 caratteri, casuale):\n' + p + '\nNon viene salvata né inviata: copiala subito dove ti serve.'); }
+    const vq = /violaz|pwned|compromess|hibp|sicurezza|analisi|audit|vulnerab|duplicat|riutilizz|ripetut|debol|corte|statistic|riepilogo/.test(t) || /^(cerca|trova) /.test(t);
+    if (vq && !S.protOpen) return R('Per questo serve l’area protetta: sbloccala e ti rispondo.', { l: 'Sblocca', a: 'data-act="asUnlock"' });
+    if (/violaz|pwned|compromess|hibp/.test(t)) {
+      const L = vitems().filter(i => i.type === 'login' && i.data.password); if (!L.length) return R('Nessuna password da controllare.');
+      (async () => { let off = false; const bad = []; for (const i of L) { const n = await pwnedCount(i.data.password); if (n === null) { off = true; break; } if (n > 0) bad.push(titleOf(i) + ' (' + n.toLocaleString('it-IT') + ' volte)'); }
+        const txt = off ? 'Controllo non eseguito: serve la connessione. Per la verifica esce dal dispositivo solo un prefisso di 5 caratteri dell’hash.' : bad.length ? 'Password presenti in violazioni note:\n' + bad.map(x => '• ' + x).join('\n') + '\n\nCambiale subito.' : 'Nessuna delle tue password risulta in violazioni note.';
+        AS.log.push({ w: 'ai', t: txt }); asDraw(); })();
+      return R('Controllo di ' + L.length + ' password in corso (solo un prefisso dell’hash lascia il dispositivo)…');
+    }
+    if (/statistic|riepilogo/.test(t) && /vault|password|voci|accessi|credenz/.test(t + ' vault')) return R(vaultStats());
+    if (/sicurezza|analisi|audit|vulnerab|duplicat|riutilizz|ripetut|debol|corte/.test(t)) return R(vaultAudit());
+    const m = /^(?:cerca|trova)\s+(.+)/.exec(t);
+    if (m) {
+      const k = m[1].trim(), V = vitems().filter(i => fold([i.data.service, i.data.title, i.data.username, i.data.domain].join(' ')).includes(k)).slice(0, 8), C = [...S.cards.values()].filter(c => fold(c.data.name).includes(k)).slice(0, 5);
+      if (!V.length && !C.length) return R('Nessun risultato per «' + q.replace(/^\S+\s+/, '') + '».', { l: 'Cerca ovunque', a: 'data-act="palette"' });
+      return R((C.length ? 'Carte: ' + C.map(c => c.data.name).join(', ') + '\n' : '') + (V.length ? 'Vault:\n' + V.map(i => '• ' + titleOf(i) + (i.data.username ? ' — ' + i.data.username : '')).join('\n') : ''), V[0] ? { l: 'Apri «' + titleOf(V[0]) + '»', a: 'data-act="detail" data-id="' + h(V[0].id) + '"' } : C[0] ? { l: 'Mostra la carta', a: 'data-act="cardOpen" data-id="' + h(C[0].id) + '"' } : null);
+    }
+    return base(q);
+  };
+  const baseOpen = openAssistant;
+  openAssistant = function () {
+    baseOpen();
+    const log = $('alog'); if (!log || log.previousElementSibling && log.previousElementSibling.id === 'aschips') return;
+    const chips = ['Analisi sicurezza', 'Controlla violazioni', 'Statistiche', 'Consigli', 'Genera password', 'Cosa posso dire?'];
+    log.insertAdjacentHTML('beforebegin', '<div class="chips" id="aschips" aria-label="Domande rapide">' + chips.map(c => '<button class="chip" data-act="asq" data-q="' + h(c) + '">' + h(c) + '</button>').join('') + '</div>');
+  };
+}
+ACT.asq = t => asPush(t.dataset.q);
+
+/* --- 2. CSV: importa da browser/gestori e esporta (Vault) --- */
+function csvParse(txt) {
+  txt = txt.replace(/^﻿/, ''); const first = txt.split(/\r?\n/)[0] || '', sep = (first.match(/;/g) || []).length > (first.match(/,/g) || []).length ? ';' : ',';
+  const rows = []; let r = [], c = '', q = false;
+  for (let i = 0; i < txt.length; i++) {
+    const ch = txt[i];
+    if (q) { if (ch === '"') { if (txt[i + 1] === '"') { c += '"'; i++; } else q = false; } else c += ch; }
+    else if (ch === '"' && c === '') q = true; else if (ch === sep) { r.push(c); c = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && txt[i + 1] === '\n') i++; r.push(c); c = ''; if (r.some(x => x !== '')) rows.push(r); r = []; }
+    else c += ch;
+  }
+  r.push(c); if (r.some(x => x !== '')) rows.push(r); return rows;
+}
+const csvCell = v => { v = String(v == null ? '' : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return /[",;\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+function hostOf(u) { try { return new URL(/^[a-z]+:\/\//i.test(u) ? u : 'https://' + u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } }
+async function importCsvVault() {
+  if (!(await openProt())) return;
+  const f = await pickFile('.csv,text/csv'); if (!f) return;
+  if (f.size > 5e6) return toast('File troppo grande (max 5 MB)');
+  const rows = csvParse(await f.text()); if (rows.length < 2) return toast('CSV vuoto o non riconosciuto');
+  const H = rows[0].map(x => fold(x).replace(/[^a-z0-9]/g, '')), col = (...n) => H.findIndex(x => n.includes(x));
+  const cN = col('name', 'title', 'nome', 'servizio', 'service', 'account'), cU = col('url', 'loginuri', 'website', 'sito', 'origin', 'uri', 'web'), cL = col('username', 'loginusername', 'user', 'utente', 'login', 'email'), cP = col('password', 'loginpassword', 'pass'), cT = col('note', 'notes', 'nota', 'extra', 'notas');
+  if (cP < 0 || (cN < 0 && cU < 0)) return toast('Colonne non riconosciute: servono almeno nome/sito e password');
+  const have = new Set(vitems().filter(i => i.type === 'login').map(i => [i.data.domain || '', i.data.username || '', i.data.password || ''].join('|')));
+  let add = 0, dup = 0, skip = 0; const vm = vmeta();
+  for (const r of rows.slice(1)) {
+    const pw = (r[cP] || '').trim(), url = cU >= 0 ? (r[cU] || '').trim() : '', dom = hostOf(url), svc = ((cN >= 0 ? r[cN] : '') || dom || '').trim().slice(0, 80), us = cL >= 0 ? (r[cL] || '').trim().slice(0, 200) : '';
+    if (!pw || !svc) { skip++; continue; }
+    const key = [dom, us, pw].join('|'); if (have.has(key)) { dup++; continue; } have.add(key);
+    await putItem(uid(), 'login', { service: svc, username: us, password: pw.slice(0, 500), domain: dom, notes: cT >= 0 ? (r[cT] || '').slice(0, 2000) : '', category: vm.cats[0], owner: vm.owners[0] });
+    add++;
+  }
+  buzz(30); render(); toast('Importati ' + add + ' accessi' + (dup ? ', ' + dup + ' già presenti' : '') + (skip ? ', ' + skip + ' saltati' : ''));
+}
+async function exportCsvVault() {
+  if (!(await openProt())) return;
+  if (!(await ask('Esporta in chiaro', 'Il file CSV conterrà le password NON cifrate: chiunque lo apra le legge. Conservalo al sicuro ed eliminalo dopo l’uso. Per un backup usa il file cifrato .enc.', { ok: 'Esporta CSV' }))) return;
+  const L = vitems().filter(i => i.type === 'login');
+  const csv = 'name,url,username,password,notes,category,owner\r\n' + L.map(i => [titleOf(i), i.data.domain ? 'https://' + i.data.domain : '', i.data.username, i.data.password, i.data.notes, i.data.category, i.data.owner].map(csvCell).join(',')).join('\r\n');
+  download('vortexhub-vault-' + new Date().toISOString().slice(0, 10) + '.csv', new Blob([csv], { type: 'text/csv' })); toast('Esportate ' + L.length + ' voci (file in chiaro!)');
+}
+
+/* --- 3. Installazione, diagnostica, guida, notifiche, reset --- */
+let DEFP = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); DEFP = e; if (U.route === 'settings') render(); });
+addEventListener('appinstalled', () => { DEFP = null; toast('App installata'); });
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+function extraSettings() {
+  const np = 'Notification' in window ? Notification.permission : 'unsupported';
+  return '<div class="card"><h3>Installazione e aggiornamenti</h3>' + (isStandalone() ? '<p class="sm mut">Vortex Hub è installata come app su questo dispositivo.</p>' : DEFP ? '<button class="btn pri blk" data-act="inst">' + ic('install') + ' Installa Vortex Hub</button>' : isIOS() ? '<p class="sm mut">Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».</p>' : '<p class="sm mut">' + h(instWhy()) + '</p>') +
+    '<div class="stack mt"><button class="btn blk" data-act="logoSweep">' + ic('refresh') + ' Scarica i loghi mancanti</button><button class="btn blk" data-act="diag">Aggiornamento e diagnostica</button><button class="btn blk" data-act="guide">' + ic('file') + ' Guida all’uso</button></div></div>' +
+    '<div class="card"><h3>Vault: CSV</h3><p class="sm mut">Importa da Chrome, Edge, Firefox, Bitwarden e simili (nome, sito, utente, password). L’esportazione è in chiaro: usala con cautela.</p><div class="stack"><button class="btn blk" data-act="csvIn">' + ic('up') + ' Importa accessi da CSV</button><button class="btn blk" data-act="csvOut">' + ic('dl') + ' Esporta accessi in CSV</button></div></div>' +
+    '<div class="card"><h3>Notifiche e preferenze</h3>' + (np === 'unsupported' ? '' : '<p class="sm mut">Notifica generica quando un avviso di prezzo viene raggiunto (senza dettagli dei tuoi dati). Stato: ' + (np === 'granted' ? 'attive' : np === 'denied' ? 'bloccate dal browser' : 'non attive') + '.</p>' + (np === 'default' ? '<button class="btn blk" data-act="notifOn">Attiva le notifiche</button>' : '')) +
+    '<div class="stack mt"><button class="btn blk" data-act="prefReset">Ripristina le impostazioni standard</button></div><p class="sm mut">Riporta aspetto, blocco automatico e promemoria ai valori iniziali. I tuoi dati non vengono toccati.</p></div>';
+}
+{ const s0 = V.settings; V.settings = () => { const s = s0(), i = s.lastIndexOf('</main>'); return i < 0 ? s : s.slice(0, i) + extraSettings() + s.slice(i); }; }
+const GUIDE = [
+  ['Primi passi', 'Crea l’account con una master password lunga e scrivi su carta le 24 parole di recupero: sono l’unico modo per rientrare se dimentichi la password. Facoltativo: attiva la passkey per sbloccare con impronta o volto.'],
+  ['Due livelli di accesso', 'Le carte fedeltà si aprono subito. Vault e Conti stanno nell’area protetta: servono la master password o la passkey, e si blocca da sola dopo l’inattività scelta in Impostazioni.'],
+  ['Carte fedeltà', 'Aggiungi con il + o scansiona il codice con la fotocamera. Vortex Hub cerca da sola sito, logo e negozio vicino. Tocca una carta per mostrare il codice a schermo intero (lo schermo resta acceso). Puoi ordinare per recenti, più usate, A–Z, e condividere una carta con un link o un file cifrato.'],
+  ['Vault', 'Accessi, note e file cifrati. Viste a schede, tabella o icone; filtri per categoria e proprietario; selezione multipla; generatore di password; controllo di password deboli, ripetute o compromesse; condivisione cifrata con codice monouso; import/export CSV.'],
+  ['Conti e dashboard', 'Patrimonio, conti, titoli, BTP, Poste, PAC, pensioni integrative (con versamento automatico nel giorno scelto), ribilanciamento, flussi di cassa, simulatori, spese, budget e avvisi di prezzo. Aggiorna i prezzi con «Quote JSON». Il report si stampa o si esporta in Excel.'],
+  ['Assistente e ricerca', 'Ctrl/Cmd+K cerca ovunque. L’assistente risponde in locale su carte, Vault, conti e scadenze; puoi dettare le domande. Nulla viene inviato a servizi di intelligenza artificiale.'],
+  ['Backup e sincronizzazione', 'Un unico backup cifrato .enc contiene tutto: salvalo su file, su Google Drive o nella cartella dell’app. Copie interne automatiche e promemoria. La sincronizzazione tra dispositivi è facoltativa e cifrata end-to-end.'],
+  ['Sicurezza', 'Tutto è cifrato (AES-256) sul dispositivo. «Cambia le chiavi di cifratura» rinnova le chiavi e il codice di recupero. Se perdi un dispositivo: cambia le chiavi e ricollega gli altri.']
+];
+Object.assign(ACT, {
+  inst: async () => { if (!DEFP) return; DEFP.prompt(); try { await DEFP.userChoice; } catch (e) { } DEFP = null; render(); },
+  csvIn: () => importCsvVault(), csvOut: () => exportCsvVault(),
+  guide: () => { const m = modal('<div class="gap"><h2 class="sp" style="margin:0">Guida all’uso</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' + GUIDE.map(g => '<div class="card cl"><h3 data-cl="1" tabindex="0" role="button">' + h(g[0]) + '</h3><p>' + h(g[1]) + '</p></div>').join('')); m.el.querySelectorAll('h3[data-cl]').forEach(x => { const tg = () => x.parentElement.classList.toggle('cl'); x.addEventListener('click', e => { e.stopPropagation(); tg(); }); x.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tg(); } }); }); const f = m.el.querySelector('.card'); if (f) f.classList.remove('cl'); },
+  notifOn: async () => { try { await Notification.requestPermission(); } catch (e) { } render(); },
+  prefReset: async () => { if (!(await ask('Ripristina impostazioni', 'Riporta aspetto, blocco automatico, vibrazione e promemoria ai valori standard. I dati restano.', { ok: 'Ripristina' }))) return; ['fs', 'ic', 'theme', 'idle', 'hap', 'bkd', 'tts', 'snapn', 'gen', 'ftab'].forEach(k => { try { localStorage.removeItem('unica_' + k); } catch (e) { } }); location.reload(); },
+  diag: async () => {
+    const m = modal('<div class="gap"><h2 class="sp" style="margin:0">Aggiornamento e diagnostica</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><div id="dg" class="stack mt"><p class="mut">Controllo…</p></div><div class="stack mt"><button class="btn blk" data-act="dgUp">Cerca aggiornamenti</button><button class="btn blk" data-act="dgFiles">Verifica file</button><button class="btn blk dan" data-act="dgFix">Ripara e ricarica</button></div><p class="sm mut">«Ripara» cancella solo cache e service worker: carte, Vault, conti e backup restano.</p>');
+    m.el.addEventListener('click', async e => { const b = e.target.closest('[data-act^=dg]'); if (b) { e.stopPropagation(); await DGA[b.dataset.act](m); } }, true);
+    await dgInfo(m);
+  }
+});
+async function dgInfo(m) {
+  const el = m.q('#dg'); if (!el) return; let sw = 'non supportato', cs = '—';
+  try { if ('serviceWorker' in navigator) { const r = await navigator.serviceWorker.getRegistration(); sw = r ? (r.active ? 'attivo' : r.installing ? 'in installazione' : r.waiting ? 'aggiornamento pronto' : 'registrato') : 'non registrato'; } const k = await caches.keys(); cs = k.join(', ') || 'nessuna'; } catch (e) { }
+  el.innerHTML = '<div class="kv"><div class="k">Versione</div><div class="v"><span>' + h(APP_VERSION) + '</span></div></div><div class="kv"><div class="k">Service worker</div><div class="v"><span>' + h(sw) + '</span></div></div><div class="kv"><div class="k">Cache</div><div class="v"><span>' + h(cs) + '</span></div></div><div class="kv"><div class="k">Connessione</div><div class="v"><span>' + (navigator.onLine ? 'online' : 'offline') + '</span></div></div><div class="kv"><div class="k">Modalità</div><div class="v"><span>' + (isStandalone() ? 'app installata' : 'browser') + '</span></div></div>';
+}
+const DGA = {
+  async dgUp(m) { try { const r = await navigator.serviceWorker.getRegistration(); if (!r) return toast('Nessun service worker'); await r.update(); toast(r.waiting || r.installing ? 'Aggiornamento trovato: riapri l’app' : 'Sei aggiornato'); await dgInfo(m); } catch (e) { toast('Controllo non riuscito (offline?)'); } },
+  async dgFiles(m) { const F = ['./', 'manifest.webmanifest', 'sw.js', 'icons/icon-192x192.png', 'icons/icon-512x512.png', 'icons/apple-touch-icon.png', 'privacy.html'], miss = []; for (const f of F) { try { const r = await fetch(f, { method: 'HEAD', cache: 'no-store' }); if (!r.ok) miss.push(f); } catch (e) { miss.push(f); } } toast(miss.length ? 'Mancano: ' + miss.join(', ') : 'Tutti i file sono presenti'); },
+  async dgFix() { if (!(await ask('Ripara e ricarica', 'Cancella cache e service worker, poi ricarica l’app. I dati restano.', { ok: 'Ripara' }))) return; try { for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister(); for (const k of await caches.keys()) await caches.delete(k); } catch (e) { } location.reload(); }
+};
+
+/* --- 4. Torna in cima + ultima scheda dei Conti + notifiche prezzo --- */
+(function () {
+  const b = document.createElement('button'); b.className = 'ib topbtn'; b.setAttribute('aria-label', 'Torna in cima'); b.hidden = true; b.innerHTML = ic('up'); document.body.appendChild(b);
+  b.onclick = () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  addEventListener('scroll', () => { b.hidden = scrollY < 700; }, { passive: true });
+  const lt = lsg('unica_ftab'); if (lt && typeof FTABS !== 'undefined' && FTABS.some(t => t[0] === lt) && U.fin) U.fin.tab = lt;
+  const ft = ACT.ftab; ACT.ftab = t => { lss('unica_ftab', t.dataset.t); return ft(t); };
+})();
+{
+  const iq = importQuotes;
+  importQuotes = async function () {
+    const before = finLoaded() ? FIN().priceAlerts.filter(a => a.status === 'hit' && !a.seen).length : 0;
+    await iq.apply(this, arguments);
+    try { const n = finLoaded() ? FIN().priceAlerts.filter(a => a.status === 'hit' && !a.seen).length : 0; if (n > before) { buzz([40,60,40]); notify('Vortex Hub', { body: 'Un avviso di prezzo è stato raggiunto.', tag: 'unica-alert' }); } } catch (e) { }
+  };
+}
+
+/* ===== v1.5: da Fidelity Wallet 13.7: database insegne, ricerca automatica sito/logo, link ?card= ===== */
+const FW_BRANDS = [
+  ['Esselunga', 'esselunga.it', '#e11d48', ['040', '041', '042', '043', '044', '049'], ['fidaty']],
+  ['Coop', 'e-coop.it', '#dc2626', ['200', '201', '202', '203'], ['sociocoop', 'incoop']],
+  ['Conad', 'conad.it', '#dc2626', ['990', '991', '028', '280'], []],
+  ['Carrefour', 'carrefour.it', '#2563eb', ['210', '211', '212', '213'], ['payback']],
+  ['Decathlon', 'decathlon.it', '#0284c7', ['209', '208'], []],
+  ['Lidl', 'lidl.it', '#2563eb', ['205', '998'], ['lidlplus']],
+  ['IKEA', 'ikea.it', '#ca8a04', ['19', '29', '99'], []],
+  ['Eurospin', 'eurospin.it', '#1e40af', ['800'], []],
+  ['Tigotà', 'tigota.it', '#0d9488', ['980'], ['tigota']],
+  ['Sephora', 'sephora.it', '#000000', ['376'], []],
+  ['Acqua & Sapone', 'acquaesapone.it', '#e8711a', ['970'], ['acquaesapone']],
+  ['MediaWorld', 'mediaworld.it', '#cc0000', ['240'], []],
+  ['Unieuro', 'unieuro.it', '#f97316', ['250'], []],
+  ['Leroy Merlin', 'leroymerlin.it', '#16a34a', ['330'], ['leroy', 'ideapiu']],
+  ['Pam Panorama', 'pampanorama.it', '#15803d', ['204'], ['panorama']],
+  ['Penny Market', 'penny.it', '#b91c1c', ['206'], ['penny']],
+  ['Bennet', 'bennet.com', '#0284c7', ['207'], []],
+  ['Crai', 'crai-supermercati.it', '#ea580c', ['220'], []],
+  ['Despar', 'despar.it', '#166534', ['230'], ['interspar']]
+].map(b => ({ name: b[0], domain: b[1], color: b[2], prefixes: b[3], keys: [b[0], ...b[4]].map(x => fwn(x)) }));
+function fwn(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, ''); }
+// prima il nome dell'insegna (nel testo o nel nome scritto), poi il prefisso del codice
+function detectBrand(code, text) {
+  const flat = fwn(text); let best = null, hits = 0;
+  if (flat) for (const b of FW_BRANDS) { const n = Math.max(...b.keys.map(k => k.length >= 3 ? flat.split(k).length - 1 : 0)); if (n > hits) { best = b; hits = n; } }
+  if (best) return best;
+  const c = String(code || '').trim(); if (!c) return null;
+  return FW_BRANDS.find(b => b.prefixes.some(p => c.startsWith(p) && (p.length >= 3 || /^\d{12,13}$/.test(c)))) || null;
+}
+const colDist = (a, b) => { const p = x => [1, 3, 5].map(i => parseInt(x.slice(i, i + 2), 16)); const A = p(a), B = p(b); return A.reduce((s, v, i) => s + (v - B[i]) ** 2, 0); };
+
+/* --- link di condivisione di Fidelity Wallet: ?card=<base64 JSON> --- */
+(function () {
+  try {
+    const raw = new URLSearchParams(location.search).get('card'); if (!raw) return;
+    const bin = atob(raw.replace(/ /g, '+')); let o; try { o = JSON.parse(decodeURIComponent(escape(bin))); } catch (e) { o = JSON.parse(bin); }
+    if (o && typeof o.name === 'string' && o.code != null && String(o.code).length && o.name.length <= 100 && String(o.code).length <= 300) { const code = String(o.code); U.incoming = { name: o.name, code, type: CTYPES[o.type] ? o.type : BC.detectType(code), color: hex(o.color), holder: String(o.holder || '').slice(0, 100), domain: String(o.domain || '').slice(0, 100) }; }
+    history.replaceState(null, '', location.pathname);
+  } catch (e) { }
+})();
+
+/* --- ricerca automatica mentre scrivi: insegna nota → sito/colore subito; poi Wikidata e logo (con consenso) --- */
+const WEB = { ok: () => lsg('unica_web') !== '0', async consent() { if (lsg('unica_web') === '0') return false; if (lsg('unica_web') !== '1') lss('unica_web', '1'); return true; } };
+function loadImg(src, minW) { return new Promise(res => { const im = new Image(); im.crossOrigin = 'anonymous'; const t = setTimeout(() => res(null), 6000); im.onload = () => { clearTimeout(t); res(im.naturalWidth >= minW ? im : null); }; im.onerror = () => { clearTimeout(t); res(null); }; im.src = src; }); }
+function imgData(im) { try { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 64, 64); const r = Math.min(56 / im.naturalWidth, 56 / im.naturalHeight); const w = im.naturalWidth * r, hh = im.naturalHeight * r; x.drawImage(im, (64 - w) / 2, (64 - hh) / 2, w, hh); const u = c.toDataURL('image/png'); return u.length < 60000 ? u : null; } catch (e) { return null; } }
+async function probeLogo(dom) { for (const [src, w] of [['https://icon.horse/icon/' + dom, 16], ['https://www.google.com/s2/favicons?domain=' + dom + '&sz=128', 32], ['https://icons.duckduckgo.com/ip3/' + dom + '.ico', 16]]) { const im = await loadImg(src, w); if (im) { const d = imgData(im); if (d) return d; } } return null; }
+async function wikiDomain(name) {
+  try {
+    const base = 'https://www.wikidata.org/w/api.php?format=json&origin=*', gj = async u => (await fetch(u, { credentials: 'omit', referrerPolicy: 'no-referrer' })).json();
+    const s = await gj(base + '&action=wbsearchentities&type=item&limit=6&language=it&uselang=it&search=' + encodeURIComponent(name)), found = s.search || []; if (!found.length) return '';
+    const g = await gj(base + '&action=wbgetentities&props=claims|descriptions&languages=it|en&ids=' + found.map(x => x.id).join('|')), retail = /(catena|supermerc|negozi|retail|store|company|azienda|brand|marchio|distribuzione|chain|shop|farmaci|profumer|cosmetic|elettronic|bricolage|abbigliament|arredament|carburant|ristorazione)/i, nn = fwn(name);
+    for (const f of found) {
+      const e = (g.entities || {})[f.id], cl = e && e.claims && e.claims.P856; if (!cl || !cl.length) continue;
+      const hs = cl.filter(c => c.rank !== 'deprecated').map(c => { try { return new URL(c.mainsnak.datavalue.value).hostname.replace(/^www\./, ''); } catch (x) { return ''; } }).filter(Boolean);
+      const dom = hs.find(x => /\.it$/.test(x)) || hs[0]; if (!dom) continue;
+      const desc = ((e.descriptions || {}).it || (e.descriptions || {}).en || {}).value || '';
+      if (retail.test(desc) || fwn(f.label) === nn) return dom;
+    }
+  } catch (e) { }
+  return '';
+}
+{
+  const base = openCardForm;
+  openCardForm = function (id, pre) {
+    base(id, pre);
+    const n = $('c_n'), c = $('c_c'), d = $('c_d'); if (!n || !d) return;
+    const st = U.cform; st.autoName = n.value; st.autoDom = !d.value; st.autoCol = !(id && S.cards.get(id)) && !(pre && pre.color); st.logo = undefined; let T = 0;
+    document.getElementById('c_cols').addEventListener('click', () => { st.autoCol = false; });
+    d.addEventListener('input', () => { st.autoDom = false; });
+    const setColor = hexc => { const sw = [...document.querySelectorAll('#c_cols .sw')]; if (!sw.length) return; const best = sw.reduce((a, b) => colDist(hexc, b.dataset.c) < colDist(hexc, a.dataset.c) ? b : a); sw.forEach(x => x.setAttribute('aria-pressed', x === best ? 'true' : 'false')); };
+    const run = async () => {
+      const name = n.value.trim(); if (name.length < 2 || name === st.autoName && st.ran) return; st.autoName = name; st.ran = true;
+      const auto = () => st.autoDom && (!d.value || d.value === st.lastDom), prevDom = d.value.trim(), had = auto();
+      if (had && d.value) { d.value = ''; st.lastDom = ''; st.logo = undefined; }   // sito trovato dalla ricerca precedente: si ricomincia
+      const br = detectBrand(c ? c.value : '', name);
+      if (br) { if (auto()) { d.value = br.domain; st.lastDom = br.domain; } if (st.autoCol) setColor(br.color); }
+      let dom = d.value.trim();
+      if (!dom && st.autoDom && !br) { if (!(await WEB.consent())) return; dom = await wikiDomain(name); if (n.value.trim() !== name) return; if (dom && auto()) { d.value = dom; st.lastDom = dom; toast('Sito trovato: ' + dom); } else dom = ''; }
+      const changed = dom !== prevDom;
+      if (dom && (changed || !(id && S.cards.get(id) && S.cards.get(id).data.logo)) && lsg('unica_web') !== '0') { if (!(await WEB.consent())) return; const lg = await probeLogo(dom); if (n.value.trim() !== name) return; if (lg) { st.logo = lg; toast('Logo trovato'); } else if (changed) st.logo = undefined; }
+    };
+    n.addEventListener('input', () => { clearTimeout(T); T = setTimeout(run, 450); });
+    if (c) c.addEventListener('input', () => { if (!n.value.trim() && !st.userName) { const br = detectBrand(c.value, ''); if (br) { n.value = br.name; st.autoName = ''; clearTimeout(T); T = setTimeout(run, 200); } } });
+    n.addEventListener('keydown', () => { st.userName = true; });
+    if (!id && n.value.trim().length >= 2) T = setTimeout(run, 250);
+  };
+}
+
+/* ===== v1.6: IA generativa integrata (facoltativa, con la TUA chiave API) =====
+   Parte solo il testo che scrivi nella chat. Carte, Vault e Conti non vengono mai inviati. */
+const AI = { cfg: null, hist: [], busy: false, ctl: null,
+  prov: {} };
+const AI_SYS = 'Sei l’assistente generativo integrato in Vortex Hub, un’app personale per carte fedeltà, password e conti. Rispondi sempre in italiano, in modo chiaro e conciso. Non hai accesso ai dati dell’utente: ricevi solo il testo che scrive e i dati che allega lui stesso al messaggio (ad esempio meteo, scadenze, punteggio di sicurezza, nomi delle carte). Usa quei dati quando ci sono e non inventare quelli che non vedi: se manca qualcosa, dillo e suggerisci di allegarlo o di usare l’assistente locale. Sii concreto e proponi azioni brevi. Non chiedere mai password, codici, IBAN o numeri di carta. Per temi finanziari o legali dai informazioni generali e ricorda che non sei un consulente.';
+const aiSys = () => AI_SYS + ' Oggi è ' + new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + '.';
+async function aiLoad() {
+  if (AI.cfg || !S.kcKey) return AI.cfg;
+  try { const r = await DB.get('meta', 'ai'); if (r) { AI.cfg = JSON.parse(td.decode(await unseal(S.kcKey, r, 'ai'))); if (!AI.cfg || AI.cfg.p !== 'local') { AI.cfg = null; await DB.del('meta', 'ai'); } } } catch (e) { AI.cfg = null; }
+  return AI.cfg;
+}
+async function aiSave(c) { AI.cfg = c; await DB.put('meta', await seal(S.kcKey, te.encode(JSON.stringify(c)), 'ai'), 'ai'); }
+async function aiRemove() { AI.cfg = null; AI.hist = []; await DB.del('meta', 'ai'); }
+setInterval(() => { if (!S.kcKey) { AI.cfg = null; AI.hist = []; if (AI.ctl) try { AI.ctl.abort(); } catch (e) { } } }, 4000);
+
+const AI_RISK = /\b[A-Za-z]{2}\d{2}[A-Za-z0-9]{11,30}\b|\b(?:\d[ -]?){13,19}\b|(?:password|pwd|pin|cvv|cvc)\s*[:=]/i;
+function aiMd(t) {
+  const code = []; t = String(t).replace(/```[a-z]*\n?([\s\S]*?)```/g, (m, c) => { code.push(c); return '\u0000' + (code.length - 1) + '\u0000'; });
+  t = h(t).replace(/`([^`\n]+)`/g, '<code class="mono">$1</code>').replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/^#{1,3} (.+)$/gm, '<b>$1</b>').replace(/^[-*] (.+)$/gm, '• $1').replace(/\n/g, '<br>');
+  return t.replace(/\u0000(\d+)\u0000/g, (m, i) => '<pre class="mono" style="white-space:pre-wrap;margin:6px 0">' + h(code[+i].trim()) + '</pre>');
+}
+async function aiStream() { throw new Error('IA esterna non disponibile in questa versione.'); }
+async function aiAsk(q) {
+  if (AI.busy) return toast('Attendi la fine della risposta');
+  const cfg = await aiLoad(); if (!cfg) return aiSetup();
+  if (AI_RISK.test(q) && !(await ask('Dati sensibili?', 'Il messaggio sembra contenere un IBAN, un numero di carta o una password. Il modello gira sul dispositivo, ma meglio non scrivere dati sensibili in chat. Inviare comunque?', { ok: 'Invia', danger: true }))) return;
+  AS.log.push({ w: 'me', t: q }); const slot = { w: 'ai', t: '…', md: true }; AS.log.push(slot); asDraw();
+  AI.hist.push({ role: 'user', content: q }); AI.hist = AI.hist.slice(-12); AI.busy = true; AI.ctl = new AbortController(); aiBusyUi();
+  let raf = 0; const upd = t => { slot.t = t; if (!raf) raf = requestAnimationFrame(() => { raf = 0; asDraw(); }); };
+  try {
+    const full = await aiStream(cfg, AI.hist, upd, AI.ctl.signal); slot.t = full || '(nessuna risposta)'; AI.hist.push({ role: 'assistant', content: full }); buzz(15);
+    if ($('atts') && $('atts').checked && full) say(full.replace(/[*`#]/g, ''));
+  } catch (e) { slot.t = e.name === 'AbortError' ? (slot.t === '…' ? '(interrotto)' : slot.t + ' …(interrotto)') : 'Non riesco a contattare l’IA: ' + (e.message === 'Failed to fetch' ? 'nessuna connessione o servizio non raggiungibile.' : e.message); AI.hist.pop(); }
+  finally { AI.busy = false; AI.ctl = null; asDraw(); aiBusyUi(); }
+}
+function aiBusyUi() { const b = $('aistop'); if (b) b.hidden = !AI.busy; }
+{ const ap = asPush; asPush = function (q) { return AS.mode === 'ai' ? aiAsk(q) : ap(q); }; }
+{
+  const ad = asDraw;
+  asDraw = function () { const el = $('alog'); if (!el) return; el.innerHTML = AS.log.map(x => '<div class="bub ' + x.w + '">' + (x.md ? aiMd(x.t) : h(x.t).replace(/\n/g, '<br>')) + (x.btn ? '<div style="margin-top:6px"><button class="btn sm" ' + x.btn.a + '>' + h(x.btn.l) + '</button></div>' : '') + '</div>').join('') || '<p class="sm mut">Chiedimi di una carta, del Vault, dei conti, dei backup o delle scadenze.</p>'; el.scrollTop = el.scrollHeight; };
+}
+{
+  const oa = openAssistant;
+  openAssistant = function () {
+    oa(); const log = $('alog'); if (!log || $('asmode')) return;
+    log.insertAdjacentHTML('beforebegin', '<div class="seg" id="asmode" role="group" aria-label="Tipo di assistente"><button data-act="aimode" data-m="local" aria-pressed="' + (AS.mode !== 'ai') + '">Locale</button><button data-act="aimode" data-m="ai" aria-pressed="' + (AS.mode === 'ai') + '">IA generativa</button></div><p class="sm mut" id="aihint" hidden></p><button class="btn sm" id="aistop" data-act="aistop" hidden>Interrompi</button>');
+    aiModeUi();
+  };
+}
+function aiModeUi() {
+  const ai = AS.mode === 'ai', c = $('aschips'), hint = $('aihint'); if (c) c.hidden = ai;
+  document.querySelectorAll('#asmode button').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.m === 'ai') === ai)));
+  if (hint) { hint.hidden = !ai; hint.textContent = ai ? (AI.cfg ? 'IA: ' + AI.prov[AI.cfg.p].n + '. Viene inviato solo ciò che scrivi qui; le risposte possono essere inesatte e non sono consulenza finanziaria.' : '') : ''; }
+  const f = $('aqi'); if (f) f.placeholder = ai ? 'Scrivi all’IA generativa…' : 'Scrivi o detta una domanda…';
+}
+function aiSetup() {
+  modal('<div class="gap"><h2 class="sp" style="margin:0">IA del browser</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+    '<p class="sm mut">L’IA gira <b>sul dispositivo</b>, dentro il browser: nessuna chiave, nessun server, nessun invio in rete. Non è più possibile collegare servizi esterni (Claude, OpenAI): l’app non può contattarli.</p>' +
+    '<button type="button" class="btn blk" data-act="aiLocal">' + ic('chat') + ' Attiva l’IA del browser</button><p class="sm mut">Funziona solo se il browser la offre (es. Chrome recente su computer). Su molti telefoni non è disponibile: resta l’assistente locale a regole.</p>' +
+    '<div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Chiudi</button></div>');
+}
+ACT.aimode = async t => { if (t.dataset.m === 'ai') { const c = await aiLoad(); if (!c) return aiSetup(); } AS.mode = t.dataset.m; aiModeUi(); };
+ACT.aistop = () => { if (AI.ctl) AI.ctl.abort(); };
+ACT.aidel = async () => { if (!(await ask('Disattivare l’IA del browser?', 'L’impostazione verrà cancellata da questo dispositivo.', { ok: 'Disattiva', danger: true }))) return; await aiRemove(); closeTop(); AS.mode = 'local'; toast('IA disattivata'); if (U.route === 'settings') render(); },
+ACT.aiCfg = () => aiSetup();
+{ const s2 = V.settings; V.settings = () => { const s = s2(), i = s.lastIndexOf('</main>'); if (i < 0) return s; aiLoad().then(c => { if (c && U.route === 'settings' && !document.querySelector('.ov') && !s.__r) { const el = document.getElementById('aist'); if (el) el.textContent = 'Attiva: ' + AI.prov[c.p].n; } });
+  return s.slice(0, i) + '<div class="card"><h3>IA del browser (facoltativa)</h3><p class="sm mut">Chat con il modello integrato nel browser, se disponibile: gira sul dispositivo, senza chiavi né rete. Dall’Assistente scegli «IA generativa». Viene usato solo il testo che scrivi e i dati che allegherai tu a ogni messaggio; mai Vault, conti o password.</p><p class="sm" id="aist">' + (AI.cfg ? 'Attiva: ' + h(AI.prov[AI.cfg.p].n) : 'Non attiva.') + '</p><button class="btn blk" data-act="aiCfg">' + ic('key') + ' ' + (AI.cfg ? 'Gestisci / disattiva' : 'Attiva l’IA del browser') + '</button></div>' + s.slice(i); }; }
+
+/* ===== IA locale: modello integrato nel browser (Prompt API / Gemini Nano), senza chiave né server ===== */
+AI.prov.local = { n: 'IA del browser (sul dispositivo)', host: '', model: '' };
+const LMapi = () => window.LanguageModel || (window.ai && window.ai.languageModel) || null;
+async function lmAvail() {
+  const L = LMapi(); if (!L) return 'unsupported';
+  try { if (L.availability) return await L.availability(); const c = await L.capabilities(); return c.available === 'readily' ? 'available' : c.available === 'after-download' ? 'downloadable' : 'unavailable'; } catch (e) { return 'unavailable'; }
+}
+(function () {
+  const orig = aiStream;
+  aiStream = async function (cfg, msgs, onText, signal) {
+    if (cfg.p !== 'local') return orig.apply(this, arguments);
+    const L = LMapi(); if (!L) throw new Error('Questo browser non ha un’IA integrata.');
+    const prior = msgs.slice(0, -1).map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content) }));
+    const s = await L.create({ initialPrompts: [{ role: 'system', content: aiSys() }, ...prior], signal });
+    try {
+      let full = ''; const st = s.promptStreaming(msgs[msgs.length - 1].content, { signal });
+      for await (const ch of st) { full = (full && String(ch).startsWith(full)) ? String(ch) : full + ch; onText(full); }
+      return full;
+    } finally { try { s.destroy(); } catch (e) { } }
+  };
+})();
+ACT.aiLocal = async () => {
+  const st = await lmAvail();
+  if (st === 'unsupported' || st === 'unavailable') return modal('<div class="gap"><h2 class="sp" style="margin:0">IA del browser non disponibile</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><p class="sm">Questo browser non offre un modello di IA integrato (o il dispositivo non è adatto). Al momento è presente solo in alcune versioni recenti di Chrome per computer, con almeno circa 20 GB liberi e una scheda grafica o CPU adeguata; in Chrome può servire abilitare «Prompt API for Gemini Nano» in <span class="mono">chrome://flags</span>.</p><p class="sm mut">Resta disponibile l’assistente locale a regole.</p>');
+  if (st !== 'available' && !(await ask('Scaricare il modello?', 'Il browser scaricherà un modello di IA (alcuni GB) una sola volta. Può richiedere diversi minuti: usa il Wi‑Fi.', { ok: 'Scarica' }))) return;
+  try {
+    toast('Preparo l’IA del browser…');
+    const s = await LMapi().create({ monitor(m) { m.addEventListener('downloadprogress', e => { const t = document.querySelector('.toast'); if (t) t.textContent = 'Download modello: ' + Math.round(e.loaded * 100) + '%'; }); } });
+    try { s.destroy(); } catch (e) { }
+    await aiSave({ p: 'local', k: '', m: '' }); closeTop(); toast('IA del browser attiva'); AS.mode = 'ai'; aiModeUi(); if (U.route === 'settings') render();
+  } catch (e) { toast('IA non disponibile: ' + (e && e.message ? e.message : e)); }
+};
+
+/* ===== v1.7: installazione e aggiornamento automatici ===== */
+(function () {
+  const lg = k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, ls = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+  const http = /^https?:$/.test(location.protocol);
+  /* 1. Autosufficiente: se manifest o icone mancano (es. si è copiato solo index.html), li genera al volo */
+  let LG = null;
+  function iconUrl(sz, mask) {
+    const c = document.createElement('canvas'); c.width = c.height = sz; const x = c.getContext('2d');
+    x.fillStyle = '#f2f3ed'; if (mask) x.fillRect(0, 0, sz, sz); else { const r = sz * .22; x.beginPath(); x.moveTo(r, 0); x.arcTo(sz, 0, sz, sz, r); x.arcTo(sz, sz, 0, sz, r); x.arcTo(0, sz, 0, 0, r); x.arcTo(0, 0, sz, 0, r); x.fill(); }
+    const k = mask ? .68 : .9; if (LG) x.drawImage(LG, sz * (1 - k) / 2, sz * (1 - k) / 2, sz * k, sz * k);
+    return c.toDataURL('image/png');
+  }
+  async function selfContained() {
+    if (!http) return;
+    let ok = false; try { const r = await fetch('manifest.webmanifest', { cache: 'no-store' }); ok = r.ok; } catch (e) { }
+    if (ok) return;
+    try { LG = new Image(); LG.src = LOGO; await LG.decode(); } catch (e) { LG = null; }
+    const base = location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, ''), i192 = iconUrl(192), i512 = iconUrl(512), m512 = iconUrl(512, true);
+    const man = { id: base, name: 'Vortex Hub', short_name: 'Vortex Hub', description: 'Carte, conti e password in un\'unica app cifrata', lang: 'it', start_url: base, scope: base, shortcuts: [['Ultima carta usata', 'Ultima carta', 'last'], ['Carte preferite', 'Preferite', 'fav'], ['Scansiona carta', 'Scansiona', 'scan'], ['Nuova carta', 'Nuova carta', 'new'], ['Vault', 'Vault', 'vault'], ['Conti', 'Conti', 'fin']].map(s => ({ name: s[0], short_name: s[1], url: base + '?go=' + s[2], icons: [{ src: base + 'icons/icon-192x192.png', sizes: '192x192', type: 'image/png' }] })), display: 'standalone', background_color: '#06121c', theme_color: '#06121c', icons: [{ src: i192, sizes: '192x192', type: 'image/png' }, { src: i512, sizes: '512x512', type: 'image/png' }, { src: m512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }] };
+    const l = document.querySelector('link[rel=manifest]') || document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'manifest' }));
+    l.href = URL.createObjectURL(new Blob([JSON.stringify(man)], { type: 'application/manifest+json' }));
+    document.querySelectorAll('link[rel=apple-touch-icon],link[rel=icon]').forEach(e => e.remove());
+    document.head.append(Object.assign(document.createElement('link'), { rel: 'apple-touch-icon', href: iconUrl(180, true) }), Object.assign(document.createElement('link'), { rel: 'icon', href: i192 }));
+    window.UNICA_SELF = true;
+  }
+  selfContained();
+
+  /* 2. Proposta di installazione automatica (una volta, poi ogni 7 giorni se rimandata) */
+  const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  const ios = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  let shown = false;
+  function banner() {
+    if (shown || !http || standalone() || document.getElementById('inb')) return;
+    const snooze = +lg('unica_insnz') || 0; if (lg('unica_indone') === '1' || Date.now() < snooze) return;
+    const canPrompt = typeof DEFP !== 'undefined' && DEFP; if (!canPrompt && !ios()) return;
+    shown = true;
+    const b = document.createElement('div'); b.id = 'inb'; b.className = 'inb'; b.setAttribute('role', 'region'); b.setAttribute('aria-label', 'Installa Vortex Hub');
+    b.innerHTML = '<div class="inbt"><b>Installa Vortex Hub</b><span>' + (canPrompt ? 'Aprila come un’app, anche offline.' : 'Tocca Condividi, poi «Aggiungi alla schermata Home».') + '</span></div>' + (canPrompt ? '<button class="btn pri sm" data-in="go">' + ic('install') + ' Installa</button>' : '') + '<button class="btn sm" data-in="later">' + ic('clock') + ' Più tardi</button><button class="ib" data-in="never" aria-label="Non chiedere più">' + ic('x') + '</button>';
+    b.addEventListener('click', async e => {
+      const t = e.target.closest('[data-in]'); if (!t) return; const a = t.dataset.in;
+      if (a === 'go' && DEFP) { try { DEFP.prompt(); await DEFP.userChoice; } catch (x) { } DEFP = null; }
+      if (a === 'later') ls('unica_insnz', String(Date.now() + 7 * 864e5)); if (a === 'never' || a === 'go') ls('unica_indone', '1');
+      b.remove();
+    });
+    document.body.appendChild(b);
+  }
+  setInterval(() => { try { if (!document.querySelector('.ov')) banner(); } catch (e) { } }, 5000);
+  addEventListener('appinstalled', () => { ls('unica_indone', '1'); const b = document.getElementById('inb'); if (b) b.remove(); });
+
+  /* 3. Memoria persistente (impedisce al browser di cancellare i dati cifrati con lo spazio scarso) */
+  setInterval(() => { try { if (S.kcKey && navigator.storage && navigator.storage.persist && lg('unica_persist') !== '1') { navigator.storage.persist().then(ok => { if (ok) ls('unica_persist', '1'); }); } } catch (e) { } }, 8000);
+
+  /* 4. Aggiornamento automatico: controlla ogni ora e al ritorno nell'app; ricarica da bloccata */
+  if (http && 'serviceWorker' in navigator) {
+    let had = !!navigator.serviceWorker.controller, pending = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => { if (!had) { had = true; return; } pending = true; });
+    const chk = () => navigator.serviceWorker.getRegistration().then(r => r && r.update()).catch(() => { });
+    setInterval(chk, 3600e3); document.addEventListener('visibilitychange', () => { if (!document.hidden) chk(); });
+    setInterval(() => { const typing = (() => { const a = document.activeElement; return !!(a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) || [...document.querySelectorAll('input')].some(i => i.value); })(); if (pending && !S.kcKey && !typing) { pending = false; location.reload(); } else if (pending && !window.__updToast) { window.__updToast = 1; toast('Nuova versione pronta: si applicherà al prossimo blocco'); } }, 3000);
+  }
+})();
+
+/* ===== v1.9.1: perché non si installa + versione vicino al logo ===== */
+function instWhy() {
+  const ua = navigator.userAgent, p = location.protocol;
+  if (p === 'file:') return 'Stai aprendo il file direttamente dal dispositivo (file://): così nessun browser può installare l’app. Caricala su un hosting https (Netlify, Cloudflare Pages, GitHub Pages…) oppure provala in locale con «python3 -m http.server» e apri http://localhost:8000.';
+  if (!window.isSecureContext) return 'Questa pagina non è servita in modo sicuro: per installare serve https (fa eccezione solo localhost).';
+  if (!('serviceWorker' in navigator)) return 'Questo browser o questa modalità (navigazione privata?) non supporta il service worker, necessario per installare.';
+  if (/FBAN|FBAV|Instagram|Line\/|Snapchat|Telegram|; wv\)|WebView|MiuiBrowser.*XiaoMi/i.test(ua)) return 'Stai usando il browser interno di un’altra app: apri l’indirizzo in Chrome (Android) o Safari (iPhone) e riprova.';
+  if (window.UNICA_SELF) return 'Mancano i file manifest.webmanifest, sw.js e la cartella icons accanto a index.html: caricali TUTTI sullo stesso hosting (carica l’intero contenuto dello zip, non solo index.html).';
+  if (window.SWERR) return 'Il service worker non si registra (' + window.SWERR + '). Controlla che sw.js sia caricato nella stessa cartella di index.html e che l’hosting lo serva come JavaScript.';
+  if (/iphone|ipad|ipod/i.test(ua) && !/Safari/i.test(ua)) return 'Su iPhone/iPad l’installazione funziona solo da Safari: Condividi → «Aggiungi alla schermata Home».';
+  if (/iphone|ipad|ipod/i.test(ua)) return 'Su iPhone/iPad: Safari → Condividi → «Aggiungi alla schermata Home».';
+  if (/Firefox/i.test(ua) && !/Android/i.test(ua)) return 'Firefox desktop non permette di installare le app web: usa Chrome o Edge (oppure Safari su Mac).';
+  return 'Il browser non ha ancora offerto l’installazione. Apri il menu (⋮) e scegli «Installa app» / «Aggiungi a schermata Home»; se non c’è, ricarica la pagina una volta e attendi qualche secondo. Se l’app è già installata, aprila dalla sua icona.';
+}
+(function () {
+  const tag = ' <span class="ver" title="Versione dell’app">v' + APP_VERSION + '</span>';
+  const addAfterH1 = f => { const o = V[f]; V[f] = function () { return o.apply(this, arguments).replace('</h1>', '</h1>' + tag.trim()); }; };
+  ['welcome', 'lock', 'pkask'].forEach(addAfterH1);
+  const hv = V.home; V.home = function () { return hv.apply(this, arguments).replace('<h1>' + APP_NAME + '</h1>', '<h1>' + APP_NAME + tag + '</h1>'); };
+})();
+
+/* ===== v1.8: notifiche (service worker) + geofencing continuo con geometria dei negozi (da Fidelity Wallet) ===== */
+async function notify(title, opts) {
+  opts = Object.assign({ icon: 'icons/icon-192x192.png', badge: 'icons/icon-192x192.png', vibrate: [200, 100, 200], tag: 'unica' }, opts || {});
+  window.NOTIF_ERR = '';
+  if (!('Notification' in window)) { window.NOTIF_ERR = 'notifiche non supportate'; return false; }
+  if (Notification.permission !== 'granted') { window.NOTIF_ERR = 'permesso ' + (Notification.permission === 'denied' ? 'negato' : 'non concesso'); return false; }
+  try {
+    if (navigator.serviceWorker) {
+      const reg = await Promise.race([navigator.serviceWorker.ready, new Promise(r => setTimeout(() => r(null), 4000))]);
+      if (reg && reg.showNotification) { await reg.showNotification(title, opts); return true; }
+      window.NOTIF_ERR = 'service worker non pronto';
+    }
+  } catch (e) { window.NOTIF_ERR = (e && e.message) || String(e); }
+  try { new Notification(title, opts); return true; } catch (e) { window.NOTIF_ERR = window.NOTIF_ERR || 'questo browser non mostra notifiche dalla pagina'; return false; }
+}
+// tocco su una notifica: il service worker avvisa l'app (o la apre con ?open=<id>)
+(function () {
+  try { const id = new URLSearchParams(location.search).get('open'); if (id && /^[\w-]{4,64}$/.test(id)) { U.openCard = id; history.replaceState(null, '', location.pathname); } } catch (e) { }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', e => { const d = e.data || {}; if (d.t === 'openCard' && /^[\w-]{4,64}$/.test(d.id || '')) { if (S.kcKey && S.cards.get(d.id)) cardOpen(d.id); else U.openCard = d.id; } if (d.t === 'go' && d.r === 'agenda') { if (S.kcKey) go('agenda'); else U.go = 'agenda'; } });
+})();
+
+const GEO = { pos: null, err: '', watch: null, stores: [], query: null, querying: false, backoff: 0, last: {}, wake: null, loaded: false, tmr: null };
+const GEO_COVER = 400, GEO_REQ = 250, GEO_COOL = 20 * 60000, GEO_OVP = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+const gcfg = () => { let c = {}; try { c = JSON.parse(localStorage.getItem('unica_geo2') || '{}') || {}; } catch (e) { } return Object.assign({ on: true, radius: 30, wake: false, name: true }, c); };
+const gset = o => { try { localStorage.setItem('unica_geo2', JSON.stringify(Object.assign(gcfg(), o))); } catch (e) { } };
+const hav = (a, b, c, d) => { const R = 6371000, p = Math.PI / 180, x = Math.sin((c - a) * p / 2) ** 2 + Math.cos(a * p) * Math.cos(c * p) * Math.sin((d - b) * p / 2) ** 2; return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x)); };
+function gGeom(el) {
+  if (el.type === 'node' && el.lat != null) return { k: 'p', lat: el.lat, lng: el.lon };
+  if (el.type === 'way' && Array.isArray(el.geometry) && el.geometry.length >= 2) return { k: 'r', pts: el.geometry.map(p => [p.lat, p.lon]) };
+  if (el.type === 'relation' && Array.isArray(el.members)) { let best = null; el.members.forEach(m => { if (m.type === 'way' && m.role !== 'inner' && Array.isArray(m.geometry) && (!best || m.geometry.length > best.length)) best = m.geometry; }); if (best && best.length >= 3) return { k: 'r', pts: best.map(p => [p.lat, p.lon]) }; }
+  if (el.bounds) return { k: 'p', lat: (el.bounds.minlat + el.bounds.maxlat) / 2, lng: (el.bounds.minlon + el.bounds.maxlon) / 2 };
+  if (el.center) return { k: 'p', lat: el.center.lat, lng: el.center.lon };
+  return null;
+}
+const gSeg = (a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], l = dx * dx + dy * dy; let t = l ? -(a[0] * dx + a[1] * dy) / l : 0; t = Math.max(0, Math.min(1, t)); return Math.hypot(a[0] + t * dx, a[1] + t * dy); };
+// distanza in metri dal negozio; 0 se sei dentro il perimetro dell'edificio
+function gDist(lat, lng, g) {
+  if (g.k === 'p') return hav(lat, lng, g.lat, g.lng);
+  const kx = 111320 * Math.cos(lat * Math.PI / 180), ky = 110540, P = g.pts.map(p => [(p[1] - lng) * kx, (p[0] - lat) * ky]);
+  if (P.length > 2 && Math.hypot(P[0][0] - P[P.length - 1][0], P[0][1] - P[P.length - 1][1]) < .5) { let ins = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const xi = P[i][0], yi = P[i][1], xj = P[j][0], yj = P[j][1]; if ((yi > 0) !== (yj > 0) && 0 < (xj - xi) * (0 - yi) / (yj - yi) + xi) ins = !ins; } if (ins) return 0; }
+  let m = Infinity; for (let i = 0; i < P.length - 1; i++) m = Math.min(m, gSeg(P[i], P[i + 1])); return m;
+}
+const gIgnored = t => !!(t.highway || t.public_transport || t.railway || t.parking || ['parking', 'parking_space', 'bus_station', 'charging_station'].includes(t.amenity));
+const gNames = () => [...new Set(cardsArr().map(c => c.data.name).filter(n => norm(n).length >= 3))];
+const G_GENERIC = new Set(['supermercato', 'market', 'negozio', 'negozi', 'store', 'shop', 'centro', 'city', 'express', 'italia', 'online', 'point']);
+const gTokens = s => norm(s).split(' ').filter(x => x.length >= 3);
+const gRegexToken = s => [...s].map(c => ({ a: '[aàáâäãå]', e: '[eèéêë]', i: '[iìíîï]', o: '[oòóôöõ]', u: '[uùúûü]', c: '[cç]' }[c] || c)).join('');
+const gOverpassRx = names => [...new Set(names.flatMap(gTokens))].map(gRegexToken).join('|');
+const gNameMatch = (cn, t) => {
+  const c = norm(cn); if (c.length < 3) return false;
+  const fields = [t.name, t.brand, t.operator].map(norm).filter(Boolean);
+  const compact = c.replace(/ /g, '');
+  if (fields.some(v => v === c || v.replace(/ /g, '') === compact)) return true;
+  const wanted = gTokens(c).filter(x => !G_GENERIC.has(x)), found = new Set(fields.flatMap(gTokens));
+  return wanted.some(x => found.has(x));
+};
+function gParse(json) {
+  const out = [], cards = cardsArr();
+  (json.elements || []).forEach(el => { const t = el.tags || {}; if (gIgnored(t)) return; const m = cards.filter(c => gNameMatch(c.data.name, t)); if (!m.length) return; const g = gGeom(el); if (!g) return;
+    out.push({ id: el.type + el.id, label: t.name || t.brand || m[0].data.name, geom: g, ids: m.map(c => c.id) }); });
+  return out;
+}
+async function gOverpass(q) {
+  let last = null;
+  for (const url of GEO_OVP) { const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 14000); try { const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(q), signal: ctl.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); if (!r.ok) throw new Error('HTTP ' + r.status); return await r.json(); } catch (e) { last = e; } finally { clearTimeout(tm); } }
+  throw last || new Error('Overpass non raggiungibile');
+}
+const gSig = () => gNames().map(norm).sort().join('|');
+async function gSaveCache() { try { if (S.kcKey) await DB.put('meta', await seal(S.kcKey, te.encode(JSON.stringify({ q: GEO.query, s: GEO.stores })), 'geo'), 'geo'); } catch (e) { } }
+async function gLoadCache() { if (GEO.loaded || !S.kcKey) return; GEO.loaded = true; try { const r = await DB.get('meta', 'geo'); if (r) { const c = JSON.parse(td.decode(await unseal(S.kcKey, r, 'geo'))); if (c.q && Date.now() - c.q.time < 864e5) { GEO.query = c.q; GEO.stores = c.s || []; } } } catch (e) { } }
+async function gQuery(force) {
+  if (GEO.querying || !GEO.pos || !navigator.onLine || !nearOn()) return; const names = gNames(); if (!names.length || Date.now() < GEO.backoff) return;
+  const sig = gSig(), now = Date.now();
+  if (!force && GEO.query) { const same = GEO.query.sig === sig, moved = hav(GEO.pos.lat, GEO.pos.lng, GEO.query.lat, GEO.query.lng), fresh = same && moved < GEO_REQ && now - GEO.query.time < 30 * 60000; if (fresh || same && now - GEO.query.time < 20000) return; }
+  GEO.querying = true; const clat = Math.round(GEO.pos.lat * 1000) / 1000, clng = Math.round(GEO.pos.lng * 1000) / 1000;
+  const rx = gOverpassRx(names);
+  try {
+    const json = await gOverpass('[out:json][timeout:15];(nwr["name"~"' + rx + '",i](around:' + GEO_COVER + ',' + clat + ',' + clng + ');nwr["brand"~"' + rx + '",i](around:' + GEO_COVER + ',' + clat + ',' + clng + ');nwr["operator"~"' + rx + '",i](around:' + GEO_COVER + ',' + clat + ',' + clng + '););out tags geom;');
+    GEO.stores = gParse(json); GEO.query = { lat: clat, lng: clng, time: Date.now(), sig }; GEO.err = ''; gSaveCache();
+  } catch (e) { GEO.err = 'Ricerca negozi non riuscita (rete o servizio non disponibile).'; GEO.backoff = Date.now() + 60000; }
+  finally { GEO.querying = false; gEval(); gStatus(); }
+}
+function gCands() {
+  const L = []; GEO.stores.forEach(s => s.ids.forEach(id => { if (S.cards.get(id)) L.push({ id, geom: s.geom, label: s.label }); }));
+  cardsArr().forEach(c => { if (typeof c.data.lat === 'number' && typeof c.data.lng === 'number') L.push({ id: c.id, geom: { k: 'p', lat: c.data.lat, lng: c.data.lng }, label: c.data.name }); });
+  return L;
+}
+function gNearest() { if (!GEO.pos) return null; let b = null; gCands().forEach(c => { const d = gDist(GEO.pos.lat, GEO.pos.lng, c.geom); if (!b || d < b.d) b = Object.assign({ d }, c); }); return b; }
+const gAccOk = () => GEO.pos && GEO.pos.acc <= Math.max(40, gcfg().radius * 2);
+function gEval() {
+  if (!GEO.pos || !gAccOk()) { return; } const cfg = gcfg(), near = new Set();
+  for (const c of gCands()) { if (gDist(GEO.pos.lat, GEO.pos.lng, c.geom) <= cfg.radius) { near.add(c.id); gNotify(c); } }
+  U.near = near; if (U.route === 'cards' && !document.querySelector('.ov')) { const l = $('clist'); if (l) { l.innerHTML = cardsList(); drawMinis(); } }
+}
+async function gNotify(c) {
+  const card = S.cards.get(c.id); if (!card || Date.now() - (GEO.last[c.id] || 0) < GEO_COOL) return; GEO.last[c.id] = Date.now(); buzz([200, 100, 200]);
+  const cfg = gcfg(), title = cfg.name ? card.data.name + ' – sei al negozio' : 'Vortex Hub – sei vicino a un negozio';
+  gBanner(card, title); notify(title, { body: 'Tocca per aprire la carta.', tag: 'unica-geo-' + c.id, data: { cardId: c.id }, actions: [{ action: 'open', title: 'Apri carta' }] });
+}
+function gBanner(card, title) {
+  let el = $('gbn'); if (!el) { el = document.createElement('div'); el.id = 'gbn'; el.className = 'gbn'; el.setAttribute('role', 'alert'); document.body.appendChild(el); }
+  el.innerHTML = '<div class="inbt"><b>' + h(title) + '</b><span>Tocca per mostrare il codice</span></div><button class="btn pri sm" data-gb="open">Apri carta</button><button class="ib" data-gb="x" aria-label="Chiudi">✕</button>';
+  el.onclick = e => { const t = e.target.closest('[data-gb]'); if (!t) return; el.remove(); if (t.dataset.gb === 'open') cardOpen(card.id); };
+  clearTimeout(gBanner.t); gBanner.t = setTimeout(() => el.remove(), 40000);
+}
+function gStatus() {
+  const el = $('gstat'); if (!el) return; const cfg = gcfg(); if (!cfg.on) { el.hidden = true; return; } el.hidden = false; let t, cls = 'ok';
+  if (GEO.err && !GEO.pos) { t = GEO.err; cls = 'bad'; } else if (!GEO.pos) { t = 'In attesa del segnale GPS…'; cls = 'mut'; }
+  else { const acc = '±' + Math.round(GEO.pos.acc) + ' m', n = gNearest(); t = GEO.querying ? 'GPS ' + acc + ' · cerco negozi…' : n ? 'GPS ' + acc + ' · ' + n.label + ' a ' + (n.d < 1 ? '0' : Math.round(n.d)) + ' m' : 'GPS ' + acc + ' · nessun negozio vicino'; if (!gAccOk()) { t += ' (segnale poco preciso)'; cls = 'warn'; } }
+  el.className = 'sm gstat ' + cls; el.textContent = '● ' + t;
+}
+function gOnPos(p) { GEO.pos = { lat: p.coords.latitude, lng: p.coords.longitude, acc: p.coords.accuracy || 999, time: Date.now() }; GEO.err = ''; gQuery(false); gEval(); gStatus(); }
+function gOnErr(e) { GEO.pos = null; GEO.err = e && e.code === 1 ? 'Posizione negata: consentila per questo sito nelle impostazioni del browser.' : 'Posizione non disponibile al momento.'; gStatus(); }
+async function gWake() { try { if (gcfg().wake && 'wakeLock' in navigator && !document.hidden && !GEO.wake) { GEO.wake = await navigator.wakeLock.request('screen'); GEO.wake.addEventListener('release', () => { GEO.wake = null; }); } else if (!gcfg().wake && GEO.wake) { await GEO.wake.release(); GEO.wake = null; } } catch (e) { GEO.wake = null; } }
+function gStart() {
+  if (GEO.watch !== null) return;
+  if (!navigator.geolocation) { GEO.err = 'Questo browser non supporta la posizione.'; gStatus(); return; }
+  if (!window.isSecureContext) { GEO.err = 'La posizione richiede HTTPS o localhost.'; gStatus(); return; }
+  gLoadCache();
+  try { GEO.watch = navigator.geolocation.watchPosition(gOnPos, gOnErr, { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }); }
+  catch (e) { GEO.err = 'Impossibile avviare la posizione: controlla i permessi del browser.'; }
+  gWake(); gStatus();
+}
+function gStop() { if (GEO.watch !== null) { try { navigator.geolocation.clearWatch(GEO.watch); } catch (e) { } GEO.watch = null; } GEO.pos = null; if (GEO.wake) { GEO.wake.release().catch(() => { }); GEO.wake = null; } }
+setInterval(() => { const on = gcfg().on && !!S.kcKey; if (on) gStart(); else if (GEO.watch !== null) { gStop(); if (!S.kcKey) { GEO.loaded = false; GEO.stores = []; GEO.query = null; } } }, 3000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && GEO.watch !== null) { gWake(); navigator.geolocation.getCurrentPosition(gOnPos, () => { }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }); } });
+addEventListener('online', () => { GEO.backoff = 0; gQuery(false); });
+
+/* --- posizione del negozio nel modulo carta (come in Fidelity Wallet) --- */
+{
+  const base = openCardForm;
+  openCardForm = function (id, pre) {
+    base(id, pre); const o = $('c_o'); if (!o) return; const it = id ? S.cards.get(id) : null, d = it ? it.data : (pre || {}), st = U.cform;
+    const has = typeof d.lat === 'number'; const lab = o.previousElementSibling;
+    lab.insertAdjacentHTML('beforebegin', '<label class="f">Posizione del negozio (facoltativa, per gli avvisi di vicinanza)</label><p class="sm mut" id="c_pl" role="status">' + (has ? 'Salvata: ' + h(d.address || d.lat.toFixed(4) + ', ' + d.lng.toFixed(4)) : 'Nessuna posizione salvata.') + '</p><div class="gap"><button type="button" class="btn sm" data-act="plHere">' + ic('pin') + ' Posizione attuale</button><button type="button" class="btn sm" data-act="plFind">' + ic('search') + ' Trova il negozio più vicino</button><button type="button" class="btn sm" data-act="plClear"' + (has ? '' : ' hidden') + '>' + ic('trash') + ' Rimuovi</button></div>');
+  };
+}
+async function gHere() { return new Promise((res, rej) => navigator.geolocation ? navigator.geolocation.getCurrentPosition(res, () => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, maximumAge: 5000, timeout: 12000 }), { enableHighAccuracy: false, maximumAge: 120000, timeout: 6000 }) : rej(new Error('no gps'))); }
+const plSet = (pl, txt) => { U.cform.place = pl; const e = $('c_pl'); if (e) e.textContent = txt; const b = document.querySelector('[data-act=plClear]'); if (b) b.hidden = !pl; };
+Object.assign(ACT, {
+  async plHere() { plSet(U.cform.place, 'Rilevo la posizione…'); try { const p = await gHere(); plSet({ lat: +p.coords.latitude.toFixed(6), lng: +p.coords.longitude.toFixed(6) }, 'Posizione attuale: ' + p.coords.latitude.toFixed(5) + ', ' + p.coords.longitude.toFixed(5)); } catch (e) { plSet(U.cform.place, 'Posizione non disponibile: consentila nelle impostazioni del browser.'); } },
+  async plFind() {
+    const name = $('c_n').value.trim(); if (norm(name).length < 3) return toast('Scrivi prima il nome del negozio');
+    if (!nearOn() && !(await ask('Posizione e OpenStreetMap', 'Per trovare il negozio, Vortex Hub usa la tua posizione approssimata (~100 m) e invia a OpenStreetMap quell’area e il nome del negozio. Procedere?', { ok: 'Procedi' }))) return; localStorage.setItem('unica_near', '1');
+    plSet(U.cform.place, 'Cerco il negozio più vicino…');
+    try { const p = await gHere(), lat = p.coords.latitude, lng = p.coords.longitude, clat = Math.round(lat * 1000) / 1000, clng = Math.round(lng * 1000) / 1000, rx = gOverpassRx([name]);
+      const j = await gOverpass('[out:json][timeout:15];(nwr["name"~"' + rx + '",i](around:2500,' + clat + ',' + clng + ');nwr["brand"~"' + rx + '",i](around:2500,' + clat + ',' + clng + ');nwr["operator"~"' + rx + '",i](around:2500,' + clat + ',' + clng + '););out tags geom;');
+      const L = (j.elements || []).filter(e => !gIgnored(e.tags || {}) && gNameMatch(name, e.tags || {})).map(e => ({ e, g: gGeom(e) })).filter(x => x.g).map(x => ({ ...x, d: gDist(lat, lng, x.g) })).sort((a, b) => a.d - b.d);
+      if (!L.length) return plSet(U.cform.place, 'Nessun «' + name + '» entro 2,5 km: usa «Posizione attuale» o verifica il nome.');
+      const s = L[0], c = s.g.k === 'p' ? { lat: s.g.lat, lng: s.g.lng } : { lat: s.g.pts.reduce((a, p) => a + p[0], 0) / s.g.pts.length, lng: s.g.pts.reduce((a, p) => a + p[1], 0) / s.g.pts.length }, t = s.e.tags || {};
+      const addr = [[t['addr:street'], t['addr:housenumber']].filter(Boolean).join(' '), t['addr:city'] || t['addr:town'] || t['addr:village']].filter(Boolean).join(', ');
+      plSet({ lat: +c.lat.toFixed(6), lng: +c.lng.toFixed(6), address: addr.slice(0, 200) }, (t.name || name) + ' a ' + Math.round(s.d) + ' m' + (addr ? ' · ' + addr : ''));
+    } catch (e) { plSet(U.cform.place, 'Ricerca non riuscita: controlla connessione e permesso di posizione.'); }
+  },
+  plClear() { plSet(null, 'Nessuna posizione salvata.'); },
+  geoOn: async t => {
+    if (t.checked) { if (!(await ask('Avvisi di vicinanza', 'Mentre l’app è aperta Vortex Hub segue la tua posizione e, quando sei dentro o vicino a un negozio di cui hai la carta, ti avvisa. Invia a OpenStreetMap solo un’area di ~100 m e i NOMI dei tuoi negozi (non i codici). Attivare?', { ok: 'Attiva' }))) { t.checked = false; return; }
+      localStorage.setItem('unica_near', '1'); gset({ on: true }); if ('Notification' in window && Notification.permission === 'default') try { await Notification.requestPermission(); } catch (e) { } gStart(); }
+    else { gset({ on: false }); gStop(); } render();
+  },
+  geoRad: t => { gset({ radius: +t.value || 30 }); gEval(); gStatus(); }, geoWake: t => { gset({ wake: t.checked }); gWake(); }, geoName: t => gset({ name: t.checked }),
+  async geoTest() {
+    if (!('Notification' in window)) return toast('Questo browser non supporta le notifiche');
+    if (Notification.permission !== 'granted') { const p = await Notification.requestPermission(); if (p !== 'granted') return toast('Notifiche non consentite: abilitale dalle impostazioni del browser'); }
+    const c = cardsArr()[0]; const ok = await notify(c && gcfg().name ? c.data.name + ' – sei al negozio' : 'Vortex Hub – notifica di prova', { body: 'Questa è una notifica di prova.', tag: 'unica-test', data: c ? { cardId: c.id } : {} }); if (c) gBanner(c, c.data.name + ' – notifica di prova'); if (!ok) toast('Notifica non mostrata dal sistema');
+  },
+  geoScan() { if (!navigator.geolocation) return; GEO.err = ''; GEO.backoff = 0; navigator.geolocation.getCurrentPosition(p => { gOnPos(p); gQuery(true); }, gOnErr, { enableHighAccuracy: true, timeout: 15000 }); }
+});
+{
+  const s1 = V.settings;
+  V.settings = () => { const s = s1(), i = s.lastIndexOf('</main>'), c = gcfg(), np = 'Notification' in window ? Notification.permission : 'unsupported'; if (i < 0) return s;
+    return s.slice(0, i) + '<div class="card"><h3>Avvisi di vicinanza ai negozi</h3><p class="sm mut">Con l’app aperta, Vortex Hub segue il GPS e ti avvisa quando sei al negozio di una tua carta (dentro l’edificio o a pochi metri). Nessun dato di posizione lascia il dispositivo, tranne un’area di ~100 m e i nomi dei negozi verso OpenStreetMap.</p>' +
+      '<label class="chk"><input type="checkbox" data-act="geoOn"' + (c.on ? ' checked' : '') + '><span>Avvisami quando sono vicino a un negozio</span></label>' +
+      '<div class="gap" style="margin-top:8px"><span class="sp">Distanza di avviso</span><select class="in" style="width:auto" data-act="geoRad" aria-label="Distanza di avviso">' + [20, 30, 50, 100].map(r => '<option value="' + r + '"' + (c.radius === r ? ' selected' : '') + '>' + r + ' m</option>').join('') + '</select></div>' +
+      '<label class="chk" style="margin-top:8px"><input type="checkbox" data-act="geoWake"' + (c.wake ? ' checked' : '') + '><span>Tieni lo schermo acceso (consuma batteria)</span></label>' +
+      '<label class="chk" style="margin-top:8px"><input type="checkbox" data-act="geoName"' + (c.name ? ' checked' : '') + '><span>Mostra il nome del negozio nella notifica (visibile a schermo bloccato)</span></label>' +
+      '<p class="sm mut" style="margin-top:8px">Notifiche: ' + (np === 'granted' ? 'consentite' : np === 'denied' ? 'bloccate dal browser' : np === 'unsupported' ? 'non supportate' : 'non ancora consentite') + '. Funzionano solo con l’app aperta (anche in secondo piano su Android); per un avviso più preciso salva la posizione nella carta.</p>' +
+      '<div class="stack"><button class="btn blk" data-act="geoTest">' + ic('bell') + ' Prova la notifica</button><button class="btn blk" data-act="geoScan">' + ic('pin') + ' Rileva ora la posizione</button></div></div>' + s.slice(i); };
+  const vc = V.cards; V.cards = () => { const s = vc(), i = s.indexOf('<div id="clist"'); return i < 0 ? s : s.slice(0, i) + '<p class="sm gstat" id="gstat" role="status" aria-live="polite" hidden></p>' + s.slice(i); };
+  const pc = POST.cards; POST.cards = () => { pc(); gStatus(); };
+}
+document.addEventListener('change', e => { const t = e.target; if (t && t.tagName === 'SELECT' && t.dataset.act && ACT[t.dataset.act]) ACT[t.dataset.act](t); });
+
+/* ===== v1.8: sblocco biometrico anche per l'area protetta, senza PRF (dispositivo con impronta/volto) =====
+   Se il dispositivo supporta la passkey con PRF (modalità più sicura) si usa quella. Altrimenti, con il tuo consenso,
+   la chiave è custodita da una chiave del dispositivo non estraibile e rilasciata solo dopo la verifica biometrica
+   (WebAuthn). Scade dopo 14 giorni o 25 sblocchi: poi serve la master password. */
+const BIO_DAYS = 14, BIO_MAX = 25;
+function bioOk() { const b = S.meta && S.meta.bio; return !!(S.meta && S.meta.wrapBio && b && Date.now() - b.pw < BIO_DAYS * 864e5 && b.n < BIO_MAX); }
+async function bioEnable(fresh) {
+  if (!S.kc || !S.kp || !S.meta.pk) throw new Error('Serve prima la passkey e l’area protetta sbloccata');
+  const r = fresh || await pkAssert(); if (!r) throw new Error('Verifica annullata');
+  const M = cat(S.kc, S.kp), k = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  await DB.put('dev', k, 'b'); S.meta.wrapBio = await seal(k, M, 'wrapBio'); S.meta.bio = { pw: Date.now(), n: 0 }; wipe(M); await DB.put('meta', S.meta, 'acct');
+}
+async function bioOff() { delete S.meta.wrapBio; delete S.meta.bio; try { await DB.del('dev', 'b'); } catch (e) { } await DB.put('meta', S.meta, 'acct'); }
+async function bioKey() { const k = await DB.get('dev', 'b'); if (!k) throw new Error('Chiave del dispositivo mancante'); const M = await unseal(k, S.meta.wrapBio, 'wrapBio'); S.meta.bio.n++; await DB.put('meta', S.meta, 'acct'); return M; }
+{ const o = disablePasskey; disablePasskey = async function () { await o(); delete S.meta.wrapBio; delete S.meta.bio; try { await DB.del('dev', 'b'); } catch (e) { } await DB.put('meta', S.meta, 'acct'); }; }
+// la master password azzera la scadenza
+{ let fresh = false; const uw = unwrapWithPassword; unwrapWithPassword = async function () { const M = await uw.apply(this, arguments); fresh = true; return M; };
+  const am = applyM; applyM = async function () { const r = await am.apply(this, arguments); if (fresh) { fresh = false; if (S.meta && S.meta.wrapBio) { S.meta.bio = { pw: Date.now(), n: 0 }; try { await DB.put('meta', S.meta, 'acct'); } catch (e) { } } } return r; }; }
+
+Object.assign(ACT, {
+  async pkUnlock() {
+    try {
+      const r = await pkAssert(); if (!r) return;
+      if (r.prf && S.meta.wrapPk) { const M = await unseal(await kekHkdf(r.prf, 'unica-pk-v1'), S.meta.wrapPk, 'wrapPk'); await applyM(M); }
+      else if (bioOk()) { const M = await bioKey(); await applyM(M); }
+      else { const dk = await DB.get('dev', 'k'); await setKeys(await unseal(dk, S.meta.wrapDev, 'wrapDev'), null); if (S.meta.wrapBio) toast('Per sicurezza, per l’area protetta serve la master password'); }
+      await afterUnlock();
+    } catch (e) { toast('Sblocco annullato'); }
+  },
+  async pkVerify() {
+    try {
+      const r = await pkAssert(); let M;
+      if (r && r.prf && S.meta.wrapPk) M = await unseal(await kekHkdf(r.prf, 'unica-pk-v1'), S.meta.wrapPk, 'wrapPk'); else if (r && bioOk()) M = await bioKey(); else return toast('Usa la master password');
+      await applyM(M); U.verify.done();
+    } catch (e) { toast('Verifica annullata'); }
+  },
+  async bioOn() {
+    if (!S.meta.pk) { if (!(await ensureProt())) return; try { await enablePasskey(); } catch (e) { return toast('Passkey non attivata'); } }
+    if (S.meta.pk.prf) { toast('Il tuo dispositivo usa già la modalità più sicura (impronta anche per l’area protetta)'); return render(); }
+    if (!(await ensureProt())) return;
+    if (!(await ask('Biometria per l’area protetta', 'Il tuo dispositivo non supporta la modalità più sicura. Puoi comunque usare impronta o volto anche per Vault e Conti su QUESTO dispositivo: la chiave resta protetta da una chiave del dispositivo e viene rilasciata dopo la verifica biometrica. Per sicurezza scade dopo ' + BIO_DAYS + ' giorni o ' + BIO_MAX + ' sblocchi e serve la master password. Attivare?', { ok: 'Attiva' }))) return;
+    try { await bioEnable(); toast('Biometria attiva anche per l’area protetta'); } catch (e) { toast('Non attivata: ' + (e.name === 'NotAllowedError' ? 'operazione annullata' : e.message)); } render();
+  },
+  async bioOff() { await bioOff(); toast('Biometria disattivata per l’area protetta'); render(); },
+  abioSet: t => { try { localStorage.setItem('unica_abio', t.checked ? '1' : '0'); } catch (e) { } }
+});
+// dopo l'attivazione della passkey senza PRF propone la biometria anche per l'area protetta
+for (const k of ['pkOn2']) { const o = ACT[k]; ACT[k] = async function () { await o.apply(this, arguments); if (S.meta.pk && !S.meta.pk.prf && !S.meta.wrapBio && S.kp) { if (await ask('Biometria anche per Vault e Conti?', 'Il tuo dispositivo non supporta la modalità più sicura (PRF). Vuoi comunque usare impronta o volto anche per l’area protetta su questo dispositivo? Scade dopo ' + BIO_DAYS + ' giorni o ' + BIO_MAX + ' sblocchi.', { ok: 'Sì, attiva', cancel: 'Solo carte' })) { try { await bioEnable(); toast('Biometria attiva anche per l’area protetta'); render(); } catch (e) { toast('Non attivata'); } } } }; }
+// richiesta automatica dell'impronta all'apertura
+{ const vl = V.lock; V.lock = () => { if (S.meta && S.meta.pk && localStorage.getItem('unica_abio') !== '0' && !U._abio) { U._abio = true; setTimeout(() => { const a = document.activeElement, u = document.getElementById('up'); if (U.route === 'lock' && !S.kcKey && !(u && (u.value || a === u))) ACT.pkUnlock(); }, 600); } return vl(); }; }
+setInterval(() => { if (S.kcKey) U._abio = false; }, 2000);
+{ const s1 = V.settings; V.settings = () => { const s = s1(), i = s.lastIndexOf('</main>'); if (i < 0 || !pkSupported()) return s;
+  const pk = S.meta.pk, bio = !!S.meta.wrapBio, left = bio && S.meta.bio ? Math.max(0, BIO_DAYS - Math.floor((Date.now() - S.meta.bio.pw) / 864e5)) : 0;
+  return s.slice(0, i) + '<div class="card"><h3>Sblocco biometrico</h3>' + (!pk ? '<p class="sm mut">Usa impronta o Face ID invece della master password. Per le carte è sempre possibile; per Vault e Conti dipende dal dispositivo.</p><button class="btn pri blk" data-act="bioOn">' + ic('key') + ' Attiva impronta / Face ID</button>'
+    : pk.prf ? '<p class="sm ok">✓ Impronta / Face ID attivi per carte, Vault e Conti (modalità più sicura del dispositivo).</p>'
+    : bio ? '<p class="sm ok">✓ Impronta / Face ID attivi anche per Vault e Conti su questo dispositivo.</p><p class="sm mut">Richiede la master password tra ' + left + ' giorni o dopo ' + Math.max(0, BIO_MAX - S.meta.bio.n) + ' sblocchi.' + (bioOk() ? '' : ' <b>Scaduto: inserisci la master password per riattivarlo.</b>') + '</p><button class="btn blk" data-act="bioOff">Disattiva per l’area protetta</button>'
+    : '<p class="sm mut">Passkey attiva solo per le carte: il dispositivo non supporta la modalità più sicura. Puoi estendere la biometria a Vault e Conti su questo dispositivo, con scadenza periodica.</p><button class="btn pri blk" data-act="bioOn">Estendi a Vault e Conti</button>') +
+    (pk ? '<label class="chk" style="margin-top:10px"><input type="checkbox" data-act="abioSet"' + (localStorage.getItem('unica_abio') !== '0' ? ' checked' : '') + '><span>Chiedi subito l’impronta quando apro l’app</span></label>' : '') + '</div>' + s.slice(i); }; }
+
+/* ===== v1.8: notifiche push (promemoria programmato dal tuo Worker di sincronizzazione) =====
+   Il server invia un push SENZA contenuto all'ora scelta; il service worker mostra un promemoria generico.
+   Non partono dati personali. Richiede la sincronizzazione attiva (usa lo stesso spazio/token) e le chiavi VAPID sul Worker. */
+const PUSH_DAYS = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
+const u8k = s => { const b = atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+const pcfg = () => { let c = {}; try { c = JSON.parse(localStorage.getItem('unica_push') || '{}') || {}; } catch (e) { } return Object.assign({ on: false, dow: 0, hour: 9 }, c); };
+const pset = o => { try { localStorage.setItem('unica_push', JSON.stringify(Object.assign(pcfg(), o))); } catch (e) { } };
+const pushOk = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && location.protocol === 'https:';
+async function pushReq(cfg, method, path, body) {
+  return fetch(cfg.u + path, { method, body, headers: { Authorization: 'Bearer ' + cfg.t, 'Content-Type': 'application/json' }, credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store' });
+}
+async function pushSubscribe() {
+  const cfg = await syLoad(); if (!cfg) throw new Error('Attiva prima la sincronizzazione: il promemoria usa il tuo Worker.');
+  if (Notification.permission === 'default') await Notification.requestPermission(); if (Notification.permission !== 'granted') throw new Error('Notifiche non consentite dal browser.');
+  const kr = await fetch(cfg.u + '/push/key', { credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store' }); const pub = (await kr.text()).trim();
+  if (!kr.ok || pub.length < 80) throw new Error('Il Worker non ha le chiavi VAPID: segui sync-server/LEGGIMI.md (punto Notifiche push).');
+  const reg = await navigator.serviceWorker.ready; let sub = await reg.pushManager.getSubscription();
+  if (sub) { try { const cur = new Uint8Array(sub.options.applicationServerKey || []); const want = u8k(pub); if (cur.length !== want.length || cur.some((v, i) => v !== want[i])) { await sub.unsubscribe(); sub = null; } } catch (e) { } }
+  if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: u8k(pub) });
+  const c = pcfg(), r = await pushReq(cfg, 'PUT', '/push/' + cfg.i, JSON.stringify({ sub: { endpoint: sub.endpoint }, dow: c.dow, hour: c.hour, off: new Date().getTimezoneOffset() }));
+  if (!r.ok) throw new Error('Il Worker ha rifiutato la richiesta (' + r.status + ').');
+}
+async function pushUnsubscribe() {
+  try { const cfg = await syLoad(); if (cfg) await pushReq(cfg, 'DELETE', '/push/' + cfg.i).catch(() => { }); const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription(); if (sub) await sub.unsubscribe(); } catch (e) { }
+}
+Object.assign(ACT, {
+  async pushOn(t) {
+    if (t.checked) {
+      if (!(await ask('Notifiche push', 'Il tuo Worker riceverà l’indirizzo anonimo di notifica del tuo browser (non il tuo nome né i tuoi dati) e invierà un promemoria generico all’ora scelta, passando dal servizio push del browser (Google, Apple o Mozilla). Attivare?', { ok: 'Attiva' }))) { t.checked = false; return; }
+      try { await pushSubscribe(); pset({ on: true }); toast('Promemoria push attivo'); } catch (e) { pset({ on: false }); toast(e.message || 'Non attivato'); }
+    } else { pset({ on: false }); await pushUnsubscribe(); toast('Promemoria push disattivato'); }
+    render();
+  },
+  async pushDay(t) { pset({ dow: +t.value }); if (pcfg().on) await pushSubscribe().catch(e => toast(e.message)); },
+  async pushHour(t) { pset({ hour: +t.value }); if (pcfg().on) await pushSubscribe().catch(e => toast(e.message)); },
+  async pushTest() { const ok = await notify('Vortex Hub · promemoria', { body: 'Controlla il backup cifrato e le scadenze: apri Vortex Hub.', tag: 'unica-reminder' }); if (!ok) toast(Notification.permission === 'denied' ? 'Notifiche bloccate dal browser' : 'Notifica non mostrata'); }
+});
+{ const s1 = V.settings; V.settings = () => { const s = s1(), i = s.lastIndexOf('</main>'); if (i < 0) return s; const c = pcfg(), sy = !!SY.cfg;
+  return s.slice(0, i) + '<div class="card"><h3>Scadenze e promemoria</h3>' + window.dueNotifyUi() + (!pushOk() ? '<p class="sm mut">Non disponibili qui: servono https, un browser compatibile e (su iPhone) l’app aggiunta alla schermata Home.</p>' :
+    '<p class="sm mut">Un promemoria programmato (anche ad app chiusa) per controllare backup e scadenze. Lo invia il tuo Worker di sincronizzazione: non contiene dati e non parte nulla di personale.' + (sy ? '' : ' <b>Richiede la sincronizzazione attiva.</b>') + '</p>' +
+    '<label class="chk"><input type="checkbox" data-act="pushOn"' + (c.on ? ' checked' : '') + (sy ? '' : ' disabled') + '><span>Ricordami (anche ad app chiusa)</span></label>' +
+    '<div class="gap" style="margin-top:8px"><select class="in" data-act="pushDay" aria-label="Giorno" style="flex:1"><option value="-1"' + (c.dow === -1 ? ' selected' : '') + '>ogni giorno</option>' + PUSH_DAYS.map((d, k) => '<option value="' + k + '"' + (c.dow === k ? ' selected' : '') + '>' + d + '</option>').join('') + '</select><select class="in" data-act="pushHour" aria-label="Ora" style="width:auto">' + Array.from({ length: 24 }, (_, k) => '<option value="' + k + '"' + (c.hour === k ? ' selected' : '') + '>' + String(k).padStart(2, '0') + ':00</option>').join('') + '</select></div>' +
+    '<div class="stack mt"><button class="btn blk" data-act="pushTest">Mostra una notifica di prova</button></div>') + '</div>' + s.slice(i); }; }
+
+/* ===== Ricerca vocale carte + ricerca fuzzy/fonetica (v1.9.0) ===== */
+const VSR = () => window.SpeechRecognition || window.webkitSpeechRecognition;
+function phon(s) { // normalizzazione fonetica italiana semplificata
+  return norm(s).replace(/ch/g, 'k').replace(/gh/g, 'g').replace(/sci|sce/g, 'sc').replace(/qu/g, 'kw').replace(/c(?=[aou])/g, 'k').replace(/q/g, 'k')
+    .replace(/ph/g, 'f').replace(/w/g, 'v').replace(/y/g, 'i').replace(/x/g, 'ks').replace(/h/g, '').replace(/(.)\1+/g, '$1').replace(/ /g, '');
+}
+function lev(a, b) {
+  if (a === b) return 0; if (!a.length) return b.length; if (!b.length) return a.length;
+  let p = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) { const c = [i]; for (let j = 1; j <= b.length; j++) c[j] = Math.min(p[j] + 1, c[j - 1] + 1, p[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); p = c; }
+  return p[b.length];
+}
+/* punteggio 0..1 tra la query e il nome carta */
+function cardScore(c, qs) {
+  const q = norm(qs); if (!q) return 1;
+  const n = norm(c.data.name), dom = norm(c.data.domain || '').replace(/ (com|it|net|org|eu)$/, '');
+  if ((c.data.code || '').includes(String(qs).trim())) return 1;
+  if (n === q) return 1; if (n.includes(q) || dom.includes(q)) return .95;
+  const qp = phon(q), np = phon(n);
+  if (qp.length > 1 && np.includes(qp)) return .9;
+  let best = 0;
+  const toks = q.split(' ').filter(Boolean), nt = n.split(' ').concat(dom.split(' ')).filter(Boolean);
+  // ogni parola della query deve somigliare a una parola del nome
+  let sum = 0;
+  for (const t of toks) {
+    let tb = 0; const tp = phon(t);
+    for (const w of nt) {
+      const wp = phon(w); if (!wp || !tp) continue;
+      if (wp.startsWith(tp) && tp.length > 1) { tb = Math.max(tb, .85); continue; }
+      const d = lev(tp, wp), m = Math.max(tp.length, wp.length);
+      tb = Math.max(tb, 1 - d / m);
+    }
+    sum += tb;
+  }
+  best = sum / toks.length;
+  const d2 = lev(qp, np), m2 = Math.max(qp.length, np.length); best = Math.max(best, 1 - d2 / m2);
+  return best;
+}
+const CS_MIN = .66;
+function cardMatch(c, qs) { return cardScore(c, qs) >= CS_MIN; }
+/* ricerca fuzzy nella lista: ordina per rilevanza quando c'è una query */
+(function () {
+  const old = sortedCards;
+  sortedCards = function () {
+    const q = (U.cq || '').trim(); if (!q) { const o = old(); return U.cfav ? o.filter(c => c.data.fav) : o; }
+    const sc = new Map(); cardsArr().forEach(c => sc.set(c.id, cardScore(c, q)));
+    const all = cardsArr().filter(c => sc.get(c.id) >= CS_MIN);
+    return all.sort((x, y) => sc.get(y.id) - sc.get(x.id) || (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) || (y.data.uses || 0) - (x.data.uses || 0));
+  };
+})();
+
+/* ---- comandi vocali ---- */
+function vcCommand(t, alts) {
+  const s = norm(t);
+  const has = re => re.test(s);
+  if (has(/^(mostra |vedi )?(tutte|tutto)( le carte)?$|^(azzera|cancella|pulisci)( la ricerca| filtro)?$/)) return { say: 'Mostro tutte le carte', run() { U.cq = ''; vcRefresh(); } };
+  if (has(/\b(vista|visualizza|mostra)\b.*\b(icone|icona)\b|^icone$/)) return { say: 'Vista a icone', run() { localStorage.setItem('unica_cview', 'icons'); render(); } };
+  if (has(/\b(vista|visualizza|mostra)\b.*\b(schede|carte|scheda)\b|^schede$/) && !has(/^apri/)) return { say: 'Vista a schede', run() { localStorage.setItem('unica_cview', 'cards'); render(); } };
+  if (has(/\b(ordina|ordine)\b/)) {
+    const m = has(/piu usate|usate/) ? 'used' : has(/\b(az|alfabet\w*|nome)\b/) ? 'az' : has(/aggiunt|ordine di inserimento/) ? 'added' : has(/recent|ultime/) ? 'recent' : null;
+    if (m) return { say: 'Ordino', run() { localStorage.setItem('unica_csort', m); render(); } };
+  }
+  if (has(/\b(preferit\w*|stellat\w*)\b/) && !has(/^apri/)) return { say: 'Preferite', run() { const f = cardsArr().filter(c => c.data.fav); if (!f.length) return toast('Nessuna carta preferita'); U.cq = ''; U.cfav = true; vcRefresh(); } };
+  if (has(/\b(vicin\w*|qui intorno|nei dintorni)\b/)) return { say: 'Cerco i negozi vicini', run() { ACT.near && ACT.near({ dataset: {} }); } };
+  if (has(/(nuova|aggiungi|crea)( una)?( nuova)? carta|aggiungi$/)) return { say: 'Nuova carta', run() { openCardForm(null, {}); } };
+  if (has(/\b(scansiona|scanner|fotocamera)\b/)) return { say: 'Scanner', run() { ACT.scan && ACT.scan({ dataset: {} }); } };
+  const open = s.match(/^(apri|mostra|vai a|usa|fammi vedere|trova|cerca)( la| il| lo| l| le| carta| tessera| della| di)* ?(.*)$/);
+  const open2 = open && open[3] ? open[3] : null;
+  const isOpen = open && /^(apri|vai a|usa|fammi vedere|mostra)/.test(s) && open2;
+  const query = open2 || s;
+  // trova la carta migliore su tutte le alternative del riconoscimento
+  let top = null, second = 0;
+  for (const alt of [query].concat((alts || []).map(a => norm(a).replace(/^(apri|mostra|cerca|trova|usa|vai a)( la| il| lo| l| carta| tessera| di| della)* ?/, '')).filter(Boolean))) {
+    for (const c of cardsArr()) { const sc = cardScore(c, alt); if (!top || sc > top.sc) { if (top && top.c.id !== c.id) second = Math.max(second, top.sc); top = { c, sc }; } else if (c.id !== top.c.id) second = Math.max(second, sc); }
+  }
+  if (isOpen && top && top.sc >= .75 && top.sc - second >= .08) return { say: 'Apro ' + top.c.data.name, run() { U.cq = ''; cardOpen(top.c.id); } };
+  return { say: null, search: query, run() { U.cq = query; vcRefresh(); } };
+}
+function vcRefresh() {
+  if (U.cq) U.cfav = false;
+  const q = $('cq'); if (q) q.value = U.cq || '';
+  const l = $('clist'); if (l) { l.innerHTML = cardsList(); drawMinis(); }
+}
+/* ---- riconoscimento ---- */
+const VC = { r: null, on: false };
+function vcUI(txt, state) {
+  let b = $('vcb');
+  if (!txt && !state) { if (b) b.remove(); return; }
+  if (!b) { b = document.createElement('div'); b.id = 'vcb'; b.className = 'vcb'; b.setAttribute('role', 'status'); b.setAttribute('aria-live', 'polite'); document.body.appendChild(b); }
+  micMark(VC.on ? 'vc' : '');
+  b.className = 'vcb ' + (state || ''); b.innerHTML = '<span class="vcd" aria-hidden="true"></span><span class="vct">' + h(txt) + '</span>' + (VC.on ? '<button class="ib" data-act="vcStop" aria-label="Annulla">' + ic('x') + '</button>' : '');
+}
+function vcStop() { VC.on = false; try { VC.r && VC.r.abort(); } catch (e) { } VC.r = null; vcUI(); }
+function vcStart() {
+  const SR = VSR();
+  if (!SR) { toast('Il riconoscimento vocale non è supportato da questo browser'); return; }
+  if (VC.on) { vcStop(); return; }
+  try {
+    const r = new SR(); VC.r = r; VC.on = true; let got = false, fin = '';
+    r.lang = 'it-IT'; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
+    r.onresult = e => {
+      const res = e.results[e.results.length - 1], t = res[0].transcript.trim();
+      vcUI('“' + t + '”', 'live'); if (!res.isFinal) return;
+      got = true; fin = t; const alts = []; for (let i = 0; i < res.length; i++) alts.push(res[i].transcript);
+      VC.on = false; const cmd = vcCommand(t, alts);
+      if (cmd.say) { vcUI(cmd.say, 'ok'); buzz && buzz(); } else { const n = (U.cq = cmd.search, cardsArr().filter(c => cardMatch(c, cmd.search)).length); vcUI(n ? '“' + t + '” · ' + n + (n === 1 ? ' carta' : ' carte') : '“' + t + '” · nessuna carta', n ? 'ok' : 'no'); }
+      cmd.run(); say2(cmd.say);
+      setTimeout(() => { if (!VC.on) vcUI(); }, 2200);
+    };
+    r.onerror = e => {
+      VC.on = false; VC.r = null;
+      const m = { 'not-allowed': 'Microfono non consentito: abilitalo nelle impostazioni del browser', 'service-not-allowed': 'Riconoscimento vocale non consentito', 'no-speech': 'Non ho sentito nulla, riprova', 'audio-capture': 'Microfono non trovato', 'network': 'Il riconoscimento vocale richiede la rete su questo dispositivo', 'language-not-supported': 'Italiano non disponibile in questo browser' }[e.error];
+      if (e.error !== 'aborted') { vcUI(m || 'Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2800); } else vcUI();
+    };
+    r.onend = () => { micMark(''); if (VC.on) { VC.on = false; if (!got) { vcUI('Non ho sentito nulla, riprova', 'no'); setTimeout(() => vcUI(), 2000); } } };
+    r.start(); vcUI('Parla ora… prova “apri Esselunga”', 'live');
+  } catch (e) { VC.on = false; VC.r = null; vcUI('Ricerca vocale non disponibile', 'no'); setTimeout(() => vcUI(), 2200); }
+}
+function say2(t) { try { if (t && lsGet('unica_tts') === '1') say(t); } catch (e) { } }
+/* microfono nella barra di ricerca */
+(function () {
+  const vc = V.cards;
+  V.cards = function () {
+    let html = vc();
+    const mic = VSR() ? '<button class="ib vcm" data-act="vcStart" aria-label="Ricerca vocale" title="Ricerca vocale">' + ic('mic') + '</button>' : '';
+    if (U.cfav) html = html.replace('<div id="clist"', '<div class="chips"><button class="chip" data-act="cfavOff" aria-label="Mostra tutte le carte">' + ic('star') + ' Solo preferite ' + ic('x') + '</button></div><div id="clist"');
+    return html.replace('<input class="in sp" id="cq"', '<div class="sbox sp"><input class="in" id="cq"').replace('<select class="in" id="cs"', mic + '</div><select class="in" id="cs"');
+  };
+  Object.assign(ACT, { cfavOff: () => { U.cfav = false; render(); }, vcStart: () => vcStart(), vcStop: () => vcStop() });
+})();
+
+/* ===== Codici 2FA (TOTP, RFC 6238) nel Vault ===== */
+const B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function b32dec(s) {
+  s = String(s).toUpperCase().replace(/[\s-]+/g, '').replace(/=+$/, ''); let bits = '', out = [];
+  for (const ch of s) { const v = B32.indexOf(ch); if (v < 0) return null; bits += v.toString(2).padStart(5, '0'); }
+  for (let i = 0; i + 8 <= bits.length; i += 8) out.push(parseInt(bits.slice(i, i + 8), 2));
+  return out.length ? new Uint8Array(out) : null;
+}
+/* accetta un segreto base32 oppure un URI otpauth://totp/...; restituisce la configurazione normalizzata */
+function totpParse(txt) {
+  txt = String(txt || '').trim(); if (!txt) return null;
+  let secret = txt, digits = 6, period = 30, algo = 'SHA-1', issuer = '', label = '';
+  if (/^otpauth:\/\//i.test(txt)) {
+    let u; try { u = new URL(txt); } catch (e) { return null; }
+    if (u.hostname.toLowerCase() !== 'totp') return null;
+    const q = u.searchParams; secret = q.get('secret') || '';
+    digits = [6, 7, 8].includes(+q.get('digits')) ? +q.get('digits') : 6;
+    period = +q.get('period') >= 10 && +q.get('period') <= 120 ? +q.get('period') : 30;
+    const a = (q.get('algorithm') || 'SHA1').toUpperCase().replace('SHA', 'SHA-').replace('SHA--', 'SHA-'); algo = ['SHA-1', 'SHA-256', 'SHA-512'].includes(a) ? a : 'SHA-1';
+    label = decodeURIComponent(u.pathname.replace(/^\//, '')); issuer = q.get('issuer') || (label.includes(':') ? label.split(':')[0] : '');
+  }
+  const key = b32dec(secret); if (!key || key.length < 10) return null;
+  return { secret: secret.toUpperCase().replace(/[\s-]+/g, '').replace(/=+$/, ''), digits, period, algo, issuer, label };
+}
+async function totpCode(cfg, t) {
+  t = t == null ? Date.now() : t; const ctr = Math.floor(t / 1000 / cfg.period), buf = new ArrayBuffer(8), dv = new DataView(buf);
+  dv.setUint32(0, Math.floor(ctr / 4294967296)); dv.setUint32(4, ctr >>> 0);
+  const key = await crypto.subtle.importKey('raw', b32dec(cfg.secret), { name: 'HMAC', hash: cfg.algo }, false, ['sign']);
+  const h = new Uint8Array(await crypto.subtle.sign('HMAC', key, buf)), o = h[h.length - 1] & 15;
+  const n = ((h[o] & 127) << 24 | h[o + 1] << 16 | h[o + 2] << 8 | h[o + 3]) % Math.pow(10, cfg.digits);
+  return String(n).padStart(cfg.digits, '0');
+}
+const totpFmt = c => c.length === 6 ? c.slice(0, 3) + ' ' + c.slice(3) : c.length === 8 ? c.slice(0, 4) + ' ' + c.slice(4) : c;
+
+/* campo nel modulo della voce (solo per gli accessi) */
+(function () {
+  const vf = vxFields; vxFields = function (d) {
+    const base = vf(d); if (!U.form || U.form.type !== 'login') return base;
+    return base + '<label class="f" for="f_totp">Codice 2FA (facoltativo)</label><div class="pw"><input class="in mono" id="f_totp" type="password" value="' + h(d.totp || '') + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Chiave segreta o link otpauth://"><button type="button" class="btn" data-act="eye" data-for="f_totp" aria-label="Mostra o nascondi">' + ic('eye') + '</button><button type="button" class="btn" data-act="totpScan" aria-label="Scansiona il QR">' + ic('scan') + '</button></div><p class="sm mut">Incolla la chiave che ti mostra il sito (o scansiona il suo QR): Vortex Hub genererà i codici a 6 cifre. Resta cifrata come la password.</p><p class="sm bad" id="totperr" role="alert"></p>';
+  };
+  const vx = vxExtra; vxExtra = function () { const o = vx(), f = $('f_totp'); if (f) { const c = totpParse(f.value); o.totp = c ? f.value.trim() : undefined; } return o; };
+  /* validazione prima del salvataggio: se non valida avvisa */
+  const fi = FORMS.item; FORMS.item = async function (f) {
+    const t = $('f_totp'); if (t && t.value.trim() && !totpParse(t.value)) { const e = $('totperr'); if (e) e.textContent = 'Chiave 2FA non valida: controlla di aver copiato tutto il codice (almeno 16 caratteri A–Z e 2–7) oppure il link otpauth://.'; t.focus(); return; }
+    return fi.call(this, f);
+  };
+})();
+
+/* riga con codice nel dettaglio */
+(function () {
+  const od = openDetail; openDetail = function (id) {
+    const m = od(id), it = S.items.get(id); if (!m || !it || it.type !== 'login' || !it.data.totp) return m;
+    const cfg = totpParse(it.data.totp); if (!cfg) return m; const card = m.q('.card'); if (!card) return m;
+    const row = document.createElement('div'); row.className = 'kv'; row.innerHTML = '<div class="k">Codice 2FA' + (cfg.issuer ? ' · ' + h(cfg.issuer) : '') + '</div><div class="v"><span id="totpv" class="mono b" style="font-size:1.35rem;letter-spacing:.08em" aria-live="off">••• •••</span><svg id="totpr" viewBox="0 0 36 36" width="30" height="30" aria-hidden="true" style="flex:none"><circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" stroke-opacity=".2" stroke-width="3"/><circle id="totpc" cx="18" cy="18" r="15" fill="none" stroke="var(--neo2,#1f78b4)" stroke-width="3" stroke-linecap="round" stroke-dasharray="94.2" transform="rotate(-90 18 18)"/></svg><span class="sm mut" id="totps" style="min-width:2ch;text-align:right"></span><button class="ib" id="totpb" aria-label="Copia codice 2FA">' + ic('copy') + '</button></div>';
+    card.appendChild(row);
+    let cur = '', last = -1;
+    const tick = async () => {
+      if (!row.isConnected) return clearInterval(iv);
+      const now = Date.now(), ctr = Math.floor(now / 1000 / cfg.period), left = cfg.period - ((now / 1000) % cfg.period);
+      if (ctr !== last) { last = ctr; try { cur = await totpCode(cfg, now); row.querySelector('#totpv').textContent = totpFmt(cur); } catch (e) { row.querySelector('#totpv').textContent = 'Errore'; } }
+      row.querySelector('#totpc').style.strokeDashoffset = String(94.2 * (1 - left / cfg.period)); row.querySelector('#totps').textContent = Math.ceil(left);
+      row.querySelector('#totpv').style.opacity = left < 5 ? .55 : 1;
+    };
+    const iv = setInterval(tick, 500); tick();
+    row.querySelector('#totpb').onclick = () => { if (cur) copy(cur, 'Codice 2FA'); };
+    return m;
+  };
+  Object.assign(ACT, {
+    totpScan: () => openScanner(r => {
+      const f = $('f_totp'); if (!f) return; if (!r) return toast('Scrivi o incolla la chiave a mano');
+      if (!totpParse(r.code)) return toast('Il QR non contiene un codice 2FA valido');
+      f.value = r.code; f.type = 'text'; toast('Codice 2FA letto');
+    })
+  });
+})();
+
+/* ===== Import estratti conto CSV intelligente (v2.1) ===== */
+function csvRows(txt, sep) {
+  const rows = []; let r = [], c = '', q = false;
+  for (let i = 0; i < txt.length; i++) {
+    const ch = txt[i];
+    if (q) { if (ch === '"') { if (txt[i + 1] === '"') { c += '"'; i++; } else q = false; } else c += ch; }
+    else if (ch === '"' && c === '') q = true; else if (ch === sep) { r.push(c.trim()); c = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && txt[i + 1] === '\n') i++; r.push(c.trim()); c = ''; if (r.some(x => x !== '')) rows.push(r); r = []; }
+    else c += ch;
+  }
+  r.push(c.trim()); if (r.some(x => x !== '')) rows.push(r); return rows;
+}
+function bankSep(txt) {
+  const L = txt.split(/\r?\n/).filter(x => x.trim()).slice(0, 40); let best = ';', bs = -1;
+  for (const s of [';', '\t', ',', '|']) { const counts = L.map(l => l.split(s).length - 1).filter(n => n > 0); if (counts.length < 2) continue; const freq = {}; counts.forEach(n => freq[n] = (freq[n] || 0) + 1); const sc = Math.max(...Object.values(freq)) * 10 + counts.length; if (sc > bs) { bs = sc; best = s; } }
+  return best;
+}
+async function bankText(f) {
+  const buf = await f.arrayBuffer(); let t = new TextDecoder('utf-8').decode(buf);
+  if (t.includes('�')) t = new TextDecoder('windows-1252').decode(buf);
+  return t.replace(/^﻿/, '');
+}
+const bkNum = raw => {
+  let s = String(raw == null ? '' : raw).trim(); if (!s) return NaN; let neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1); } if (/-\s*$/.test(s)) { neg = true; s = s.replace(/-\s*$/, ''); }
+  s = s.replace(/eur|euro|€|\s/gi, ''); const n = parseAmount(s); return isNaN(n) ? NaN : (neg ? -Math.abs(n) : n);
+};
+function bankDetect(rows) {
+  let hi = -1;
+  for (let i = 0; i < Math.min(rows.length, 40); i++) { const j = rows[i].join(' ').toLowerCase(); const k = ['data', 'descrizione', 'importo', 'causale', 'dare', 'avere', 'entrate', 'uscite', 'operazione', 'valuta', 'addebit', 'accredit', 'date', 'description', 'amount', 'debit', 'credit', 'details', 'memo'].filter(w => j.includes(w)).length; if (k >= 2 && !/\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}/.test(j)) { hi = i; break; } }
+  const head = hi >= 0 ? rows[hi].map(x => x.toLowerCase()) : [], data = rows.slice(hi + 1), w = Math.max(...rows.slice(hi + 1, hi + 40).map(r => r.length), head.length, 1);
+  const find = (...res) => { for (const re of res) { const i = head.findIndex(h => re.test(h)); if (i >= 0) return i; } return -1; };
+  let date = find(/contabil|data operazione|^data$/, /data(?! valuta)/, /date/, /valuta/), desc = find(/descrizione|causale|dettagli|operazione(?! data)|descr|motivo|note/), amt = find(/^importo|importo in eur|ammontare|amount|^eur$/, /importo/);
+  const debit = find(/dare|uscite|addebit|debit/), credit = find(/avere|entrate|accredit|credit/);
+  const samp = data.slice(0, 40);
+  const colScore = (i, fn) => samp.filter(r => r[i] !== undefined && fn(r[i])).length;
+  if (date < 0) { let b = 0; for (let i = 0; i < w; i++) { const s = colScore(i, v => !!parseDate(v)); if (s > b) { b = s; date = i; } } }
+  if (amt < 0 && debit < 0) { let b = 0; for (let i = 0; i < w; i++) { if (i === date) continue; const s = colScore(i, v => !isNaN(bkNum(v)) && /\d/.test(v) && !parseDate(v)); if (s > b) { b = s; amt = i; } } }
+  if (desc < 0) { let b = 0; for (let i = 0; i < w; i++) { if (i === date || i === amt || i === debit || i === credit) continue; const s = samp.reduce((a, r) => a + (r[i] ? String(r[i]).length : 0), 0); if (s > b) { b = s; desc = i; } } }
+  return { hi, head, data, w, date, desc, amt, debit, credit };
+}
+function bankParse(D, m, opt) {
+  const out = [];
+  D.data.forEach(r => {
+    if (r.length < 2) return; const date = parseDate(r[m.date]); if (!date) { out.push({ bad: true }); return; }
+    let a = NaN;
+    if (m.amt >= 0) a = bkNum(r[m.amt]);
+    else { const dv = bkNum(r[m.debit]), cv = bkNum(r[m.credit]); if (!isNaN(dv) && dv !== 0) a = -Math.abs(dv); else if (!isNaN(cv) && cv !== 0) a = Math.abs(cv); }
+    if (isNaN(a)) { out.push({ bad: true }); return; }
+    if (opt.flip) a = -a;
+    const desc = String(r[m.desc] || 'Movimento bancario').replace(/\s+/g, ' ').slice(0, 200);
+    out.push({ date, desc, a });
+  });
+  return out;
+}
+const bkKey = (date, amt, desc) => date + '|' + Math.round(Math.abs(amt) * 100) + '|' + norm(desc).slice(0, 40);
+function bankPlan(rows) {
+  const d = FIN(), have = new Map(); d.expenses.forEach(e => { const k = bkKey(e.date, num(e.amount), e.desc); have.set(k, (have.get(k) || 0) + 1); });
+  const res = { add: [], dup: 0, inc: 0, bad: 0, incSum: 0, outSum: 0 };
+  rows.forEach(r => {
+    if (r.bad) return res.bad++;
+    if (r.a >= 0) { res.inc++; res.incSum += r.a; return; }
+    const k = bkKey(r.date, r.a, r.desc); if ((have.get(k) || 0) > 0) { have.set(k, have.get(k) - 1); res.dup++; return; }
+    const c = categorize(r.desc); res.add.push({ date: r.date, desc: r.desc, category: c.cat, amount: Math.abs(r.a) }); res.outSum += Math.abs(r.a);
+  });
+  return res;
+}
+async function bankImport() {
+  const f = await pickFile('.csv,.tsv,.txt,text/csv,text/plain'); if (!f) return;
+  let text; try { text = await bankText(f); } catch (e) { return toast('File non leggibile'); }
+  if (text.length > 8e6) return toast('File troppo grande');
+  const sep = bankSep(text), rows = csvRows(text, sep); if (rows.length < 2) return toast('CSV vuoto o non riconosciuto');
+  const D = bankDetect(rows); if (!D.data.length) return toast('Nessun movimento trovato');
+  const st = { date: D.date, desc: D.desc, amt: D.amt >= 0 ? D.amt : -1, debit: D.debit, credit: D.credit, mode: D.amt >= 0 || D.debit < 0 ? 'one' : 'two', flip: false };
+  const colName = i => (D.head[i] ? D.head[i] : 'Colonna ' + (i + 1)).slice(0, 28) + ' · ' + String((D.data[0] || [])[i] || '').slice(0, 14);
+  const opts = (sel, none) => (none ? '<option value="-1"' + (sel < 0 ? ' selected' : '') + '>—</option>' : '') + Array.from({ length: D.w }, (_, i) => '<option value="' + i + '"' + (i === sel ? ' selected' : '') + '>' + h(colName(i)) + '</option>').join('');
+  const m = modal('<div id="bkb"></div>', { sticky: true });
+  let plan = null;
+  const draw = () => {
+    const m2 = { date: +st.date, desc: +st.desc, amt: st.mode === 'one' ? +st.amt : -1, debit: +st.debit, credit: +st.credit };
+    const valid = m2.date >= 0 && m2.desc >= 0 && (m2.amt >= 0 || (m2.debit >= 0 || m2.credit >= 0));
+    plan = valid ? bankPlan(bankParse(D, m2, st)) : null;
+    const prev = plan ? plan.add.slice(0, 6).map(e => '<tr><td>' + h(e.date.slice(5).split('-').reverse().join('/')) + '</td><td>' + h(e.desc.slice(0, 26)) + '</td><td class="sm mut">' + h(e.category) + '</td><td style="text-align:right">' + h(eur(e.amount)) + '</td></tr>').join('') : '';
+    m.q('#bkb').innerHTML = '<div class="gap"><h2 class="sp" style="margin:0">Importa estratto conto</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+      '<p class="sm mut">File «' + h(f.name) + '» · ' + D.data.length + ' righe · separatore «' + (sep === '\t' ? 'tab' : h(sep)) + '». Ho riconosciuto le colonne: correggile se serve.</p>' +
+      '<label class="f" for="bk_d">Data</label><select class="in" id="bk_d" data-bk="date">' + opts(st.date) + '</select><label class="f" for="bk_s">Descrizione</label><select class="in" id="bk_s" data-bk="desc">' + opts(st.desc) + '</select>' +
+      '<div class="seg" role="group" aria-label="Importi" style="margin-top:10px"><button type="button" data-bkm="one" aria-pressed="' + (st.mode === 'one') + '">Una colonna importi</button><button type="button" data-bkm="two" aria-pressed="' + (st.mode === 'two') + '">Uscite / Entrate separate</button></div>' +
+      (st.mode === 'one' ? '<label class="f" for="bk_a">Importo</label><select class="in" id="bk_a" data-bk="amt">' + opts(st.amt, 1) + '</select><label class="chk"><input type="checkbox" data-bkf' + (st.flip ? ' checked' : '') + '><span>Le uscite sono positive (inverti il segno)</span></label>'
+        : '<label class="f" for="bk_u">Uscite (dare)</label><select class="in" id="bk_u" data-bk="debit">' + opts(st.debit, 1) + '</select><label class="f" for="bk_e">Entrate (avere)</label><select class="in" id="bk_e" data-bk="credit">' + opts(st.credit, 1) + '</select>') +
+      (plan ? '<div class="card" style="margin-top:12px"><b>' + plan.add.length + ' spese da importare</b> (' + h(eur(plan.outSum)) + ')<p class="sm mut" style="margin:4px 0 0">' + plan.dup + ' già presenti · ' + plan.inc + ' entrate ignorate (' + h(eur(plan.incSum)) + ')' + (plan.bad ? ' · ' + plan.bad + ' righe non lette' : '') + '</p></div>' +
+        (prev ? '<div style="overflow:auto"><table class="sm" style="width:100%;border-collapse:collapse"><tbody>' + prev + '</tbody></table></div>' : '') : '<p class="sm bad">Scegli almeno data, descrizione e importo.</p>') +
+      '<div class="gap" style="margin-top:12px"><span class="sp"></span><button class="btn" data-act="close">Annulla</button><button class="btn pri" id="bk_go"' + (plan && plan.add.length ? '' : ' disabled') + '>Importa ' + (plan ? plan.add.length : 0) + '</button></div>';
+  };
+  m.el.addEventListener('change', e => { const t = e.target; if (t.dataset.bk) { st[t.dataset.bk] = +t.value; draw(); } else if (t.hasAttribute('data-bkf')) { st.flip = t.checked; draw(); } });
+  m.el.addEventListener('click', async e => {
+    const b = e.target.closest('[data-bkm]'); if (b) { st.mode = b.dataset.bkm; draw(); return; }
+    if (e.target.id === 'bk_go' && plan && plan.add.length) {
+      const d = FIN(), id = 'i' + Date.now().toString(36);
+      plan.add.forEach(x => { if (d.budgets[x.category] === undefined) d.budgets[x.category] = 150; d.expenses.unshift({ ...x, imp: id }); });
+      await finSave(); const n = plan.add.length; m.close(); render();
+      const r = modal('<h2>Importate ' + n + ' spese</h2><p class="mut sm">Le trovi in Conti → Spese, già categorizzate per parole chiave: puoi correggere la categoria di ognuna. Se hai sbagliato colonna o segno, puoi annullare questo import.</p><div class="gap"><button class="btn dan" id="bk_un">Annulla import</button><span class="sp"></span><button class="btn pri" data-act="close">Fatto</button></div>');
+      r.q('#bk_un').onclick = async () => { const d2 = FIN(); d2.expenses = d2.expenses.filter(x => x.imp !== id); await finSave(); r.close(); render(); toast('Import annullato'); };
+    }
+  });
+  draw();
+}
+Object.assign(ACT, { csvImp: () => bankImport() });
+
+/* ===== Conti: obiettivi di risparmio, ricorrenze/abbonamenti, confronti (v2.2) ===== */
+FTABS.splice(FTABS.findIndex(t => t[0] === 'bud') + 1, 0, ['obi', 'Obiettivi'], ['ric', 'Ricorrenze'], ['cmp', 'Confronti']);
+const isoDay3 = (d = new Date()) => d.toISOString().slice(0, 10);
+const addMon3 = (d, n) => { const x = new Date(d); const day = x.getDate(); x.setDate(1); x.setMonth(x.getMonth() + n); x.setDate(Math.min(day, new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate())); return x; };
+const fmtD3 = d => new Date(d).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' });
+
+/* ---------- Obiettivi di risparmio ---------- */
+function goalForecast(g) {
+  const target = num(g.target), saved = num(g.saved), rem = target - saved, now = new Date();
+  if (target > 0 && rem <= 0) return { done: true, text: 'Obiettivo raggiunto 🎉', cls: 'ok' };
+  const since = Date.now() - 90 * MS_DAY, last = (g.hist || []).filter(x => new Date(x.d).getTime() >= since).reduce((s, x) => s + num(x.a), 0);
+  const avg = last / 3, plan = num(g.monthly), rate = plan > 0 ? plan : avg;
+  const out = { rate, rem, plan, avg };
+  if (g.deadline) { const dl = new Date(g.deadline), ml = Math.max(1, (dl.getFullYear() - now.getFullYear()) * 12 + dl.getMonth() - now.getMonth()); out.need = rem / ml; out.deadline = dl; if (dl < now) out.late = true; }
+  if (rate <= 0) { out.text = 'Indica un versamento mensile o registra dei versamenti per avere la previsione.' + (out.need ? ' Per rispettare la scadenza servirebbero ' + eur(out.need) + ' al mese.' : ''); out.cls = 'mut'; return out; }
+  const months = Math.ceil(rem / rate); out.eta = addMon3(now, months);
+  out.text = 'Al ritmo di ' + eur(rate) + '/mese lo raggiungi ' + (months <= 1 ? 'entro un mese' : 'tra ' + months + ' mesi') + ' (' + fmtD3(out.eta) + ').';
+  if (out.deadline) { if (out.late) { out.text += ' La scadenza è passata.'; out.cls = 'bad'; } else if (out.eta <= out.deadline) { out.text += ' Sei in linea con la scadenza.'; out.cls = 'ok'; } else { out.text += ' Per la scadenza (' + fmtD3(out.deadline) + ') servono ' + eur(out.need) + '/mese.'; out.cls = 'bad'; } } else out.cls = 'mut';
+  return out;
+}
+FV.obi = function () {
+  const d = FIN(), G = d.goals;
+  const tot = G.reduce((s, g) => s + num(g.saved), 0), tgt = G.reduce((s, g) => s + num(g.target), 0);
+  return '<div class="gap"><b class="sp">Obiettivi di risparmio</b><button class="btn sm pri" data-act="goalNew">' + ic('plus') + ' Obiettivo</button></div>' +
+    (G.length ? '<p class="sm mut">Messi da parte: <b>' + h(eur(tot)) + '</b> su ' + h(eur(tgt)) + '</p>' : '') +
+    (G.map(g => { const f = goalForecast(g), p = num(g.target) ? Math.min(100, num(g.saved) / num(g.target) * 100) : 0; return '<div class="card mt"><div class="gap"><b class="sp">' + h(g.name) + '</b><button class="ib" data-act="goalEdit" data-id="' + h(g.id) + '" aria-label="Modifica ' + h(g.name) + '">' + ic('edit') + '</button></div><p style="margin:2px 0"><b>' + h(eur(num(g.saved))) + '</b> <span class="mut sm">su ' + h(eur(num(g.target))) + ' · ' + Math.round(p) + '%</span></p>' + bar(p, f.done ? '' : '') + '<p class="sm ' + (f.cls || 'mut') + '">' + h(f.text) + '</p>' + (f.done ? '' : '<button class="btn sm pri" data-act="goalAdd" data-id="' + h(g.id) + '">' + ic('plus') + ' Versamento</button>') + '</div>'; }).join('') || '<div class="card c mut mt">Nessun obiettivo. Crea il primo: vacanza, fondo emergenza, auto…</div>');
+};
+function goalForm(id) {
+  const g = id ? FIN().goals.find(x => x.id === id) : { name: '', target: '', saved: 0, monthly: '', deadline: '' }; U.gid = id || null;
+  modal('<h2>' + (id ? 'Modifica obiettivo' : 'Nuovo obiettivo') + '</h2><form data-form="goal"><label class="f" for="g_n">Nome</label><input class="in" id="g_n" required maxlength="60" value="' + h(g.name) + '" autocomplete="off"><label class="f" for="g_t">Importo da raggiungere (€)</label><input class="in" id="g_t" inputmode="decimal" required value="' + h(g.target) + '"><label class="f" for="g_s">Già messi da parte (€)</label><input class="in" id="g_s" inputmode="decimal" value="' + h(g.saved) + '"><label class="f" for="g_m">Versamento mensile previsto (facoltativo)</label><input class="in" id="g_m" inputmode="decimal" value="' + h(g.monthly || '') + '"><label class="f" for="g_d">Scadenza (facoltativa)</label><input class="in" type="date" id="g_d" value="' + h(g.deadline || '') + '"><p class="sm bad" id="g_err" role="alert"></p><div class="gap" style="margin-top:12px">' + (id ? '<button type="button" class="btn dan" data-act="goalDel">Elimina</button>' : '') + '<span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>', { sticky: true });
+}
+Object.assign(FORMS, {
+  async goal() {
+    const g = { name: $('g_n').value.trim().slice(0, 60), target: Math.abs(num($('g_t').value)), saved: Math.abs(num($('g_s').value)), monthly: Math.abs(num($('g_m').value)) || 0, deadline: $('g_d').value || '' };
+    if (!g.name || !g.target) return $('g_err').textContent = 'Inserisci nome e importo da raggiungere.';
+    const d = FIN(); if (U.gid) { const o = d.goals.find(x => x.id === U.gid); Object.assign(o, g); } else d.goals.push({ id: 'g' + Date.now().toString(36), hist: [], ...g });
+    await finSave(); closeTop(); render(); toast('Obiettivo salvato');
+  },
+  async goaladd() {
+    const a = Math.abs(num($('ga_a').value)); if (!a) return $('ga_err').textContent = 'Inserisci un importo.';
+    const g = FIN().goals.find(x => x.id === U.gid); if (!g) return; g.saved = num(g.saved) + a; (g.hist = g.hist || []).push({ d: isoDay3(), a }); g.hist = g.hist.slice(-120);
+    await finSave(); closeTop(); render(); toast('Versamento registrato');
+  }
+});
+Object.assign(ACT, {
+  goalNew: () => goalForm(null), goalEdit: t => goalForm(t.dataset.id),
+  goalAdd: t => { U.gid = t.dataset.id; modal('<h2>Nuovo versamento</h2><form data-form="goaladd"><label class="f" for="ga_a">Importo (€)</label><input class="in" id="ga_a" inputmode="decimal" required autofocus><p class="sm bad" id="ga_err" role="alert"></p><div class="gap" style="margin-top:12px"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Aggiungi</button></div></form>', { sticky: true }); },
+  async goalDel() { if (await ask('Eliminare l’obiettivo?', 'L’operazione non si può annullare.', { ok: 'Elimina', danger: true })) { const d = FIN(); d.goals = d.goals.filter(x => x.id !== U.gid); await finSave(); closeTop(); render(); } }
+});
+
+/* ---------- Ricorrenze e abbonamenti ---------- */
+function recKey(desc) {
+  return norm(String(desc)).replace(/\b(pagamento|pos|carta|addebito|sdd|rid|bonifico|a favore di|ordinante|data|del|il|n|nr|rif|ref)\b/g, ' ').replace(/[0-9]+/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 1).slice(0, 3).join(' ');
+}
+const REC_F = [['settimanale', 7, 2, 1], ['mensile', 30.4, 4, 3], ['trimestrale', 91, 8, 3], ['annuale', 365, 15, 2]];
+function recDetect(d) {
+  const groups = new Map();
+  d.expenses.forEach(e => { const a = num(e.amount), dt = new Date(e.date); if (!a || isNaN(dt)) return; const k = recKey(e.desc); if (!k) return; (groups.get(k) || groups.set(k, []).get(k)).push({ t: dt.getTime(), a, desc: e.desc, date: e.date }); });
+  const out = [], today = Date.now();
+  groups.forEach((L, k) => {
+    L.sort((x, y) => x.t - y.t);
+    const amts = L.map(x => x.a).sort((x, y) => x - y), med = amts[Math.floor(amts.length / 2)];
+    // un movimento al giorno per lo stesso pagamento non conta due volte
+    const days = L.filter((x, i) => !i || x.t - L[i - 1].t > 3 * MS_DAY); if (days.length < 2) return;
+    const iv = days.slice(1).map((x, i) => (x.t - days[i].t) / MS_DAY);
+    for (const [name, dd, tol, minN] of REC_F) {
+      if (days.length < minN) continue;
+      const okI = iv.filter(v => Math.abs(v - dd) <= tol).length; if (okI / iv.length < .7) continue;
+      const okA = days.filter(x => Math.abs(x.a - med) <= med * .2 + .5).length; if (okA / days.length < .7) continue;
+      const last = days[days.length - 1], next = new Date(last.t + dd * MS_DAY), mEq = med * (name === 'settimanale' ? 52 / 12 : name === 'mensile' ? 1 : name === 'trimestrale' ? 1 / 3 : 1 / 12);
+      out.push({ key: k, label: last.desc.slice(0, 40), amount: med, freq: name, n: days.length, last: last.date, next, mEq, stale: today - next.getTime() > dd * 1.5 * MS_DAY });
+      break;
+    }
+  });
+  return out.sort((a, b) => a.next - b.next);
+}
+const recActive = d => recDetect(d).filter(r => !d.recIgnore.includes(r.key));
+FV.ric = function () {
+  const d = FIN(), all = recDetect(d), act = all.filter(r => !d.recIgnore.includes(r.key) && !r.stale), hid = all.filter(r => d.recIgnore.includes(r.key)), old = all.filter(r => !d.recIgnore.includes(r.key) && r.stale);
+  const mo = act.reduce((s, r) => s + r.mEq, 0), now = Date.now();
+  const row = r => { const dd = Math.ceil((r.next.getTime() - now) / MS_DAY); return '<div class="card mt"><div class="gap"><b class="sp">' + h(r.label) + '</b><b>' + h(eur(r.amount)) + '</b></div><p class="sm mut" style="margin:2px 0">' + h(r.freq) + ' · ' + r.n + ' addebiti · prossimo ' + (dd < 0 ? 'atteso da ' + (-dd) + ' g' : dd === 0 ? '<b>oggi</b>' : dd === 1 ? 'domani' : 'tra ' + dd + ' giorni') + ' (' + h(fmtD3(r.next)) + ')</p><button class="btn sm" data-act="recIgnore" data-k="' + h(r.key) + '">Ignora</button></div>'; };
+  return '<div class="card"><h3>Abbonamenti e pagamenti ricorrenti</h3><p class="sm mut">Rilevati dalle tue spese (servono almeno 2–3 addebiti simili e regolari). Importa un estratto conto per un risultato migliore.</p>' + (act.length ? '<p style="margin:0"><b>' + h(eur(mo)) + '</b> <span class="mut sm">al mese (' + h(eur(mo * 12)) + ' l’anno) in ' + act.length + ' ricorrenze</span></p>' : '<p class="sm mut">Nessuna ricorrenza rilevata per ora.</p>') + '</div>' +
+    act.map(row).join('') + (old.length ? '<h3 class="mt">Forse terminate</h3>' + old.map(r => '<p class="sm mut">' + h(r.label) + ' · ultimo addebito ' + h(r.last) + ' · <button class="btn sm" data-act="recIgnore" data-k="' + h(r.key) + '">Nascondi</button></p>').join('') : '') +
+    (hid.length ? '<details class="mt"><summary class="sm">Ignorate (' + hid.length + ')</summary>' + hid.map(r => '<p class="sm">' + h(r.label) + ' <button class="btn sm" data-act="recRestore" data-k="' + h(r.key) + '">Ripristina</button></p>').join('') + '</details>' : '');
+};
+Object.assign(ACT, {
+  async recIgnore(t) { const d = FIN(); if (!d.recIgnore.includes(t.dataset.k)) d.recIgnore.push(t.dataset.k); await finSave(); render(); },
+  async recRestore(t) { const d = FIN(); d.recIgnore = d.recIgnore.filter(k => k !== t.dataset.k); await finSave(); render(); }
+});
+/* promemoria in Home e notifica prima del rinnovo */
+(function () {
+  const ag = agenda; agenda = function () {
+    const L = ag();
+    if (finLoaded()) { const lim = Date.now() + 5 * MS_DAY; recActive(FIN()).filter(r => !r.stale && r.next.getTime() <= lim && r.next.getTime() > Date.now() - MS_DAY).slice(0, 3).forEach(r => L.push({ i: 'cal', t: 'Rinnovo/addebito: ' + r.label + ' · ' + eur(r.amount) + ' · ' + fmtD3(r.next), tab: 'ric' })); }
+    return L;
+  };
+  const chk = () => { try { if (!finLoaded()) return; const lim = Date.now() + 3 * MS_DAY; recActive(FIN()).filter(r => !r.stale && r.next.getTime() <= lim && r.next.getTime() > Date.now()).forEach(r => { const k = 'unica_recn_' + r.key + '_' + r.next.toISOString().slice(0, 10); if (localStorage.getItem(k)) return; localStorage.setItem(k, '1'); notify('Addebito in arrivo', { body: r.label + ' · ' + eur(r.amount) + ' · ' + fmtD3(r.next), tag: 'rec-' + r.key }); }); } catch (e) { } };
+  setInterval(chk, 15 * 60 * 1000); setTimeout(chk, 6000);
+})();
+
+/* ---------- Confronti e flussi ---------- */
+const prevMon3 = m => { const [y, mm] = m.split('-').map(Number); return monthKey(new Date(y, mm - 2, 1)); };
+FV.cmp = function () {
+  const d = FIN(), m = U.fin.month, pm = prevMon3(m), cur = spentBy(d, m), prv = spentBy(d, pm), ex = c => c !== INC_CAT;
+  const cats = [...new Set([...Object.keys(cur), ...Object.keys(prv)])].filter(ex).sort((a, b) => ((cur[b] || 0) + (prv[b] || 0)) - ((cur[a] || 0) + (prv[a] || 0)));
+  const tc = cats.reduce((s, c) => s + (cur[c] || 0), 0), tp = cats.reduce((s, c) => s + (prv[c] || 0), 0), dl = tc - tp;
+  const mx = Math.max(1, ...cats.map(c => Math.max(cur[c] || 0, prv[c] || 0)));
+  const cmpRows = cats.map((c, i) => { const a = cur[c] || 0, b = prv[c] || 0, dd = a - b; return '<div class="kv"><div class="gap"><b class="sp">' + h(c) + '</b><span class="sm ' + (dd > 0 ? 'bad' : dd < 0 ? 'ok' : 'mut') + '">' + (dd > 0 ? '▲ ' : dd < 0 ? '▼ ' : '') + h(eur(Math.abs(dd))) + (b ? ' (' + (dd >= 0 ? '+' : '−') + Math.round(Math.abs(dd) / b * 100) + '%)' : b === 0 && a ? ' (nuova)' : '') + '</span></div><div class="cmpb" aria-hidden="true"><i style="width:' + a / mx * 100 + '%;background:' + PAL[i % PAL.length] + '"></i></div><div class="cmpb" aria-hidden="true"><i style="width:' + b / mx * 100 + '%;background:' + PAL[i % PAL.length] + ';opacity:.4"></i></div><div class="sm mut">' + h(monthLabel(m)) + ' ' + h(eur(a)) + ' · ' + h(monthLabel(pm)) + ' ' + h(eur(b)) + '</div></div>'; }).join('');
+  /* ultimi 6 mesi, barre impilate */
+  const ms = []; { const [y, mm] = m.split('-').map(Number); for (let i = 5; i >= 0; i--) ms.push(monthKey(new Date(y, mm - 1 - i, 1))); }
+  const per = ms.map(k => spentBy(d, k)), totC = {}; per.forEach(o => Object.entries(o).forEach(([c, v]) => { if (ex(c)) totC[c] = (totC[c] || 0) + v; }));
+  const top = Object.entries(totC).sort((a, b) => b[1] - a[1]).slice(0, 6).map(x => x[0]), series = [...top, 'Altre'];
+  const vals = per.map(o => { const r = {}; let oth = 0; Object.entries(o).forEach(([c, v]) => { if (!ex(c)) return; if (top.includes(c)) r[c] = v; else oth += v; }); r['Altre'] = oth; return r; });
+  const sums = vals.map(r => Object.values(r).reduce((a, b) => a + b, 0)), my = Math.max(1, ...sums), W = 320, H = 170, bw = 30, gx = (W - 6 * bw) / 7;
+  const svg = '<svg viewBox="0 0 ' + W + ' ' + (H + 22) + '" class="chart" role="img" aria-label="Spese per categoria negli ultimi 6 mesi">' + vals.map((r, i) => { let y = H; const x = gx + i * (bw + gx); return series.map((c, j) => { const v = r[c] || 0, hh = v / my * (H - 16); y -= hh; return hh > .3 ? '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="' + hh + '" rx="2" fill="' + PAL[j % PAL.length] + '"><title>' + h(c) + ' ' + h(eur(v)) + '</title></rect>' : ''; }).join('') + '<text x="' + (x + bw / 2) + '" y="' + (y - 4) + '" text-anchor="middle" font-size="8" fill="currentColor">' + (sums[i] >= 1000 ? Math.round(sums[i] / 100) / 10 + 'k' : Math.round(sums[i])) + '</text><text x="' + (x + bw / 2) + '" y="' + (H + 14) + '" text-anchor="middle" font-size="9" fill="currentColor" opacity=".7">' + MESI[+ms[i].split('-')[1] - 1].slice(0, 3) + '</text>'; }).join('') + '</svg>' +
+    '<ul class="legend">' + series.map((c, j) => '<li><i class="dot" style="background:' + PAL[j % PAL.length] + '"></i><span>' + h(c) + '</span></li>').join('') + '</ul>';
+  /* flusso: totale → categorie (sankey semplificato) */
+  const fl = cats.map(c => [c, cur[c] || 0]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]), ftot = fl.reduce((s, x) => s + x[1], 0);
+  let flow = '<p class="sm mut">Nessuna spesa nel mese.</p>';
+  if (ftot) { const FH = 150, gap = 4, avail = FH - gap * (fl.length - 1); let ly = 0, ry = 0; const paths = fl.map((x, i) => { const hh = Math.max(2, x[1] / ftot * avail), l0 = ly, r0 = ry; ly += x[1] / ftot * FH; ry += hh + gap; return '<path d="M70 ' + l0 + ' C 150 ' + l0 + ',150 ' + r0 + ',230 ' + r0 + ' L230 ' + (r0 + hh) + ' C 150 ' + (r0 + hh) + ',150 ' + (l0 + x[1] / ftot * FH) + ',70 ' + (l0 + x[1] / ftot * FH) + ' Z" fill="' + PAL[i % PAL.length] + '" opacity=".55"/><text x="236" y="' + (r0 + hh / 2 + 3) + '" font-size="8.5" fill="currentColor">' + h(x[0].slice(0, 22)) + ' · ' + Math.round(x[1] / ftot * 100) + '%</text>'; }).join('');
+    flow = '<svg viewBox="0 0 340 ' + (FH + 6) + '" class="chart" role="img" aria-label="Flusso delle spese dal totale alle categorie"><rect x="62" y="0" width="8" height="' + FH + '" rx="3" fill="currentColor" opacity=".7"/><text x="58" y="' + FH / 2 + '" text-anchor="end" font-size="9" fill="currentColor">' + h(eur(ftot)) + '</text>' + paths + '</svg>'; }
+  return '<div class="gap">' + monthPicker() + '</div>' +
+    '<div class="card mt"><h3>' + h(monthLabel(m)) + ' contro ' + h(monthLabel(pm)) + '</h3><p style="margin:0"><b>' + h(eur(tc)) + '</b> <span class="sm ' + (dl > 0 ? 'bad' : dl < 0 ? 'ok' : 'mut') + '">' + (dl > 0 ? '▲ ' : dl < 0 ? '▼ ' : '') + h(eur(Math.abs(dl))) + (tp ? ' (' + (dl >= 0 ? '+' : '−') + Math.round(Math.abs(dl) / tp * 100) + '%)' : '') + ' rispetto al mese prima (' + h(eur(tp)) + ')</span></p>' + (cmpRows || '<p class="sm mut">Nessuna spesa da confrontare.</p>') + '</div>' +
+    '<div class="card mt"><h3>Ultimi 6 mesi per categoria</h3>' + svg + '</div><div class="card mt"><h3>Flusso delle spese</h3>' + flow + '</div>';
+};
+
+/* ===== Scorciatoie dell'icona (pressione lunga) e collegamenti ?go= ===== */
+(function () {
+  try {
+    const g = new URLSearchParams(location.search).get('go');
+    if (g && /^(fav|scan|new|cards|vault|fin|last|agenda)$/.test(g)) { U.go = g; history.replaceState(null, '', location.pathname + location.hash); }
+  } catch (e) { }
+})();
+function applyGo() {
+  const g = U.go; U.go = null; if (!g || !S.kcKey) return;
+  if (g === 'agenda') return go('agenda');
+  if (g === 'settings') return go('settings');
+  if (g === 'vault') return ACT.enterProt();
+  if (g === 'fin') return ACT.enterFin();
+  go('cards'); U.cq = '';
+  if (g === 'fav') { U.cfav = true; render(); if (!cardsArr().some(c => c.data.fav)) toast('Nessuna carta preferita: tocca la stella su una carta'); }
+  else if (g === 'last') { const lc = cardsArr().sort((a, b) => (b.data.last || 0) - (a.data.last || 0))[0]; if (lc) setTimeout(() => cardOpen(lc.id), 250); else toast('Nessuna carta salvata'); } else if (g === 'scan') setTimeout(() => ACT.scan && ACT.scan({ dataset: {} }), 200);
+  else if (g === 'new') setTimeout(() => openCardForm(null, {}), 200);
+}
+
+/* ===== OCR da foto (motore Tesseract in iframe isolato, scaricato solo su richiesta) ===== */
+const OCR = { frame: null, ready: null };
+function ocrFrame() {
+  if (OCR.frame && OCR.frame.isConnected) return OCR.ready;
+  const f = document.createElement('iframe'); f.setAttribute('sandbox', 'allow-scripts'); f.src = 'ocr.html'; f.title = 'OCR'; f.setAttribute('aria-hidden', 'true'); f.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden';
+  OCR.frame = f; OCR.ready = new Promise((res, rej) => { const t = setTimeout(() => rej(new Error('Modulo OCR non caricato')), 8000); const on = e => { if (e.source === f.contentWindow && e.data && e.data.t === 'ready') { clearTimeout(t); removeEventListener('message', on); res(f); } }; addEventListener('message', on); });
+  document.body.appendChild(f); return OCR.ready;
+}
+async function ocrRead(file, onSt) {
+  const f = await ocrFrame(), buf = await file.arrayBuffer();
+  return new Promise((res, rej) => {
+    const to = setTimeout(() => { cleanup(); rej(new Error('Tempo scaduto')); }, 180000);
+    const on = e => {
+      if (e.source !== f.contentWindow || !e.data) return; const d = e.data;
+      if (d.t === 'st') onSt && onSt(d.s, d.p); else if (d.t === 'done') { cleanup(); res(d.text); } else if (d.t === 'err') { cleanup(); rej(new Error(d.m)); }
+    };
+    const cleanup = () => { clearTimeout(to); removeEventListener('message', on); setTimeout(() => { try { f.remove(); } catch (x) { } }, 100); };
+    addEventListener('message', on); f.contentWindow.postMessage({ t: 'ocr', buf, mime: file.type }, '*', [buf]);
+  });
+}
+async function ocrConsent() {
+  if (localStorage.getItem('unica_ocr') === '1') return true;
+  const ok = await ask('Leggere il testo da una foto', 'Vortex Hub scarica una sola volta il motore OCR (Tesseract, circa 10 MB) da cdn.jsdelivr.net. La foto resta sul dispositivo e viene letta in una finestra isolata che non vede i tuoi dati. Serve la connessione. Procedere?', { ok: 'Scarica e leggi' });
+  if (ok) try { localStorage.setItem('unica_ocr', '1'); } catch (e) { } return ok;
+}
+function ocrParse(text) {
+  const lines = text.split(/\r?\n/).map(s => s.replace(/\s+/g, ' ').trim()).filter(s => s.length >= 3 && /[A-Za-zÀ-ÿ]{3}/.test(s)).slice(0, 12);
+  const codes = [...new Set((text.replace(/[Oo]/g, '0').match(/\d[\d \-]{6,26}\d/g) || []).map(s => s.replace(/[ \-]/g, '')).filter(s => s.length >= 8 && s.length <= 20))].slice(0, 6);
+  let brand = null; for (const l of lines) { const b = detectBrand('', l); if (b) { brand = b; break; } }
+  return { lines: lines.slice(0, 5), codes, brand };
+}
+ACT.ocrCard = async () => {
+  if (!(await ocrConsent())) return;
+  const fs = await pickMany('image/*'); const file = fs[0]; if (!file) return;
+  if (file.size > 12 * 1024 * 1024) return toast('Foto troppo grande');
+  toast('Lettura in corso…', 60000);
+  try {
+    const text = await ocrRead(file, (s, p) => toast('OCR: ' + s + (p ? ' ' + Math.round(p * 100) + '%' : '')));
+    const o = ocrParse(text), has = o.codes.length || o.lines.length;
+    modal('<div class="gap"><h2 class="sp" style="margin:0">Testo letto dalla foto</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+      (has ? '' : '<p class="sm mut">Non ho trovato testo utile. Riprova con una foto più nitida e ben illuminata.</p>') +
+      (o.brand ? '<p class="sm">Riconosciuto: <b>' + h(o.brand.name || '') + '</b> <button type="button" class="btn sm" data-ocrn="' + h(o.brand.name || '') + '">Usa come nome</button></p>' : '') +
+      (o.lines.length ? '<p class="sm mut" style="margin-bottom:4px">Nome del negozio</p><div class="chips">' + o.lines.map(l => '<button type="button" class="chip" data-ocrn="' + h(l.slice(0, 60)) + '">' + h(l.slice(0, 32)) + '</button>').join('') + '</div>' : '') +
+      (o.codes.length ? '<p class="sm mut" style="margin-bottom:4px">Codici trovati (tocca per usarlo)</p><div class="chips">' + o.codes.map(c => '<button type="button" class="chip mono" data-ocrc="' + h(c) + '">' + h(c) + '</button>').join('') + '</div>' : '') +
+      '<details class="mt"><summary class="sm">Testo completo</summary><pre class="sm" style="white-space:pre-wrap">' + h(text.slice(0, 2000)) + '</pre></details>').el.addEventListener('click', e => {
+        const n = e.target.closest('[data-ocrn]'), c = e.target.closest('[data-ocrc]');
+        if (n && $('c_n')) { $('c_n').value = n.dataset.ocrn; $('c_n').dispatchEvent(new Event('input')); toast('Nome impostato'); }
+        if (c && $('c_c')) { $('c_c').value = c.dataset.ocrc; const t = $('c_t'); if (t) t.value = c.dataset.ocrc.length === 13 ? 'EAN13' : c.dataset.ocrc.length === 8 ? 'EAN8' : 'CODE128'; toast('Codice impostato'); }
+      });
+  } catch (e) { toast('OCR non riuscito: ' + (e && e.message ? e.message : e), 4000); }
+};
+(function () {
+  const base = openCardForm; openCardForm = function (id, pre) {
+    base(id, pre); const row = $('c_c') && $('c_c').closest('.pw'); if (!row || $('ocrb')) return;
+    row.insertAdjacentHTML('afterend', '<button type="button" class="btn sm" id="ocrb" data-act="ocrCard" style="margin-top:6px">' + ic('scan') + ' Leggi nome e codice da una foto</button>');
+  };
+})();
+
+/* ===== Allegati cifrati a note, accessi e passkey (documenti, foto) ===== */
+const attOf = id => [...S.items.values()].filter(i => i.type === 'file' && i.data.parent === id).sort((a, b) => a.ts - b.ts);
+const pickMany = (accept, cam) => new Promise(res => { const i = document.createElement('input'); i.type = 'file'; i.multiple = !cam; if (accept) i.accept = accept; if (cam) i.setAttribute('capture', 'environment'); i.onchange = () => res([...i.files]); i.oncancel = () => res([]); i.click(); });
+const isImg = m => /^image\/(png|jpe?g|gif|webp|bmp|avif)$/i.test(m || '');
+(function () {
+  const dl = delItem; delItem = async function (id, k) {
+    if ((k || 'p') === 'p') for (const c of attOf(id)) await dl(c.id, 'p');
+    return dl(id, k);
+  };
+  const od = openDetail; openDetail = function (id) {
+    const m = od(id), it = S.items.get(id); if (!m || !it || it.type === 'file') return m;
+    const card = m.q('.card'); if (!card) return m;
+    const box = document.createElement('div'); box.className = 'card mt'; box.id = 'attbox'; card.after(box); attDraw(box, id, m); return m;
+  };
+  window.attDraw = function (box, id, m) {
+    const L = attOf(id);
+    box.innerHTML = '<div class="gap"><b class="sp">' + ic('file') + ' Allegati' + (L.length ? ' (' + L.length + ')' : '') + '</b><button class="btn sm" data-attadd="' + h(id) + '">' + ic('plus') + ' File</button><button class="btn sm" data-attcam="' + h(id) + '">' + ic('scan') + ' Foto</button></div>' +
+      (L.length ? L.map(a => '<div class="kv"><div class="gap"><span class="sp"><b>' + h(a.data.fname) + '</b><br><span class="sm mut">' + h(fmtSize(a.data.size)) + ' · ' + h(a.data.mime) + '</span></span>' + (isImg(a.data.mime) ? '<button class="ib" data-attview="' + h(a.id) + '" aria-label="Anteprima">' + ic('eye') + '</button>' : '') + '<button class="ib" data-attdl="' + h(a.id) + '" aria-label="Scarica">' + ic('dl') + '</button><button class="ib" data-attdel="' + h(a.id) + '" aria-label="Elimina allegato">' + ic('trash') + '</button></div></div>').join('') : '<p class="sm mut" style="margin:6px 0 0">Nessun allegato. Documenti e foto vengono cifrati come il resto (max ' + h(fmtSize(MAX_FILE)) + ' ciascuno).</p>');
+    const add = async (files) => {
+      for (const f of files) {
+        if (f.size > MAX_FILE) { toast(f.name + ': troppo grande'); continue; }
+        try { const par = S.items.get(id), nid = uid(); await putBlob(nid, new Uint8Array(await f.arrayBuffer())); await putItem(nid, 'file', { title: f.name, fname: f.name, size: f.size, mime: f.type || 'application/octet-stream', parent: id, category: (par.data.category || ''), owner: (par.data.owner || '') }, null); }
+        catch (e) { toast('Errore: ' + e.message); }
+      }
+      if (files.length) { toast('Allegato/i salvato/i'); attDraw(box, id, m); }
+    };
+    const pick = cam => pickMany(cam ? 'image/*' : '', cam).then(fs => fs.length && add(fs));
+    box.querySelector('[data-attadd]').onclick = () => pick(false);
+    box.querySelector('[data-attcam]').onclick = () => pick(true);
+    box.querySelectorAll('[data-attdl]').forEach(b => b.onclick = async () => { try { const a = S.items.get(b.dataset.attdl); download(a.data.fname, new Blob([await getBlob(a.id)], { type: a.data.mime })); } catch (e) { toast('Errore: ' + e.message); } });
+    box.querySelectorAll('[data-attdel]').forEach(b => b.onclick = async () => { const a = S.items.get(b.dataset.attdel); if (a && await ask('Eliminare l’allegato?', a.data.fname, { ok: 'Elimina', danger: true })) { await delItem(a.id, 'p'); attDraw(box, id, m); } });
+    box.querySelectorAll('[data-attview]').forEach(b => b.onclick = async () => {
+      try { const a = S.items.get(b.dataset.attview), url = URL.createObjectURL(new Blob([await getBlob(a.id)], { type: a.data.mime }));
+        const v = modal('<div class="gap"><b class="sp">' + h(a.data.fname) + '</b><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><img src="' + url + '" alt="' + h(a.data.fname) + '" style="max-width:100%;max-height:70vh;display:block;margin:10px auto;border-radius:12px">', { onClose: () => URL.revokeObjectURL(url) }); } catch (e) { toast('Errore: ' + e.message); }
+    });
+  };
+})();
+
+/* ===== Condivisione carta: file cifrato + codice monouso ===== */
+const CSH = { ttl: 48 * 3600e3, aad: 'unica-fcard' };
+const usedSh = () => { try { return JSON.parse(localStorage.getItem('unica_usedsh') || '[]'); } catch (e) { return []; } };
+const markSh = sid => { try { const a = usedSh(); a.push(sid); localStorage.setItem('unica_usedsh', JSON.stringify(a.slice(-200))); } catch (e) { } };
+async function cardSealShare(d) {
+  const code = shCode(), salt = rnd(16), sid = b64u(rnd(9)), key = await kekPw(code.replace(/-/g, ''), salt, KDF_ITER);
+  const card = { name: d.name, code: d.code, type: d.type, color: d.color, holder: d.holder || '', domain: d.domain || '', notes: d.notes || '' };
+  const pl = { unicaFCard: 1, iter: KDF_ITER, salt: b64e(salt), ...(await seal(key, te.encode(JSON.stringify({ v: 1, sid, exp: Date.now() + CSH.ttl, card })), CSH.aad)) };
+  const slug = String(d.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'carta';
+  return { code, file: new File([JSON.stringify(pl)], 'VortexHub_carta_' + slug + '.json', { type: 'application/json' }) };
+}
+async function cardShareFile(id, m) {
+  const c = S.cards.get(id); if (!c) return; const box = m.q('#shfa'); box.innerHTML = '<p class="sm mut">Cifro…</p>';
+  try {
+    const { code, file } = await cardSealShare(c.data);
+    box.innerHTML = '<div class="card c"><div class="mono b" style="font-size:1.2rem">' + h(code) + '</div><p class="sm mut">Invia il file e comunica questo codice a parte (voce o un’altra chat). Scade fra 48 ore.</p></div><div class="gap"><button type="button" class="btn pri" id="shfs">' + ic('up') + ' Invia il file…</button><button type="button" class="btn" id="shfc">' + ic('copy') + ' Copia il codice</button></div>';
+    m.q('#shfc').onclick = () => copy(code, 'Codice');
+    m.q('#shfs').onclick = async () => { try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Carta ' + c.data.name }); return; } } catch (x) { if (x && x.name === 'AbortError') return; } download(file.name, file); toast('File salvato: invialo e comunica il codice a parte.'); };
+  } catch (e) { box.innerHTML = '<p class="sm bad">Non sono riuscito a cifrare la carta.</p>'; }
+}
+async function cardOpenShareFile(txt) {
+  let pl; try { pl = JSON.parse(txt); } catch (e) { return toast('File non valido'); }
+  if (!pl || !pl.unicaFCard) return toast('Non è una carta condivisa con Vortex Hub');
+  const code = await askText('Carta condivisa', 'Inserisci il codice che ti ha dato il mittente (es. ABCD-EFGH-JKLM).', true); if (!code) return;
+  let o; try { toast('Decifro…'); const key = await kekPw(code.toUpperCase().replace(/[^A-Z0-9]/g, ''), b64d(pl.salt), Math.min(+pl.iter || KDF_ITER, 2000000)); o = JSON.parse(td.decode(await unseal(key, pl, CSH.aad))); } catch (e) { return toast('Codice errato o file non valido.'); }
+  if (!o || !o.card) return toast('File non valido');
+  if (o.exp && Date.now() > o.exp) return toast('Il file è scaduto: chiedi al mittente di crearne uno nuovo.');
+  if (o.sid && usedSh().includes(o.sid)) return toast('Questo file è già stato usato su questo dispositivo.');
+  const s = (v, n) => String(v == null ? '' : v).slice(0, n), cd = o.card;
+  const card = { name: s(cd.name, 100), code: s(cd.code, 300), type: CTYPES[cd.type] ? cd.type : BC.detectType(s(cd.code, 300)), color: hex(cd.color), holder: s(cd.holder, 100), domain: s(cd.domain, 100), notes: s(cd.notes, 1000) };
+  if (!card.name || !card.code) return toast('File non valido');
+  if (!(await ask('Carta condivisa', 'Aggiungere «' + card.name + '» (' + card.code + ') alle tue carte? Il file non potrà essere riusato.', { ok: 'Aggiungi' }))) return;
+  if (o.sid) markSh(o.sid);
+  await putItem(uid(), 'card', { ...card, added: Date.now(), uses: 0 }, null, 'c'); toast('Carta aggiunta'); if (U.route === 'cards') render(); else go('cards');
+}
+async function cardImportEnc() { const f = await pickFile('.json,application/json'); if (!f) return; cardOpenShareFile(await f.text()); }
+Object.assign(ACT, { cardImpEnc: () => cardImportEnc() });
+/* riga di aiuto nella lista Carte */
+(function () { const vc = V.cards; V.cards = function () { return vc().replace(/<\/main>\s*$/, '<p class="c sm" style="margin-top:14px"><button class="btn sm" data-act="cardImpEnc">' + ic('lock') + ' Ho ricevuto una carta cifrata</button></p></main>'); }; })();
+
+/* ---------- Rotazione delle chiavi di cifratura (dispositivo perso / sospetta compromissione) ---------- */
+const rawTx = (stores, fn) => new Promise((res, rej) => { const tx = DB.db.transaction(stores, 'readwrite'); fn(tx); tx.oncomplete = () => res(); tx.onerror = tx.onabort = () => rej(tx.error || new Error('Operazione annullata')); });
+async function rotateKeys(pw, nw) {
+  while (SY.busy) await new Promise(r => setTimeout(r, 100));
+  SY.busy = true;   // blocca la sincronizzazione automatica finché le chiavi non sono cambiate
+  try { await rotateCore(nw); } finally { SY.busy = false; }
+  const cfg = SY.cfg;
+  if (cfg && lsGet('unica_syon') === '1') await sySync();
+  try { if (typeof pcfg === 'function' && pcfg().on) await pushSubscribe(); } catch (e) { }
+}
+async function rotateCore(nw) {
+  // 1. copia di sicurezza con le chiavi attuali (resta ripristinabile con la vecchia password o il vecchio codice)
+  await snapSave('Prima della rotazione chiavi', false);
+  const oldMeta = S.meta, oldKc = S.kcKey, oldKp = S.kpKey;
+  // 2. nuove chiavi, nuova password (anche uguale alla precedente) e nuovo codice di recupero
+  const acc = nw.acc; acc.meta.created = oldMeta.created; acc.meta.mts = Date.now(); acc.meta.v = oldMeta.v || 1;
+  const nKc = await dataKey(acc.kc), nKp = await dataKey(acc.kp);
+  // 3. ricifratura di tutto in memoria
+  const items = [], recs = await DB.all('items'), blobs = [], bl = await DB.all('blobs');
+  for (const r of recs) {
+    if (r.t === 'tomb') { items.push(r); continue; }
+    const oldK = (r.k || 'p') === 'c' ? oldKc : oldKp, newK = (r.k || 'p') === 'c' ? nKc : nKp;
+    let plain; try { plain = await unseal(oldK, r, aadOf(r.id, r.t, r.ver)); } catch (e) { items.push(r); continue; }
+    const ver = r.ver + 1; items.push({ id: r.id, type: 'x', t: r.t, k: r.k || 'p', ver, ts: Date.now(), ...(await seal(newK, plain, aadOf(r.id, r.t, ver))) });
+  }
+  for (const b of bl) { try { blobs.push({ id: b.id, ...(await seal(nKp, await unseal(oldKp, b, 'blob|' + b.id), 'blob|' + b.id)) }); } catch (e) { blobs.push(b); } }
+  let syncRec = null; const cfg = await syLoad(); if (cfg) syncRec = await seal(nKc, te.encode(JSON.stringify(cfg)), 'sync');
+  let aiRec = null; { const ar = await DB.get('meta', 'ai'); if (ar) { try { aiRec = await seal(nKc, await unseal(oldKc, ar, 'ai'), 'ai'); } catch (e) { } } }
+  // 4. scrittura unica e atomica
+  await rawTx(['items', 'blobs', 'meta', 'dev'], tx => {
+    items.forEach(r => tx.objectStore('items').put(r)); blobs.forEach(b => tx.objectStore('blobs').put(b));
+    tx.objectStore('meta').put(acc.meta, 'acct'); if (syncRec) tx.objectStore('meta').put(syncRec, 'sync'); if (aiRec) tx.objectStore('meta').put(aiRec, 'ai'); else tx.objectStore('meta').delete('ai'); tx.objectStore('dev').delete('k'); tx.objectStore('dev').delete('b');
+  });
+  // 5. sessione con le nuove chiavi
+  S.meta = acc.meta; wipe(S.kc); wipe(S.kp); await setKeys(acc.kc, acc.kp); await loadCards(); await loadItems(); S.protOpen = true; S.verifiedAt = Date.now();
+  syDirty();
+  // 6. sincronizzazione: nuovo spazio (id e token nuovi), vecchio spazio eliminato
+  if (cfg) {
+    const c = { u: cfg.u, i: b64u(rnd(16)), t: b64u(rnd(32)), rev: 0, mts: 0, last: 0 };
+    await sySave(c);   // da ora la configurazione in memoria è quella nuova
+    try { await syReq(cfg, 'DELETE'); } catch (e) { }
+  }
+}
+function openRotate() {
+  const m = modal('<div id="rkb"></div>'); let step = 1, acc = null, chk = null;
+  const draw = () => {
+    const box = m.q('#rkb');
+    if (step === 1) box.innerHTML = '<div class="gap"><h2 class="sp" style="margin:0">Cambia le chiavi di cifratura</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div><p>Usalo se hai perso un dispositivo o sospetti che qualcuno abbia avuto accesso ai tuoi dati sbloccati. Vortex Hub genera <b>chiavi nuove</b>, ricifra tutto e crea un <b>nuovo codice di recupero</b>.</p><ul class="sm"><li>Il vecchio codice di recupero smette di funzionare per i dati attuali.</li><li>Se usi la sincronizzazione, viene creato uno spazio nuovo e il vecchio viene eliminato: gli altri dispositivi vanno ricollegati con il nuovo codice.</li><li>La passkey va riattivata.</li><li>Una copia di sicurezza interna con le chiavi precedenti viene creata prima (eliminala dopo, se il rischio era la compromissione del dispositivo).</li></ul><form id="rkf"><label class="f" for="rk_p">Master password (attuale o nuova)</label><div class="pw"><input class="in mono" id="rk_p" type="password" autocomplete="current-password" required><button type="button" class="btn" data-act="eye" data-for="rk_p" aria-label="Mostra o nascondi">' + ic('eye') + '</button></div><p class="sm mut">Se vuoi cambiare anche la password, scrivine una nuova: verrà usata da ora in poi.</p><label class="f" for="rk_c">Per confermare, scrivi la password attuale</label><input class="in mono" id="rk_c" type="password" autocomplete="off" required><p class="sm bad" id="rk_e" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Continua</button></div></form>';
+    else box.innerHTML = '<h2>Nuovo codice di recupero</h2><p class="mut">Scrivi queste 24 parole su carta, in un posto sicuro e offline. <b>Il vecchio codice non vale più.</b></p><div class="words" aria-label="24 parole">' + acc.words.map((w, i) => '<div class="w1"><small>' + (i + 1) + '</small><b class="mono">' + h(w) + '</b></div>').join('') + '</div><form id="rkf2"><label class="f" for="rk_w1">Conferma: scrivi la parola n. ' + chk[0] + '</label><input class="in" id="rk_w1" autocapitalize="off" autocomplete="off" spellcheck="false"><label class="f" for="rk_w2">e la parola n. ' + chk[1] + '</label><input class="in" id="rk_w2" autocapitalize="off" autocomplete="off" spellcheck="false"><label class="chk"><input type="checkbox" id="rk_k"><span>Ho salvato il nuovo codice in un posto sicuro.</span></label><p class="sm bad" id="rk_e" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Cambia le chiavi</button></div></form>';
+  };
+  m.el.addEventListener('submit', async e => {
+    e.preventDefault(); const err = m.q('#rk_e'), btn = e.target.querySelector('button.pri');
+    if (e.target.id === 'rkf') {
+      const nw = m.q('#rk_p').value, cur = m.q('#rk_c').value; if (nw.length < 8) return err.textContent = 'La password deve avere almeno 8 caratteri.';
+      btn.disabled = true; err.textContent = '';
+      try { const M = await unwrapWithPassword(cur); wipe(M); } catch (x) { btn.disabled = false; return err.textContent = 'La password attuale non è corretta.'; }
+      try { acc = await buildAccount(nw); } catch (x) { btn.disabled = false; return err.textContent = 'Errore: ' + x.message; }
+      const a = 1 + Math.floor(Math.random() * 24); let b2; do { b2 = 1 + Math.floor(Math.random() * 24); } while (b2 === a); chk = [a, b2].sort((x, y) => x - y); step = 2; draw();
+    } else {
+      const w1 = m.q('#rk_w1').value.trim().toLowerCase(), w2 = m.q('#rk_w2').value.trim().toLowerCase();
+      if (w1 !== acc.words[chk[0] - 1] || w2 !== acc.words[chk[1] - 1]) return err.textContent = 'Le parole non corrispondono.'; if (!m.q('#rk_k').checked) return err.textContent = 'Conferma di aver salvato il codice.';
+      btn.disabled = true; btn.textContent = 'Ricifro…'; await new Promise(r => setTimeout(r, 30));
+      try { await rotateKeys(null, { acc }); m.close(); lsSet('unica_emg', ''); render(); toast('Chiavi cambiate'); if (lsGet('unica_syon') === '1' && SY.cfg) setTimeout(() => syShowCode(SY.cfg), 300); }
+      catch (x) { btn.disabled = false; btn.textContent = 'Cambia le chiavi'; err.textContent = 'Errore: ' + (x.message || x) + '. I dati non sono stati modificati.'; }
+    }
+  });
+  draw();
+}
+Object.assign(ACT, { async rotate() { if (!(await ensureProt())) return; openRotate(); } });
+
+/* ===== Effetti visivi "Aurora": costellazione, riflesso al puntatore, inclinazione carte ===== */
+(function () {
+  const RM = matchMedia('(prefers-reduced-motion: reduce)'), CT = matchMedia('(prefers-contrast: more)');
+  // 1. Costellazione animata dietro l'interfaccia
+  let cv, cx, pts = [], W = 0, H = 0, raf = 0, mx = -1e3, my = -1e3;
+  const col = () => getComputedStyle(document.documentElement).getPropertyValue('--neo1').trim() || '#22d3ee';
+  function size() { W = cv.width = innerWidth; H = cv.height = innerHeight; const n = Math.min(46, Math.round(W * H / 22000)); while (pts.length < n) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25 }); pts.length = n; }
+  function frame() {
+    raf = 0; return;
+    cx.clearRect(0, 0, W, H); const c = col(), dark = !(document.documentElement.getAttribute('data-theme') === 'light' || (!document.documentElement.getAttribute('data-theme') && !matchMedia('(prefers-color-scheme: dark)').matches));
+    cx.fillStyle = c; cx.strokeStyle = c;
+    for (const p of pts) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; }
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i]; cx.globalAlpha = dark ? .55 : .35; cx.beginPath(); cx.arc(a.x, a.y, 1.6, 0, 6.3); cx.fill();
+      for (let j = i + 1; j < pts.length; j++) { const b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y); if (d < 130) { cx.globalAlpha = (1 - d / 130) * (dark ? .28 : .18); cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke(); } }
+      const dm = Math.hypot(a.x - mx, a.y - my); if (dm < 160) { cx.globalAlpha = (1 - dm / 160) * .5; cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(mx, my); cx.stroke(); }
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function start() { if (!raf && !RM.matches && !CT.matches) raf = requestAnimationFrame(frame); }
+  function init() {
+    cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true');
+    cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none';
+    document.body.prepend(cv); cx = cv.getContext('2d'); size();
+    addEventListener('resize', size); document.addEventListener('visibilitychange', start);
+    addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+    addEventListener('pointerleave', () => { mx = my = -1e3; });
+    RM.addEventListener && RM.addEventListener('change', start);
+    start();
+  }
+  // 2. Riflesso luminoso che segue il puntatore sulle superfici
+  document.addEventListener('pointermove', e => {
+    const t = e.target.closest && e.target.closest('.tile,.card,.row,.btn,.vtile,.ccard'); if (!t) return;
+    const r = t.getBoundingClientRect(); t.style.setProperty('--mx', (e.clientX - r.left) + 'px'); t.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    if (t.classList.contains('ccard') && !RM.matches) { const px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5; t.style.transform = 'translateY(-4px) perspective(700px) rotateX(' + (-py * 10).toFixed(1) + 'deg) rotateY(' + (px * 12).toFixed(1) + 'deg) scale(1.03)'; }
+  }, { passive: true });
+  document.addEventListener('pointerout', e => { const t = e.target.closest && e.target.closest('.ccard'); if (t && !t.contains(e.relatedTarget)) t.style.transform = ''; });
+  if (document.body) init(); else addEventListener('DOMContentLoaded', init);
+})();
+
+/* ===== Icone di qualità su tutti i pulsanti (v2.3.0) ===== */
+Object.assign(P, {
+  send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
+  tag: '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.2"/>',
+  power: '<path d="M12 2v10M18.4 6.6a9 9 0 1 1-12.8 0"/>',
+  cloud: '<path d="M17.5 19a4.5 4.5 0 0 0 .5-9 6 6 0 0 0-11.5 1.5A3.8 3.8 0 0 0 7 19Z"/>',
+  unlock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.6-2"/>',
+  share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
+  open: '<path d="M7 17 17 7M8 7h9v9"/>',
+  wrench: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7V21h3.3l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.4-.6-.6-2.4Z"/>',
+  mic2: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>',
+  bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'
+});
+(function () {
+  const RULES = [
+    [/notific/i, 'bell'], [/sincroni|server|collegamento|link/i, 'cloud'],
+    [/diagnostica|verifica file|verifica/i, 'shield'], [/ripara/i, 'wrench'], [/aggiorn|ripristina le impostazioni/i, 'refresh'],
+    [/passkey|password|chiav|recupero|recupera|cifratura|id client/i, 'key'],
+    [/ripristina|backup|importa|import /i, 'dl'], [/esporta|salva su file|scarica/i, 'up'],
+    [/cartella/i, 'folder'], [/categori|propriet/i, 'tag'], [/quote/i, 'chart'], [/vicin|posizione|negozio|geo/i, 'pin'],
+    [/elimina|cancella|annulla import|svuota/i, 'trash'], [/disattiva|rimuovi|nascondi|ignora/i, 'power'],
+    [/condividi|share/i, 'share'], [/copia$|^copia|crea una copia/i, 'copy'],
+    [/invia|chiedi/i, 'send'], [/scrivi/i, 'edit'], [/apri|vedi|mostra/i, 'eye'],
+    [/sblocca|usa$/i, 'unlock'], [/blocca/i, 'lock'],
+    [/riattiva|attiva/i, 'bolt'], [/cerca/i, 'search'],
+    [/crea|aggiungi|nuov|nuova/i, 'plus'], [/cambia|modifica|imposta|scegli/i, 'edit'],
+    [/annulla|chiudi|interrompi|più tardi/i, 'x'],
+    [/salva|applica|fatto|^ok$|continua|conferm|ho salvato|tutte|ho già/i, 'check']
+  ];
+  const ACTS = { dgFix: 'wrench', dgUp: 'refresh', dgFiles: 'shield', forgot: 'key', snapNow: 'copy', snapRestore: 'dl', syNow: 'refresh', syLink: 'cloud', pushTest: 'bell', notifOn: 'bell', quotes: 'chart', aistop: 'x', toCreate: 'plus', restore: 'dl', pkOn: 'key', chpw: 'key', showRec: 'eye', rotate: 'key', fbNow: 'refresh', diag: 'info', vselMode: 'check', vselAll: 'check', vmeta: 'tag', vbCat: 'tag', vbOwn: 'tag' };
+  function pick(b, t) {
+    const a = b.getAttribute('data-act'); if (a && ACTS[a]) return ACTS[a];
+    for (const [re, n] of RULES) if (re.test(t)) return n;
+    return null;
+  }
+  function decorate(root) {
+    (root.querySelectorAll ? root : document).querySelectorAll('button.btn:not([data-ico]),a.btn:not([data-ico])').forEach(b => {
+      b.setAttribute('data-ico', '1');
+      if (b.querySelector('.ic,svg')) return;
+      const t = (b.textContent || '').trim(); if (!t) return;
+      const n = pick(b, t); if (n && P[n]) b.insertAdjacentHTML('afterbegin', ic(n));
+    });
+  }
+  let q = 0;
+  new MutationObserver(() => { if (q) return; q = requestAnimationFrame(() => { q = 0; try { decorate(document); } catch (e) { } }); }).observe(document.documentElement, { childList: true, subtree: true });
+  try { decorate(document); } catch (e) { }
+})();
+
+/* ===== Effetto wow (v2.4.0): carte olografiche 3D, carta che gira, Home viva ===== */
+(function () {
+  const RMq = matchMedia('(prefers-reduced-motion: reduce)');
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  /* --- inclinazione: giroscopio sul telefono, puntatore sul computer --- */
+  let tx = 0, ty = 0, gyro = false, raf = 0, perm = false;
+  const apply = () => { raf = 0; if (RMq.matches) return; if (!document.querySelector('.hero3d,.ccard')) return; const r = document.documentElement.style; r.setProperty('--tx', tx.toFixed(3)); r.setProperty('--ty', ty.toFixed(3)); };
+  const push = () => { if (!raf) raf = requestAnimationFrame(apply); };
+  addEventListener('deviceorientation', e => { if (e.gamma == null || e.beta == null) return; gyro = true; tx += (clamp(e.gamma / 28, -1, 1) - tx) * .25; ty += (clamp((e.beta - 45) / 28, -1, 1) - ty) * .25; push(); }, { passive: true });
+  addEventListener('pointermove', e => { if (gyro || e.pointerType === 'touch') return; tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; push(); }, { passive: true });
+  addEventListener('pointerdown', () => { if (perm) return; perm = true; try { const D = window.DeviceOrientationEvent; if (D && typeof D.requestPermission === 'function') D.requestPermission().catch(() => { }); } catch (e) { } }, { once: true, passive: true });
+
+  /* --- ologramma su ogni carta della lista --- */
+  { const ct = cardTile; cardTile = function (c) { return ct(c).replace(/<\/button>$/, '<i class="holo" aria-hidden="true"></i></button>'); }; }
+
+  /* --- carta fisica 3D che gira: davanti il logo, dietro il codice --- */
+  { const co = cardOpen; cardOpen = async function (id) {
+    await co.apply(this, arguments);
+    try {
+      const c = S.cards.get(id); if (!c) return; const d = c.data, cvs = [...document.querySelectorAll('.cview')], cv = cvs[cvs.length - 1]; if (!cv || cv.closest('.hero3d')) return;
+      const ini = (String(d.name || '?').trim()[0] || '?').toUpperCase();
+      const hero = document.createElement('div'); hero.className = 'hero3d';
+      hero.innerHTML = '<div class="htilt"><div class="hflip" role="button" tabindex="0" aria-pressed="false" aria-label="Carta ' + h(d.name) + ': tocca per girarla"><div class="hf hfront" style="background:' + hex(d.color) + '"><span class="hlogo">' + (d.logo ? '<img src="' + h(d.logo) + '" alt="">' : '<i>' + h(ini) + '</i>') + '</span><b class="hname">' + h(d.name) + '</b><span class="hhint">tocca per girare</span><i class="holo" aria-hidden="true"></i></div><div class="hf hback"></div></div></div>';
+      cv.parentNode.insertBefore(hero, cv); hero.querySelector('.hback').appendChild(cv); cv.style.cssText = 'margin:0;padding:10px 12px;border-radius:0;width:100%';
+      const fl = hero.querySelector('.hflip'); let back = false;
+      const set = b => { back = b; fl.classList.toggle('back', b); fl.setAttribute('aria-pressed', String(b)); buzz(12); };
+      fl.addEventListener('click', () => set(!back)); fl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set(!back); } });
+      if (RMq.matches) { fl.classList.add('back', 'nomo'); back = true; fl.setAttribute('aria-pressed', 'true'); } else setTimeout(() => set(true), 650);
+    } catch (e) { }
+  }; }
+
+  /* --- Home viva: saluto, contatori animati, anello dei preferiti --- */
+  { const hv = V.home; V.home = function () {
+    const html = hv.apply(this, arguments), cs = cardsArr(), n = cs.length, fav = cs.filter(c => c.data.fav).length, uses = cs.reduce((a, c) => a + (c.data.uses || 0), 0);
+    const hr = new Date().getHours(), g = hr < 5 ? 'Buona notte' : hr < 13 ? 'Buongiorno' : hr < 18 ? 'Buon pomeriggio' : 'Buonasera';
+    const pct = n ? fav / n : 0, C = 2 * Math.PI * 34;
+    const hero = '<section class="pulse" aria-label="Riepilogo"><div class="pl"><div class="pg">' + g + '</div><div class="pst"><div><b data-count="' + n + '">' + n + '</b><span>carte</span></div><div><b data-count="' + fav + '">' + fav + '</b><span>preferite</span></div><div><b data-count="' + uses + '">' + uses + '</b><span>utilizzi</span></div></div></div>' +
+      '<svg class="ring" viewBox="0 0 80 80" aria-hidden="true"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#6fb7e0"/></linearGradient></defs><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="7"/><circle class="rfg" cx="40" cy="40" r="34" fill="none" stroke="url(#rg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="' + C.toFixed(2) + '" stroke-dashoffset="' + C.toFixed(2) + '" data-to="' + (C * (1 - pct)).toFixed(2) + '" transform="rotate(-90 40 40)"/><text x="40" y="45" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">' + Math.round(pct * 100) + '%</text></svg></section>';
+    return html.replace('<main class="wrap">', '<main class="wrap">' + hero);
+  }; }
+  function countUp(el) {
+    el.setAttribute('data-cd', '1'); const to = +el.dataset.count; if (RMq.matches || !to) return; const t0 = performance.now();
+    (function f(t) { const k = clamp((t - t0) / 1000, 0, 1); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); })(t0);
+  }
+  function wow() {
+    document.querySelectorAll('[data-count]:not([data-cd])').forEach(countUp);
+    document.querySelectorAll('.rfg:not([data-rd])').forEach(c => { c.setAttribute('data-rd', '1'); if (RMq.matches) { c.setAttribute('stroke-dashoffset', c.dataset.to); return; } requestAnimationFrame(() => requestAnimationFrame(() => { c.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)'; c.setAttribute('stroke-dashoffset', c.dataset.to); })); });
+  }
+  let q2 = 0; new MutationObserver(() => { if (q2) return; q2 = requestAnimationFrame(() => { q2 = 0; try { wow(); } catch (e) { } }); }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+
+/* ===== v2.5: biometria in un tocco, solo sensore del dispositivo ===== */
+(function () {
+  ACT.bioQuick = async function () {
+    if (!pkSupported()) return toast('Questo browser non supporta l’impronta / Face ID');
+    try {
+      if (!S.meta.pk) { if (!(await ensureProt())) return; await enablePasskey(); }
+      if (!S.meta.pk.prf && !S.meta.wrapBio && S.kp) await bioEnable(true);
+      try { localStorage.setItem('unica_bioskip', '1'); } catch (e) { }
+      toast('Impronta / Face ID attivi' + (S.meta.wrapBio ? ' (ogni ' + BIO_DAYS + ' giorni chiederà la master password)' : ''));
+    } catch (e) { toast('Non attivata: ' + (e.name === 'NotAllowedError' ? 'operazione annullata o nessun sensore sul dispositivo' : (e.name ? e.name + ' – ' : '') + e.message)); }
+    render();
+  };
+  ACT.bioOn = ACT.bioQuick;
+  ACT.bioSkip = () => { try { localStorage.setItem('unica_bioskip', '1'); } catch (e) { } render(); };
+  { const po = ACT.pkOn; ACT.pkOn = async function () { await po.apply(this, arguments); try { if (S.meta.pk && !S.meta.pk.prf && !S.meta.wrapBio && S.kp) await bioEnable(true); } catch (e) { } }; }
+  { const hv = V.home; V.home = function () {
+    const html = hv.apply(this, arguments); let skip = false; try { skip = localStorage.getItem('unica_bioskip') === '1'; } catch (e) { }
+    if (S.meta && S.meta.pk || skip || !pkSupported()) return html;
+    const card = '<div class="card" data-s="vault" style="margin:0 0 14px"><div class="gap"><span class="ti" style="flex:none">' + ic('key') + '</span><span class="sp"><b>Entra con impronta o Face ID</b><br><span class="sm mut">Attivalo in un solo tocco: usa il sensore del telefono, nessuna chiave esterna.</span></span></div><div class="gap" style="margin-top:10px"><button class="btn pri sp" data-act="bioQuick">' + ic('key') + ' Attiva ora</button><button class="btn" data-act="bioSkip">Non ora</button></div></div>';
+    return html.replace('</section>', '</section>' + card);
+  }; }
+})();
+
+/* ===== v2.6: cielo stellato (scuro) e «alba di vetro» (chiaro) ===== */
+(function () {
+  const RM = matchMedia('(prefers-reduced-motion: reduce)'), CT = matchMedia('(prefers-contrast: more)');
+  const cv = document.createElement('canvas'); cv.id = 'sky'; cv.setAttribute('aria-hidden', 'true');
+  cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none';
+  const cx = cv.getContext('2d');
+  let W = 0, H = 0, DPR = 1, raf = 0, T0 = performance.now(), px = 0, py = 0, tpx = 0, tpy = 0, stars = [], bubs = [], motes = [], cons = [], shoot = null, nextShoot = 5000, lastDark = null;
+  const rnd = (a, b) => a + Math.random() * (b - a), clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const isDark = () => { const t = document.documentElement.getAttribute('data-theme'); return t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches); };
+  function sprite(r, g, b) { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'), gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.16, 'rgba(' + r + ',' + g + ',' + b + ',.9)'); gr.addColorStop(.45, 'rgba(' + r + ',' + g + ',' + b + ',.22)'); gr.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b + ',0)'); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); return c; }
+  const SPR = [sprite(205, 220, 255), sprite(255, 228, 170), sprite(160, 195, 255)];
+  const CON = [
+    { n: 'Orione', ax: .08, ay: .09, sz: .50, p: [[.05, 0], [.95, .08], [.5, -.15], [.62, .5], [.5, .48], [.38, .46], [.1, 1], [.95, 1]], l: [[2, 0], [2, 1], [0, 5], [1, 3], [5, 4], [4, 3], [5, 6], [3, 7]] },
+    { n: 'Orsa Maggiore', ax: .52, ay: .05, sz: .44, p: [[0, 0], [.04, .3], [.4, .36], [.43, .08], [.64, .04], [.83, .1], [1, .26]], l: [[0, 1], [1, 2], [2, 3], [3, 0], [3, 4], [4, 5], [5, 6]] },
+    { n: 'Cassiopea', ax: .58, ay: .36, sz: .34, p: [[0, .35], [.25, .9], [.5, .42], [.76, .95], [1, .3]], l: [[0, 1], [1, 2], [2, 3], [3, 4]] },
+    { n: 'Cigno', ax: .07, ay: .52, sz: .30, p: [[.5, 0], [.5, .46], [.5, 1], [.1, .34], [.92, .56]], l: [[0, 1], [1, 2], [3, 1], [1, 4]] },
+    { n: 'Scorpione', ax: .46, ay: .66, sz: .42, p: [[.2, .02], [.04, .22], [.24, .28], [.32, .5], [.42, .7], [.57, .86], [.76, .82], [.95, .62], [.9, .42]], l: [[1, 2], [0, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8]] }
+  ];
+  function size() {
+    DPR = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const n = clamp(Math.round(W * H / 2400), 140, 420); stars = [];
+    for (let i = 0; i < n; i++) {
+      let x = Math.random() * W, y = Math.random() * H;
+      if (Math.random() < .3) { const u = Math.random(); x = u * W; y = H * (.12 + .72 * u) + (Math.random() + Math.random() + Math.random() - 1.5) * H * .09; }
+      const big = Math.random() < .07; stars.push({ x, y, r: big ? rnd(1.6, 2.6) : rnd(.35, 1.3), a: rnd(.35, 1), ph: rnd(0, 6.3), sp: rnd(.6, 2.2), c: (Math.random() * 3) | 0, z: rnd(.2, 1) });
+    }
+    const S = Math.min(W, H); cons = CON.map((c, k) => ({ n: c.n, d: 600 + k * 450, pts: c.p.map((q, i) => ({ x: c.ax * W + q[0] * c.sz * S, y: c.ay * H + q[1] * c.sz * S * 1.05, m: i % 3 === 0 ? 1 : .7, ph: rnd(0, 6.3) })), l: c.l }));
+    bubs = []; const nb = clamp(Math.round(W / 14), 14, 34); for (let i = 0; i < nb; i++) bubs.push({ x: Math.random() * W, y: Math.random() * H, r: rnd(7, 44), v: rnd(5, 18), sw: rnd(6, 24), ph: rnd(0, 6.3), h: (Math.random() * 3) | 0 });
+    motes = []; for (let i = 0; i < 70; i++) motes.push({ x: Math.random() * W, y: Math.random() * H, r: rnd(.6, 1.8), ph: rnd(0, 6.3), sp: rnd(.5, 1.8), g: Math.random() < .5 });
+  }
+  function drawDark(t) {
+    const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#020a12'); g.addColorStop(.55, '#07202f'); g.addColorStop(1, '#0b2f4a'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    // via lattea
+    cx.save(); cx.translate(W * .5, H * .5); cx.rotate(.62); const bg = cx.createLinearGradient(0, -H * .22, 0, H * .22); bg.addColorStop(0, 'rgba(130,200,235,0)'); bg.addColorStop(.5, 'rgba(150,205,235,.13)'); bg.addColorStop(1, 'rgba(130,200,235,0)'); cx.fillStyle = bg; cx.fillRect(-W, -H * .22, W * 2, H * .44); cx.restore();
+    // nebulose
+    const neb = [[.2, .25, '99,102,241', .26, 0], [.85, .55, '236,72,153', .17, 2], [.4, .88, '34,211,238', .15, 4]];
+    for (const [fx, fy, c, a, o] of neb) { const x = fx * W + Math.sin(t / 9000 + o) * 30 + px * 10, y = fy * H + Math.cos(t / 11000 + o) * 24 + py * 10, r = Math.max(W, H) * .6; const q = cx.createRadialGradient(x, y, 0, x, y, r); q.addColorStop(0, 'rgba(' + c + ',' + a + ')'); q.addColorStop(1, 'rgba(' + c + ',0)'); cx.fillStyle = q; cx.fillRect(0, 0, W, H); }
+    // stelle
+    for (const s of stars) { const tw = .72 + .28 * Math.sin(t / 1000 * s.sp + s.ph), x = s.x + px * 6 * s.z, y = s.y + py * 6 * s.z; cx.globalAlpha = s.a * tw; const d = s.r * 5; cx.drawImage(SPR[s.c], x - d / 2, y - d / 2, d, d); }
+    // costellazioni
+    cx.globalCompositeOperation = 'lighter';
+    for (const c of cons) {
+      const pr = clamp((t - c.d) / 2400, 0, 1), ox = px * 14, oy = py * 14;
+      cx.lineCap = 'round';
+      for (let li = 0; li < c.l.length; li++) {
+        const a = c.pts[c.l[li][0]], b = c.pts[c.l[li][1]], k = clamp(pr * c.l.length - li, 0, 1); if (k <= 0) continue;
+        const x1 = a.x + ox, y1 = a.y + oy, x2 = x1 + (b.x + ox - x1) * k, y2 = y1 + (b.y + oy - y1) * k;
+        cx.strokeStyle = 'rgba(120,200,255,.16)'; cx.lineWidth = 4; cx.beginPath(); cx.moveTo(x1, y1); cx.lineTo(x2, y2); cx.stroke();
+        cx.strokeStyle = 'rgba(200,225,255,.75)'; cx.lineWidth = 1.1; cx.beginPath(); cx.moveTo(x1, y1); cx.lineTo(x2, y2); cx.stroke();
+        if (k >= 1 && !RM.matches) { const u = ((t / 3200) + li * .31) % 1; cx.globalAlpha = .95; const d = 9; cx.drawImage(SPR[0], x1 + (x2 - x1) * u - d / 2, y1 + (y2 - y1) * u - d / 2, d, d); }
+      }
+      for (const p of c.pts) { const tw = .8 + .2 * Math.sin(t / 700 + p.ph), d = (p.m > .9 ? 22 : 15) * tw * pr; cx.globalAlpha = Math.min(1, pr * 1.3); cx.drawImage(SPR[p.m > .9 ? 1 : 0], p.x + ox - d / 2, p.y + oy - d / 2, d, d); }
+      cx.globalAlpha = .55 * pr; cx.fillStyle = '#cfe0ff'; cx.font = '600 11px system-ui,sans-serif'; const q = c.pts[0]; cx.fillText(c.n.toUpperCase(), q.x + ox, Math.max(...c.pts.map(z => z.y)) + oy + 22);
+    }
+    cx.globalCompositeOperation = 'source-over'; cx.globalAlpha = 1;
+    // stella cadente
+    if (!RM.matches) {
+      if (!shoot && t > nextShoot) { shoot = { x: rnd(W * .4, W * 1.05), y: rnd(-20, H * .35), vx: -rnd(520, 760), vy: rnd(260, 380), t0: t }; nextShoot = t + rnd(7000, 13000); }
+      if (shoot) { const e = (t - shoot.t0) / 1000, x = shoot.x + shoot.vx * e, y = shoot.y + shoot.vy * e; if (e > 1.1 || x < -150 || y > H + 50) shoot = null; else { const gr = cx.createLinearGradient(x, y, x - shoot.vx * .16, y - shoot.vy * .16); gr.addColorStop(0, 'rgba(255,255,255,.95)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); cx.strokeStyle = gr; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x - shoot.vx * .16, y - shoot.vy * .16); cx.stroke(); } }
+    }
+  }
+  let CLS = null, CLI = null;
+  function cloudSprite(w, h, seed) {
+    const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d'); let r = seed; const rn = () => { r = (r * 16807) % 2147483647; return r / 2147483647; }; const n = 8;
+    for (let i = 0; i < n; i++) { const u = i / (n - 1), cx0 = w * (.16 + .68 * u) + (rn() - .5) * w * .05, rad = h * (.3 + .2 * rn()) * (1 - Math.abs(u - .5) * .55), cy0 = h * (.58 - .14 * rn()); const g = x.createRadialGradient(cx0, cy0, 0, cx0, cy0, rad); g.addColorStop(0, 'rgba(255,255,255,.97)'); g.addColorStop(.55, 'rgba(255,255,255,.6)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.beginPath(); x.arc(cx0, cy0, rad, 0, 6.3); x.fill(); }
+    x.globalCompositeOperation = 'source-atop'; const g2 = x.createLinearGradient(0, h * .4, 0, h); g2.addColorStop(0, 'rgba(175,215,240,0)'); g2.addColorStop(1, 'rgba(200,225,245,.4)'); x.fillStyle = g2; x.fillRect(0, 0, w, h); return c;
+  }
+  const HILLS = [['166,204,230', '136,184,220', .72, .05, 1.3, 0], ['150,214,226', '110,190,208', .79, .045, 1.0, 1.7], ['255,216,170', '250,190,130', .86, .04, 1.6, 3.1], ['200,228,246', '168,210,238', .93, .035, .8, 4.4]];
+  function drawLight(t) {
+    if (!CLS) { CLS = [cloudSprite(420, 170, 11), cloudSprite(420, 170, 29), cloudSprite(420, 170, 47)]; }
+    if (!CLI || CLI.W !== W) { CLI = { W, a: [] }; for (let i = 0; i < 8; i++) { const near = i >= 4; CLI.a.push({ s: CLS[i % 3], w: near ? rnd(340, 520) : rnd(200, 300), x: Math.random() * (W + 600), y: near ? rnd(.14, .42) * H : rnd(.05, .26) * H, v: near ? rnd(9, 17) : rnd(3, 8), z: near ? 1 : .45, al: near ? .92 : .6, ph: rnd(0, 6.3) }); } }
+    const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#a6d6ff'); g.addColorStop(.38, '#d3e8f6'); g.addColorStop(.7, '#e6f2fa'); g.addColorStop(1, '#ffe9d8'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    // sole
+    const sx = W * .84 + px * 10, sy = H * .1 + py * 6, R = Math.max(W, H) * .6;
+    const sg = cx.createRadialGradient(sx, sy, 0, sx, sy, R); sg.addColorStop(0, 'rgba(255,243,205,1)'); sg.addColorStop(.1, 'rgba(255,226,160,.85)'); sg.addColorStop(.35, 'rgba(255,236,190,.32)'); sg.addColorStop(1, 'rgba(255,236,190,0)'); cx.fillStyle = sg; cx.fillRect(0, 0, W, H);
+    const cloud = c => { const x = ((c.x + t / 1000 * c.v) % (W + c.w * 2 + 200)) - c.w - 100 + px * c.z * 14, y = c.y + Math.sin(t / 5000 + c.ph) * 4 + py * c.z * 8; cx.globalAlpha = c.al; cx.drawImage(c.s, x, y, c.w, c.w * .405); cx.globalAlpha = 1; };
+    CLI.a.filter(c => c.z < 1).forEach(cloud);
+    // fasci di luce
+    for (let i = 0; i < 6; i++) {
+      const ang = 1.95 + i * .17 + Math.sin(t / 7000 + i) * .03, wd = .05 + (i % 3) * .018, L = R * 2.2, a0 = ang - wd, a1 = ang + wd, al = .16 + .08 * Math.sin(t / 3000 + i * 1.7);
+      const rg = cx.createLinearGradient(sx, sy, sx + Math.cos(ang) * L, sy + Math.sin(ang) * L); rg.addColorStop(0, 'rgba(255,244,214,' + al + ')'); rg.addColorStop(1, 'rgba(255,244,214,0)');
+      cx.fillStyle = rg; cx.beginPath(); cx.moveTo(sx, sy); cx.lineTo(sx + Math.cos(a0) * L, sy + Math.sin(a0) * L); cx.lineTo(sx + Math.cos(a1) * L, sy + Math.sin(a1) * L); cx.fill();
+    }
+    CLI.a.filter(c => c.z >= 1).forEach(cloud);
+    // colline pastello a strati con nebbiolina e parallasse
+    HILLS.forEach(([c1, c2, fy, amp, fr, ph], i) => {
+      const yb = fy * H + py * (5 + i * 6), pathH = () => { cx.beginPath(); for (let x = -10; x <= W + 10; x += 10) { const y = yb + Math.sin(x / (W * .35) * fr + ph + px * (.25 + i * .2) + t / 9000 * (.6 + i * .25)) * H * amp + Math.sin(x / (W * .13) * fr + ph * 2 + t / 14000) * H * amp * .35; x === -10 ? cx.moveTo(x, y) : cx.lineTo(x, y); } };
+      pathH(); cx.lineTo(W + 10, H + 10); cx.lineTo(-10, H + 10); cx.closePath(); const gr = cx.createLinearGradient(0, yb - H * amp, 0, H); gr.addColorStop(0, 'rgba(' + c1 + ',.93)'); gr.addColorStop(1, 'rgba(' + c2 + ',.98)'); cx.fillStyle = gr; cx.fill();
+      pathH(); cx.strokeStyle = 'rgba(255,255,255,.6)'; cx.lineWidth = 1.3; cx.stroke();
+      const mg = cx.createLinearGradient(0, yb - H * .1, 0, yb + H * .03); mg.addColorStop(0, 'rgba(255,255,255,0)'); mg.addColorStop(.7, 'rgba(255,255,255,.26)'); mg.addColorStop(1, 'rgba(255,255,255,0)'); cx.fillStyle = mg; cx.fillRect(0, yb - H * .1, W, H * .13);
+    });
+    // scintille dorate nei raggi
+    for (const m of motes) { const tw = .5 + .5 * Math.sin(t / 1000 * m.sp + m.ph); cx.globalAlpha = (.2 + .55 * tw) * (m.y < H * .7 ? 1 : .3); cx.fillStyle = m.g ? '#ffd479' : '#ffffff'; cx.beginPath(); cx.arc(m.x + px * 5, m.y + py * 5, m.r, 0, 6.3); cx.fill(); }
+    cx.globalAlpha = 1;
+  }
+  function draw(now) {
+    const t = RM.matches || CT.matches ? 9000 : now - T0; px += (tpx - px) * .06; py += (tpy - py) * .06;
+    const d = isDark(); lastDark = d; d ? drawDark(t) : drawLight(t);
+  }
+  function loop(now) { raf = 0; if (document.hidden) return; draw(now); if (!RM.matches && !CT.matches) raf = requestAnimationFrame(loop); }
+  function start() { if (raf) return; if (RM.matches || CT.matches) { requestAnimationFrame(now => draw(now)); return; } raf = requestAnimationFrame(loop); }
+  function init() {
+    document.body.prepend(cv); size(); start();
+    addEventListener('resize', () => { size(); start(); }); document.addEventListener('visibilitychange', start);
+    addEventListener('pointermove', e => { tpx = (e.clientX / W - .5) * 2; tpy = (e.clientY / H - .5) * 2; }, { passive: true });
+    addEventListener('deviceorientation', e => { if (e.gamma == null) return; tpx = clamp(e.gamma / 30, -1, 1); tpy = clamp((e.beta - 45) / 30, -1, 1); }, { passive: true });
+    new MutationObserver(() => start()).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener && matchMedia('(prefers-color-scheme: dark)').addEventListener('change', start);
+    RM.addEventListener && RM.addEventListener('change', start);
+  }
+  document.body ? init() : addEventListener('DOMContentLoaded', init);
+  window.__sky = { draw: () => draw(performance.now()), isDark };
+})();
+
+/* ===== v2.6: loghi di carte e servizi del Vault ===== */
+(function () {
+  const SERV = [
+    ['google.com', 'google gmail'], ['youtube.com', 'youtube'], ['facebook.com', 'facebook fb'], ['instagram.com', 'instagram'], ['whatsapp.com', 'whatsapp'], ['amazon.it', 'amazon'], ['netflix.com', 'netflix'], ['spotify.com', 'spotify'], ['paypal.com', 'paypal'], ['apple.com', 'apple icloud itunes'],
+    ['microsoft.com', 'microsoft outlook office365 hotmail onedrive'], ['linkedin.com', 'linkedin'], ['x.com', 'twitter'], ['tiktok.com', 'tiktok'], ['telegram.org', 'telegram'], ['dropbox.com', 'dropbox'], ['github.com', 'github'], ['ebay.it', 'ebay'], ['poste.it', 'poste postepay postemobile'],
+    ['intesasanpaolo.com', 'intesa intesasanpaolo'], ['unicredit.it', 'unicredit'], ['fineco.it', 'fineco'], ['revolut.com', 'revolut'], ['n26.com', 'n26'], ['bnl.it', 'bnl'], ['mps.it', 'montepaschi'], ['bancobpm.it', 'bancobpm'], ['bper.it', 'bper'], ['hype.it', 'hype'], ['satispay.com', 'satispay'],
+    ['booking.com', 'booking'], ['airbnb.it', 'airbnb'], ['uber.com', 'uber'], ['justeat.it', 'justeat'], ['deliveroo.it', 'deliveroo'], ['glovoapp.com', 'glovo'], ['tim.it', 'tim'], ['vodafone.it', 'vodafone'], ['windtre.it', 'windtre'], ['iliad.it', 'iliad'], ['fastweb.it', 'fastweb'],
+    ['enel.it', 'enel enelenergia'], ['eni.com', 'eniplenitude plenitude'], ['a2a.it', 'a2a'], ['inps.it', 'inps'], ['agenziaentrate.gov.it', 'agenziaentrate'], ['pagopa.it', 'pagopa'], ['trenitalia.com', 'trenitalia'], ['italotreno.it', 'italo'], ['ryanair.com', 'ryanair'], ['easyjet.com', 'easyjet'],
+    ['aliexpress.com', 'aliexpress'], ['zalando.it', 'zalando'], ['shein.com', 'shein'], ['twitch.tv', 'twitch'], ['discord.com', 'discord'], ['reddit.com', 'reddit'], ['pinterest.it', 'pinterest'], ['snapchat.com', 'snapchat'], ['zoom.us', 'zoom'], ['adobe.com', 'adobe'], ['steampowered.com', 'steam'],
+    ['playstation.com', 'playstation'], ['xbox.com', 'xbox'], ['nintendo.com', 'nintendo'], ['disneyplus.com', 'disney disneyplus'], ['primevideo.com', 'primevideo'], ['dazn.com', 'dazn'], ['sky.it', 'sky'], ['tripadvisor.it', 'tripadvisor'], ['wetransfer.com', 'wetransfer'], ['proton.me', 'proton protonmail'],
+    ['cloudflare.com', 'cloudflare'], ['openai.com', 'openai chatgpt'], ['claude.ai', 'claude']
+  ].map(r => ({ d: r[0], k: r[1].split(' ').map(fwn) }));
+  const clean = x => { x = String(x || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/[\/?#:].*$/, ''); return /^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(x) ? x : ''; };
+  function domOf(it) {
+    const d = it.data; let x = clean(d.domain); if (x) return x;
+    if (it.type === 'card') { const b = detectBrand(d.code, d.name); return b ? b.domain : ''; }
+    const t = String(d.service || ''); x = /^\S+\.\S+$/.test(t) ? clean(t) : ''; if (x) return x;
+    const f = fwn(t); if (!f) return '';
+    const m = SERV.find(r => r.k.some(k => k.length >= 4 ? f.includes(k) : f === k)); return m ? m.d : '';
+  }
+  let busy = false;
+  async function sweep(manual) {
+    if (busy) return { n: 0, m: 0 }; busy = true; let n = 0, m = 0;
+    try {
+      let fail = {}; try { fail = JSON.parse(lsg('unica_lgf') || '{}'); } catch (e) { } const now = Date.now(), jobs = [];
+      const want = (it, k) => { if (it.data.logo || it.data.parent) return; const dom = domOf(it); if (dom && (manual || !(fail[it.id] > now - 7 * 864e5))) jobs.push({ it, dom, k }); };
+      if (S.kcKey) for (const c of S.cards.values()) want(c, 'c');
+      if (S.kpKey) for (const i of S.items.values()) if (i.type === 'login' || i.type === 'passkey') want(i, 'p');
+      for (const j of jobs.slice(0, 40)) {
+        m++; const lg = await probeLogo(j.dom);
+        if (lg) { const cur = (j.k === 'c' ? S.cards : S.items).get(j.it.id); if (cur) { await putItem(cur.id, cur.type, { ...cur.data, logo: lg }, cur, j.k); n++; } } else fail[j.it.id] = now;
+      }
+      lss('unica_lgf', JSON.stringify(fail));
+    } finally { busy = false; }
+    return { n, m };
+  }
+  { const pi = putItem; putItem = async function (id, type, data, prev) { if (prev && prev.data && prev.data.logo && data && !data.logo && (type === 'login' || type === 'passkey')) data.logo = prev.data.logo; return pi.apply(this, arguments); }; }
+  ACT.logoSweep = async function () {
+    if (lsg('unica_web') !== '1') {
+      if (!(await ask('Scarica i loghi', 'Per ogni carta o servizio il nome del sito (per esempio esselunga.it) viene richiesto a icon.horse, Google o DuckDuckGo per ottenere il logo. Non viene inviata nessuna password né il codice delle carte. I loghi restano poi salvati, cifrati, sul dispositivo.', { ok: 'Scarica' }))) return;
+      lss('unica_web', '1');
+    }
+    toast('Cerco i loghi…'); const r = await sweep(true);
+    toast(r.m ? 'Loghi trovati: ' + r.n + ' su ' + r.m + (S.kpKey ? '' : ' · sblocca il Vault per includere anche i servizi') : 'Nessun logo da cercare' + (S.kpKey ? '' : ' · sblocca il Vault per includere i servizi')); render();
+  };
+  { const r0 = render; let tm = 0, last = 0; render = function () { r0.apply(this, arguments); if (S.kcKey && lsg('unica_web') === '1' && ['home', 'cards', 'vault'].includes(U.route) && !tm && Date.now() - last > 60000) tm = setTimeout(async () => { tm = 0; last = Date.now(); try { const r = await sweep(false); if (r.n) r0(); } catch (e) { } }, 2500); }; }
+  window.__logos = { domOf, sweep };
+})();
+
+/* ===== v2.7: barre superiori con icone chiare e etichette ===== */
+Object.assign(P, {
+  spark: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8Z"/>',
+  dice: '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2"/><circle cx="15.5" cy="8.5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="8.5" cy="15.5" r="1.2"/><circle cx="15.5" cy="15.5" r="1.2"/>',
+  scan2: '<path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/>'
+});
+const HB = {
+  palette: ['Cerca', 'search', 200], assist: ['Assistente', 'spark', 205], lockNow: ['Blocca', 'lock', 22], audit: ['Controllo', 'shield', 150],
+  gen: ['Genera', 'dice', 32], newItem: ['Nuova', 'plus', 220], near: ['Vicino', 'pin', 18], scan: ['Scansiona', 'scan2', 190], newCard: ['Nuova', 'plus', 220], finReport: ['Report', 'chart', 215]
+};
+function hdrFix(html) {
+  return html.replace(/<button class="ib"([^>]*)>[\s\S]*?<\/button>/g, (m, a) => {
+    const act = (/data-act="(\w+)"/.exec(a) || [])[1]; let sp = HB[act]; if (act === 'cview') sp = /schede/i.test(a) ? ['Schede', 'card', 170] : ['Icone', 'grid', 170]; if (!sp) return m;
+    return '<button class="ib hb"' + a + '><span class="hi" style="--h:' + sp[2] + '">' + ic(sp[1]) + '</span><span class="hl">' + sp[0] + '</span></button>';
+  });
+}
+
+/* ===== v2.8: Impostazioni raggruppate in sezioni ripiegabili con ricerca ===== */
+(function () {
+  const SEC = [
+    { k: 'asp', t: 'Aspetto', d: 'Tema, testo, vibrazione', i: 'eye', h: 205, m: ['Aspetto'] },
+    { k: 'sic', t: 'Sicurezza e accesso', d: 'Blocco automatico, impronta / Face ID, password', i: 'shield', h: 180, m: ['Sicurezza', 'Sblocco biometrico', 'Dispositivi'] },
+    { k: 'dat', t: 'Dati e backup', d: 'Backup, copie automatiche, sincronizzazione', i: 'dl', h: 220, m: ['Backup', 'Backup interni', 'Backup automatico', 'Sincronizzazione'] },
+    { k: 'car', t: 'Carte e Vault', d: 'Importazioni, vicinanza ai negozi, CSV', i: 'card', h: 28, m: ['Carte', 'Vault: CSV', 'Avvisi di vicinanza'] },
+    { k: 'not', t: 'Notifiche', d: 'Avvisi e notifiche push', i: 'bell', h: 20, m: ['Notifiche'] },
+    { k: 'ia', t: 'Assistente IA', d: 'Chat con l’IA del browser, sul dispositivo (facoltativa)', i: 'spark', h: 195, m: ['IA generativa'] },
+    { k: 'inf', t: 'App e informazioni', d: 'Versione, installazione, privacy, dati', i: 'info', h: 220, m: ['Privacy', 'Info', 'Installazione'] }
+  ];
+  const getOpen = () => { try { return JSON.parse(lsg('unica_setopen') || '[]'); } catch (e) { return []; } };
+  const setOpen = a => lss('unica_setopen', JSON.stringify(a));
+  const titleOf2 = c => { const e = c.querySelector('h2,h3,b'); return e ? e.textContent.trim() : ''; };
+  const s0 = V.settings;
+  V.settings = function () {
+    const html = s0.apply(this, arguments), a = html.indexOf('<main class="wrap">'), z = html.lastIndexOf('</main>'); if (a < 0 || z < 0) return html;
+    const head = html.slice(0, a + 19), tail = html.slice(z), tpl = document.createElement('template'); tpl.innerHTML = html.slice(a + 19, z);
+    const cards = [...tpl.content.children], groups = new Map(SEC.map(x => [x.k, []])), other = [];
+    const open0 = getOpen();
+    const fold = c => { const hd = c.firstElementChild; if (!hd || !/^H[23]$/.test(hd.tagName)) return c.outerHTML; const t = hd.textContent.trim(), k = 'c:' + t; hd.remove(); return '<details class="card sc" data-k="' + h(k) + '"' + (open0.includes(k) ? ' open' : '') + '><summary><b>' + h(t) + '</b><i class="chev"></i></summary><div class="scb">' + c.innerHTML + '</div></details>'; };
+    for (const c of cards) { const t = titleOf2(c), sec = SEC.find(x => x.m.some(p => t.startsWith(p))); (sec ? groups.get(sec.k) : other).push(c); }
+    for (const [k, a] of groups) groups.set(k, a.map(c => a.length > 1 ? fold(c) : c.outerHTML));
+    for (let i = 0; i < other.length; i++) other[i] = other.length > 1 ? fold(other[i]) : other[i].outerHTML;
+    const open = getOpen(); let out = '<div class="sgsearch"><input class="in" id="sset" type="search" placeholder="Cerca nelle impostazioni…" aria-label="Cerca nelle impostazioni" autocomplete="off"></div><div class="sgs">';
+    const sec = (k, t, d, i, hue, body) => '<details class="sg" data-k="' + k + '" data-t="' + h(t + ' ' + d) + '"' + (open.includes(k) ? ' open' : '') + '><summary><span class="sgi" style="--h:' + hue + '">' + ic(i) + '</span><span class="sgt"><b>' + h(t) + '</b><span>' + h(d) + '</span></span><i class="chev"></i></summary><div class="sgb">' + body.join('') + '</div></details>';
+    for (const x of SEC) if (groups.get(x.k).length) out += sec(x.k, x.t, x.d, x.i, x.h, groups.get(x.k));
+    if (other.length) out += sec('alt', 'Altro', 'Altre impostazioni', 'gear', 200, other);
+    out += '</div><p class="sm mut c" id="sempty" hidden>Nessuna impostazione trovata.</p>';
+    return head + out + tail;
+  };
+  document.addEventListener('toggle', e => { const t = e.target; if (!t || !t.classList || !(t.classList.contains('sg') || t.classList.contains('sc'))) return; const q = document.getElementById('sset'); if (q && q.value) return; const o = new Set(getOpen()); t.open ? o.add(t.dataset.k) : o.delete(t.dataset.k); setOpen([...o]); }, true);
+  document.addEventListener('input', e => {
+    const q0 = e.target; if (!q0 || q0.id !== 'sset') return; const q = fwn(q0.value), open = getOpen(); let tot = 0;
+    document.querySelectorAll('.sg').forEach(sg => {
+      let any = false, tm = !q || fwn(sg.dataset.t).includes(q);
+      sg.querySelectorAll('.sgb>.card').forEach(c => { const m = tm || fwn(c.textContent).includes(q); c.hidden = !m; if (m) any = true; });
+      sg.querySelectorAll('.sc').forEach(sc => { sc.open = q ? !sc.closest('[hidden]') && fwn(sc.textContent).includes(q) : open.includes(sc.dataset.k); });
+      sg.hidden = !any; if (any) tot++; if (q) { if (any) sg.open = true; } else sg.open = open.includes(sg.dataset.k);
+    });
+    const em = document.getElementById('sempty'); if (em) em.hidden = tot > 0 || !q;
+  });
+})();
+
+
+/* ===== v2.10: blocco configurabile, promemoria backup, dispositivi, accesso rapido, scadenze, conti ===== */
+function appIdleMin() { const v = +lsGet('unica_appidle'); return v >= 1 ? v : 15; }
+function lockHideSec() { const v = +lsGet('unica_lockhide'); return v > 0 ? v : 0; }
+function bkDue() {
+  if (!(S.cards.size || (S.items && S.items.size))) return null;
+  const a = bkAge(), bd = bkDays(), c = +lsGet('unica_bkchg') || 0;
+  if (a === null) return { why: 'Non hai ancora fatto un backup: se perdi il telefono perdi i dati.' };
+  if (bd && a > bd) return { why: 'Ultimo backup di ' + a + (a === 1 ? ' giorno' : ' giorni') + ' fa.' };
+  if (c >= 15) return { why: c + ' modifiche non sono ancora in un backup.' };
+  return null;
+}
+function bkNag() {
+  const d = bkDue(); if (!d || !S.kcKey || document.querySelector('.ov')) return;
+  const day = new Date().toISOString().slice(0, 10); if (lsGet('unica_bknag') === day) return; lsSet('unica_bknag', day);
+  ask('Fai un backup', d.why + ' Il file cifrato è l’unica copia se perdi il telefono.', { ok: 'Backup ora' }).then(ok => { if (ok) ACT.exp(); });
+}
+function devId() { let v = lsGet('unica_devid'); if (!v) { v = b64u(rnd(9)); lsSet('unica_devid', v); } return v; }
+function devGuess() {
+  const u = navigator.userAgent, os = /iPhone/.test(u) ? 'iPhone' : /iPad/.test(u) ? 'iPad' : /Android/.test(u) ? 'Android' : /Windows/.test(u) ? 'Windows' : /Mac/.test(u) ? 'Mac' : /Linux/.test(u) ? 'Linux' : 'Dispositivo';
+  const br = /Edg\//.test(u) ? 'Edge' : /Firefox|FxiOS/.test(u) ? 'Firefox' : /Chrome|CriOS/.test(u) ? 'Chrome' : /Safari/.test(u) ? 'Safari' : '';
+  return os + (br ? ' · ' + br : '');
+}
+async function devTouch(force) {
+  if (!S.kcKey) return; if (!S.devs) S.devs = new Map();
+  const id = 'dev-' + devId(), prev = S.devs.get(id), name = lsGet('unica_devname') || devGuess();
+  if (!force && prev && prev.data.name === name && Date.now() - prev.data.last < 6 * 3600e3) return;
+  await putItem(id, 'devinfo', { name, first: prev ? prev.data.first : Date.now(), last: Date.now(), v: APP_VERSION }, prev, 'c');
+  const e = S.cards.get(id); S.cards.delete(id); if (e) S.devs.set(id, e);
+}
+function devCard() {
+  if (!S.devs) S.devs = new Map();
+  const me = 'dev-' + devId(), L = [...S.devs.values()].sort((a, b) => (b.id === me) - (a.id === me) || b.data.last - a.data.last);
+  const fmt = t => new Date(t).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' });
+  return '<div class="card"><h3>Dispositivi</h3><p class="sm mut">I dispositivi che hanno sbloccato questo account; l’elenco viaggia cifrato con la sincronizzazione. Per escluderne uno si cambiano le chiavi: da quel momento non può più sincronizzare né leggere i nuovi dati (quelli già presenti sul suo schermo non si possono cancellare da qui).</p>' +
+    (L.length ? L.map(x => '<div class="kv"><div class="gap"><span class="sp"><b>' + h(x.data.name) + (x.id === me ? ' (questo)' : '') + '</b><br><span class="sm mut">Ultimo accesso ' + h(fmt(x.data.last)) + ' · v' + h(x.data.v || '?') + '</span></span>' + (x.id === me ? '<button class="btn sm" data-act="devName">Rinomina</button>' : '<button class="btn sm dan" data-act="devRevoke" data-id="' + h(x.id) + '">Revoca</button>') + '</div></div>').join('') : '<p class="sm mut">Nessun dispositivo registrato.</p>') + '</div>';
+}
+(function () {
+  let hideAt = 0, devBusy = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') hideAt = Date.now();
+    else { const sec = lockHideSec(); if (sec && hideAt && S.kcKey && Date.now() - hideAt > sec * 1000) lockAll(); hideAt = 0; }
+  });
+  const bump = () => lsSet('unica_bkchg', String((+lsGet('unica_bkchg') || 0) + 1));
+  { const a = putItem; putItem = async function (id, type) { const r = await a.apply(this, arguments); if (type !== 'devinfo') bump(); return r; }; }
+  { const a = delItem; delItem = async function () { const r = await a.apply(this, arguments); bump(); return r; }; }
+  { const a = putBlob; putBlob = async function () { const r = await a.apply(this, arguments); bump(); return r; }; }
+  { const vc = V.cards; V.cards = function () { return vc.apply(this, arguments).replace('<main class="wrap">', '<main class="wrap">' + bkBanner()); }; }
+  Object.assign(ACT, {
+    async devName() { const v = await askText('Nome del dispositivo', 'Come vuoi chiamare questo dispositivo nell’elenco?'); if (!v || !v.trim()) return; lsSet('unica_devname', v.trim().slice(0, 40)); await devTouch(true); render(); },
+    async devRevoke(t) {
+      const id = t.dataset.id, e = S.devs.get(id);
+      if (!(await ask('Revocare il dispositivo?', 'Per escluderlo servono nuove chiavi di cifratura: verranno creati un nuovo codice di recupero e, se la sincronizzazione è attiva, un nuovo spazio. Gli altri dispositivi andranno ricollegati.', { ok: 'Continua', danger: true }))) return;
+      if (e) { try { await delItem(id, 'c'); } catch (x) { } S.devs.delete(id); }
+      ACT.rotate();
+    },
+    async recat() {
+      const d = FIN(); lrn.t = 0; let n = 0;
+      d.expenses.forEach(e => { if (e.category !== 'Varie / Altro') return; const c = categorize(e.desc); if (!c.income && c.cat && c.cat !== e.category) { e.category = c.cat; if (d.budgets[c.cat] === undefined) d.budgets[c.cat] = 150; n++; } });
+      if (n) await finSave(); render(); toast(n ? n + ' spese riclassificate' : 'Nessuna spesa da riclassificare');
+    },
+    fmbar(t) { const g = t.closest('[data-m]'); if (!g) return; U.fin.month = g.dataset.m; U.fin.cat = ''; render(); }
+  });
+  /* --- accesso rapido alle carte dalla Home --- */
+  { const vh = V.home; V.home = function () {
+    if (S.kcKey && !devBusy) { devBusy = true; devTouch().catch(() => { }).finally(() => { devBusy = false; }); }
+    const html = vh.apply(this, arguments), near = U.near || new Set(), a = cardsArr();
+    if (!a.length) return html;
+    a.sort((x, y) => (near.has(y.id) ? 1 : 0) - (near.has(x.id) ? 1 : 0) || (y.data.fav ? 1 : 0) - (x.data.fav ? 1 : 0) || (y.data.last || 0) - (x.data.last || 0));
+    const blk = '<h2 data-s="cards">Carte rapide</h2><div class="igrid qk">' + a.slice(0, 8).map(iconTile).join('') + '</div>', i = html.indexOf('</section>');
+    return i >= 0 ? html.slice(0, i + 10) + blk + html.slice(i + 10) : html.replace('<main class="wrap">', '<main class="wrap">' + blk);
+  }; }
+  /* --- scadenza delle carte --- */
+  window.expInfo = d => {
+    const m = /^(\d{4})-(\d{2})$/.exec(d && d.exp || ''); if (!m) return null;
+    const days = Math.ceil((new Date(+m[1], +m[2], 0, 23, 59, 59) - Date.now()) / 864e5);
+    if (days < 0) return { t: 'Scaduta', bad: 1, days };
+    if (days <= 30) return { t: days === 0 ? 'Scade oggi' : 'Scade fra ' + days + ' g', days };
+    return null;
+  };
+  { const ct = cardTile; cardTile = function (c) { const s = ct.apply(this, arguments), x = expInfo(c.data); if (!x) return s; const i = s.lastIndexOf('</button>'); return s.slice(0, i) + '<span class="tag exp' + (x.bad ? ' bad' : '') + '">' + x.t + '</span>' + s.slice(i); }; }
+  { const it = iconTile; iconTile = function (c) { const s = it.apply(this, arguments), x = expInfo(c.data); if (!x) return s; const i = s.lastIndexOf('</button>'); return s.slice(0, i) + '<span class="iexp' + (x.bad ? ' bad' : '') + '">' + x.t + '</span>' + s.slice(i); }; }
+  window.cardExpAgenda = L => cardsArr().forEach(c => { const x = expInfo(c.data); if (x) L.push({ i: 'card', t: 'Carta «' + c.data.name + '» ' + (x.bad ? 'scaduta' : x.days === 0 ? 'scade oggi' : 'scade fra ' + x.days + ' giorni'), go: 'cards', w: x.bad || x.days <= 7 ? 1 : 0 }); });
+  /* --- conti: categorie che imparano dalle tue spese --- */
+  const ADD = { 'Alimentari & Supermercato': ['PANETTERIA', 'MACELLERIA', 'ALIMENTARI', 'SELEX', 'DESPAR', 'BENNET', 'PENNY', 'NATURASI', 'EATALY'], 'Utenze & Casa': ['IKEA', 'LEROY MERLIN', 'BRICO', 'EDISON', 'A2A', 'SORGENIA', 'TIM', 'POSTEMOBILE', 'POSTE MOBILE', 'TARI', 'IMU', 'ASSICURAZIONE', 'UNIPOL', 'GENERALI', 'ALLIANZ'], 'Trasporti & Carburante': ['UBER', 'FLIXBUS', 'RYANAIR', 'EASYJET', 'ITA AIRWAYS', 'LUFTHANSA', 'BOLLO', 'ESSO', 'KUWAIT', 'BLABLACAR', 'TRENORD'], 'Svago & Ristoranti': ['DISNEY', 'DAZN', 'ZALANDO', 'ZARA', 'DECATHLON', 'TRATTORIA', 'OSTERIA', 'SUSHI', 'GELATERIA', 'PASTICCERIA', 'STEAM', 'PLAYSTATION', 'XBOX', 'NINTENDO', 'AIRBNB', 'PALESTRA'], 'Salute & Persona': ['ESTETISTA', 'PARRUCCHIERE', 'OTTICA', 'LABORATORIO', 'ANALISI', 'FISIOTERAPIA', 'AMPLIFON'] };
+  for (const [c, ws] of KW) if (ADD[c]) ADD[c].forEach(w => { if (!ws.includes(w)) ws.push(w); });
+  const GEN = new Set(['PAGAMENTO', 'POS', 'CARTA', 'ADDEBITO', 'BONIFICO', 'SEPA', 'COMMISSIONI', 'PRELIEVO', 'ACQUISTO', 'ACQUISTI', 'DEBIT', 'VISA', 'MASTERCARD', 'CIRCUITO', 'ITALIA', 'DELLA', 'PRESSO', 'OPERAZIONE', 'CONTO', 'MOVIMENTO', 'BANCARIO', 'PAGOBANCOMAT', 'PAYPAL', 'ADDEBITI', 'UTENZA', 'DATA', 'CARD', 'EUR']);
+  const toks = desc => String(desc || '').toUpperCase().replace(/[^A-Z0-9&]+/g, ' ').split(' ').filter(w => w.length >= 4 && !/^\d+$/.test(w) && !GEN.has(w)).slice(0, 3);
+  const lrn = window.lrn = { t: 0, idx: null };
+  const learn = () => {
+    if (lrn.idx && Date.now() - lrn.t < 2000) return lrn.idx; const ix = new Map();
+    FIN().expenses.forEach(e => { if (!e.category || e.category === 'Varie / Altro') return; toks(e.desc).forEach(w => { const m = ix.get(w) || {}; m[e.category] = (m[e.category] || 0) + 1; ix.set(w, m); }); });
+    lrn.idx = ix; lrn.t = Date.now(); return ix;
+  };
+  { const cz = categorize; categorize = function (desc) {
+    const r = cz.apply(this, arguments); if (r.income) return r;
+    const ix = learn(), vote = {}; toks(desc).forEach(w => { const m = ix.get(w); if (m) for (const c in m) vote[c] = (vote[c] || 0) + m[c]; });
+    let best = null, bn = 0, tot = 0; for (const c in vote) { tot += vote[c]; if (vote[c] > bn) { bn = vote[c]; best = c; } }
+    return best && bn >= 2 && bn / tot >= .7 ? { cat: best } : r;
+  }; }
+  window.recatLine = sp => sp['Varie / Altro'] > 0 ? '<p class="sm mut" style="margin:10px 0 0">«Varie / Altro»: ' + h(eur(sp['Varie / Altro'])) + ' <button class="btn sm" data-act="recat">Riclassifica</button></p>' : '';
+  window.monthBars = () => {
+    const d = FIN(), cur = U.fin.month || monthKey(), [y, m] = cur.split('-').map(Number), ms = [];
+    for (let i = 5; i >= 0; i--) { const dt = new Date(y, m - 1 - i, 1); ms.push(dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0')); }
+    const vals = ms.map(k => Object.values(spentBy(d, k)).reduce((a, b) => a + b, 0)), mx = Math.max(...vals, 1); if (!vals.some(v => v > 0)) return '';
+    const sh = v => v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1).replace('.', ',') + 'k' : String(Math.round(v)), bw = 34, gp = (300 - bw * 6) / 7;
+    const bars = ms.map((k, i) => { const x = gp + i * (bw + gp), hh = Math.max(2, vals[i] / mx * 76), yy = 90 - hh, sel = k === cur;
+      return '<g data-act="fmbar" data-m="' + k + '" aria-label="' + h(monthLabel(k)) + ': ' + h(eur(vals[i])) + '" style="cursor:pointer"><rect x="' + x + '" y="' + yy + '" width="' + bw + '" height="' + hh + '" rx="6" style="fill:' + (sel ? 'var(--pri)' : 'currentColor') + '" opacity="' + (sel ? 1 : .28) + '"/><text x="' + (x + bw / 2) + '" y="' + (yy - 5) + '" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">' + (vals[i] ? sh(vals[i]) : '') + '</text><text x="' + (x + bw / 2) + '" y="108" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">' + MESI[+k.slice(5) - 1].slice(0, 3) + '</text></g>'; }).join('');
+    return '<h4 style="margin:14px 0 4px">Ultimi 6 mesi</h4><svg viewBox="0 0 300 120" width="100%" role="group" aria-label="Spese degli ultimi 6 mesi" style="max-width:440px;display:block">' + bars + '</svg><p class="sm mut" style="margin:0">Tocca una barra per aprire quel mese.</p>';
+  };
+})();
+
+
+/* ===== v2.11: assistente nella Home (orario, meteo, briefing) ===== */
+(function () {
+  const WX = 'unica_wx', WC = 'unica_wxc', JV = 'unica_jv';
+  const wxOn = () => lsGet(WX) === '1', jvOn = () => lsGet(JV) !== '0';
+  const cache = () => { try { return JSON.parse(lsGet(WC) || 'null'); } catch (e) { return null; } };
+  const WMO = c => c === 0 ? ['Sereno', 'sun'] : c === 1 ? ['Quasi sereno', 'sun'] : c === 2 ? ['Parzialmente nuvoloso', 'part'] : c === 3 ? ['Coperto', 'cloud'] : (c === 45 || c === 48) ? ['Nebbia', 'fog'] : (c >= 51 && c <= 57) ? ['Pioviggine', 'rain'] : (c >= 61 && c <= 67) ? ['Pioggia', 'rain'] : ((c >= 71 && c <= 77) || c === 85 || c === 86) ? ['Neve', 'snow'] : (c >= 80 && c <= 82) ? ['Rovesci', 'rain'] : c >= 95 ? ['Temporale', 'storm'] : ['Variabile', 'cloud'];
+  const WI = {
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+    moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+    part: '<circle cx="8" cy="8" r="3"/><path d="M8 2.5V4M2.5 8H4M4.2 4.2l1 1M11.8 4.2l-1 1"/><path d="M8 20h9a4 4 0 0 0 .5-8A5.5 5.5 0 0 0 7 13a3.5 3.5 0 0 0 1 7z"/>',
+    cloud: '<path d="M7 19h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 12.5 3.3 3.3 0 0 0 7 19z"/>',
+    fog: '<path d="M5 9h14M3 13h18M6 17h12"/>',
+    rain: '<path d="M7 15h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 8.5 3.3 3.3 0 0 0 7 15z"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>',
+    snow: '<path d="M7 14h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 7.5 3.3 3.3 0 0 0 7 14z"/><path d="M8 18h.01M12 20h.01M16 18h.01"/>',
+    storm: '<path d="M7 14h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 7.5 3.3 3.3 0 0 0 7 14z"/><path d="M12 14l-2 4h3l-2 4"/>'
+  };
+  const wi = (k, night) => '<svg class="jvi k-' + (k === 'sun' && night ? 'moon' : k) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + WI[k === 'sun' && night ? 'moon' : k] + '</svg>';
+  const r0 = n => Math.round(n), pad = n => String(n).padStart(2, '0');
+  let busy = false, BAT = null;
+  try { if (navigator.getBattery) navigator.getBattery().then(b => { BAT = b; ['levelchange', 'chargingchange'].forEach(ev => b.addEventListener(ev, () => draw())); draw(); }).catch(() => { }); } catch (e) { }
+
+  async function wxFetch(force) {
+    if (!wxOn() || busy || !navigator.onLine || !navigator.geolocation) return;
+    const c = cache();
+    if (!force && c && c.hr && ((c.t && Date.now() - c.t < 30 * 60e3) || (c.et && Date.now() - c.et < 5 * 60e3))) return;
+    busy = true;
+    try {
+      const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 }));
+      const lat = (Math.round(pos.coords.latitude * 100) / 100).toFixed(2), lng = (Math.round(pos.coords.longitude * 100) / 100).toFixed(2);
+      const u = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lng + '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_gusts_10m,is_day&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset&timezone=auto&forecast_days=2';
+      const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 12000);
+      const r = await fetch(u, { signal: ctl.signal, referrerPolicy: 'no-referrer', credentials: 'omit' }); clearTimeout(to);
+      if (!r.ok) throw new Error('http');
+      const j = await r.json(), cu = j.current, d = j.daily, day = i => ({ c: d.weather_code[i], mn: d.temperature_2m_min[i], mx: d.temperature_2m_max[i], p: d.precipitation_probability_max[i] || 0 });
+      if (!cu || !d) throw new Error('dati');
+      let hr = []; try { const hz = j.hourly, off = (j.utc_offset_seconds || 0) * 1000; if (hz && hz.time) { const i0 = Math.max(0, hz.time.findIndex(x => Date.parse(x + 'Z') - off > Date.now() - 3600e3)); for (let i = i0; i < Math.min(hz.time.length, i0 + 14); i++) hr.push([+hz.time[i].slice(11, 13), hz.temperature_2m[i], hz.precipitation_probability[i] || 0, hz.weather_code[i]]); } } catch (e) { hr = []; }
+      const hm = x => (typeof x === 'string' && x.length >= 16) ? x.slice(11, 16) : '';
+      lsSet(WC, JSON.stringify({ t: Date.now(), now: { t: cu.temperature_2m, a: cu.apparent_temperature, c: cu.weather_code, w: cu.wind_speed_10m, g: cu.wind_gusts_10m, d: cu.is_day }, today: day(0), tom: day(1), hr, uv: d.uv_index_max ? d.uv_index_max[0] : null, sr: d.sunrise ? hm(d.sunrise[0]) : '', ss: d.sunset ? hm(d.sunset[0]) : '' }));
+    } catch (e) {
+      lsSet(WC, JSON.stringify(Object.assign({}, c || {}, { et: Date.now(), err: e && e.code === 1 ? 'perm' : 'net' })));
+    } finally { busy = false; draw(); }
+  }
+
+
+  /* consigli meteo: regole semplici calcolate sul dispositivo (non un modello IA) */
+  const hh2 = n => pad(((n % 24) + 24) % 24) + ':00';
+  function wxPlan(w) {
+    const out = []; if (!w || !w.now) return out; const n = w.now, t = w.today || {}, H = (w.hr || []).slice(0, 12), k = t.c != null ? WMO(t.c)[1] : '';
+    // 1. pioggia: quando
+    const wet = i => H[i] && H[i][2] >= 50; let a = -1, b = -1;
+    for (let i = 0; i < H.length; i++) { if (wet(i)) { a = i; b = i; while (wet(b + 1)) b++; break; } }
+    if (a >= 0) { const mx = Math.max(...H.slice(a, b + 1).map(x => x[2])); out.push(['cloud', (a === 0 ? 'Pioggia probabile ora' : 'Pioggia probabile dalle ' + hh2(H[a][0])) + (b < H.length - 1 ? ' fino alle ' + hh2(H[b][0] + 1) : ' e oltre') + ' (fino al ' + mx + '%): porta l’ombrello.', 1]); }
+    else if (!H.length && (t.p >= 50 || k === 'rain' || k === 'storm' || k === 'snow')) out.push(['cloud', 'Oggi ' + (t.p ? 'probabile ' + WMO(t.c)[0].toLowerCase() + ' (' + t.p + '%)' : WMO(t.c)[0].toLowerCase()) + ': porta l’ombrello.', 1]);
+    // 2. abbigliamento
+    const ap = n.a, wear = ap <= 3 ? 'cappotto, sciarpa e guanti' : ap <= 9 ? 'giacca pesante' : ap <= 15 ? 'giacca o felpa' : ap <= 21 ? 'maglia leggera, una felpa nel caso' : ap <= 27 ? 'abiti leggeri' : 'abiti freschi e chiari, cappello';
+    let wl = 'Abbigliamento (percepiti ' + r0(ap) + '°): ' + wear + '.'; if ((n.g || 0) >= 45 || n.w >= 35) wl += ' Meglio un capo antivento.';
+    out.push([ap <= 5 || ap >= 30 ? 'warn' : 'info', wl, ap <= 3 || ap >= 30 ? 1 : 0]);
+    // 3. sbalzo di temperatura
+    if (H.length >= 6) { const lo = Math.min(...H.map(x => x[1])), at = H.find(x => x[1] === lo); if (n.t - lo >= 6) out.push(['warn', 'Entro le ' + hh2(at[0]) + ' la temperatura scende a ' + r0(lo) + '°: porta qualcosa in più.', 0]); }
+    // 4. finestra migliore per uscire (solo se in giornata piove)
+    if (a >= 0) { let best = null, i = 0; while (i < H.length) { if (H[i][0] >= 7 && H[i][0] <= 21 && H[i][2] < 25) { let j = i; while (j + 1 < H.length && H[j + 1][0] <= 21 && H[j + 1][2] < 25) j++; if (j > i && (!best || j - i > best[1] - best[0])) best = [i, j]; i = j + 1; } else i++; } if (best) out.push(['cal', 'Finestra migliore per uscire all’asciutto: ' + hh2(H[best[0]][0]) + '–' + hh2(H[best[1]][0] + 1) + '.', 0]); }
+    // 5. UV, raffiche, tramonto
+    if (n.d === 1 && w.uv >= 6) out.push(['warn', 'UV ' + (w.uv >= 8 ? 'molto ' : '') + 'alto (' + r0(w.uv) + '): crema solare e occhiali.', 1]); else if (n.d === 1 && w.uv >= 3) out.push(['info', 'UV moderato (' + r0(w.uv) + '): crema se resti fuori a lungo.', 0]);
+    if ((n.g || 0) >= 50) out.push(['warn', 'Raffiche fino a ' + r0(n.g) + ' km/h: attenzione all’aperto.', 1]);
+    if (n.d === 1 && w.ss) { const [sh, sm] = w.ss.split(':').map(Number), mins = sh * 60 + sm - (new Date().getHours() * 60 + new Date().getMinutes()); if (mins > 0 && mins <= 150) out.push(['info', 'Il sole tramonta alle ' + w.ss + '.', 0]); }
+    return out;
+  }
+  window.wxAsk = t => { const w = cache(); if (!w || !w.now) return null; const P = wxPlan(w);
+    if (/tramonto|\balba\b/.test(t)) return w.sr && w.ss ? 'Oggi l’alba è alle ' + w.sr + ' e il tramonto alle ' + w.ss + '.' : null;
+    if (/spiov|smette|quando.*piov|ora.*piov/.test(t)) { const x = P.find(y => /^Pioggia/.test(y[1])); return x ? x[1] : (w.hr && w.hr.length ? 'Nelle prossime 12 ore non è prevista pioggia significativa (probabilità sotto il 50%).' : null); }
+    if (/\buv\b|crema solare/.test(t)) { const x = P.find(y => /^UV/.test(y[1])); return x ? x[1] : (w.uv != null ? 'UV massimo oggi: ' + r0(w.uv) + ', nessuna precauzione particolare.' : null); }
+    return null; };
+  window.wxPlanAll = () => wxPlan(wxOn() ? cache() : null).map(x => x[1]);
+  function wxDetail() {
+    const w = cache(); if (!w || !w.now) return '<h2>Meteo</h2><p class="mut">Nessun dato: attiva il meteo dalla Home.</p><button class="btn blk" data-act="close">Chiudi</button>';
+    const n = w.now, m = WMO(n.c), night = n.d === 0, H = (w.hr || []).slice(0, 12), plan = wxPlan(w);
+    const bars = H.length ? '<div class="jvhr" role="img" aria-label="Prossime ore: temperatura e probabilità di pioggia">' + H.map(x => '<div class="hc"><span class="hp"><i style="height:' + Math.max(2, Math.round(x[2] * .42)) + 'px"></i></span><b>' + r0(x[1]) + '°</b><span class="hl">' + pad(x[0]) + '</span><span class="hq">' + (x[2] >= 10 ? x[2] + '%' : '') + '</span></div>').join('') + '</div><p class="sm mut">Barre: probabilità di pioggia nelle prossime ore.</p>' : '';
+    const facts = []; if (w.today) facts.push('Oggi ' + r0(w.today.mn) + '°/' + r0(w.today.mx) + '°'); if (w.sr && w.ss) facts.push('alba ' + w.sr + ' · tramonto ' + w.ss); if (w.uv != null) facts.push('UV max ' + r0(w.uv)); facts.push('vento ' + r0(n.w) + ' km/h' + (n.g ? ' (raffiche ' + r0(n.g) + ')' : ''));
+    const tom = w.tom ? '<p class="sm">Domani: <b>' + h(WMO(w.tom.c)[0]) + '</b>, ' + r0(w.tom.mn) + '°/' + r0(w.tom.mx) + '°, pioggia ' + w.tom.p + '%.</p>' : '';
+    return '<div class="jvbig">' + wi(m[1], night) + '<span>' + r0(n.t) + '°</span><small>' + h(m[0]) + '</small></div><p class="sm mut">' + h(facts.join(' · ')) + '</p>' + bars + '<h3>Consigli per oggi</h3><ul class="jvb">' + plan.map(x => '<li' + (x[2] ? ' class="w"' : '') + '>' + ic(x[0]) + '<span>' + h(x[1]) + '</span></li>').join('') + '</ul>' + tom +
+      '<p class="sm mut">I consigli sono regole semplici calcolate sul dispositivo (non un modello IA). Dati: Open-Meteo, posizione approssimata.</p><div class="stack"><button class="btn blk" data-act="jvWx">' + ic('refresh') + ' Aggiorna ora</button><button class="btn blk" data-act="close">Chiudi</button></div>';
+  }
+
+  function lines() {
+    const L = [], hr = new Date().getHours(), w = wxOn() ? cache() : null;
+    if (w && w.now && w.today) {
+      wxPlan(w).slice(0, 3).forEach(x => L.push(x));
+      if (w.tom) L.push(['cal', 'Domani: ' + WMO(w.tom.c)[0].toLowerCase() + ', ' + r0(w.tom.mn) + '°/' + r0(w.tom.mx) + '°.', 0]);
+    }
+    const E = []; try { cardExpAgenda(E); } catch (e) { } E.slice(0, 2).forEach(x => L.push(['card', x.t, x.w ? 1 : 0]));
+    try { window.agendaBrief && window.agendaBrief(L); } catch (e) { }
+    try { if (lsGet('unica_syon') === '1' && SY.err) L.push(['refresh', 'Sincronizzazione: ' + SY.err, 1]); } catch (e) { }
+    try { const n = U.near ? U.near.size : 0; if (n) L.push(['card', n + (n === 1 ? ' carta per un negozio qui vicino.' : ' carte per i negozi qui vicino.'), 0]); } catch (e) { }
+    if (!navigator.onLine) L.push(['info', 'Sei offline: meteo e sincronizzazione sono in pausa.', 1]);
+    if (BAT && BAT.level <= .2 && !BAT.charging) L.push(['warn', 'Batteria al ' + Math.round(BAT.level * 100) + '%: collega il caricatore.', 1]);
+    if (hr < 5) L.push(['info', 'È notte fonda: ricordati di riposare.', 0]);
+    if (!L.length) L.push(['shield', 'Tutto in ordine.', 0]);
+    return L.slice(0, 7);
+  }
+
+  function parts() {
+    const d = new Date(), w = wxOn() ? cache() : null, night = w && w.now ? w.now.d === 0 : (d.getHours() < 6 || d.getHours() >= 20);
+    let wx, fc = '';
+    if (!wxOn()) wx = wi('part', night) + '<span class="jvwt"><b>Meteo</b><span>Tocca per attivare</span></span>';
+    else if (w && w.now) {
+      const m = WMO(w.now.c); wx = wi(m[1], night) + '<span class="jvwt"><b>' + r0(w.now.t) + '°</b><span>' + h(m[0]) + '</span></span>';
+      if (w.today) fc = 'Oggi ' + r0(w.today.mn) + '°/' + r0(w.today.mx) + '° · pioggia ' + w.today.p + '% · vento ' + r0(w.now.w) + ' km/h' + (w.t ? ' · agg. ' + pad(new Date(w.t).getHours()) + ':' + pad(new Date(w.t).getMinutes()) : '');
+      if (w.err) fc += (fc ? ' · ' : '') + (w.err === 'perm' ? 'posizione negata' : 'aggiornamento non riuscito');
+    } else wx = wi('cloud', night) + '<span class="jvwt"><b>Meteo</b><span>' + (w && w.err === 'perm' ? 'Posizione negata' : w && w.err ? 'Non disponibile' : 'Carico…') + '</span></span>';
+    return {
+      clk: pad(d.getHours()) + ':' + pad(d.getMinutes()),
+      dt: d.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }),
+      wx, fc, go: (window.agendaGo ? window.agendaGo() : ''), br: lines().map(x => '<li' + (x[2] ? ' class="w"' : '') + '>' + ic(x[0]) + '<span>' + h(x[1]) + '</span></li>').join('')
+    };
+  }
+  function box() {
+    const p = parts();
+    return '<section class="card jv" aria-label="Assistente"><div class="jvh"><div><div class="jvk" id="jvclk">' + p.clk + '</div><div class="jvd" id="jvdt">' + h(p.dt) + '</div></div><button class="jvw" id="jvwx" data-act="jvWx" aria-label="Meteo">' + p.wx + '</button></div><p class="jvf" id="jvf"' + (p.fc ? '' : ' hidden') + '>' + h(p.fc) + '</p><button class="btn sm jvmore" id="jvmore" data-act="jvWxMore"' + (p.fc ? '' : ' hidden') + '>' + ic('cloud') + ' Dettagli e consigli meteo</button><ul class="jvb" id="jvbrief">' + p.br + '</ul><div class="jvg" id="jvgo">' + p.go + '</div></section>';
+  }
+  function draw() {
+    if (U.route !== 'home') return; const p = parts(), set = (id, v) => { const e = document.getElementById(id); if (e && e.innerHTML !== v) e.innerHTML = v; };
+    set('jvclk', p.clk); set('jvdt', h(p.dt)); set('jvwx', p.wx); set('jvbrief', p.br); set('jvgo', p.go);
+    const f = document.getElementById('jvf'); if (f) { f.hidden = !p.fc; if (f.textContent !== p.fc) f.textContent = p.fc; } const mo = document.getElementById('jvmore'); if (mo) mo.hidden = !p.fc;
+  }
+  setInterval(() => { try { draw(); } catch (e) { } }, 15000);
+  addEventListener('online', () => { wxFetch(false); draw(); });   addEventListener('offline', () => draw());
+  window.wxState = () => { const c = cache(); return { on: wxOn(), has: !!(c && c.now), err: c && c.err || '' }; };
+  window.wxRefresh = () => wxFetch(true);
+  window.wxText = () => { const w = cache(); if (!w || !w.now) return ''; const n = w.now, t = w.today, m = WMO(n.c)[0].toLowerCase(); let o = 'Ora ' + r0(n.t) + '° (percepiti ' + r0(n.a) + '°), ' + m + '.';
+    if (t) o += ' Oggi min ' + r0(t.mn) + '°, max ' + r0(t.mx) + '°, pioggia ' + t.p + '%, vento ' + r0(n.w) + ' km/h.'; if (w.tom) o += ' Domani: ' + WMO(w.tom.c)[0].toLowerCase() + ', ' + r0(w.tom.mn) + '°/' + r0(w.tom.mx) + '°, pioggia ' + w.tom.p + '%.';
+    if (w.t && Date.now() - w.t > 3 * 3600e3) o += ' (dato delle ' + pad(new Date(w.t).getHours()) + ':' + pad(new Date(w.t).getMinutes()) + ')'; return o; };
+  window.wxAdvice = () => window.wxPlanAll();
+
+  { const vh = V.home; V.home = function () {
+    const html = vh.apply(this, arguments); if (!jvOn()) return html;
+    setTimeout(() => wxFetch(false), 0);
+    const i = html.indexOf('</section>'), blk = box();
+    return i >= 0 ? html.slice(0, i + 10) + blk + html.slice(i + 10) : html.replace('<main class="wrap">', '<main class="wrap">' + blk);
+  }; }
+
+  const consent = () => ask('Meteo nella Home', 'Per mostrare il meteo, Vortex Hub usa la tua posizione approssimata (circa 1 km) e la invia a Open-Meteo (api.open-meteo.com), un servizio meteo gratuito. La posizione non viene salvata sul dispositivo. Puoi disattivarlo in Impostazioni → Home e assistente.', { ok: 'Attiva' });
+  Object.assign(ACT, {
+    jvWxMore() { modal(wxDetail()); },
+    async jvWx() {
+      if (!wxOn()) { if (!(await consent())) return; lsSet(WX, '1'); draw(); }
+      toast('Aggiorno il meteo…'); await wxFetch(true); try { const d = document.querySelector('.sheet .jvhr'); if (d) { closeTop(); modal(wxDetail()); } } catch (e) { } const c = cache(); if (c && c.err === 'perm') toast('Posizione negata: consentila dalle impostazioni del browser');
+    },
+    async jvSetWx() {
+      if (wxOn()) { lsSet(WX, '0'); try { localStorage.removeItem(WC); } catch (e) { } toast('Meteo disattivato'); }
+      else { if (!(await consent())) return; lsSet(WX, '1'); toast('Meteo attivo'); }
+      render();
+    },
+    jvSetBrief() { lsSet(JV, jvOn() ? '0' : '1'); toast(jvOn() ? 'Assistente nella Home attivo' : 'Assistente nella Home nascosto'); render(); }
+  });
+
+  /* scheda in Impostazioni (dentro «Aspetto») */
+  { const s0 = V.settings; V.settings = function () {
+    const html = s0.apply(this, arguments), k = 'c:Home e assistente'; let op = false; try { op = JSON.parse(lsGet('unica_setopen') || '[]').includes(k); } catch (e) { }
+    const card = '<details class="card sc" data-k="' + k + '"' + (op ? ' open' : '') + '><summary><b>Home e assistente</b><i class="chev"></i></summary><div class="scb"><p class="sm mut">Nella Home l’assistente mostra ora, data, meteo e un breve riepilogo (scadenze delle carte, backup, sincronizzazione, batteria). Il riepilogo usa solo dati delle carte: nulla dell’area protetta. Il meteo è facoltativo e spento finché non lo attivi.</p>' +
+      '<button class="btn blk" data-act="jvSetBrief">Assistente nella Home: ' + (jvOn() ? 'attivo' : 'nascosto') + '</button><button class="btn blk" style="margin-top:8px" data-act="jvSetWx">Meteo (Open-Meteo): ' + (wxOn() ? 'attivo' : 'spento') + '</button></div></details>';
+    const a = html.indexOf('data-k="asp"'), b = a < 0 ? -1 : html.indexOf('<div class="sgb">', a);
+    if (b >= 0) return html.slice(0, b + 17) + card + html.slice(b + 17);
+    const i = html.lastIndexOf('</main>'); return i < 0 ? html : html.slice(0, i) + card + html.slice(i);
+  }; }
+})();
+
+
+/* ===== v2.13: agenda unificata, scadenze personali e punteggio di sicurezza ===== */
+(function () {
+  const CATS = [['doc', 'Documento', 'card'], ['ass', 'Assicurazione', 'shield'], ['auto', 'Auto e bollo', 'pin'], ['casa', 'Casa e utenze', 'home'], ['gar', 'Garanzia', 'info'], ['abb', 'Abbonamento', 'refresh'], ['alt', 'Altro', 'cal']];
+  const catOf = k => CATS.find(c => c[0] === k) || CATS[CATS.length - 1];
+  const pd = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
+  const today = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); };
+  const daysTo = x => Math.round((x - today()) / MS_DAY);
+  function occ(d) {
+    const b = pd(d.date); if (!b) return null; if (d.repeat !== 'y') return b;
+    const t = today(); let x = new Date(t.getFullYear(), b.getMonth(), b.getDate()); if (x < t) x = new Date(t.getFullYear() + 1, b.getMonth(), b.getDate()); return x;
+  }
+  const lead = d => (+d.lead >= 0 && d.lead !== '' ? +d.lead : 7);
+  const dls = () => [...(S.dls ? S.dls.values() : [])].filter(e => e.type === 'deadline').map(e => { const x = occ(e.data); return x ? { e, x, n: daysTo(x) } : null; }).filter(Boolean).sort((a, b) => a.n - b.n);
+  const when = o => o.n < 0 ? (o.n === -1 ? 'scaduta ieri' : 'scaduta da ' + -o.n + ' giorni') : o.n === 0 ? 'scade oggi' : o.n === 1 ? 'scade domani' : o.n <= 60 ? 'scade fra ' + o.n + ' giorni' : 'scade il ' + o.x.toLocaleDateString('it-IT');
+  const soon = o => o.n <= lead(o.e.data);
+
+  function secCheck() {
+    const C = [], a = bkAge(), bd = bkDays(), chg = +lsGet('unica_bkchg') || 0, old = a !== null && bd && a > bd;
+    C.push({ w: 30, ok: a !== null && !old && chg < 15, t: 'Backup recente', d: a === null ? 'Nessun backup fatto: se perdi il telefono perdi i dati.' : old ? 'Ultimo backup di ' + a + ' giorni fa.' : chg >= 15 ? chg + ' modifiche non ancora in un backup.' : 'Ultimo backup ' + (a === 0 ? 'oggi' : a + (a === 1 ? ' giorno' : ' giorni') + ' fa') + '.', act: 'exp', lab: 'Backup ora' });
+    const idle = +lsGet('unica_idle') || 5;
+    C.push({ w: 15, ok: idle <= 15 && appIdleMin() <= 30, t: 'Blocco automatico', d: idle <= 15 && appIdleMin() <= 30 ? 'Area protetta dopo ' + idle + ' min, app dopo ' + appIdleMin() + ' min.' : 'Imposta un blocco più breve (area protetta fino a 15 min, app fino a 30 min).', go: 'settings', lab: 'Impostazioni' });
+    if (pkSupported()) { const ok = !!(S.meta && (S.meta.pk || S.meta.wrapBio)); C.push({ w: 10, ok, t: 'Sblocco con impronta o Face ID', d: ok ? 'Attivo: non devi digitare la master password in pubblico.' : 'Attivalo per non digitare la master password davanti agli altri.', act: 'bioQuick', lab: 'Attiva' }); }
+    if (S.devs && S.devs.size) {
+      const me = 'dev-' + devId(), st = [...S.devs.values()].filter(x => x.id !== me && Date.now() - x.data.last > 90 * MS_DAY);
+      C.push({ w: 10, ok: !st.length, t: 'Dispositivi', d: st.length ? st.length + (st.length === 1 ? ' dispositivo non usato' : ' dispositivi non usati') + ' da oltre 90 giorni: revoca quelli che non riconosci.' : S.devs.size + (S.devs.size === 1 ? ' dispositivo registrato, tutti attivi.' : ' dispositivi registrati, tutti attivi.'), go: 'settings', lab: 'Dispositivi' });
+    }
+    { const e = window.emgStatus && window.emgStatus(); C.push({ w: 10, ok: !!e, t: 'Accesso di emergenza', d: e ? 'Parti create il ' + new Date(e.t).toLocaleDateString('it-IT') + ' (' + e.k + ' su ' + e.n + ').' : 'Nessuna persona di fiducia potrebbe aprire i tuoi dati se non ci sei.', go: 'settings', lab: 'Prepara' }); }
+    let partial = !S.protOpen;
+    if (S.protOpen) {
+      const lg = vitems().filter(i => i.type === 'login' && i.data.password);
+      if (lg.length) {
+        const cnt = new Map(); lg.forEach(i => cnt.set(i.data.password, (cnt.get(i.data.password) || 0) + 1));
+        const weak = lg.filter(i => strength(i.data.password).lv === 0).length, rep = lg.filter(i => cnt.get(i.data.password) > 1).length, o = lg.filter(i => Date.now() - i.ts > 365 * MS_DAY).length;
+        C.push({ w: 25, ok: !weak && !rep, t: 'Password robuste e diverse', d: weak || rep ? [weak && weak + ' deboli', rep && rep + ' ripetute'].filter(Boolean).join(', ') + ' su ' + lg.length + '.' : 'Nessuna password debole o ripetuta su ' + lg.length + '.', act: 'audit', lab: 'Controlla' });
+        C.push({ w: 10, ok: !o, t: 'Password aggiornate', d: o ? o + (o === 1 ? ' password non cambiata' : ' password non cambiate') + ' da oltre un anno.' : 'Nessuna password ferma da oltre un anno.', act: 'audit', lab: 'Controlla' });
+      } else partial = false;
+    }
+    const tot = C.reduce((s, c) => s + c.w, 0), got = C.reduce((s, c) => s + (c.ok ? c.w : 0), 0), score = tot ? Math.round(100 * got / tot) : 0;
+    return { C, score, partial, label: score >= 85 ? 'Ottima' : score >= 60 ? 'Buona' : 'Da migliorare', bad: C.filter(c => !c.ok) };
+  }
+  window.agendaBrief = L => {
+    dls().filter(soon).slice(0, 2).forEach(o => L.push(['cal', o.e.data.title + ': ' + when(o) + '.', o.n <= 7 ? 1 : 0]));
+  };
+  window.agendaGo = () => { const s = secCheck(), n = dls().filter(soon).length; return '<span class="jvgs">Sicurezza <b>' + s.score + '/100</b>' + (n ? ' · ' + n + (n === 1 ? ' scadenza vicina' : ' scadenze vicine') : '') + '</span><button class="btn sm" data-s="agenda" data-act="nav" data-r="agenda">Agenda e sicurezza</button>'; };
+
+  const actBtn = c => c.act ? '<button class="btn sm" data-act="' + c.act + '">' + h(c.lab) + '</button>' : c.go ? '<button class="btn sm" data-act="nav" data-r="' + c.go + '">' + h(c.lab) + '</button>' : '';
+  V.agenda = () => {
+    const s = secCheck(), D = dls(), A = agenda().filter(x => !(x.i === 'shield' && /backup/i.test(x.t)) && !/^Carta «/.test(x.t) && x.act !== 'agendaUnlock');
+    const back = '<button class="ib" data-act="nav" data-r="home" aria-label="Torna alla Home">' + ic('home') + '</button>';
+    const sec = '<section class="card ag"><div class="ag-h"><div class="ag-n">' + s.score + '<small>/100</small></div><div class="t"><b>Sicurezza: ' + s.label + '</b><p class="sm mut">' + s.C.filter(c => c.ok).length + ' controlli su ' + s.C.length + ' superati.' + (s.partial ? ' Sblocca l’area protetta per includere anche le password.' : '') + '</p></div></div><div class="ag-bar" role="img" aria-label="Punteggio ' + s.score + ' su 100"><i style="width:' + s.score + '%"></i></div>' +
+      '<ul class="ag-l">' + s.C.map(c => '<li class="' + (c.ok ? 'ok' : 'no') + '">' + ic(c.ok ? 'shield' : 'warn') + '<span class="t"><b>' + h(c.t) + '</b><br><span class="sm mut">' + h(c.d) + '</span></span>' + (c.ok ? '' : actBtn(c)) + '</li>').join('') + '</ul></section>';
+    const dl = window.dueCardHtml();
+    const av = A.length ? '<div class="card"><h3>' + ic('info') + ' Da sapere</h3>' + A.map(x => '<button class="row" ' + (x.go ? 'data-act="nav" data-r="' + x.go + '"' : x.tab ? 'data-act="goFin" data-t="' + x.tab + '"' : 'data-act="' + x.act + '"') + '><span class="' + (x.w ? 'bad' : 'mut') + '">' + ic(x.i) + '</span><span class="t">' + h(x.t) + '</span></button>').join('') + '</div>' : '';
+    return hdr('Agenda e sicurezza', back) + '<main class="wrap">' + sec + dl + av + '</main>';
+  };
+
+  async function dlSave(id, prev, d) {
+    await putItem(id, 'deadline', d, prev, 'c'); const e = S.cards.get(id); S.cards.delete(id); if (!S.dls) S.dls = new Map(); if (e) S.dls.set(id, e);
+  }
+  function dlForm(prev, pre) {
+    const d = prev ? prev.data : pre || { title: '', cat: 'doc', date: '', repeat: '', lead: 7 };
+    const sel = (id, opts, v) => '<select class="in" id="' + id + '">' + opts.map(o => '<option value="' + h(String(o[0])) + '"' + (String(o[0]) === String(v) ? ' selected' : '') + '>' + h(o[1]) + '</option>').join('') + '</select>';
+    const m = modal('<h2>' + (prev ? 'Modifica scadenza' : 'Nuova scadenza') + '</h2><form data-form="x"><label class="f" for="dl_t">Cosa scade</label><input class="in" id="dl_t" maxlength="60" autocomplete="off" placeholder="Es. Passaporto, assicurazione auto" value="' + h(d.title) + '">' +
+      '<label class="f" for="dl_c">Categoria</label>' + sel('dl_c', CATS.map(c => [c[0], c[1]]), d.cat) + '<label class="f" for="dl_d">Data di scadenza</label><input class="in" id="dl_d" type="date" value="' + h(d.date) + '">' +
+      '<label class="f" for="dl_r">Si ripete</label>' + sel('dl_r', [['', 'No, una volta sola'], ['y', 'Ogni anno']], d.repeat) + '<label class="f" for="dl_l">Avvisami prima</label>' + sel('dl_l', [[1, '1 giorno'], [3, '3 giorni'], [7, '7 giorni'], [14, '14 giorni'], [30, '30 giorni'], [60, '60 giorni'], [90, '90 giorni']], lead(d)) +
+      '<p class="sm bad" id="dl_e" role="alert"></p><div class="gap" style="margin-top:12px">' + (prev ? '<button type="button" class="btn dan" id="dl_x">Elimina</button>' : '') + '<span class="sp"></span><button type="button" class="btn" id="dl_n">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>');
+    m.q('#dl_n').onclick = () => m.close();
+    if (prev) m.q('#dl_x').onclick = async () => { if (!(await ask('Eliminare la scadenza?', '«' + d.title + '» verrà rimossa.', { ok: 'Elimina', danger: true }))) return; await delItem(prev.id, 'c'); S.dls.delete(prev.id); m.close(); toast('Scadenza eliminata'); render(); };
+    m.q('form').onsubmit = async ev => {
+      ev.preventDefault(); const t = m.q('#dl_t').value.trim(), dt = m.q('#dl_d').value, er = m.q('#dl_e');
+      if (!t) return er.textContent = 'Scrivi cosa scade.'; if (!pd(dt)) return er.textContent = 'Scegli la data di scadenza.';
+      try { await dlSave(prev ? prev.id : 'dl-' + uid(), prev, { title: t, cat: m.q('#dl_c').value, date: dt, repeat: m.q('#dl_r').value, lead: +m.q('#dl_l').value }); } catch (e) { return er.textContent = 'Non salvata: ' + e.message; }
+      m.close(); toast(prev ? 'Scadenza aggiornata' : 'Scadenza aggiunta'); render();
+    };
+  }
+  window.dlOpen = pre => dlForm(null, pre);
+  window.__ag = { dls, occ, when, soon, catOf, pd, daysTo, lead, CATS };
+  window.dlList = () => dls().map(o => ({ title: o.e.data.title, cat: catOf(o.e.data.cat)[1], n: o.n, when: when(o), date: o.x.toLocaleDateString('it-IT'), soon: soon(o) }));
+  window.secSummary = () => { const s = secCheck(); return { score: s.score, label: s.label, bad: s.bad.map(c => ({ t: c.t, d: c.d })) }; };
+  Object.assign(ACT, { dlNew() { dlForm(null); }, dlEdit(t) { const e = S.dls && S.dls.get(t.dataset.id); if (e) dlForm(e); } });
+})();
+
+
+/* ===== v2.14: accesso di emergenza (parti del codice di recupero, schema di Shamir k su n) ===== */
+(function () {
+  /* campo di Galois GF(2^11), polinomio x^11+x^2+1: ogni parola del codice (11 bit) è un elemento */
+  const GFE = new Uint16Array(4096), GFL = new Uint16Array(2048);
+  { let x = 1; for (let i = 0; i < 2047; i++) { GFE[i] = x; GFL[x] = i; x <<= 1; if (x & 2048) x ^= 0x805; } for (let i = 2047; i < 4096; i++) GFE[i] = GFE[i - 2047]; }
+  const gm = (a, b) => a && b ? GFE[GFL[a] + GFL[b]] : 0, gd = (a, b) => a ? GFE[GFL[a] + 2047 - GFL[b]] : 0;
+  const chk = a => { let c = 0; for (const v of a) c = (c * 31 + v + 1) % 2039; return c; };
+  const rnd11 = n => { const r = new Uint16Array(n); crypto.getRandomValues(r); return Array.from(r, v => v & 2047); };
+  const LEN = 27;   /* intestazione + serie + 24 valori + controllo */
+
+  function emgSplit(words, k, n) {
+    if (!(k >= 2 && k <= n && n <= 9)) throw new Error('Schema non valido.');
+    const sec = words.map(w => WIDX.get(w)); if (sec.some(v => v === undefined)) throw new Error('Codice di recupero non valido.');
+    const coef = sec.map(s => [s, ...rnd11(k - 1)]), serie = rnd11(1)[0], out = [];
+    for (let x = 1; x <= n; x++) {
+      const ys = coef.map(c => { let y = c[k - 1]; for (let i = k - 2; i >= 0; i--) y = gm(y, x) ^ c[i]; return y; });
+      const v = [1024 | (k << 6) | x, serie, ...ys]; v.push(chk(v)); out.push(v.map(i => WORDS[i]));
+    }
+    return out;
+  }
+  function emgJoin(text) {
+    const w = String(text).toLowerCase().split(/[^a-z]+/).filter(Boolean);
+    if (!w.length) throw new Error('Incolla le parti di emergenza.');
+    const bad = w.findIndex(x => !WIDX.has(x)); if (bad >= 0) throw new Error('La parola «' + w[bad] + '» non è valida: controlla di averla scritta bene.');
+    if (w.length % LEN) throw new Error('Ogni parte ha ' + LEN + ' parole: ne hai inserite ' + w.length + '. Controlla di non aver saltato o aggiunto parole.');
+    const P = [];
+    for (let i = 0; i < w.length; i += LEN) {
+      const v = w.slice(i, i + LEN).map(x => WIDX.get(x)), n = i / LEN + 1;
+      if (chk(v.slice(0, LEN - 1)) !== v[LEN - 1]) throw new Error('La parte ' + n + ' contiene un errore di battitura: confrontala con l’originale.');
+      if (v[0] < 1024) throw new Error('La parte ' + n + ' non è una parte di emergenza.');
+      P.push({ k: (v[0] >> 6) & 15, x: v[0] & 63, serie: v[1], y: v.slice(2, 26) });
+    }
+    if (P.some(p => p.serie !== P[0].serie || p.k !== P[0].k)) throw new Error('Le parti non appartengono alla stessa serie: usa solo parti create nella stessa occasione.');
+    const U = [...new Map(P.map(p => [p.x, p])).values()], k = P[0].k;
+    if (U.length < k) throw new Error('Servono almeno ' + k + ' parti diverse: ne hai inserite ' + U.length + '.');
+    const use = U.slice(0, k);
+    return Array.from({ length: 24 }, (_, j) => {
+      let s = 0;
+      use.forEach((a, i) => { let num = 1, den = 1; use.forEach((b, t) => { if (t !== i) { num = gm(num, b.x); den = gm(den, a.x ^ b.x); } }); s ^= gm(a.y[j], gd(num, den)); });
+      return WORDS[s];
+    });
+  }
+  window.emgSplit = emgSplit; window.emgJoin = emgJoin;
+
+  const emg = () => { try { return JSON.parse(lsGet('unica_emg') || 'null'); } catch (e) { return null; } };
+  window.emgStatus = () => emg();
+  const guide = k => 'ISTRUZIONI DI EMERGENZA PER ' + APP_NAME.toUpperCase() + '\n\n' +
+    'Questa persona ti ha affidato una parte di emergenza. Da sola non apre nulla: servono almeno ' + (k || 'K') + ' parti, di persone diverse, insieme.\n\n' +
+    'Che cosa serve\n1. Il file di backup più recente (estensione .enc). Chiedilo a chi lo conserva.\n2. Almeno ' + (k || 'K') + ' parti di emergenza (ogni parte è un elenco di 27 parole).\n3. Questo indirizzo, da aprire con Chrome: ' + location.origin + location.pathname + '\n\n' +
+    'Che cosa fare\n1. Apri l’indirizzo e scegli «Ripristina da un backup», poi seleziona il file .enc.\n2. Nella finestra scegli «Ho le parti di emergenza» e incolla le parti, una dopo l’altra, quindi premi «Unisci».\n3. Scegli una nuova master password. I dati si aprono su quel dispositivo.\n\n' +
+    'Regole\n- Non inviare le parti in messaggi non protetti e non conservarle in cloud.\n- Usa le parti solo se la persona non può più aprire i suoi dati.\n- Le parti vanno scritte esattamente come sono: una parola sbagliata le rende inutili.\n';
+
+  function showShares(k, n, shares) {
+    let i = 0; const m = modal('<div id="em_b"></div>');
+    const draw = () => {
+      const s = shares[i], last = i === n - 1;
+      m.q('#em_b').innerHTML = '<h2>Parte ' + (i + 1) + ' di ' + n + '</h2><p class="mut sm">Servono ' + k + ' parti su ' + n + '. Scrivi questa parte su carta (o consegnala in un modo sicuro) e dalla alla persona scelta. Non viene salvata nell’app.</p><div class="words" aria-label="Parte ' + (i + 1) + '">' +
+        s.map((x, j) => '<div class="w1"><small>' + (j + 1) + '</small><b class="mono">' + x + '</b></div>').join('') + '</div><div class="gap" style="margin-top:12px"><button type="button" class="btn sm" id="em_c">Copia</button><span class="sp"></span>' +
+        (i ? '<button type="button" class="btn" id="em_p">Indietro</button>' : '') + '<button type="button" class="btn pri" id="em_n">' + (last ? 'Fatto' : 'Avanti') + '</button></div>';
+      m.q('#em_c').onclick = async () => { try { await navigator.clipboard.writeText(s.join(' ')); toast('Parte copiata: incollala solo dove serve'); } catch (e) { toast('Copia non riuscita'); } };
+      if (i) m.q('#em_p').onclick = () => { i--; draw(); };
+      m.q('#em_n').onclick = () => { if (last) { m.close(); render(); toast('Parti create'); } else { i++; draw(); } };
+    };
+    draw();
+  }
+
+  Object.assign(ACT, {
+    async emgNew() {
+      if (!(await ensureProt())) return;
+      const m = modal('<h2>Crea le parti di emergenza</h2><p class="mut sm">Dividi il codice di recupero in parti da affidare a persone di fiducia. Una parte da sola non rivela nulla; insieme, il numero richiesto apre tutti i tuoi dati (carte, Vault e Conti).</p><label class="f" for="em_s">Schema</label><select class="in" id="em_s"><option value="2,3">2 parti su 3 (consigliato)</option><option value="2,4">2 parti su 4</option><option value="3,5">3 parti su 5</option><option value="3,6">3 parti su 6</option></select>' +
+        '<p class="sm mut">Chi ha abbastanza parti e il file di backup può aprire tutto: scegli persone di cui ti fidi. Se perdi la fiducia in qualcuno, usa Cambia le chiavi: il codice di recupero cambia e le vecchie parti smettono di funzionare.</p><p class="sm bad" id="em_e" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button type="button" class="btn pri" id="em_g">Crea le parti</button></div>');
+      m.q('#em_g').onclick = async () => {
+        try {
+          const [k, n] = m.q('#em_s').value.split(',').map(Number), w = td.decode(await unseal(S.kpKey, S.meta.recEnc, 'recEnc')).split(' ');
+          const shares = emgSplit(w, k, n);
+          if (JSON.stringify(emgJoin(shares.slice(0, k).map(s => s.join(' ')).join(' '))) !== JSON.stringify(w)) throw new Error('Controllo interno non superato: nessuna parte creata.');
+          lsSet('unica_emg', JSON.stringify({ t: Date.now(), k, n })); m.close(); showShares(k, n, shares);
+        } catch (e) { m.q('#em_e').textContent = e.message; }
+      };
+    },
+    emgGuide() {
+      const e = emg(), m = modal('<h2>Istruzioni per i fiduciari</h2><p class="mut sm">Copia questo testo e consegnalo insieme alle parti. Non contiene segreti.</p><textarea class="in" id="em_t" rows="13" readonly></textarea><div class="gap" style="margin-top:10px"><span class="sp"></span><button type="button" class="btn" data-act="close">Chiudi</button><button type="button" class="btn pri" id="em_cp">Copia il testo</button></div>');
+      m.q('#em_t').value = guide(e && e.k); m.q('#em_cp').onclick = async () => { try { await navigator.clipboard.writeText(m.q('#em_t').value); toast('Testo copiato'); } catch (x) { m.q('#em_t').select(); } };
+    },
+    emgJoin(t) {
+      const to = t && t.dataset ? t.dataset.to : '', m = modal('<h2>Unisci le parti di emergenza</h2><p class="mut sm">Incolla le parti (27 parole ciascuna) una dopo l’altra, di persone diverse. Servono quante ne indica la serie.</p><textarea class="in mono" id="ej_t" rows="7" autocapitalize="off" spellcheck="false"></textarea><p class="sm bad" id="ej_e" role="alert"></p><div class="gap" style="margin-top:10px"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button type="button" class="btn pri" id="ej_g">Unisci</button></div>');
+      m.q('#ej_g').onclick = () => {
+        try { const w = emgJoin(m.q('#ej_t').value), el = document.getElementById(to); if (el) el.value = w.join(' '); m.close(); toast('Parti unite: codice di recupero ricostruito'); } catch (e) { m.q('#ej_e').textContent = e.message; }
+      };
+    }
+  });
+
+  { const s0 = V.settings; V.settings = function () {
+    const html = s0.apply(this, arguments), k = 'c:Accesso di emergenza'; let op = false; try { op = JSON.parse(lsGet('unica_setopen') || '[]').includes(k); } catch (e) { }
+    const e = emg(), st = e ? 'Parti create il ' + new Date(e.t).toLocaleDateString('it-IT') + ' (' + e.k + ' su ' + e.n + '). Se cambi le chiavi, vanno ricreate.' : 'Nessuna parte creata: se non puoi più aprire i tuoi dati, nessuno potrebbe farlo per te.';
+    const card = '<details class="card sc" data-k="' + k + '"' + (op ? ' open' : '') + '><summary><b>Accesso di emergenza</b><i class="chev"></i></summary><div class="scb"><p class="sm mut">Dividi il codice di recupero in parti da affidare a persone di fiducia: da sole non aprono nulla, insieme sì. Non c’è un tempo di attesa: funziona tutto sul dispositivo, senza server.</p><p class="sm">' + h(st) + '</p>' +
+      '<button class="btn blk" data-act="emgNew">' + (e ? 'Ricrea le parti' : 'Crea le parti di emergenza') + '</button><button class="btn blk" style="margin-top:8px" data-act="emgGuide">Istruzioni per i fiduciari</button></div></details>';
+    const a = html.indexOf('data-k="sic"'), b = a < 0 ? -1 : html.indexOf('<div class="sgb">', a);
+    if (b >= 0) return html.slice(0, b + 17) + card + html.slice(b + 17);
+    const i = html.lastIndexOf('</main>'); return i < 0 ? html : html.slice(0, i) + card + html.slice(i);
+  }; }
+})();
+
+
+/* ===== v2.15: assistente più utile (meteo, scadenze, sicurezza, emergenza) e allegati espliciti per l'IA ===== */
+(function () {
+  const MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+  const mid = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  const itd = d => d.toLocaleDateString('it-IT');
+  const add = (d, n, u) => { const x = new Date(d); if (u === 'g') x.setDate(x.getDate() + n); else if (u === 's') x.setDate(x.getDate() + 7 * n); else if (u === 'm') x.setMonth(x.getMonth() + n); else x.setFullYear(x.getFullYear() + n); return x; };
+  function findDate(q) {
+    const t = q.toLowerCase(), now = mid(new Date()); let m;
+    if ((m = /\b(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})\b/.exec(t))) { const y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return { d: new Date(y, +m[2] - 1, +m[1]), at: m.index, len: m[0].length }; }
+    if ((m = new RegExp('\\b(\\d{1,2})\\s+(' + MESI.join('|') + ')(?:\\s+(\\d{4}))?\\b').exec(t))) { const mo = MESI.indexOf(m[2]); let y = m[3] ? +m[3] : now.getFullYear(), d = new Date(y, mo, +m[1]); if (!m[3] && d < now) d = new Date(y + 1, mo, +m[1]); return { d, at: m.index, len: m[0].length }; }
+    if ((m = /\bdopodomani\b/.exec(t))) return { d: add(now, 2, 'g'), at: m.index, len: m[0].length };
+    if ((m = /\bdomani\b/.exec(t))) return { d: add(now, 1, 'g'), at: m.index, len: m[0].length };
+    if ((m = /\b(?:tra|fra)\s+(\d+)\s+(giorn[oi]|settiman[ae]|mesi|mese|ann[oi])\b/.exec(t))) return { d: add(now, +m[1], m[2][0] === 'g' ? 'g' : m[2][0] === 's' ? 's' : m[2] === 'mesi' || m[2] === 'mese' ? 'm' : 'a'), at: m.index, len: m[0].length };
+    return null;
+  }
+  function guessCat(t) {
+    t = t.toLowerCase();
+    return /passaporto|patente|identit|document|permesso|tessera sanit/.test(t) ? 'doc' : /assicuraz|polizza|rc auto/.test(t) ? 'ass' : /bollo|auto|moto|revision|tagliando|targa/.test(t) ? 'auto' : /affitto|bolletta|luce|gas|condomin|imu|tari|mutuo|casa/.test(t) ? 'casa' : /garanzi/.test(t) ? 'gar' : /abbonament|netflix|spotify|palestra|prime|disney/.test(t) ? 'abb' : 'alt';
+  }
+  function parseDeadline(q) {
+    const f = findDate(q); if (!f || isNaN(+f.d)) return null;
+    let title = (q.slice(0, f.at) + ' ' + q.slice(f.at + f.len)).replace(/\b(ogni anno|tutti gli anni|annuale|annualmente)\b/ig, ' ')
+      .replace(/^\s*(aggiungi|crea|segna|ricordami|ricorda|metti|inserisci|nuova)\s+(di\s+)?(una\s+|la\s+)?(scadenza\s+)?(di\s+|del\s+|della\s+|dello\s+|dell['’]\s*|per\s+)?/i, '')
+      .replace(/\b(entro il|entro|per il|in data|scade il|scade|scadenza|il|al)\s*$/i, '').replace(/\s+/g, ' ').trim();
+    title = title.replace(/^(il|la|lo|l['’]|un|una)\s+/i, m => /['’]$/.test(m) ? '' : '');
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+    return { title, date: iso(f.d), cat: guessCat(title), repeat: /\b(ogni anno|tutti gli anni|annual)/i.test(q) ? 'y' : '', lead: 7 };
+  }
+  window.parseDeadline = parseDeadline;
+
+  const dateLine = () => new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + ', ore ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+  const wxLine = () => { const s = window.wxState(); if (!s.on) return null; if (!s.has) return null; const t = window.wxText(); const a = window.wxAdvice(); return t + (a.length ? ' ' + a.join(' ') : ''); };
+  const dlLines = (all) => { const L = window.dlList(); return (all ? L : L.filter(x => x.soon)).slice(0, 25); };
+  const secLines = () => { const s = window.secSummary(); return { s, txt: 'Sicurezza ' + s.score + '/100 (' + s.label + ').' + (s.bad.length ? ' Da migliorare: ' + s.bad.map(b => b.t + ' (' + b.d + ')').join('; ') : ' Nessun punto critico.') }; };
+
+  /* ---- assistente locale ---- */
+  const base = assist;
+  assist = function (q) {
+    const t = fold(q), R = (text, btn) => ({ t: text, btn }), AG = { l: 'Apri agenda e sicurezza', a: 'data-act="nav" data-r="agenda"' };
+    if (/^(aggiungi|crea|segna|ricordami|ricorda|metti|inserisci|nuova)\b/.test(t) && /scadenz|ricord|rinnov|bollo|passaporto|patente|assicuraz|garanzi|abbonament|revision|tagliando|affitto|bolletta|imu/.test(t)) {
+      const p = parseDeadline(q);
+      if (!p) return R('Per quando? Scrivi per esempio «aggiungi scadenza passaporto 15 marzo 2027» oppure «ricordami la revisione tra 3 mesi».');
+      if (!p.title) return R('Cosa scade? Scrivi per esempio «aggiungi scadenza passaporto ' + itd(new Date(p.date)) + '».');
+      return R('Ho preparato la scadenza «' + p.title + '» per il ' + itd(new Date(p.date + 'T00:00:00')) + (p.repeat ? ', ogni anno' : '') + '. Controlla e salva.', { l: 'Rivedi e salva', a: 'data-act="dlPre" data-p="' + h(JSON.stringify(p)) + '"' });
+    }
+    if (/\b(meteo|che tempo|piove|piovera|pioggia|ombrello|temperatura|freddo|caldo|vento|cosa indosso|vestirmi|giacca|uv|tramonto|alba|raffiche|crema solare|spiove|smette di piovere)\b/.test(t) && !/spes|conto|budget/.test(t)) {
+      const s = window.wxState();
+      if (!s.on) return R('Il meteo è spento. Attivandolo lo vedo anche qui e nella Home: usa la tua posizione approssimata (circa 1 km), che non viene salvata.', { l: 'Attiva il meteo', a: 'data-act="jvWx"' });
+      if (!s.has) { window.wxRefresh(); return R(s.err === 'perm' ? 'Non ho il permesso di usare la posizione: consentila per questo sito nelle impostazioni di Chrome.' : 'Sto recuperando il meteo: riprova fra qualche secondo.'); }
+      const sp = window.wxAsk && window.wxAsk(t); if (sp) return R(sp, { l: 'Dettagli meteo', a: 'data-act="jvWxMore"' }); const a = window.wxAdvice(); return R(window.wxText() + (a.length ? '\n' + a.map(x => '• ' + x).join('\n') : ''), { l: 'Dettagli meteo', a: 'data-act="jvWxMore"' });
+    }
+    if (/cosa devo fare|cosa ho (oggi|da fare)|piano della giornata|programma|riepilogo|briefing|situazione|buongiorno|buonasera|come va\b/.test(t) && !/vault|password|spes|conto/.test(t)) {
+      const out = [dateLine().replace(/^./, c => c.toUpperCase()) + '.']; const w = wxLine(); if (w) out.push('Meteo: ' + w);
+      const D = dlLines(false); if (D.length) out.push('Scadenze vicine:\n' + D.map(x => '• ' + x.title + ': ' + x.when).join('\n'));
+      const A = agenda().filter(x => !/^Carta «/.test(x.t)); if (A.length) out.push('Da sapere:\n' + A.slice(0, 4).map(x => '• ' + x.t).join('\n'));
+      const sc = secLines(); out.push(sc.txt); return R(out.join('\n\n'), AG);
+    }
+    if (/\b(punteggio|quanto sono sicur|come sono messo|livello di sicurezza|migliorare la sicurezza|sicurezza dell.?app)\b/.test(t)) { const sc = secLines(); return R(sc.txt, AG); }
+    if (/\b(emergenza|fiduciar|erede|eredi|parti di emergenza)\b/.test(t)) { const e = window.emgStatus(); return R(e ? 'Hai creato le parti di emergenza il ' + new Date(e.t).toLocaleDateString('it-IT') + ' (' + e.k + ' su ' + e.n + '). Se hai cambiato le chiavi dopo, vanno ricreate.' : 'Non hai ancora creato le parti di emergenza: senza, nessuno potrebbe aprire i tuoi dati se non ci sei.', { l: e ? 'Ricrea le parti' : 'Crea le parti', a: 'data-act="emgNew"' }); }
+    if (/scadenz|rinnov|bollo|passaporto|patente|assicuraz|garanzi|promemoria|agenda|da fare/.test(t) && (/scadenz|rinnov|promemoria|agenda/.test(t) || !/vault|password|nota|note|spes|conto|carta di credito/.test(t))) {
+      const want = /\b(vault|file|document\w*|password|login|passkey)\b/.test(t) ? 'vault' : /\b(conti|conto|btp|titol\w*|poste|pac|obiettiv\w*|investiment\w*|finanz\w*)\b/.test(t) ? 'fin' : /\bcart[ae]\b/.test(t) ? 'card' : '';
+      if ((want === 'vault' || want === 'fin') && !S.protOpen) return R('Per leggere le scadenze di Vault e Conti devo avere l’area protetta sbloccata.', { l: 'Sblocca', a: 'data-act="agendaUnlock"' });
+      const L = window.dlList().filter(x => !want || x.src === want), A = agenda().filter(x => !/backup/i.test(x.t) || /scad/i.test(x.t));
+      const out = []; if (L.length) out.push('Le tue scadenze:\n' + L.slice(0, 12).map(x => '• ' + x.title + ' (' + x.cat + '): ' + x.when).join('\n') + (L.length > 12 ? '\n…e altre ' + (L.length - 12) + '.' : ''));
+      if (A.length) out.push('Avvisi:\n' + A.slice(0, 4).map(x => '• ' + x.t).join('\n')); if (!L.length) out.unshift(want ? 'Nessuna scadenza in quest’area: aprendo un elemento puoi aggiungerne una.' : 'Non hai scadenze personali. Scrivimi «aggiungi scadenza passaporto 15 marzo 2027» e la preparo.');
+      return R(out.join('\n\n'), { l: 'Tutte le scadenze', a: 'data-act="nav" data-r="scadenze"' });
+    }
+    return base(q);
+  };
+
+  /* ---- IA generativa: allegati espliciti, scelti dall'utente per ogni messaggio ---- */
+  AI.att = new Set();
+  const ATT = [['brief', 'Briefing'], ['wx', 'Meteo'], ['dl', 'Scadenze'], ['dlp', 'Scad. Vault e Conti'], ['sec', 'Sicurezza'], ['cards', 'Carte (nomi)']];
+  const attText = () => {
+    if (!AI.att.size) return '';
+    const P = ['[Dati allegati da me, ' + dateLine() + ']'], has = k => AI.att.has(k);
+    if (has('brief') || has('wx')) P.push('METEO (zona approssimata): ' + (window.wxState().has ? window.wxText() : 'non disponibile'));
+    if (has('brief') || has('dl')) { const L = dlLines(has('dl')).filter(x => !x.prot); P.push('SCADENZE PERSONALI E CARTE: ' + (L.length ? L.map(x => x.title + ' (' + x.cat + ', ' + x.when + ', ' + x.date + ')').join('; ') : 'nessuna' + (has('dl') ? '' : ' vicina'))); }
+    if (has('dlp')) { const L = S.protOpen ? dlLines(true).filter(x => x.prot) : null; P.push('SCADENZE DI VAULT E CONTI (solo titoli, scelti da me): ' + (L === null ? 'area protetta bloccata' : L.length ? L.map(x => x.title + ' (' + x.cat + ', ' + x.when + ', ' + x.date + ')').join('; ') : 'nessuna')); }
+    if (has('brief') || has('sec')) P.push('SICUREZZA DELL’APP: ' + secLines().txt);
+    if (has('cards')) { const n = [...S.cards.values()].map(c => c.data.name).filter(Boolean).slice(0, 40); P.push('CARTE FEDELTÀ (solo nomi): ' + (n.length ? n.join(', ') : 'nessuna')); }
+    return P.join('\n');
+  };
+  const attUi = () => {
+    const box = $('aictx'); if (!box) return; box.hidden = AS.mode !== 'ai';
+    box.querySelectorAll('[data-k]').forEach(b => b.setAttribute('aria-pressed', String(AI.att.has(b.dataset.k))));
+    const v = $('aiview'); if (v) v.hidden = !AI.att.size;
+  };
+  ACT.aiatt = t => { const k = t.dataset.k; AI.att.has(k) ? AI.att.delete(k) : AI.att.add(k); attUi(); };
+  ACT.aiview = () => { const m = modal('<h2>Cosa verrà inviato</h2><p class="mut sm">Questo testo sarà aggiunto al tuo prossimo messaggio. Lo vedi per intero qui e nella chat.</p><textarea class="in mono" rows="12" readonly id="av_t"></textarea><div class="gap" style="margin-top:10px"><span class="sp"></span><button type="button" class="btn" data-act="close">Chiudi</button></div>'); m.q('#av_t').value = attText(); };
+  ACT.dlPre = t => { try { window.dlOpen(JSON.parse(t.dataset.p)); } catch (e) { toast('Non riesco a preparare la scadenza'); } };
+  { const oa = aiAsk; aiAsk = async function (q) { const a = attText(); if (a) { q = q + '\n\n' + a; AI.att.clear(); attUi(); } return oa.call(this, q); }; }
+  { const am = aiModeUi; aiModeUi = function () { am.apply(this, arguments); attUi(); const hint = $('aihint'); if (hint && AS.mode === 'ai' && AI.cfg) hint.textContent = 'IA: ' + AI.prov[AI.cfg.p].n + '. Viene inviato solo ciò che scrivi qui e i dati che allega tu con i pulsanti «Allega» (mai Vault, conti o password). Le risposte possono essere inesatte e non sono consulenza finanziaria.'; }; }
+  { const oo = openAssistant; openAssistant = function () {
+    oo(); const log = $('alog'); if (!log || $('aictx')) return;
+    log.insertAdjacentHTML('beforebegin', '<div class="chips" id="aictx" aria-label="Allega dati al messaggio" hidden><span class="sm mut" style="align-self:center">Allega:</span>' + ATT.map(a => '<button type="button" class="chip" data-act="aiatt" data-k="' + a[0] + '" aria-pressed="false">' + h(a[1]) + '</button>').join('') + '<button type="button" class="chip" id="aiview" data-act="aiview" hidden>Vedi cosa invio</button></div>');
+    const ch = $('aschips'); if (ch) ['Cosa devo fare oggi?', 'Che tempo fa?', 'Punteggio sicurezza', 'Le mie scadenze'].forEach(c => ch.insertAdjacentHTML('afterbegin', '<button class="chip" data-act="asq" data-q="' + h(c) + '">' + h(c) + '</button>'));
+    attUi();
+  }; }
+})();
+
+
+/* ===== v2.16: scadenze su ogni elemento (Carte, Vault, Conti) con agenda unica ===== */
+(function () {
+  const A = window.__ag, LEADS = [[1, '1 giorno'], [3, '3 giorni'], [7, '7 giorni'], [14, '14 giorni'], [30, '30 giorni'], [60, '60 giorni'], [90, '90 giorni']], REP = [['', 'Una volta sola'], ['y', 'Ogni anno']];
+  const opt = (a, v) => a.map(o => '<option value="' + h(o[0]) + '"' + (String(o[0]) === String(v) ? ' selected' : '') + '>' + h(o[1]) + '</option>').join('');
+  const mk = (date, rep, lead) => A.pd(date) ? { date, repeat: rep === 'y' ? 'y' : '', lead: lead !== '' && +lead >= 0 ? +lead : 7 } : undefined;
+  window.dueHtml = d => { d = d || {}; return '<div class="duebox"><b>Scadenza (facoltativa)</b><p class="sm mut">Rinnovo, garanzia, validità: ti avviso nell’Agenda e nella Home.</p><label class="f" for="du_d">Data</label><input class="in" id="du_d" type="date" value="' + h(d.date || '') + '"><label class="f" for="du_r">Si ripete</label><select class="in" id="du_r">' + opt(REP, d.repeat || '') + '</select><label class="f" for="du_l">Avvisami prima</label><select class="in" id="du_l">' + opt(LEADS, d.lead >= 0 ? d.lead : 7) + '</select><button type="button" class="btn sm" data-act="dueClear" style="margin-top:10px">Rimuovi la scadenza</button></div>'; };
+  window.dueRead = () => { const e = $('du_d'); return e ? mk(e.value, $('du_r').value, $('du_l').value) : undefined; };
+
+  /* Vault: tutti i tipi (password, passkey, note, file) */
+  { const vf = vxFields; vxFields = function (d) { return vf.apply(this, arguments) + window.dueHtml(d && d.due); }; }
+  { const vx = vxExtra; vxExtra = function () { const o = vx.apply(this, arguments); o.due = window.dueRead(); return o; }; }
+
+  /* Conti: titoli, BTP, Poste, PAC, flussi, conti bancari */
+  const ARR = { astEdit: 'assets', btpEdit: 'btps', poEdit: 'posteItems', pacEdit: 'pacItems', penEdit: 'pensionItems', cfEdit: 'cashflows' };
+  let ctx = null;
+  { const og = genForm; genForm = function (o) {
+      if (ctx && o && o.onSubmit && o.fields) {
+        const c = ctx, cur = c.i >= 0 ? FIN()[c.arr][c.i] : null, d = (cur && cur.due) || {}, os = o.onSubmit;
+        o.fields = o.fields.concat([{ id: 'dd', label: 'Scadenza (facoltativa)', type: 'date', value: d.date || '' }, { id: 'dr', label: 'La scadenza si ripete', type: 'select', options: REP, value: d.repeat || '' }, { id: 'dl', label: 'Avvisami prima', type: 'select', options: LEADS, value: d.lead >= 0 ? d.lead : 7 }]);
+        o.onSubmit = function () { const r = os.apply(this, arguments); const arr = FIN()[c.arr], rec = c.i >= 0 ? arr[c.i] : arr[arr.length - 1]; if (rec) { const due = mk(gv('dd'), gv('dr'), gv('dl')); if (due) rec.due = due; else delete rec.due; } return r; };
+      }
+      const mm = og.call(this, o);
+      if (ctx || (o && o.fields && o.fields.some(f => f.id === 'dd'))) { const e = $('g_dl'); if (e) e.insertAdjacentHTML('afterend', '<button type="button" class="btn sm" data-act="dueClear" style="margin-top:10px">Rimuovi la scadenza</button>'); }
+      return mm;
+    }; }
+  Object.keys(ARR).forEach(k => { const f = ACT[k]; if (!f) return; ACT[k] = function (t) { ctx = { arr: ARR[k], i: t && t.dataset && t.dataset.i != null && t.dataset.i !== '' ? +t.dataset.i : -1 }; try { return f.apply(this, arguments); } finally { ctx = null; } }; });
+  { const an = ACT.accNew, ae = ACT.accEdit;
+    if (an) ACT.accNew = function () { ctx = { arr: 'bankAccounts', i: -1 }; try { return an.apply(this, arguments); } finally { ctx = null; } };
+    if (ae) ACT.accEdit = function (t) { ctx = { arr: 'bankAccounts', i: +t.dataset.i }; try { return ae.apply(this, arguments); } finally { ctx = null; } }; }
+
+  /* raccolta unica */
+  const VL = { login: 'Password', passkey: 'Passkey', note: 'Nota', file: 'File' };
+  function all() {
+    const L = [], add = (src, kind, title, sub, ds, rep, lead, attr, prot, icn) => {
+      const x = A.occ({ date: ds, repeat: rep }); if (!x) return; const n = A.daysTo(x);
+      if ((kind === 'mat' || kind === 'goal') && n < -7) return;
+      L.push({ src, kind, title: String(title || 'Senza nome'), sub, x, n, lead: lead >= 0 ? +lead : 30, repeat: rep === 'y', attr, prot: !!prot, icn });
+    };
+    A.dls().forEach(o => add('pers', 'due', o.e.data.title, A.catOf(o.e.data.cat)[1], o.e.data.date, o.e.data.repeat, A.lead(o.e.data), 'data-act="dlEdit" data-id="' + h(o.e.id) + '"', 0, A.catOf(o.e.data.cat)[2]));
+    try { cardsArr().forEach(c => {
+      const d = c.data, at = 'data-act="cardOpen" data-id="' + h(c.id) + '"';
+      if (d.due) add('card', 'due', d.name, 'Carta fedeltà', d.due.date, d.due.repeat, d.due.lead, at, 0, 'card');
+      const m = /^(\d{4})-(\d{2})$/.exec(d.exp || ''); if (m) add('card', 'exp', d.name, 'Scadenza carta', m[1] + '-' + m[2] + '-' + String(new Date(+m[1], +m[2], 0).getDate()).padStart(2, '0'), '', 30, at, 0, 'card');
+    }); } catch (e) { }
+    if (S.protOpen) {
+      try { vitems().forEach(i => { const d = i.data.due; if (d) add('vault', 'due', titleOf(i), 'Vault · ' + (VL[i.type] || ''), d.date, d.repeat, d.lead, 'data-act="detail" data-id="' + h(i.id) + '"', 1, i.type === 'file' ? 'file' : i.type === 'note' ? 'note' : 'key'); }); } catch (e) { }
+      if (finLoaded()) try {
+        const f = FIN(), G = [['assets', 'Titolo', 'tit'], ['btps', 'BTP', 'btp'], ['posteItems', 'Poste', 'poste'], ['pacItems', 'PAC', 'pac'], ['pensionItems', 'Pensione', 'pen'], ['cashflows', 'Flusso', 'cf'], ['bankAccounts', 'Conto', 'acc']];
+        G.forEach(g => (f[g[0]] || []).forEach(r => { if (r.due) add('fin', 'due', r.name, 'Conti · ' + g[1], r.due.date, r.due.repeat, r.due.lead, 'data-act="goFin" data-t="' + g[2] + '"', 1, 'chart'); }));
+        f.btps.forEach(b => b.maturity && add('fin', 'mat', b.name, 'Conti · scadenza BTP', b.maturity, '', 30, 'data-act="goFin" data-t="btp"', 1, 'chart'));
+        f.posteItems.forEach(p => p.maturity && add('fin', 'mat', p.name, 'Conti · scadenza ' + (p.type || 'Poste'), p.maturity, '', 30, 'data-act="goFin" data-t="poste"', 1, 'chart'));
+        (f.goals || []).forEach(g => g.deadline && add('fin', 'goal', g.name, 'Conti · obiettivo', g.deadline, '', 14, 'data-act="goFin" data-t="obi"', 1, 'chart'));
+      } catch (e) { }
+    }
+    return L.sort((a, b) => a.n - b.n);
+  }
+  const soon = o => o.n <= o.lead;
+  const when = o => A.when({ n: o.n, x: o.x });
+  window.dueAll = all;
+  window.dlList = () => all().map(o => ({ title: o.title, cat: o.sub, n: o.n, when: when(o), date: o.x.toLocaleDateString('it-IT'), soon: soon(o), prot: o.prot, src: o.src }));
+  window.agendaBrief = L => { all().filter(o => soon(o) && o.kind !== 'exp').slice(0, 3).forEach(o => L.push(['cal', o.title + ': ' + when(o) + '.', o.n <= 7 ? 1 : 0])); };
+  window.agendaGo = () => { const s = window.secSummary(), n = all().filter(o => soon(o) && o.kind !== 'exp').length; return '<span class="jvgs">Sicurezza <b>' + s.score + '/100</b>' + (n ? ' · ' + n + (n === 1 ? ' scadenza vicina' : ' scadenze vicine') : '') + '</span><button class="btn sm" data-s="agenda" data-act="nav" data-r="agenda">Agenda e sicurezza</button> <button class="btn sm" data-s="agenda" data-act="nav" data-r="scadenze">Tutte le scadenze</button>'; };
+
+  const SRC = { pers: '', card: 'Carte', vault: 'Vault', fin: 'Conti' };
+  const row = o => '<button class="row drow" ' + o.attr + '><span class="' + (o.n <= 7 ? 'bad' : 'mut') + '">' + ic(o.icn) + '</span><span class="t"><b>' + h(o.title) + '</b><br><span class="sm mut">' + h(o.sub) + ' · ' + h(when(o)) + (o.repeat ? ' · ogni anno' : '') + '</span></span></button>';
+  window.dueCardHtml = () => {
+    const D = all(), V = D.filter(o => soon(o) && o.kind !== 'exp' || (o.kind === 'exp' && soon(o))).slice(0, 10);
+    return '<div class="card"><div class="gap"><h3 class="sp" style="margin:0">' + ic('cal') + ' Scadenze in arrivo</h3><button class="btn sm pri" data-act="dlNew">Aggiungi</button></div>' +
+      (V.length ? '<div style="margin-top:10px">' + V.map(row).join('') + '</div>' : '<p class="sm mut" style="margin-top:8px">Nessuna scadenza imminente: ti avviso poco prima che arrivino.</p>') +
+      '<button class="btn blk" style="margin-top:10px" data-act="nav" data-r="scadenze">' + ic('cal') + ' Tutte le scadenze' + (D.length ? ' (' + D.length + ')' : '') + '</button>' +
+      (S.protOpen ? '' : '<button class="row" data-act="agendaUnlock"><span class="mut">' + ic('key') + '</span><span class="t">Sblocca l’area protetta per vedere anche le scadenze di Vault e Conti</span></button>') + '</div>';
+  };
+  V.scadenze = () => {
+    const D = all(), F = U.dueF || '', N = k => D.filter(o => !k || o.src === k).length, L = D.filter(o => !F || o.src === F);
+    const chips = [['', 'Tutte'], ['pers', 'Personali'], ['card', 'Carte'], ['vault', 'Vault'], ['fin', 'Conti']].filter(c => !c[0] || N(c[0]) || (c[0] === 'vault' || c[0] === 'fin') && !S.protOpen).map(c => '<button class="chip' + (F === c[0] ? ' on' : '') + '" data-act="dueFilter" data-f="' + c[0] + '"' + (F === c[0] ? ' aria-pressed="true"' : '') + '>' + c[1] + (c[0] === 'vault' || c[0] === 'fin' ? (S.protOpen ? ' ' + N(c[0]) : ' 🔒') : ' ' + N(c[0])) + '</button>').join('');
+    const groups = []; L.forEach(o => { const k = o.n < 0 ? 'Scadute' : o.x.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' }); let g = groups.find(x => x.k === k); if (!g) groups.push(g = { k, a: [] }); g.a.push(o); });
+    const back = '<button class="ib" data-act="nav" data-r="agenda" aria-label="Torna all’Agenda">' + ic('cal') + '</button>';
+    return hdr('Tutte le scadenze', back) + '<main class="wrap"><div class="chips" role="group" aria-label="Area">' + chips + '</div>' +
+      (groups.length ? groups.map(g => '<div class="card"><h3 style="text-transform:capitalize">' + h(g.k) + '</h3>' + g.a.map(row).join('') + '</div>').join('') : '<div class="card"><p class="sm mut">Nessuna scadenza' + (F ? ' in quest’area' : '') + '. Puoi impostarla aprendo una carta, un elemento del Vault o una voce dei Conti.</p></div>') +
+      (S.protOpen ? '' : '<div class="card"><button class="row" data-act="agendaUnlock"><span class="mut">' + ic('key') + '</span><span class="t">Sblocca l’area protetta per vedere anche le scadenze di Vault e Conti</span></button></div>') +
+      '<button class="btn blk pri" data-act="dlNew">Aggiungi una scadenza</button></main>';
+  };
+  Object.assign(ACT, {
+    dueClear() { ['du_d', 'g_dd'].forEach(i => { const e = $(i); if (e) e.value = ''; }); toast('Scadenza rimossa: premi Salva per confermare'); },
+    dueFilter(t) { U.dueF = t.dataset.f || ''; render(); }
+  });
+})();
+
+
+/* ===== v2.16: avvisi di scadenza sul telefono ===== */
+(function () {
+  const hs = t => { let x = 5381; for (let i = 0; i < t.length; i++) x = ((x << 5) + x + t.charCodeAt(i)) | 0; return (x >>> 0).toString(36); };
+  const rank = o => o.n < 0 ? (o.n >= -3 ? 4 : 0) : o.n === 0 ? 3 : (o.lead > 14 && o.n <= 7) ? 2 : o.n <= o.lead ? 1 : 0;
+  const on = () => lsGet('unica_dn') === '1' && 'Notification' in window && Notification.permission === 'granted';
+  let busy = false;
+  async function dueNotify(force) {
+    if (busy || !S.kcKey || !on()) return 0; busy = true;
+    try {
+      let seen = {}; try { seen = JSON.parse(lsGet('unica_dnseen') || '{}') || {}; } catch (e) { }
+      const nxt = {}, fresh = [];
+      window.dueAll().forEach(o => {
+        const r = rank(o); const k = hs([o.src, o.kind, o.attr, o.title, o.x.toISOString().slice(0, 10)].join('|'));
+        if (seen[k]) nxt[k] = seen[k];
+        if (!r) return;
+        if ((seen[k] || 0) < r || force) { nxt[k] = r; if (!(r === 4 && o.n < -7)) fresh.push(o); }
+      });
+      if (!fresh.length) { if (!force) lsSet('unica_dnseen', JSON.stringify(nxt)); return 0; }
+      const pub = fresh.filter(o => !o.prot), prot = fresh.filter(o => o.prot);
+      const title = fresh.length === 1 && pub.length === 1 ? pub[0].title : 'Vortex Hub · scadenze';
+      const body = fresh.length === 1 && pub.length === 1 ? window.__ag.when({ n: pub[0].n, x: pub[0].x }) + '.' : pub.slice(0, 3).map(o => o.title + ': ' + window.__ag.when({ n: o.n, x: o.x })).concat(pub.length > 3 ? ['…e altre ' + (pub.length - 3)] : [], prot.length ? [prot.length + (prot.length === 1 ? ' scadenza nell’area protetta' : ' scadenze nell’area protetta')] : []).join('\n');
+      const shown = await notify(title, { body, tag: 'unica-due', renotify: true, data: { go: 'agenda' } });
+      if (!shown) return -1;   /* non segnare come già avvisata: ritenta al prossimo controllo */
+      if (!force) lsSet('unica_dnseen', JSON.stringify(nxt));
+      return fresh.length;
+    } finally { busy = false; }
+  }
+  window.dueNotify = dueNotify;
+  window.dueNotifyUi = () => {
+    const sup = 'Notification' in window, perm = sup ? Notification.permission : 'unsupported', act = lsGet('unica_dn') === '1' && perm === 'granted';
+    if (!sup) return '<p class="sm mut">Le notifiche non sono disponibili in questo browser.</p>';
+    return '<label class="chk"><input type="checkbox" data-act="dnOn"' + (act ? ' checked' : '') + (perm === 'denied' ? ' disabled' : '') + '><span>Avvisami delle scadenze</span></label>' +
+      '<p class="sm mut">Compare una notifica quando una scadenza entra nel suo anticipo, a 7 giorni e il giorno stesso. Scatta quando apri o riapri l’app: per ricevere un promemoria anche ad app chiusa usa il promemoria qui sotto. Di Vault e Conti la notifica dice solo quante sono, senza titoli.' + (perm === 'denied' ? ' <b>Le notifiche sono bloccate nelle impostazioni del browser.</b>' : '') + '</p>' +
+      (act ? '<p class="sm mut">Stato: permesso consentito · service worker ' + (window.SWOK ? 'attivo' : window.SWERR ? 'in errore' : 'non ancora attivo') + '.</p><div class="stack"><button class="btn blk" data-act="dnTest">Mostra un avviso di prova</button></div>' : '');
+  };
+  Object.assign(ACT, {
+    async dnOn(t) {
+      if (t.checked) {
+        let p = Notification.permission; if (p === 'default') { try { p = await Notification.requestPermission(); } catch (e) { } }
+        if (p !== 'granted') { t.checked = false; lsSet('unica_dn', '0'); toast('Notifiche non consentite dal browser'); return render(); }
+        lsSet('unica_dn', '1'); lsSet('unica_dnseen', '{}'); toast('Avvisi di scadenza attivi'); setTimeout(() => dueNotify(), 400);
+      } else { lsSet('unica_dn', '0'); toast('Avvisi di scadenza disattivati'); }
+      render();
+    },
+    async dnTest() {
+      const n = await dueNotify(true);
+      if (n > 0) return toast('Avviso inviato. Se non lo vedi, controlla le notifiche di Android per questa app');
+      if (n < 0) return toast('Notifica non mostrata: ' + (window.NOTIF_ERR || 'motivo sconosciuto'));
+      const ok = await notify('Vortex Hub · scadenze', { body: 'Nessuna scadenza vicina: tutto in ordine.', tag: 'unica-due', data: { go: 'agenda' } });
+      toast(ok ? 'Avviso di prova inviato. Se non lo vedi, controlla le notifiche di Android per questa app' : 'Notifica non mostrata: ' + (window.NOTIF_ERR || 'motivo sconosciuto'));
+    }
+  });
+  let wasK = false, wasP = false;   /* dopo lo sblocco e dopo l'apertura dell'area protetta controlla subito */
+  setInterval(() => { const k = !!S.kcKey, p = !!S.protOpen; if ((k && !wasK) || (p && !wasP)) setTimeout(() => dueNotify(), 1200); wasK = k; wasP = p; }, 3000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') setTimeout(() => dueNotify(), 800); });
+  setInterval(() => dueNotify(), 30 * 60 * 1000);
+})();
+
+
+/* ===== v2.17: credenziali multiple per asset, quotazioni istantanee, analisi IA del patrimonio ===== */
+(function () {
+  /* ---- credenziali multiple: stesso meccanismo delle scadenze (contesto del form) ---- */
+  let vctx = null;
+  { const og = genForm; genForm = function (o) {
+      U.vlPend = null;
+      if (vctx && o && o.onSubmit && o.fields) {
+        const c = vctx, cur = c.i >= 0 ? FIN()[c.arr][c.i] : null, os = o.onSubmit;
+        o.fields = o.fields.filter(f => !(c.arr === 'bankAccounts' && f.id === 'v')).concat([{ type: 'vlinks', label: 'Credenziali nel Vault (anche più di una)', value: cur ? vlOf(cur) : [] }]);
+        o.onSubmit = function () { const r = os.apply(this, arguments); if (r === false) return r; const arr = FIN()[c.arr], rec = c.i >= 0 ? arr[c.i] : arr[arr.length - 1]; if (rec) { const ids = (U.vl || []).filter(id => S.items.has(id)); if (ids.length) rec.vaultIds = ids; else delete rec.vaultIds; delete rec.vaultId; } return r; };
+      }
+      return og.call(this, o);
+    }; }
+  const wrap = (name, arr) => { const f = ACT[name]; if (!f) return; ACT[name] = function (t) { vctx = { arr, i: t && t.dataset && t.dataset.i != null && t.dataset.i !== '' ? +t.dataset.i : -1 }; try { return f.apply(this, arguments); } finally { vctx = null; } }; };
+  [['astEdit', 'assets'], ['btpEdit', 'btps'], ['poEdit', 'posteItems'], ['pacEdit', 'pacItems'], ['penEdit', 'pensionItems']].forEach(x => wrap(x[0], x[1]));
+  { const an = ACT.accNew, ae = ACT.accEdit;
+    if (an) ACT.accNew = function () { vctx = { arr: 'bankAccounts', i: -1 }; try { return an.apply(this, arguments); } finally { vctx = null; } };
+    if (ae) ACT.accEdit = function (t) { vctx = { arr: 'bankAccounts', i: +t.dataset.i }; try { return ae.apply(this, arguments); } finally { vctx = null; } }; }
+  /* una credenziale creata dal form dell'asset si collega da sola */
+  { const fi = FORMS.item; FORMS.item = async function (f) {
+      const before = new Set(S.items.keys()), r = await fi.call(this, f);
+      if (U.vlPend) { const nid = [...S.items.keys()].find(k => !before.has(k) && S.items.get(k) && VT[S.items.get(k).type]); if (nid) { const cb = U.vlPend; U.vlPend = null; if ($('g_vl')) cb(nid); } }
+      return r;
+    }; }
+
+  /* ---- chiave delle quotazioni (cifrata, come la chiave IA) ---- */
+  let QK = null;
+  const qLoad = async () => { if (QK !== null) return QK; if (!S.kcKey) return ''; try { const r = await DB.get('meta', 'qk'); QK = r ? (JSON.parse(td.decode(await unseal(S.kcKey, r, 'qk'))).k || '') : ''; } catch (e) { QK = ''; } return QK; };
+  const qSave = async k => { if (!k) { try { await DB.del('meta', 'qk'); } catch (e) { } QK = ''; return; } await DB.put('meta', await seal(S.kcKey, te.encode(JSON.stringify({ k })), 'qk'), 'qk'); QK = k; };
+  setInterval(() => { if (!S.kcKey) QK = null; }, 4000);
+
+  async function qGet(fn, q, key, signal) {
+    const r = await fetch('https://www.alphavantage.co/query?function=' + fn + '&' + q + '&apikey=' + encodeURIComponent(key), { credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store', signal });
+    if (!r.ok) throw new Error('Servizio quotazioni: errore ' + r.status);
+    const j = await r.json();
+    if (j && (j.Note || j.Information)) { const e = new Error('limit'); e.limit = true; e.msg = String(j.Note || j.Information).slice(0, 180); throw e; }
+    return j;
+  }
+  async function qFetch(sym, key, signal) {
+    const j = await qGet('GLOBAL_QUOTE', 'symbol=' + encodeURIComponent(sym), key, signal);
+    const p = parseFloat(j && j['Global Quote'] && j['Global Quote']['05. price']);
+    return isFinite(p) && p > 0 ? p : null;
+  }
+  /* cerca i simboli che corrispondono (con borsa e valuta) quando quello scritto non basta */
+  async function qSearch(kw, key, signal) {
+    const j = await qGet('SYMBOL_SEARCH', 'keywords=' + encodeURIComponent(kw), key, signal);
+    return ((j && j.bestMatches) || []).map(x => ({ sym: String(x['1. symbol'] || ''), cur: String(x['8. currency'] || '') })).filter(x => /^[A-Za-z0-9.\-]{1,20}$/.test(x.sym));
+  }
+  const qWait = ms => new Promise(r => setTimeout(r, ms));
+  function qKeyModal(then) {
+    qLoad().then(key => {
+      const m = modal('<div class="gap"><h2 class="sp" style="margin:0">Quotazioni istantanee</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+        '<p class="sm mut">I prezzi si leggono da Alpha Vantage con la <b>tua chiave gratuita</b> (si richiede sul sito alphavantage.co con un indirizzo email). Al servizio parte <b>solo il simbolo</b> di ogni titolo (es. VWCE.DEX): mai quantità, importi o nomi. La chiave resta cifrata sul dispositivo.</p>' +
+        '<p class="sm mut"><b>Limiti:</b> il piano gratuito ammette circa 25 richieste al giorno. Le borse europee si indicano con un suffisso (es. .DEX Xetra, .PAR Parigi, .AMS Amsterdam, .LON Londra) e non tutti i titoli sono coperti: se uno non si trova, il prezzo resta quello che hai inserito. I prezzi sono nella valuta della borsa e l’app li considera in euro: un prezzo che differisce troppo dal precedente viene scartato e te lo segnalo.</p>' +
+        '<form data-form="qkey"><label class="f" for="qk_k">Chiave Alpha Vantage</label><div class="pw"><input class="in mono" id="qk_k" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" value="' + h(key) + '"><button type="button" class="ib" data-act="eye" data-for="qk_k" aria-label="Mostra o nascondi la chiave">' + ic('eye') + '</button></div>' +
+        '<p class="sm bad" id="qk_err" role="alert"></p><div class="gap"><span class="sp"></span><button type="button" class="btn" data-act="close">Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>');
+      U.qThen = then || null; m.q('#qk_k').focus();
+    });
+  }
+  FORMS.qkey = async () => {
+    const v = $('qk_k').value.trim(); if (v && !/^[A-Za-z0-9]{8,40}$/.test(v)) return $('qk_err').textContent = 'La chiave deve avere solo lettere e numeri (8–40 caratteri).';
+    try { await qSave(v); } catch (e) { return $('qk_err').textContent = 'Non riesco a salvarla: ' + e.message; }
+    closeTop(); toast(v ? 'Chiave salvata' : 'Chiave rimossa'); const th = U.qThen; U.qThen = null; if (v && th) th(); render();
+  };
+
+  /* ---- aggiornamento prezzi + ricalcolo di tutto ---- */
+  async function quotesRun(opts) {
+    opts = opts || {};
+    if (!(await openProt())) return null; await ensureFin();
+    const key = await qLoad(); if (!key) { qKeyModal(() => quotesRun(opts)); return null; }
+    const d = FIN(), by = new Map();
+    d.assets.forEach(a => { const s = String(a.qsym || a.ticker || '').trim().toUpperCase(); if (s && !/^[A-Z]{2}[A-Z0-9]{9}\d$/.test(s)) { if (!by.has(s)) by.set(s, []); by.get(s).push(a); } });
+    if (!by.size) { toast('Nessun titolo con un simbolo: in «Modifica titolo» compila «Simbolo per le quotazioni»'); return null; }
+    const syms = [...by.keys()].slice(0, 25), extra = by.size - syms.length;
+    const m = modal('<h2>Aggiorno i prezzi…</h2><p class="sm mut" id="qp" role="status" aria-live="polite">Preparo…</p><div class="gap"><span class="sp"></span><button type="button" class="btn" id="qx">Annulla</button></div>', { sticky: true });
+    const ctl = new AbortController(); let stop = false; m.q('#qx').onclick = () => { stop = true; ctl.abort(); };
+    const res = { ok: [], none: [], odd: [], found: [], cand: [], limit: '', err: '', extra, stopped: false };
+    for (let i = 0; i < syms.length && !stop; i++) {
+      const s = syms[i]; const pe = m.q('#qp'); if (pe) pe.textContent = (i + 1) + ' di ' + syms.length + ': ' + s;
+      try {
+        let p = await qFetch(s, key, ctl.signal);
+        if (p === null && !s.includes('.')) {   /* manca il suffisso della borsa: lo cerco io, preferendo la quotazione in euro */
+          await qWait(1300); const c = await qSearch(s, key, ctl.signal), eu = c.find(x => x.cur === 'EUR' && x.sym.toUpperCase().startsWith(s + '.'));
+          if (eu) { await qWait(1300); const p2 = await qFetch(eu.sym, key, ctl.signal); if (p2 !== null) { p = p2; by.get(s).forEach(a => { a.qsym = eu.sym; }); res.found.push(s + ' → ' + eu.sym); } }
+          if (p === null && c.length) res.cand.push(s + ': ' + c.slice(0, 5).map(x => x.sym + (x.cur ? ' (' + x.cur + ')' : '')).join(', '));
+        }
+        if (p === null) { if (!res.cand.some(x => x.startsWith(s + ':'))) res.none.push(s); }
+        else {
+          const as = by.get(s), p0 = assetPrice(as[0]) || 0;
+          if (p0 > 0 && (p / p0 < .6 || p / p0 > 1.6)) res.odd.push(s + ' (' + p.toFixed(2) + ' contro ' + p0.toFixed(2) + ')');
+          else { as.forEach(a => { a.lastPrice = p; a.qat = Date.now(); if (a.pacLinkId) { const pc = d.pacItems.find(x => x.linkedAssetId === a.pacLinkId); if (pc) pc.etfLastPrice = p; } }); res.ok.push(s); }
+        }
+      } catch (e) {
+        if (e.name === 'AbortError') { res.stopped = true; break; }
+        if (e.limit) { res.limit = e.msg; break; }
+        res.err = e.message === 'Failed to fetch' ? 'nessuna connessione o servizio non raggiungibile' : e.message; break;
+      }
+      if (i < syms.length - 1 && !stop) await new Promise(r => setTimeout(r, 1300));
+    }
+    if (stop) res.stopped = true;
+    if (res.ok.length) { d.qAt = Date.now(); await finSave(); }   /* ricalcolo: avvisi di prezzo, storico del patrimonio e tutte le schermate */
+    m.close(); render();
+    if (!opts.silent) quotesSummary(res);
+    return res;
+  }
+  function quotesSummary(r) {
+    const L = [];
+    L.push('<p><b>' + r.ok.length + '</b> prezzi aggiornati' + (r.ok.length ? '. Patrimonio e rendimenti sono stati ricalcolati: <b>' + h(eur(grand(FIN()))) + '</b>.' : '.') + '</p>');
+    if (r.found.length) L.push('<p class="sm ok">Simbolo completato in automatico e salvato nel titolo: ' + h(r.found.join('; ')) + '.</p>');
+    if (r.cand.length) L.push('<p class="sm bad">Simbolo non univoco o non quotato in euro. Scegli quello giusto e scrivilo in «Simbolo per le quotazioni» del titolo: ' + h(r.cand.join(' · ')) + '.</p>');
+    if (r.none.length) L.push('<p class="sm">Non trovati (controlla il simbolo e il suffisso della borsa): ' + h(r.none.join(', ')) + '.</p>');
+    if (r.odd.length) L.push('<p class="sm bad">Scartati perché troppo diversi dal prezzo precedente (valuta diversa?): ' + h(r.odd.join(', ')) + '.</p>');
+    if (r.limit) L.push('<p class="sm bad">Il servizio ha risposto: «' + h(r.limit) + '». Probabile limite giornaliero o chiave non valida.</p>');
+    if (r.err) L.push('<p class="sm bad">Interrotto: ' + h(r.err) + '.</p>');
+    if (r.extra > 0) L.push('<p class="sm mut">Altri ' + r.extra + ' titoli non aggiornati per restare nel limite di 25 richieste.</p>');
+    if (r.stopped) L.push('<p class="sm mut">Aggiornamento interrotto da te.</p>');
+    L.push('<p class="sm mut">Obbligazioni (BTP) e Poste non hanno quotazione automatica: restano quelle che inserisci.</p>');
+    modal('<h2>Quotazioni</h2>' + L.join('') + '<div class="gap" style="margin-top:10px"><button type="button" class="btn" data-act="anaPf">' + ic('chart') + ' Analisi</button><span class="sp"></span><button type="button" class="btn pri" data-act="close">Chiudi</button></div>');
+  }
+
+  /* ---- analisi interna del patrimonio: regole semplici calcolate sul dispositivo, nessuna rete ---- */
+  function anaBuild() {
+    const d = FIN(), c = classTotals(d), T = d.targets || {}, tot = c.tot, F = [];
+    if (!(tot > 0)) return F;
+    const add = (sev, title, text, act) => F.push({ sev, title, text, act: act || '' }), P = x => pct(x / tot * 100), avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+    /* 1. allocazione rispetto all'obiettivo (Ribilancia) */
+    if (num(T.obbligazionario) + num(T.azionario) + num(T.liquidita) === 100) {
+      [['Obbligazionario / BTP / Poste', c.obbl, T.obbligazionario], ['Azionario / ETF', c.az, T.azionario], ['Liquidità e conti', c.liq, T.liquidita]].forEach(x => {
+        const cur = x[1] / tot * 100, df = tot * num(x[2]) / 100 - x[1];
+        if (Math.abs(cur - num(x[2])) >= 5 && Math.abs(df) >= 100) add(Math.abs(cur - num(x[2])) >= 10 ? 'bad' : 'warn', x[0] + ': ' + pct(cur) + ' contro un obiettivo del ' + pct(num(x[2])), 'Sei ' + (df > 0 ? 'sotto' : 'sopra') + ' l’obiettivo di circa ' + eur(Math.abs(df)) + '.', df > 0 ? 'Per riallinearti dovresti aggiungere circa ' + eur(df) + ', di preferenza con i nuovi versamenti.' : 'Per riallinearti dovresti ridurre circa ' + eur(-df) + ' (considera le tasse prima di vendere) oppure orientare altrove i nuovi versamenti.');
+      });
+      if (!F.length) add('ok', 'Allocazione in linea con l’obiettivo', 'Nessuna classe si discosta di 5 punti o più dal tuo obiettivo.');
+    } else add('info', 'Obiettivo di allocazione non impostato', 'Gli obiettivi in Ribilancia non sommano 100%: senza non posso dirti se sei in linea.', 'Impostali in Ribilancia.');
+    /* 2. concentrazione */
+    const pos = [].concat(d.assets.map(a => ({ n: a.name, v: assetValue(a), k: 'titolo' })), d.btps.map(b => ({ n: b.name, v: btpValue(b), k: 'BTP' })), d.posteItems.map(p => ({ n: p.name, v: num(p.capital), k: 'strumento Poste' })), d.pacItems.filter(p => !p.linkedAssetId).map(p => ({ n: p.name, v: num(p.currentVal), k: 'PAC' }))).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+    if (pos.length > 1 && pos[0].v / tot > .25) add(pos[0].v / tot > .4 ? 'bad' : 'warn', 'Concentrazione: «' + pos[0].n + '» pesa il ' + P(pos[0].v), 'Una sola posizione (' + pos[0].k + ') vale ' + eur(pos[0].v) + '.', 'Verifica che sia voluto: un fondo globale diversificato è diverso da un singolo titolo o BTP.');
+    /* 3. liquidità rispetto alle spese */
+    const mk = monthKey(), ms = [1, 2, 3].map(i => shiftMonth(mk, -i)), sp = ms.map(m => spentBy(d, m)), spent = sp.map(o => Object.entries(o).filter(e => e[0] !== INC_CAT).reduce((s, e) => s + e[1], 0)).filter(x => x > 0), inc = sp.map(o => o[INC_CAT] || 0).filter(x => x > 0);
+    if (spent.length) {
+      const av = avg(spent), mo = c.liq / av;
+      if (mo < 3) add(mo < 1.5 ? 'bad' : 'warn', 'Liquidità: copre ' + mo.toFixed(1).replace('.', ',') + ' mesi di spese', 'Spesa media degli ultimi mesi ' + eur(av) + ', liquidità ' + eur(c.liq) + '.', 'Di solito si tiene un cuscinetto di 3–6 mesi di spese: valuta di costruirlo prima di aumentare gli investimenti.');
+      else if (mo > 12) add('info', 'Liquidità ferma: ' + mo.toFixed(0) + ' mesi di spese', 'Hai ' + eur(c.liq) + ' contro spese medie di ' + eur(av) + ' al mese.', 'Oltre un anno di spese sul conto perde valore con l’inflazione: per la parte eccedente valuta strumenti a basso rischio (Poste, BTP a breve, conto deposito).');
+      else add('ok', 'Liquidità adeguata: ' + mo.toFixed(1).replace('.', ',') + ' mesi di spese', 'Il cuscinetto sta tra 3 e 12 mesi.');
+    } else add('info', 'Cuscinetto di liquidità non valutabile', 'Mancano le spese degli ultimi tre mesi.', 'Registra le spese in «Spese» per vedere quanti mesi copre la liquidità.');
+    /* 4. BTP: scadenze, scala, sensibilità ai tassi */
+    const bt = d.btps.map(b => { const y = Math.max(0, (new Date(b.maturity) - new Date()) / 31557600000), pr = num(b.currentPrice) || num(b.buyPrice) || 100; return { b, y, v: btpValue(b), dur: modDuration(num(b.couponRate) / 100, y, parseInt(b.freq) || 2, pr) }; }).filter(x => x.v > 0 && isFinite(x.y) && isFinite(x.dur));
+    if (bt.length) {
+      const bv = bt.reduce((s, x) => s + x.v, 0), soon = bt.filter(x => { const dd = daysTo(x.b.maturity); return dd >= 0 && dd <= 365; });
+      if (soon.length) add('info', 'BTP in scadenza entro 12 mesi: ' + eur(soon.reduce((s, x) => s + x.v, 0)), soon.map(x => x.b.name + ' (' + x.b.maturity + ')').join(', ') + '.', 'Decidi in anticipo come reinvestire il rimborso: nuovi BTP, Poste o riequilibrio verso l’obiettivo.');
+      const by = {}; bt.forEach(x => { const y = String(x.b.maturity).slice(0, 4); by[y] = (by[y] || 0) + x.v; });
+      const top = Object.entries(by).sort((a, b) => b[1] - a[1])[0];
+      if (bt.length > 1 && top[1] / bv > .5) add('info', 'Scadenze dei BTP concentrate nel ' + top[0], pct(top[1] / bv * 100) + ' del valore dei BTP scade nello stesso anno.', 'Una scala di scadenze diverse riduce il rischio di reinvestire tutto in un momento sfavorevole.');
+      const wd = bt.reduce((s, x) => s + x.v * x.dur, 0) / bv, imp = bt.reduce((s, x) => s + x.v * x.dur, 0) * .01;
+      add(wd > 7 ? 'warn' : 'info', 'Sensibilità ai tassi dei BTP: duration media ' + wd.toFixed(1).replace('.', ',') + ' anni', 'Se i tassi salgono di 1 punto, il valore di mercato dei BTP scende di circa ' + eur(imp) + ' (stima). Se li tieni fino a scadenza il rimborso non cambia.', wd > 7 ? 'Una duration alta amplifica le oscillazioni: valuta di accorciare la scadenza media se non vuoi questo rischio.' : '');
+    }
+    /* 5. Poste in scadenza */
+    const ps = d.posteItems.filter(p => { const dd = daysTo(p.maturity); return p.maturity && dd >= 0 && dd <= 90; });
+    if (ps.length) add('info', 'Poste in scadenza entro 90 giorni: ' + ps.length, ps.map(p => p.name + ' (' + p.maturity + ')').join(', ') + '.', 'Confronta i tassi attuali prima di rinnovare.');
+    /* 6. titoli in perdita */
+    const ls = d.assets.map(a => { const v = assetValue(a), co = assetCost(a); return { a, g: co > 0 && v > 0 ? (v / co - 1) * 100 : 0 }; }).filter(x => x.g <= -15).sort((a, b) => a.g - b.g);
+    if (ls.length) add('warn', 'Titoli in perdita di oltre il 15%: ' + ls.length, ls.slice(0, 4).map(x => x.a.name + ' ' + x.g.toFixed(0) + '%').join(', ') + '.', 'Non è di per sé un segnale di vendita: rivaluta se le ragioni dell’acquisto valgono ancora ed evita di mediare al ribasso senza un piano.');
+    /* 7. prezzi non aggiornati */
+    const old = d.assets.filter(a => a.qsym && (!a.qat || Date.now() - a.qat > 14 * 864e5));
+    if (old.length) add('info', 'Prezzi non aggiornati da più di 14 giorni: ' + old.length + ' titoli', old.slice(0, 4).map(a => a.name).join(', ') + '.', 'Usa «Aggiorna prezzi e rianalizza» qui sotto: i numeri di questa analisi dipendono dai prezzi.');
+    /* 8. PAC rispetto alle entrate */
+    const pm = sum(d.pacItems, p => p.monthly);
+    if (inc.length && pm > 0 && pm / avg(inc) > .35) add('info', 'PAC: ' + eur(pm) + ' al mese, il ' + pct(pm / avg(inc) * 100) + ' delle entrate medie', 'Versamento medio sulle entrate degli ultimi mesi.', 'Verifica che resti sostenibile anche nei mesi con più spese.');
+    const rank = { bad: 0, warn: 1, info: 2, ok: 3 }; return F.sort((a, b) => rank[a.sev] - rank[b.sev]);
+  }
+  function anaOpen() {
+    if (!finLoaded()) return; const d = FIN(), c = classTotals(d), F = anaBuild(), col = { bad: 'bad', warn: 'bad', info: 'mut', ok: 'ok' }, mark = { bad: '▲ Da sistemare', warn: '● Da valutare', info: '○ Da sapere', ok: '✓ A posto' };
+    modal('<div class="gap"><h2 class="sp" style="margin:0">Analisi del patrimonio</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+      '<p class="sm mut">Calcolata <b>sul dispositivo</b> con regole semplici: nessun dato lascia l’app. Non è consulenza finanziaria: non conosce tasse, costi, orizzonte e altri beni.</p>' +
+      '<p><b>' + h(eur(c.tot)) + '</b> <span class="sm mut">· prezzi ' + (d.qAt ? 'aggiornati il ' + h(new Date(d.qAt).toLocaleDateString('it-IT')) : 'inseriti a mano') + '</span></p>' +
+      (F.length ? F.map(f => '<div class="card"><p class="sm ' + col[f.sev] + '" style="margin:0"><b>' + mark[f.sev] + '</b></p><p style="margin:4px 0"><b>' + h(f.title) + '</b></p><p class="sm" style="margin:0">' + h(f.text) + '</p>' + (f.act ? '<p class="sm mut" style="margin:6px 0 0">' + h(f.act) + '</p>' : '') + '</div>').join('') : '<div class="card c mut">Nel patrimonio non ci sono ancora dati da analizzare.</div>') +
+      '<div class="gap" style="margin-top:10px"><button type="button" class="btn" data-act="anaUpd">' + ic('refresh') + ' Aggiorna prezzi e rianalizza</button><span class="sp"></span><button type="button" class="btn pri" data-act="close">Chiudi</button></div>');
+  }
+  /* l'assistente locale risponde alle richieste di analisi con le stesse regole */
+  window.__anaBuild = anaBuild;
+  { const oa = answer; answer = function (q) { if (/analis|consigli|come investire|dove investire|cosa modific|ribilanci/.test(fold(q)) && finLoaded()) { const F = anaBuild(); return F.length ? 'Analisi del patrimonio (calcolata sul dispositivo): ' + F.slice(0, 4).map(f => f.title + (f.act ? ' → ' + f.act : '')).join(' · ') + ' Il dettaglio è in Conti → Analisi. Non è consulenza finanziaria.' : 'Nel patrimonio non ci sono ancora dati da analizzare.'; } return oa.apply(this, arguments); }; }
+
+  Object.assign(ACT, {
+    vlAdd() { const s = $('g_vlsel'); if (s && s.value && !U.vl.includes(s.value)) { U.vl.push(s.value); vlRender(); } },
+    vlDel(t) { U.vl = (U.vl || []).filter(x => x !== t.dataset.id); vlRender(); },
+    vlOpen(t) { openDetail(t.dataset.id); },
+    vlNew() { const n = $('g_n') ? $('g_n').value.trim() : ''; U.vlPend = id => { if (!U.vl.includes(id)) U.vl.push(id); vlRender(); }; openForm(null, 'login'); const t = $('f_t'); if (t && n) t.value = n; },
+    vlList(t) {
+      const rec = (FIN()[t.dataset.k] || [])[+t.dataset.i], ids = rec ? vlOf(rec) : []; if (!ids.length) return;
+      if (ids.length === 1) return openDetail(ids[0]);
+      modal('<div class="gap"><h2 class="sp" style="margin:0">Credenziali di ' + h(rec.name) + '</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' + ids.map(id => { const it = S.items.get(id); return '<button class="row" data-act="detail" data-id="' + h(id) + '"><span class="av ' + avCls(titleOf(it)) + '">' + ic(VT[it.type][0]) + '</span><span class="t"><b>' + h(titleOf(it)) + '</b><span class="sm mut">' + h(it.data.username || VT[it.type][1]) + '</span></span></button>'; }).join(''));
+    },
+    quotesNow() { return quotesRun(); },
+    qKey() { qKeyModal(); },
+    async anaPf() { if (!(await openProt())) return; await ensureFin(); anaOpen(); },
+    async anaUpd() { closeTop(); const r = await quotesRun({ silent: true }); if (!r) return; if (!r.ok.length || r.none.length || r.odd.length || r.limit || r.err) quotesSummary(r); else anaOpen(); }
+  });
+  /* panoramica: scorciatoie */
+  { const ov = FV.ov; FV.ov = function () { return ov.apply(this, arguments).replace('<div class="card"><h3>Composizione</h3>', '<div class="card"><div class="gap"><button class="btn sm pri" data-act="quotesNow">' + ic('refresh') + ' Aggiorna prezzi</button><button class="btn sm" data-act="anaPf">' + ic('chart') + ' Analisi del patrimonio</button></div></div><div class="card"><h3>Composizione</h3>'); }; }
+})();
+
+
+/* ===== v2.19: grafica — colori per settore, animazioni di ingresso, icone nei pulsanti, codice carta sempre intero ===== */
+{
+  const SEC = { home: 'home', cards: 'cards', vault: 'vault', fin: 'fin', settings: 'settings', agenda: 'agenda', scadenze: 'agenda' };
+  const TH = { home: ['#edf4f8', '#06121c'], cards: ['#fff1e6', '#1c0f06'], vault: ['#f1ecff', '#120a24'], fin: ['#e6f7ef', '#04160f'], settings: ['#eef1f5', '#0c1118'], agenda: ['#ffe9ee', '#1d0a10'] };
+  const isDark = () => { const t = document.documentElement.dataset.theme; return t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches); };
+  const setSec = () => {
+    const sec = SEC[U.route] || 'home'; if (document.body.dataset.sec !== sec) document.body.dataset.sec = sec;
+    const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = TH[sec][isDark() ? 1 : 0];
+  };
+  let lastR = null, tm = 0;
+  const enter = () => { document.body.dataset.enter = '1'; clearTimeout(tm); tm = setTimeout(() => { delete document.body.dataset.enter; }, 1200); };
+  const IK = [[/^(salva|conferma|applica)\b/i, 'check'], [/^(annulla|chiudi)\b/i, 'x'], [/^(elimina|rimuovi|cancella|svuota)/i, 'trash'], [/^modifica/i, 'edit'], [/^(aggiungi|nuov[oa]|crea)\b/i, 'plus'], [/^copia/i, 'copy'], [/^(condividi|esporta|invia)/i, 'up'], [/^(importa|scarica|ripristina|carica)/i, 'dl'], [/^(aggiorna|ricalcola|riprova|ricarica)/i, 'refresh'], [/^cerca/i, 'search'], [/^(blocca|sblocca)/i, 'lock'], [/^analisi/i, 'chart'], [/^(tutte le )?(scadenze|agenda)/i, 'cal'], [/^(avvis|notific)/i, 'bell'], [/^(sicurezza|proteggi)/i, 'shield'], [/^(mostra|vedi)\b/i, 'eye'], [/^(non ora|più tardi|dopo|salta|ignora)/i, 'clock'], [/^backup/i, 'dl'], [/^(opzioni|impostazioni)/i, 'gear']];
+  const decorate = root => {
+    if (!root || !root.querySelectorAll) return;
+    root.querySelectorAll('.btn:not([data-ico])').forEach(b => {
+      b.dataset.ico = '1'; if (b.querySelector('svg')) return; const t = (b.textContent || '').trim(); if (!t || t.length > 42) return;
+      for (const [re, n] of IK) if (re.test(t) && P[n]) { b.insertAdjacentHTML('afterbegin', ic(n)); break; }
+    });
+  };
+  const rr = render;
+  render = function () { const r = rr.apply(this, arguments); try { setSec(); if (U.route !== lastR) { lastR = U.route; enter(); } decorate($('app')); if (S.kcKey && /^(home|cards|vault|fin|settings|agenda|scadenze)$/.test(U.route)) lsSet('unica_lr', JSON.stringify({ r: U.route, t: Date.now() })); } catch (e) { } return r; };
+  const mo = modal;
+  modal = function () { const m = mo.apply(this, arguments); try { decorate(m && m.el); } catch (e) { } return m; };
+  { const ft = ACT.ftab; if (ft) ACT.ftab = function () { try { enter(); } catch (e) { } return ft.apply(this, arguments); }; }
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { try { setSec(); } catch (e) { } });
+  /* QR: carta quadrata, mai tagliata; il testo del codice passa sotto la carta */
+  const co = cardOpen;
+  cardOpen = async function (id) {
+    await co.apply(this, arguments);
+    try {
+      const c = S.cards.get(id), f = document.querySelector('.hflip'); if (!c || !f) return;
+      if (c.data.type === 'QR') {
+        f.classList.add('qr'); const t = document.getElementById('cvt'), hero = f.closest('.hero3d');
+        if (t && hero && !t.dataset.moved) { t.dataset.moved = '1'; t.className = 'cview-txt mono'; hero.insertAdjacentElement('afterend', t); }
+      }
+    } catch (e) { }
+  };
+  setSec();
+}
+
+/* ===== v2.22: diagnostica animazioni ===== */
+{ const di2 = dgInfo; dgInfo = async function (m) { await di2.apply(this, arguments); try { const el = m.q('#dg'); if (!el) return; const rm = matchMedia('(prefers-reduced-motion: reduce)').matches; el.insertAdjacentHTML('beforeend', '<div class="kv"><div class="k">Animazioni</div><div class="v"><span>' + (rm ? 'ridotte dal telefono (Android: «Rimuovi animazioni» o risparmio energetico)' : 'attive') + '</span></div></div>'); } catch (e) { } }; }
+
+/* ===== v2.20: assistente interno potenziato, collegamenti tra i dati, ripresa dopo un ricaricamento ===== */
+{
+  /* riprende dalla sezione in cui eri (solo il nome della sezione, entro 15 minuti), dopo lo sblocco */
+  try {
+    const o = JSON.parse(lsGet('unica_lr') || 'null');
+    if (o && !U.go && Date.now() - o.t < 15 * 60000 && /^(cards|vault|fin|settings|agenda|scadenze)$/.test(o.r)) U.go = o.r === 'scadenze' ? 'agenda' : o.r;
+  } catch (e) { }
+  /* registro degli avvii: serve a capire se l'app si ricarica spesso */
+  try { const nt = (performance.getEntriesByType('navigation')[0] || {}).type || '?', L = JSON.parse(lsGet('unica_boots') || '[]'); L.push([Date.now(), nt]); lsSet('unica_boots', JSON.stringify(L.slice(-12))); } catch (e) { }
+  { const di = dgInfo; dgInfo = async function (m) { await di.apply(this, arguments); try { const el = m.q('#dg'); if (!el) return; const L = JSON.parse(lsGet('unica_boots') || '[]'), hr = L.filter(x => Date.now() - x[0] < 3600e3).length, TY = { reload: 'ricarica', navigate: 'apertura', back_forward: 'ripristino', prerender: 'precaricata' }; el.insertAdjacentHTML('beforeend', '<div class="kv"><div class="k">Avvii nell’ultima ora</div><div class="v"><span>' + hr + '</span></div></div><div class="kv"><div class="k">Ultimi avvii</div><div class="v"><span>' + h(L.slice(-5).reverse().map(x => new Date(x[0]).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' ' + (TY[x[1]] || x[1])).join(' · ') || '—') + '</span></div></div>'); } catch (e) { } }; }
+
+  const MSD = 86400000, TLD = new Set(['com', 'it', 'org', 'net', 'eu', 'co', 'uk', 'de', 'fr', 'es', 'io', 'app', 'info', 'biz']);
+  const STOP = new Set('srl spa card carta carte tessera tessere fedelta conto conti account login accesso accessi banca online www com the del della dei per con area cliente clienti privata app web mio mia miei mie tuoi italia italiana etf btp pac fondo fondi azioni buono buoni titolo titoli dove accedo entro credenziali password tutto tutti cosa collegato collegati collegamenti sai info mostra apri quando scade scadenza scadenze quanto sulla sul alla allo che ultimo ultima sono hanno vault nota note'.split(' '));
+  const nrm = x => fold(x).replace(/[^a-z0-9]+/g, ' ').trim();
+  const toks = x => nrm(x).split(' ').filter(w => w.length > 2 && !STOP.has(w));
+  const brandOf = d => { const p = domOf(d).split('.').filter(Boolean); while (p.length > 1 && TLD.has(p[p.length - 1])) p.pop(); return p.length ? fold(p[p.length - 1]) : ''; };
+  const lev = (a, b) => { if (a === b) return 0; if (Math.abs(a.length - b.length) > 2) return 3; const m = []; for (let i = 0; i <= a.length; i++) m[i] = [i]; for (let j = 1; j <= b.length; j++) m[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return m[a.length][b.length]; };
+  const same = (a, b) => a === b || (a.length >= 4 && b.length >= 4 && lev(a, b) <= (a.length >= 9 ? 2 : 1));
+  const FK = () => VL_KINDS;
+  const valOf = (arr, r) => arr === 'bankAccounts' ? num(r.balance) : arr === 'assets' ? assetValue(r) : arr === 'btps' ? btpValue(r) : arr === 'posteItems' ? num(r.capital) : arr === 'pensionItems' ? num(r.balance) : (arr === 'pacItems' && !r.linkedAssetId) ? num(r.currentVal) : 0;
+  const ents = () => {
+    const E = [];
+    cardsArr().forEach(c => E.push({ k: 'card', id: c.id, name: c.data.name || '', t: toks(c.data.name), b: brandOf(c.data.domain), lbl: 'Carta', open: 'data-act="cardOpen" data-id="' + h(c.id) + '"' }));
+    if (S.protOpen) {
+      vitems().forEach(i => E.push({ k: 'vault', id: i.id, name: titleOf(i), t: toks(titleOf(i)), b: brandOf(i.data.domain), item: i, lbl: 'Vault', open: 'data-act="detail" data-id="' + h(i.id) + '"' }));
+      if (finLoaded()) FK().forEach(kd => (FIN()[kd[0]] || []).forEach((r, ix) => E.push({ k: 'fin', arr: kd[0], ix, tab: kd[1], name: r.name || '', t: toks(r.name), b: '', rec: r, lbl: kd[2], open: 'data-act="goFin" data-t="' + kd[1] + '"' })));
+    }
+    return E;
+  };
+  const idOf = e => e.k + ':' + (e.id || e.arr + e.ix);
+  const rel = (a, b) => {
+    if (idOf(a) === idOf(b)) return '';
+    if (a.b && b.b && a.b === b.b) return 'stesso sito';
+    const A = a.t, B = b.t; if (!A.length || !B.length) return '';
+    const hit = A.filter(x => B.some(y => same(x, y)));
+    return hit.length && (hit.length >= Math.min(A.length, B.length) || hit.some(x => x.length >= 6)) ? 'nome simile' : '';
+  };
+  const linkedIds = e => e.k === 'fin' ? vlOf(e.rec) : [];
+  const isLinked = (f, v) => f.k === 'fin' && v.k === 'vault' && vlOf(f.rec).includes(v.id);
+  const risk = () => { const cnt = new Map(); vitems().filter(i => i.type === 'login' && i.data.password).forEach(i => cnt.set(i.data.password, (cnt.get(i.data.password) || 0) + 1)); return i => { const p = i.data && i.data.password, r = []; if (!p) return r; if (strength(p).lv === 0) r.push('debole'); if (cnt.get(p) > 1) r.push('ripetuta'); if (Date.now() - i.ts > 365 * MSD) r.push('non cambiata da oltre un anno'); return r; }; };
+  const suggestions = E => { const V = E.filter(e => e.k === 'vault' && e.item.type === 'login'), out = []; E.filter(e => e.k === 'fin').forEach(f => V.forEach(v => { if (isLinked(f, v)) return; const w = rel(f, v); if (w) out.push({ f, v, why: w }); })); return out; };
+  const whenTxt = o => o.n < 0 ? 'scaduta da ' + (-o.n) + (o.n === -1 ? ' giorno' : ' giorni') : o.n === 0 ? 'oggi' : o.n === 1 ? 'domani' : 'tra ' + o.n + ' giorni (' + o.x.toLocaleDateString('it-IT') + ')';
+  const SRCL = { pers: 'Agenda', card: 'Carte', vault: 'Vault', fin: 'Conti' };
+  const dl = (win, fn) => { try { return (window.dueAll ? window.dueAll() : []).filter(o => o.n >= -30 && o.n <= win && (!fn || fn(o))); } catch (e) { return []; } };
+  const R = (t, btns) => ({ t, btns: btns || [] });
+  const unlockR = () => R('Per questo serve l’area protetta: sbloccala e ti rispondo.', [{ l: 'Sblocca', a: 'data-act="asUnlock"' }]);
+  const finRecs = E => E.filter(e => e.k === 'fin');
+  const findEnt = (q, E) => { const qt = toks(q); if (!qt.length) return []; const sc = E.map(e => ({ e, n: qt.filter(x => e.t.some(y => same(x, y)) || (e.b && same(x, e.b))).length })).filter(x => x.n > 0), best = Math.max(0, ...sc.map(x => x.n)); return sc.filter(x => x.n === best).map(x => x.e); };
+
+  function briefing() {
+    const out = [], B = [], now = new Date(), E = ents();
+    out.push('Briefing di ' + now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }) + ':');
+    const D = dl(14, o => o.kind !== 'exp' || o.n <= 14);
+    out.push(D.length ? '• Scadenze entro 14 giorni: ' + D.length + '\n' + D.slice(0, 4).map(o => '   – ' + o.title + ' (' + SRCL[o.src] + '): ' + whenTxt(o)).join('\n') : '• Nessuna scadenza entro 14 giorni.');
+    const a = bkAge(), bd = bkDays(); if (bd && (a === null || a > bd) && (S.cards.size || S.items.size)) out.push('• Backup: ' + (a === null ? 'mai fatto' : 'ultimo di ' + a + ' giorni fa') + '.');
+    if (!S.protOpen) { out.push('• Sblocca l’area protetta per includere password, Conti e collegamenti.'); B.push({ l: 'Sblocca', a: 'data-act="asUnlock"' }); }
+    else {
+      const rk = risk(), lg = vitems().filter(i => i.type === 'login' && i.data.password), bad = lg.filter(i => rk(i).length);
+      out.push('• Password: ' + (bad.length ? bad.length + ' da sistemare su ' + lg.length + ' (deboli, ripetute o vecchie)' : 'nessuna da sistemare') + '.');
+      if (finLoaded()) {
+        const d = FIN(), F = finRecs(E), no = F.filter(f => !vlOf(f.rec).length), sg = suggestions(E);
+        out.push('• Patrimonio: ' + eur(grand(d)) + '.');
+        try { const fs = (window.__anaBuild ? window.__anaBuild() : []).filter(x => x.sev === 'bad' || x.sev === 'warn').slice(0, 2); fs.forEach(x => out.push('   – ' + x.title)); } catch (e) { }
+        const sp = spentBy(d, monthKey()), over = Object.keys(d.budgets).filter(c => num(d.budgets[c]) > 0 && (sp[c] || 0) > num(d.budgets[c])); if (over.length) out.push('• Budget superato: ' + over.slice(0, 3).join(', ') + '.');
+        if (no.length || sg.length) out.push('• Collegamenti: ' + no.length + ' voci dei Conti senza accessi salvati' + (sg.length ? ', ' + sg.length + ' collegamenti suggeriti' : '') + '.');
+        B.push({ l: 'Collegamenti', a: 'data-act="lkMap"' });
+      }
+    }
+    B.push({ l: 'Tutte le scadenze', a: 'data-act="nav" data-r="scadenze"' });
+    return R(out.join('\n'), B);
+  }
+  function entityAnswer(E, ents0) {
+    const out = [], B = [], seen = new Set();
+    ents0.slice(0, 3).forEach(e => {
+      out.push('«' + e.name + '» (' + e.lbl + ')');
+      const rl = [];
+      E.forEach(o => { if (idOf(o) === idOf(e)) return; let why = (isLinked(e, o) || isLinked(o, e)) ? 'collegato' : rel(e, o); if (why) rl.push([o, why]); });
+      rl.slice(0, 8).forEach(([o, why]) => { out.push('   – ' + o.lbl + ': ' + o.name + ' (' + why + ')'); if (!seen.has(idOf(o)) && B.length < 4) { seen.add(idOf(o)); B.push({ l: o.lbl + ': ' + o.name.slice(0, 22), a: o.open }); } });
+      if (!rl.length) out.push('   – nessun collegamento trovato');
+      const dd = dl(365, o => toks(o.title).some(x => e.t.some(y => same(x, y)))); dd.slice(0, 3).forEach(o => out.push('   – scadenza: ' + o.title + ' ' + whenTxt(o)));
+      if (e.k === 'vault') { const rr = risk()(e.item); if (rr.length) out.push('   – attenzione: password ' + rr.join(', ')); }
+      if (e.k === 'fin') { const c = vlOf(e.rec).length; out.push('   – accessi salvati: ' + c); }
+      if (!seen.has(idOf(e)) && B.length < 4) { seen.add(idOf(e)); B.unshift({ l: 'Apri ' + e.lbl.toLowerCase(), a: e.open }); }
+    });
+    if (ents0.length > 3) out.push('…e altri ' + (ents0.length - 3) + ' risultati.');
+    out.push('Le password non le leggo mai.');
+    AS.ctx = ents0.length === 1 ? idOf(ents0[0]) : null;
+    return R(out.join('\n'), B);
+  }
+  function xassist(q) {
+    const t = fold(q);
+    if (/cosa sai fare|cosa puoi fare|^aiuto$|^help$|esempi|come funzioni/.test(t)) return R('Rispondo sul dispositivo, senza rete, anche incrociando i tuoi dati:\n• «Briefing di oggi»\n• «Cosa scade nei prossimi 30 giorni?»\n• «Dove accedo a Directa?» · «Tutto su Coop»\n• «Quali conti non hanno accessi salvati?»\n• «Password deboli sui miei conti»\n• «Collegamenti dei miei dati»\n• «Quanto ho in Fineco?»\nLe password non le leggo mai.');
+    if (/briefing|riepilogo|come sto messo|panoramica|situazione|cosa devo sapere|buongiorno|buonasera/.test(t)) return briefing();
+    if (/collegament|mappa dei dati|connession/.test(t) && !/password|accessi|credenziali/.test(t)) { if (!S.protOpen) return unlockR(); const E = ents(), F = finRecs(E), sg = suggestions(E); return R('Collegamenti tra i tuoi dati:\n• Voci dei Conti con accessi salvati: ' + F.filter(f => vlOf(f.rec).length).length + ' su ' + F.length + '\n• Senza accessi salvati: ' + F.filter(f => !vlOf(f.rec).length).length + '\n• Collegamenti suggeriti da te da confermare: ' + sg.length, [{ l: 'Apri la mappa', a: 'data-act="lkMap"' }]); }
+    if (/senza (accessi|credenziali|password)|nessun accesso|(non hann?o|non ho|nessun\w*|manc\w+|privi)[^.?]{0,30}(accessi|credenziali)/.test(t)) {
+      if (!S.protOpen || !finLoaded()) return unlockR(); const no = finRecs(ents()).filter(f => !vlOf(f.rec).length);
+      return R(no.length ? 'Voci dei Conti senza accessi salvati (' + no.length + '):\n' + no.slice(0, 12).map(f => '• ' + f.name + ' (' + f.lbl + ')').join('\n') + (no.length > 12 ? '\n…' : '') : 'Tutte le voci dei Conti hanno almeno un accesso collegato.', [{ l: 'Apri la mappa', a: 'data-act="lkMap"' }]);
+    }
+    if (/(debol|ripetut|vecchi|rischi|sicurezz)/.test(t) && /(conti|conto|banc|invest|titol|finanz|patrimonio|btp|poste)/.test(t) && /(password|accessi|credenziali)/.test(t)) {
+      if (!S.protOpen || !finLoaded()) return unlockR(); const rk = risk(), L = [];
+      finRecs(ents()).forEach(f => vlOf(f.rec).map(id => S.items.get(id)).filter(Boolean).forEach(i => { const r = rk(i); if (r.length) L.push('• ' + f.name + ' ← ' + titleOf(i) + ': password ' + r.join(', ')); }));
+      return R(L.length ? 'Accessi dei tuoi Conti da sistemare (' + L.length + '):\n' + L.slice(0, 12).join('\n') : 'Gli accessi collegati ai tuoi Conti non risultano deboli, ripetuti o vecchi.', [{ l: 'Controllo password', a: 'data-act="audit"' }]);
+    }
+    const mq = /^quanto (?:ho|abbiamo) (?:in |su |presso |da |nel |nella |al |alla |allo )?(.+)$/.exec(t);
+    if (mq && !/spes|budget|patrimonio|total|risparm|resta|rimane|guadagn/.test(t)) {
+      if (!S.protOpen || !finLoaded()) return unlockR(); const E = ents(), hit = findEnt(mq[1], finRecs(E));
+      if (hit.length) { const tot = hit.reduce((s, e) => s + valOf(e.arr, e.rec), 0); return R('Su «' + mq[1].trim() + '» hai ' + eur(tot) + ':\n' + hit.slice(0, 8).map(e => '• ' + e.name + ' (' + e.lbl + '): ' + eur(valOf(e.arr, e.rec))).join('\n')); }
+    }
+    if (/scad|entro|prossimi giorni|questa settimana|questo mese|oggi|domani|da fare/.test(t) && !/password/.test(t)) {
+      const E = ents(), hit = findEnt(q, E);
+      if (hit.length && hit.length <= 3 && /scad/.test(t)) { const dd = dl(3650, o => hit.some(e => toks(o.title).some(x => e.t.some(y => same(x, y))))); if (dd.length) return R('Scadenze per «' + hit[0].name + '»:\n' + dd.slice(0, 6).map(o => '• ' + o.title + ' (' + SRCL[o.src] + '): ' + whenTxt(o)).join('\n')); }
+      let win = 30; const nm = /(\d+)\s*(giorn|settiman|mes)/.exec(t); if (nm) win = +nm[1] * (nm[2] === 'giorn' ? 1 : nm[2] === 'settiman' ? 7 : 30); else if (/oggi/.test(t)) win = 0; else if (/domani/.test(t)) win = 1; else if (/settimana/.test(t)) win = 7;
+      const D = dl(win), B = [{ l: 'Tutte le scadenze', a: 'data-act="nav" data-r="scadenze"' }]; if (!S.protOpen) B.unshift({ l: 'Sblocca', a: 'data-act="asUnlock"' });
+      return R(D.length ? 'Scadenze' + (win === 0 ? ' di oggi' : win === 1 ? ' fino a domani' : ' entro ' + win + ' giorni') + ' (' + D.length + '):\n' + D.slice(0, 12).map(o => '• ' + o.title + ' (' + SRCL[o.src] + '): ' + whenTxt(o)).join('\n') + (D.length > 12 ? '\n…' : '') + (S.protOpen ? '' : '\nPer vedere anche Vault e Conti sblocca l’area protetta.') : 'Nessuna scadenza' + (win === 0 ? ' oggi' : ' entro ' + win + ' giorni') + (S.protOpen ? '.' : ' tra quelle visibili. Sblocca l’area protetta per includere Vault e Conti.'), B);
+    }
+    if (/(dove accedo|dove entro|credenziali|accessi? (di|a|per)|login (di|a)|tutto su|tutto cio che|cosa sai (di|su)|info su|collegat[oi] a|cosa c.?e su|dammi tutto)/.test(t)) {
+      const E = ents(), hit = findEnt(q, E);
+      if (hit.length) return entityAnswer(E, hit);
+      if (!S.protOpen) return unlockR();
+      return R('Non trovo nulla con quel nome tra carte, Vault e Conti. Prova con il nome come l’hai salvato.', [{ l: 'Cerca ovunque', a: 'data-act="palette"' }]);
+    }
+    if (AS.ctx && /^(e |ed )?(la |le |il )?(scadenz|quando|collegament|accessi)|^(aprilo|aprila|mostramelo|mostramela)\b/.test(t)) {
+      const e = ents().find(x => idOf(x) === AS.ctx); if (e) { if (/^(aprilo|aprila|mostram)/.test(t)) return R('Ecco «' + e.name + '».', [{ l: 'Apri ' + e.lbl.toLowerCase(), a: e.open }]); return entityAnswer(ents(), [e]); }
+    }
+    return null;
+  }
+  let LAST = null;
+  { const oa = assist; assist = function (q) { LAST = null; let r = null; try { r = xassist(q); } catch (e) { r = null; } if (r) { LAST = r; return r; } return oa.apply(this, arguments); }; }
+  { const ap = asPush; asPush = function () { LAST = null; ap.apply(this, arguments); try { if (LAST && LAST.btns.length) { const e = AS.log[AS.log.length - 1]; if (e && e.w === 'ai') { e.btns = LAST.btns; asDraw(); } } } catch (e) { } }; }
+  { const od = asDraw; asDraw = function () { od.apply(this, arguments); try { const el = $('alog'); if (!el) return; const Bs = el.querySelectorAll('.bub'); AS.log.forEach((x, i) => { if (x.btns && x.btns.length && Bs[i] && !Bs[i].querySelector('[data-xb]')) Bs[i].insertAdjacentHTML('beforeend', '<div data-xb style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px">' + x.btns.map(b => '<button class="btn sm" ' + b.a + '>' + h(b.l) + '</button>').join('') + '</div>'); }); } catch (e) { } }; }
+  /* domande rapide in più */
+  { const ch = () => { const c = $('aschips'); if (c && !c.dataset.v20) { c.dataset.v20 = '1'; ['Password deboli sui conti', 'Collegamenti dei miei dati', 'Cosa scade in 30 giorni', 'Briefing di oggi'].forEach(x => c.insertAdjacentHTML('afterbegin', '<button class="chip" data-act="asq" data-q="' + h(x) + '">' + h(x) + '</button>')); } };
+    const oa = openAssistant; openAssistant = function () { const r = oa.apply(this, arguments); try { setTimeout(ch, 60); } catch (e) { } return r; }; }
+
+  /* mappa dei collegamenti */
+  function mapHtml() {
+    const E = ents(), F = finRecs(E), sg = suggestions(E), rk = risk(), V = E.filter(e => e.k === 'vault' && e.item.type === 'login'), C = E.filter(e => e.k === 'card');
+    const linked = F.filter(f => vlOf(f.rec).length), no = F.filter(f => !vlOf(f.rec).length), bad = [];
+    F.forEach(f => vlOf(f.rec).map(id => S.items.get(id)).filter(Boolean).forEach(i => { const r = rk(i); if (r.length) bad.push([f, i, r]); }));
+    const cv = []; C.forEach(c => V.forEach(v => { const w = rel(c, v); if (w) cv.push([c, v, w]); }));
+    const row = (a, b, why, btn) => '<div class="lkr"><span class="t"><b>' + h(a) + '</b> ← ' + h(b) + (why ? '<span class="tag">' + h(why) + '</span>' : '') + '</span>' + (btn || '') + '</div>';
+    let x = '<div class="gap"><h2 class="sp" style="margin:0">Collegamenti tra i dati</h2><button class="ib" data-act="close" aria-label="Chiudi">' + ic('x') + '</button></div>' +
+      '<p class="sm mut">Calcolati sul dispositivo confrontando nomi e siti. Non viene salvato nulla finché non tocchi «Collega».</p>' +
+      '<div class="kv"><div class="k">Voci dei Conti</div><div class="v"><span>' + F.length + '</span></div></div><div class="kv"><div class="k">Con accessi collegati</div><div class="v"><span>' + linked.length + '</span></div></div><div class="kv"><div class="k">Senza accessi</div><div class="v"><span>' + no.length + '</span></div></div><div class="kv"><div class="k">Carte con account nel Vault</div><div class="v"><span>' + new Set(cv.map(z => z[0].id)).size + '</span></div></div>';
+    x += '<div class="lkb"><h3>Collegamenti suggeriti</h3>' + (sg.length ? sg.slice(0, 15).map(z => row(z.f.name + ' (' + z.f.lbl + ')', z.v.name, z.why, '<button class="btn sm" data-act="lkLink" data-k="' + h(z.f.arr) + '" data-ix="' + z.f.ix + '" data-v="' + h(z.v.id) + '">' + ic('plus') + ' Collega</button>')).join('') : '<p class="sm mut">Nessun suggerimento.</p>') + '</div>';
+    x += '<div class="lkb"><h3>Accessi dei Conti da sistemare</h3>' + (bad.length ? bad.slice(0, 15).map(z => row(z[0].name, titleOf(z[1]), 'password ' + z[2].join(', '), '<button class="btn sm" data-act="detail" data-id="' + h(z[1].id) + '">Apri</button>')).join('') : '<p class="sm mut">Nessuno: gli accessi collegati non risultano deboli, ripetuti o vecchi.</p>') + '</div>';
+    x += '<div class="lkb"><h3>Voci dei Conti senza accessi</h3>' + (no.length ? no.slice(0, 15).map(f => '<div class="lkr"><span class="t"><b>' + h(f.name) + '</b><span class="tag">' + h(f.lbl) + '</span></span><button class="btn sm" data-act="goFin" data-t="' + h(f.tab) + '">Apri</button></div>').join('') + (no.length > 15 ? '<p class="sm mut">…e altre ' + (no.length - 15) + '</p>' : '') : '<p class="sm mut">Tutte hanno almeno un accesso.</p>') + '</div>';
+    x += '<div class="lkb"><h3>Carte e account del Vault</h3>' + (cv.length ? cv.slice(0, 15).map(z => row(z[0].name, z[1].name, z[2], '<button class="btn sm" data-act="cardOpen" data-id="' + h(z[0].id) + '">Carta</button><button class="btn sm" data-act="detail" data-id="' + h(z[1].id) + '">Accesso</button>')).join('') : '<p class="sm mut">Nessuna carta ha un account con lo stesso sito o nome.</p>') + '</div>';
+    return x;
+  }
+  Object.assign(ACT, {
+    async lkMap() { if (!S.protOpen && !(await openProt())) return; if (finLoaded() === false) { try { await ensureFin(); } catch (e) { } } closeTop(); modal(mapHtml()); },
+    async lkLink(t) {
+      const arr = finLoaded() ? FIN()[t.dataset.k] : null, rec = arr && arr[+t.dataset.ix], id = t.dataset.v; if (!rec || !S.items.has(id)) return;
+      const a = vlOf(rec); if (!a.includes(id)) a.push(id); rec.vaultIds = a; delete rec.vaultId;
+      try { await finSave(); } catch (e) { return toast('Non riesco a salvare il collegamento'); }
+      toast('Collegato'); closeTop(); modal(mapHtml()); render();
+    }
+  });
+  /* blocco «Collegamenti» nel dettaglio del Vault e della carta */
+  const blockHtml = e => {
+    const E = ents(), rl = []; E.forEach(o => { if (idOf(o) === idOf(e)) return; const why = (isLinked(e, o) || isLinked(o, e)) ? 'collegato' : rel(e, o); if (why && why !== 'collegato') rl.push([o, why]); });
+    if (!rl.length) return '';
+    return '<div class="lkb"><h3>Collegamenti trovati</h3>' + rl.slice(0, 6).map(([o, why]) => {
+      let b = '<button class="btn sm" ' + o.open + '>Apri</button>';
+      if (o.k === 'fin' && e.k === 'vault' && e.item.type === 'login') b = '<button class="btn sm" data-act="lkLink" data-k="' + h(o.arr) + '" data-ix="' + o.ix + '" data-v="' + h(e.id) + '">' + ic('plus') + ' Collega</button>';
+      return '<div class="lkr"><span class="t">' + h(o.lbl) + ': <b>' + h(o.name) + '</b><span class="tag">' + h(why) + '</span></span>' + b + '</div>';
+    }).join('') + '</div>';
+  };
+  { const lb = linkBtns; linkBtns = function (it) { let s = lb.apply(this, arguments); try { if (S.protOpen) { const e = ents().find(x => x.k === 'vault' && x.id === it.id); if (e) s += '</div>' + blockHtml(e) + '<div class="stack">'; } } catch (x) { } return s; }; }
+  { const co = cardOpen; cardOpen = async function (id) {
+    await co.apply(this, arguments);
+    try {
+      const f = document.querySelector('.hflip'), sh = f && f.closest('.sheet'); if (!sh || sh.querySelector('.lkb')) return;
+      if (!S.protOpen) { sh.insertAdjacentHTML('beforeend', '<div class="lkb"><button class="btn sm" data-act="agendaUnlock">' + ic('lock') + ' Sblocca l’area protetta per vedere i collegamenti con Vault e Conti</button></div>'); return; }
+      const e = ents().find(x => x.k === 'card' && x.id === id); if (e) sh.insertAdjacentHTML('beforeend', blockHtml(e));
+    } catch (x) { }
+  }; }
+  window.__lk = { ents, rel, suggestions, toks, same, brandOf };
+}
+
+/* ---------- avvio ---------- */
+(async function boot() {
+  if (window.__POPUP) return;
+  try { applyPrefs(); } catch (e) { }
+  try {
+    if (location.hash.startsWith('#c=')) { U.incoming = parseShared(location.hash); history.replaceState(null, '', location.pathname + location.search); }
+    await DB.open(); S.meta = await DB.get('meta', 'acct') || null;
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').then(r => { window.SWOK = true; return r; }).catch(e => { window.SWERR = (e && e.message) || String(e); });
+    go(S.meta ? 'lock' : 'welcome');
+  } catch (e) { $('app').innerHTML = '<main class="center"><h1>Archivio non disponibile</h1><p class="mut">Il browser non permette di salvare dati (navigazione privata?). ' + h(e.message) + '</p></main>'; }
+})();

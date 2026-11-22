@@ -52,7 +52,7 @@ Revisione interna del codice e test automatici su Chromium. **Non è un audit in
 16. La ricerca «negozi vicini» e gli avvisi di prossimità sono attivi per impostazione iniziale dopo lo sblocco. Inviano a OpenStreetMap un'area approssimata di circa 100 m e i nomi dei negozi; funzionano solo con l'app aperta e si possono disattivare in Impostazioni. La posizione precisa resta sul dispositivo.
 17. La ricerca automatica di sito e logo è attiva per impostazione iniziale: invia il NOME del negozio a Wikidata e il dominio a icon.horse, Google e DuckDuckGo; per questo la CSP ammette immagini da questi host. Le carte e i codici non partono mai. Si disattiva in Impostazioni.
 18. Il riconoscimento dell'insegna da foto con OCR (Tesseract da CDN) di Fidelity Wallet non è incluso: richiederebbe codice esterno non verificabile (script da CDN) in un'app che gestisce segreti.
-19. IA generativa (facoltativa): usa la TUA chiave API (Claude o OpenAI), cifrata sul dispositivo con la chiave delle carte (non è nei backup né nella sincronizzazione: va reinserita sugli altri dispositivi). Verso il servizio parte solo il testo scritto nella chat IA, con un avviso se sembra contenere IBAN, numeri di carta o password. Il servizio può conservare i messaggi secondo le sue regole. La chiave in sé è un segreto di fatturazione: chi sblocca le carte può usarla. Si possono usare chiavi con limite di spesa. La CSP ammette connessioni solo a api.anthropic.com e api.openai.com.
+19. IA del browser (facoltativa): dalla 2.18.1 non esistono più collegamenti a servizi IA esterni (Claude, OpenAI): non sono nella CSP né nel codice, e le chiavi API salvate da versioni precedenti vengono cancellate. Resta solo il modello integrato nel browser (se presente), che elabora il testo sul dispositivo senza rete. Il browser, non l'app, ne gestisce il download e l'esecuzione.
 20. Sblocco biometrico per l'area protetta senza PRF (facoltativo, con consenso): la chiave principale è custodita da una chiave non estraibile del dispositivo e rilasciata dopo la verifica biometrica WebAuthn, ma il controllo biometrico è applicato dall'app: un attaccante che esegue codice nell'origine di Unica sul dispositivo sbloccato potrebbe ottenerla senza biometria. Per questo scade dopo 14 giorni o 25 sblocchi (serve la master password) e viene cancellato con la passkey o la rotazione delle chiavi. Con PRF (modalità più sicura) nulla di tutto ciò è necessario.
 21. Avvisi di vicinanza: la posizione precisa resta sul dispositivo; a OpenStreetMap vanno solo un'area di ~100 m e i NOMI dei negozi (non i codici). La cache dei negozi è cifrata. La posizione salvata in una carta è cifrata con le carte. Funziona solo con l'app aperta (nessun GPS in background nelle PWA). Il browser deve autorizzare l'accesso alla posizione e alle notifiche di sistema.
 22. Notifiche push: il tuo Worker conserva l'indirizzo anonimo di notifica del browser, giorno e ora; il push parte senza contenuto, tramite il servizio del browser (Google/Apple/Mozilla), che vede solo che Unica ha una notifica. Il titolo delle notifiche di vicinanza può mostrare il nome del negozio a schermo bloccato (disattivabile).
@@ -74,3 +74,82 @@ La ricerca vocale usa il riconoscimento del browser. Su Chrome per Android l'aud
 
 ## Biometria in un tocco (v2.5.0)
 L'attivazione rapida usa solo l'autenticatore del dispositivo (WebAuthn platform). Se il dispositivo non supporta PRF, la chiave dell'area protetta resta custodita da una chiave non estraibile del dispositivo, con scadenza di 14 giorni o 25 sblocchi: ora viene attivata subito insieme alla passkey invece di chiedere una seconda conferma. Si disattiva da Impostazioni.
+
+
+## Loghi (v2.6.0)
+Il recupero dei loghi invia a icon.horse, Google o DuckDuckGo soltanto il nome del sito (es. netflix.com), mai password, codici o nomi utente. ATTENZIONE (corretto nella 2.20.0): non parte «dopo un consenso» come scritto nelle versioni precedenti, ma è attiva per impostazione iniziale (si disattiva in Impostazioni). Per le voci del Vault invia a quei tre servizi il dominio del tuo servizio (per esempio il sito della tua banca), che rivela quali servizi usi; con l'area protetta chiusa non parte per il Vault. I loghi scaricati sono salvati dentro la voce cifrata. Per le voci del Vault la ricerca avviene solo ad area protetta aperta.
+
+## Biometria (v2.6.0)
+La passkey è creata come credenziale non rilevabile sul solo autenticatore del dispositivo (residentKey: discouraged, attachment: platform). Nessuna chiave resta nel gestore password di Google.
+
+
+## Rinomina in Vortex Hub (2.9.0)
+Nessuna modifica crittografica: AES-256-GCM, PBKDF2 600k, sincronizzazione a conoscenza zero e codice di recupero restano identici. I nomi tecnici interni (database `unica`, chiavi `unica_*`, etichette di derivazione) sono rimasti invariati di proposito, perché cambiarli renderebbe illeggibili i dati e i backup già cifrati. Il logo è incorporato nel file, senza richieste di rete.
+
+
+## Blocco, backup e dispositivi (2.10.0)
+- Il blocco per uscita dall'app usa il momento in cui la pagina passa in secondo piano; è disattivato per impostazione predefinita perché alcuni selettori di file lo possono far scattare.
+- L'elenco dispositivi è un elemento cifrato come le carte (chiave dell'account) e viaggia con la sincronizzazione; il server non vede nomi né date.
+- La «revoca» non è un semplice flag: un dispositivo che ha già la chiave potrebbe continuare a leggere ciò che ha. Per questo avvia il cambio delle chiavi (nuove chiavi, nuovo codice di recupero, nuovo spazio di sincronizzazione). I dati già presenti sul dispositivo revocato non si possono cancellare da remoto.
+- Le categorie apprese e le scadenze restano sul dispositivo e nei backup cifrati; nessuna richiesta di rete in più.
+
+## Impostazioni compatte (2.10.1)
+Modifica solo di interfaccia: nessun cambiamento a cifratura, chiavi, backup o rete. La preferenza delle sezioni aperte (`unica_setopen`) contiene solo i nomi delle sezioni e delle schede, mai dati. Hash CSP di script e stile ricalcolati.
+
+## Assistente nella Home e meteo (2.11.0)
+- Nuovo host nella CSP (`connect-src`): `https://api.open-meteo.com`. Viene contattato solo se attivi il meteo e dopo un consenso esplicito.
+- Alla richiesta vanno solo latitudine e longitudine arrotondate a 2 decimali (circa 1 km), senza cookie né referrer. La posizione non viene salvata: in `localStorage` (`unica_wxc`) resta solo l’ultima previsione (temperature, codice meteo, vento, probabilità di pioggia).
+- Preferenze: `unica_wx` (meteo acceso, 1/0) e `unica_jv` (assistente visibile, 0 = nascosto).
+- Il briefing legge solo dati già disponibili senza area protetta (scadenze delle carte, età dell’ultimo backup, stato di sincronizzazione, carte vicine, batteria). Nessun dato del Vault o dei Conti, nessuna chiamata all’IA.
+
+## Nuovo logo e colori (2.12.0)
+Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di rete. Icone e logo sono immagini incorporate nella pagina (`data:`), già consentite dalla CSP. Hash CSP di script e stile ricalcolati.
+
+## Agenda e scadenze personali (2.13.0)
+- Le scadenze sono record `deadline` cifrati con la chiave delle carte (AES-256-GCM, stessa AAD delle altre voci). Titolo, data e categoria non sono mai in chiaro nel database.
+- Nessuna nuova richiesta di rete e nessun nuovo host in CSP. Il punteggio di sicurezza è calcolato sul dispositivo; le password vengono lette solo con l’area protetta già aperta, e non lasciano mai la pagina.
+- Le scadenze sono visibili senza lo sblocco forte (come le carte): non inserire in questo elenco dati che vuoi tenere solo nell’area protetta.
+
+## Accesso di emergenza (2.14.0)
+- Schema di Shamir k su n (n ≤ 9) sul codice di recupero, calcolato sul dispositivo nel campo di Galois GF(2^11) (ogni parola del codice è un elemento, polinomio x^11+x^2+1, coefficienti casuali da `crypto.getRandomValues`). Con meno di k parti non si ricava alcuna informazione sul codice.
+- Ogni parte: 27 parole (intestazione con k e posizione, identificativo di serie, 24 valori, controllo). Parti di serie diverse vengono rifiutate. Le parti non sono salvate: nel dispositivo resta solo `unica_emg` (data e schema, senza segreti).
+- Prima di mostrare le parti l’app le ricombina e verifica che diano il codice originale. Per leggere il codice serve l’identità verificata (area protetta).
+- Nessuna rete, nessun server, nessun nuovo host in CSP, nessun nuovo formato di backup.
+- Rischi da conoscere: nessun ritardo né possibilità di veto; chi riunisce k parti e ha il file `.enc` apre carte, Vault e Conti. Le parti già consegnate si annullano solo con «Cambia le chiavi». Il testo copiato negli appunti può restare nella cronologia del telefono.
+
+## IA generativa: allegati espliciti (2.15.0)
+- Regola invariata nella sostanza: l’IA vede solo ciò che l’utente scrive o allega di sua mano. Gli allegati (Briefing, Meteo, Scadenze, Sicurezza, Carte con i soli nomi) sono spenti di default, si scelgono per ogni messaggio, si possono leggere in anteprima e sono mostrati per intero nella chat. Si azzerano dopo l’invio.
+- Non sono allegabili: Vault, Conti, password, codici delle carte, IBAN. Il controllo sui dati sensibili (IBAN, numeri di carta, «password:») resta attivo sul testo finale.
+- Il prompt di sistema contiene solo la data odierna. Nessuna nuova richiesta di rete: l’IA usa lo stesso servizio già collegato dall’utente (o l’IA del browser, che resta sul dispositivo).
+- Le scadenze e i nomi delle carte, se allegati, lasciano il dispositivo verso il servizio scelto: allegali solo se ti sta bene.
+
+## Scadenze su ogni elemento (2.16.0)
+- La scadenza (data, ripetizione, anticipo) è un campo dell'elemento stesso: Vault e Conti la cifrano con la chiave protetta, le carte con la chiave delle carte. Nessun nuovo archivio, nessun dato in chiaro, nessuna notifica server.
+- L'agenda legge Vault e Conti solo ad area protetta sbloccata; al blocco quelle righe spariscono.
+- Verso l'IA generativa: «Scadenze» allega solo personali e carte; i titoli di Vault e Conti partono solo con l'allegato esplicito «Scad. Vault e Conti», scelto per ogni messaggio. Mai password, testi delle note, contenuto dei file, importi o saldi.
+- Eccezione alla regola «Vault e Conti non si allegano» (già estesa in 2.15.0 con gli allegati espliciti): ora sono allegabili, su scelta esplicita, solo i titoli delle scadenze.
+- Avvisi di scadenza: sono notifiche locali generate dall'app quando è aperta; nessun server conosce le scadenze. Lo stato «già avvisata» è in localStorage solo come impronta (hash) senza titoli. Nelle notifiche i titoli di Vault e Conti non compaiono mai: solo il numero.
+- Il promemoria push giornaliero resta senza contenuto (nessun dato personale).
+
+## Avvisi e vocale (2.16.3)
+- Nessuna modifica a cifratura, chiavi o sincronizzazione.
+- Lo stato mostrato sotto gli avvisi (permesso, service worker) non contiene titoli né dati. «Già avvisata» resta solo un'impronta (hash).
+- L'indicatore del microfono è solo un attributo di stato sulla pagina: nessun audio viene registrato o salvato dall'app (la dettatura usa il riconoscimento vocale del browser, come prima).
+
+## Quotazioni, analisi IA e credenziali per asset (2.17.0)
+- **Nuovo servizio esterno:** www.alphavantage.co (aggiunto a connect-src della CSP). Parte solo il simbolo del titolo e la tua chiave; mai quantità, importi, nomi o intestatari. La chiave è in `meta` cifrata con la chiave delle carte (come la chiave IA) e si azzera al blocco. Senza chiave non parte nessuna richiesta.
+- **Prezzi non verificati:** il prezzo ricevuto non è autenticato oltre il canale HTTPS; un valore che si discosta di oltre il 40% dal precedente viene scartato e segnalato.
+- **Analisi IA del patrimonio: rimossa nella 2.18.0.** L'eccezione alla regola «Vault e Conti non si inviano all'IA» è revocata: il patrimonio non viene più inviato a nessun servizio IA. L'analisi ora è interna (sul dispositivo, nessuna rete).
+- **Credenziali collegate:** nell'elemento dei Conti (cifrato con la chiave protetta) si salvano solo gli identificativi delle voci del Vault, mai password o utenti copiati. Se una voce del Vault viene eliminata, il collegamento sparisce al primo salvataggio.
+- **Non provato con servizi reali:** Alpha Vantage e le API IA sono provate solo con risposte simulate.
+- **2.17.1:** per completare un simbolo senza borsa l'app usa anche la ricerca simboli di Alpha Vantage (stesso host, già in CSP): parte solo il simbolo scritto dall'utente e la chiave. Il simbolo trovato viene salvato nel titolo, cifrato con gli altri dati.
+
+## Prezzi dei BTP con IA (2.17.1): rimossi nella 2.18.0
+- La funzione è stata tolta: nessun ISIN o nome dei BTP viene più inviato a servizi IA. I prezzi dei BTP si inseriscono a mano.
+
+## Analisi interna del patrimonio (2.18.0)
+- Calcolata interamente sul dispositivo, su dati già decifrati in memoria con l'area protetta aperta. Non fa richieste di rete (verificato dai test) e non salva nulla di nuovo.
+- Canali esterni restanti per i Conti: solo Alpha Vantage (simbolo dei titoli e la tua chiave), se inserisci la chiave.
+
+## 2.20.0
+20. Assistente interno potenziato e collegamenti tra i dati: tutto calcolato sul dispositivo, nessuna richiesta di rete. L'assistente non scrive mai le password; i collegamenti suggeriti si salvano (cifrati, nella voce dei Conti) solo quando tocchi «Collega». L'app ricorda solo il nome dell'ultima sezione (non dati) in localStorage, per riprendere da lì dopo un ricaricamento; il registro degli avvii (ora e tipo) è solo locale.

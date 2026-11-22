@@ -1,6 +1,7 @@
-# Vortex Hub 2.25.3
+# Vortex Hub 2.25.4
 
-- Corretto il digest SHA-256 nella Content Security Policy (CSP) per lo script inline: la release 2.25.2 aveva un hash non corrispondente, che poteva bloccare l'intero JavaScript e impedire l'avvio.
-- Aggiornata la cache del Service Worker.
-- Nessuna modifica ai dati locali o alla struttura del database.
-- Verifiche: sintassi JavaScript inline, Service Worker e OCR frame; hash CSP ricalcolato e verificato. Non testato su dispositivo Android fisico.
+- Migliorata la gestione dell'esportazione backup: l'annullamento del selettore file non viene più presentato come esportazione riuscita.
+- Il backup mostra esito più chiaro e gestisce gli errori senza interrompere l'app.
+- La funzione download restituisce l'esito per le chiamate che lo utilizzano.
+- Aggiornata la versione PWA/Service Worker e l'hash CSP dello script inline.
+- Verifiche automatiche: sintassi dello script inline principale, Service Worker e OCR frame. Non testato su dispositivi Android fisici.

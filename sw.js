@@ -1,5 +1,5 @@
 /* Vortex Hub – Service Worker: solo shell offline. Nessun dato utente passa dalla cache. */
-const VERSION = 'unica-v2-23-0';
+const VERSION = 'unica-v2-25-6';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './privacy.html', './ocr.html', './ocr-frame.js', './icons/icon-192x192.png', './icons/icon-512x512.png', './icons/maskable-192x192.png', './icons/maskable-512x512.png', './icons/apple-touch-icon.png', './icons/favicon.png'];
 /* Icone di riserva: se sul tuo hosting mancano i file in icons/, il service worker li fornisce da solo
    (serve per l'installazione). Il modo giusto resta caricare l'intera cartella icons/. */
@@ -10,7 +10,7 @@ self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Pro
 self.addEventListener('fetch', e => {
   const r = e.request; if (r.method !== 'GET') return;
   const u = new URL(r.url); if (u.origin !== location.origin) return;   // API esterne: sempre rete, mai cache
-  e.respondWith(fetch(r).then(res => { if (!res.ok) { const f = fbIcon(u); if (f) return f; } if (res.ok) { const c = res.clone(); caches.open(VERSION).then(ca => ca.put(r, c)); } return res; }).catch(() => caches.match(r).then(h => h || fbIcon(u) || caches.match('./index.html'))));
+  e.respondWith(fetch(r).then(res => { if (!res.ok) { const f = fbIcon(u); if (f) return f; } if (res.ok) { const c = res.clone(); caches.open(VERSION).then(ca => ca.put(r, c)); } return res; }).catch(() => caches.match(r).then(h => { if (h) return h; const f = fbIcon(u); if (f) return f; return r.mode === 'navigate' ? caches.match('./index.html') : Response.error(); })));
 });
 /* Notifiche: tocco su una notifica -> apre l'app (e la carta, se indicata) */
 self.addEventListener('notificationclick', e => {

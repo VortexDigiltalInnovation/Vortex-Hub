@@ -1,14 +1,9 @@
-# Vortex Hub 2.25.9
+# Vortex Hub 2.25.11
 
-- Diagnostica: raccolta locale e temporanea di errori JavaScript e Promise non gestite, consultabile nel pannello Aggiornamento e diagnostica.
-- Il log è limitato agli ultimi 12 eventi e non viene trasmesso; può essere cancellato.
-- Cache PWA aggiornata.
-- Verifiche di sintassi e hash CSP eseguite; test Android fisico non eseguito.
+- **Centro di controllo nell'Agenda:** conteggio carte, elementi Vault, scadenze già arrivate e scadenze entro 30 giorni.
+- Evidenza sintetica del backup e degli errori di sincronizzazione, con collegamenti diretti alle relative impostazioni e alle scadenze.
+- La panoramica è informativa e non modifica né elimina dati.
+- Corretto nella release precedente il conteggio degli elementi nelle copie interne di backup.
+- Cache PWA e hash CSP aggiornati.
 
-
-## 2.25.9 — Controlli preliminari sui backup
-Prima del ripristino, il file viene sottoposto a controlli strutturali (record, ID duplicati, versioni e limiti dimensionali) per intercettare file malformati prima di qualsiasi sostituzione dei dati.
-
-
-## 2.25.9 — Anteprima del ripristino
-Prima della conferma di sostituzione, mostra data del backup e conteggio di elementi attivi e allegati, per ridurre il rischio di selezionare un backup errato.
+Verifiche: sintassi JavaScript, service worker e file ZIP; hash CSP controllato. Nessun test su dispositivo Android fisico.

@@ -1,4 +1,4 @@
-# Installazione Vortex Hub 2.25.11
+# Installazione Vortex Hub 2.25.14
 
 Caricare i file del pacchetto sul hosting sovrascrivendo la versione precedente. Conservare prima un backup. Se la PWA non si aggiorna, chiudere e riaprire Chrome e ricaricare il sito.
 
@@ -9,3 +9,8 @@ In Impostazioni > Installazione e aggiornamenti > Aggiornamento e diagnostica, i
 La versione 2.25.11 controlla la struttura del backup prima di avviare il ripristino.
 
 La versione 2.25.11 mostra un riepilogo del backup (data, elementi attivi e allegati) prima della conferma di sostituzione.
+
+La versione 2.25.14 aggiunge nel Centro di controllo il conteggio delle scadenze urgenti e il nome/data della prossima scadenza, usando la lista unificata.
+
+
+La versione 2.25.14 aggiunge un controllo non distruttivo dei titoli duplicati nelle scadenze.

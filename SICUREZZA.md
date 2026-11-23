@@ -165,3 +165,7 @@ Il ripristino mostra un riepilogo del backup selezionato prima della sostituzion
 
 
 La 2.25.11 corregge il conteggio degli elementi attivi visualizzato per le copie interne, usando il campo strutturale `type`.
+
+
+## Controllo duplicati scadenze (2.25.14)
+Il Centro di controllo segnala possibili duplicati sulla base dei titoli normalizzati. La segnalazione è indicativa, non elimina né modifica elementi; verificare manualmente prima di intervenire.

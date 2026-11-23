@@ -1,9 +1,8 @@
-# Vortex Hub 2.25.11
+# Vortex Hub 2.25.14
 
-- **Centro di controllo nell'Agenda:** conteggio carte, elementi Vault, scadenze già arrivate e scadenze entro 30 giorni.
-- Evidenza sintetica del backup e degli errori di sincronizzazione, con collegamenti diretti alle relative impostazioni e alle scadenze.
-- La panoramica è informativa e non modifica né elimina dati.
-- Corretto nella release precedente il conteggio degli elementi nelle copie interne di backup.
-- Cache PWA e hash CSP aggiornati.
+- Centro di controllo: controllo non distruttivo per individuare possibili scadenze duplicate (titolo normalizzato).
+- Segnalazione prudenziale: mostra i titoli ripetuti e il numero di occorrenze, senza intervenire sui dati.
+- Aggiornamento cache e CSP.
 
-Verifiche: sintassi JavaScript, service worker e file ZIP; hash CSP controllato. Nessun test su dispositivo Android fisico.
+## 2.25.14
+Verifica assistita di possibili duplicati nell'elenco delle scadenze.

@@ -153,3 +153,12 @@ Solo grafica: nessun cambiamento a cifratura, chiavi, backup, permessi o host di
 
 ## 2.20.0
 20. Assistente interno potenziato e collegamenti tra i dati: tutto calcolato sul dispositivo, nessuna richiesta di rete. L'assistente non scrive mai le password; i collegamenti suggeriti si salvano (cifrati, nella voce dei Conti) solo quando tocchi «Collega». L'app ricorda solo il nome dell'ultima sezione (non dati) in localStorage, per riprendere da lì dopo un ricaricamento; il registro degli avvii (ora e tipo) è solo locale.
+
+
+La diagnostica runtime 2.25.9 registra localmente solo i 12 eventi tecnici più recenti, senza invio remoto. Il log è cancellabile dal pannello diagnostico.
+
+
+La 2.25.9 aggiunge controlli strutturali preliminari sui backup importati (limiti, ID e record), senza sostituire la verifica crittografica e la password.
+
+
+Il ripristino mostra un riepilogo del backup selezionato prima della sostituzione dei dati.

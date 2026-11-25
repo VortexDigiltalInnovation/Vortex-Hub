@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-BOY1t7WlOFpD/ajVOiYaBhft7+sA5P9j5aY5dVhm0fA='; style-src 'sha256-03P5Mx1pi9eEjpqDnYZ1E8keCftcDbes5fJj6GUGCSY='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://www.alphavantage.co https://api.open-meteo.com https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self' blob:; frame-src 'self'; script-src 'sha256-EXdodc/0CDSLbRfPUe6eOjuE8dTabPJhnknAaTbOFL0='; style-src 'sha256-03P5Mx1pi9eEjpqDnYZ1E8keCftcDbes5fJj6GUGCSY='; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://icon.horse https://www.google.com https://*.gstatic.com https://icons.duckduckgo.com; connect-src 'self' https://www.alphavantage.co https://api.open-meteo.com https://api.pwnedpasswords.com https://www.wikidata.org https://overpass-api.de https://overpass.kumi.systems https://www.googleapis.com https://*.workers.dev; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#06121c"><meta name="apple-mobile-web-app-title" content="Vortex Hub"><meta name="application-name" content="Vortex Hub">
 <title>Vortex Hub</title>
@@ -2100,13 +2100,15 @@ function modDuration(c, years, f, price) {
   for (let k = 1; k <= n; k++) { const v = (cp + (k === n ? 100 : 0)) / Math.pow(1 + y, k); pv += v; w += k / f * v; }
   return Math.max(0, (pv > 0 ? w / pv : years) / (1 + Math.max(-0.99, c) / f));
 }
-function posteRow(p, i) { const ty = String(p.type), isB = ty.includes('Buono Postale'), isL = ty.includes('Libretto'), cls = isB ? 'a5' : isL ? 'a2' : 'a4', icon = isB ? '✦' : isL ? '▤' : '◈', label = isB ? 'BUONO' : isL ? 'LIBRETTO' : 'DEPOSITO'; return '<button class="row poRow po' + (isB ? 'Buono' : isL ? 'Libretto' : 'Deposito') + '" data-act="poEdit" data-i="' + i + '"><span class="av ' + cls + '" style="font-size:1.25em">' + icon + '</span><span class="t"><b>' + h(p.name) + '</b><span class="sm mut">' + h(p.type) + ' · ' + h(p.rate) + '% · scad. ' + h(p.maturity) + vkTag(p) + '</span><span class="sm ok">Netto stimato a scadenza ' + h(eur(posteNet(p))) + '</span></span><span class="poLabel">' + label + '</span><b>' + h(eur(p.capital)) + '</b></button>'; }
+function posteRow(p, i) { const ty = String(p.type), isB = ty.includes('Buono Postale'), isL = ty.includes('Libretto'), cls = isB ? 'a5' : isL ? 'a2' : 'a4', icon = isB ? '✦' : isL ? '▤' : '◈', label = isB ? 'BUONO' : isL ? 'LIBRETTO' : 'DEPOSITO'; return '<button class="row poRow po' + (isB ? 'Buono' : isL ? 'Libretto' : 'Deposito') + '" data-act="poEdit" data-i="' + i + '"><span class="av ' + cls + '" style="font-size:1.25em">' + icon + '</span><span class="t"><b>' + h(p.name) + '</b><span class="sm mut">' + h(p.type) + ' · ' + h(p.rate) + '% · scad. ' + h(p.maturity) + vkTag(p) + '</span><span class="sm ok">' + (posteFinal(p) ? 'Importo a fine scadenza ' : 'Netto stimato a scadenza ') + h(eur(posteNet(p))) + '</span></span><span class="poLabel">' + label + '</span><b>' + h(eur(p.capital)) + '</b></button>'; }
 function posteSections(d) {
   const all = d.posteItems.map((p, i) => ({ p, i })), dep = all.filter(x => isDeposito(x.p)), bl = all.filter(x => !isDeposito(x.p));
   const sec = (title, arr) => arr.length ? '<div class="gap mt"><h3 class="sp" style="margin:0">' + title + '</h3><b>' + h(eur(sum(arr, x => x.p.capital))) + '</b></div>' + arr.map(x => posteRow(x.p, x.i)).join('') : '';
   return sec('Conti deposito', dep) + sec('Buoni e libretti postali', bl);
 }
-const posteNet = p => num(p.capital) + num(p.capital) * num(p.rate) / 100 * (String(p.type).includes('Buono Postale') ? 0.875 : 0.74);
+/* 2.25.15: se inserito, l'importo a fine scadenza (buoni e conti deposito) sostituisce la stima */
+const posteFinal = p => (!String(p.type).includes('Libretto') && num(p.finalAmount) > 0) ? num(p.finalAmount) : 0;
+const posteNet = p => posteFinal(p) || num(p.capital) + num(p.capital) * num(p.rate) / 100 * (String(p.type).includes('Buono Postale') ? 0.875 : 0.74);
 function classTotals(d) {
   const has = (v, t) => String(v || '').toLowerCase().includes(t.toLowerCase());
   const obbl = sum(d.btps, btpValue) + sum(d.assets.filter(a => has(a.category, 'Obbligazionario')), assetValue) + sum(d.posteItems.filter(p => has(p.type, 'Buono Postale') || has(p.type, 'Conto Deposito')), p => p.capital);
@@ -2300,8 +2302,8 @@ Object.assign(ACT, {
   },
   poEdit(t) {
     const d = FIN(), i = +t.dataset.i, p = i >= 0 ? d.posteItems[i] : { type: POSTE_TYPES[0], startDate: todayISO() };
-    genForm({ title: i >= 0 ? 'Modifica strumento' : 'Nuovo strumento', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: p.name }, { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...POSTE_TYPES, p.type].filter(Boolean))], value: p.type }, { id: 'o', label: 'Intestatario', value: p.owner }, { id: 'c', label: 'Capitale (€)', type: 'number', req: 1, value: p.capital }, { id: 'r', label: 'Tasso annuo lordo (%)', type: 'number', value: p.rate }, { id: 's', label: 'Data di inizio', type: 'date', value: p.startDate }, { id: 'm', label: 'Scadenza / svincolo', type: 'date', value: p.maturity }],
-      onSubmit() { const name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.'); const rec = { ...p, name: name.slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), capital: num(gv('c')), rate: num(gv('r')), startDate: gv('s'), maturity: gv('m') }; if (i >= 0) d.posteItems[i] = rec; else d.posteItems.push(rec); },
+    genForm({ title: i >= 0 ? 'Modifica strumento' : 'Nuovo strumento', noFocus: i >= 0, fields: [{ id: 'n', label: 'Nome', req: 1, value: p.name }, { id: 't', label: 'Tipo', type: 'select', options: [...new Set([...POSTE_TYPES, p.type].filter(Boolean))], value: p.type }, { id: 'o', label: 'Intestatario', value: p.owner }, { id: 'c', label: 'Capitale (€)', type: 'number', req: 1, value: p.capital }, { id: 'r', label: 'Tasso annuo lordo (%)', type: 'number', value: p.rate }, { id: 's', label: 'Data di inizio', type: 'date', value: p.startDate }, { id: 'm', label: 'Scadenza / svincolo', type: 'date', value: p.maturity }, { id: 'fa', label: 'Importo a fine scadenza (€) — buoni e conti deposito', type: 'number', value: p.finalAmount }],
+      onSubmit() { const name = gv('n').trim(); if (!name) throw new Error('Inserisci il nome.'); const rec = { ...p, name: name.slice(0, 100), type: gv('t'), owner: gv('o').trim().slice(0, 60), capital: num(gv('c')), rate: num(gv('r')), startDate: gv('s'), maturity: gv('m'), finalAmount: num(gv('fa')) > 0 ? num(gv('fa')) : '' }; if (i >= 0) d.posteItems[i] = rec; else d.posteItems.push(rec); },
       onDelete: i >= 0 ? () => { d.posteItems.splice(i, 1); } : null });
   },
   penEdit(t) {

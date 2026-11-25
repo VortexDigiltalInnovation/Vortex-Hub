@@ -2,6 +2,7 @@
 
 - Poste: i conti deposito sono separati da buoni e libretti postali, che restano insieme.
 - La scheda Poste mostra due sezioni con subtotale; la Panoramica (Composizione), il report, l'export Excel e l'assistente usano le due voci distinte.
+- Poste: nuovo campo "Importo a fine scadenza" dopo Scadenza / svincolo, per buoni postali e conti deposito. Se compilato sostituisce il netto stimato nella riga e nelle scadenze in agenda; i libretti lo ignorano.
 - Aggiornamento cache e CSP.
 
 ## 2.25.15

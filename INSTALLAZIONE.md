@@ -10,7 +10,7 @@ La versione 2.25.11 controlla la struttura del backup prima di avviare il ripris
 
 La versione 2.25.11 mostra un riepilogo del backup (data, elementi attivi e allegati) prima della conferma di sostituzione.
 
-La versione 2.25.15 separa i conti deposito da buoni e libretti postali nella scheda Poste e nella Panoramica.
+La versione 2.25.15 separa i conti deposito da buoni e libretti postali nella scheda Poste e nella Panoramica e aggiunge il campo Importo a fine scadenza per buoni postali e conti deposito.
 
 La versione 2.25.14 aggiunge nel Centro di controllo il conteggio delle scadenze urgenti e il nome/data della prossima scadenza, usando la lista unificata.
 

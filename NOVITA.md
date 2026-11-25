@@ -1,3 +1,8 @@
+V2.25.16
+- Aggiunto il campo manuale «Importo netto a fine scadenza» per Buoni Postali e Conti Deposito.
+- Visualizzazione dell'importo inserito nella scheda; se non compilato resta disponibile la stima automatica.
+- Esportazione del netto inserito nel foglio Investimenti.
+
 # Vortex Hub 2.25.15
 
 - Poste: i conti deposito sono separati da buoni e libretti postali, che restano insieme.

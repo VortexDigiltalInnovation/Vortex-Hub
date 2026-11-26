@@ -1,4 +1,4 @@
-# Installazione Vortex Hub 2.25.15
+# Installazione Vortex Hub 2.25.16
 
 Caricare i file del pacchetto sul hosting sovrascrivendo la versione precedente. Conservare prima un backup. Se la PWA non si aggiorna, chiudere e riaprire Chrome e ricaricare il sito.
 
@@ -9,6 +9,8 @@ In Impostazioni > Installazione e aggiornamenti > Aggiornamento e diagnostica, i
 La versione 2.25.11 controlla la struttura del backup prima di avviare il ripristino.
 
 La versione 2.25.11 mostra un riepilogo del backup (data, elementi attivi e allegati) prima della conferma di sostituzione.
+
+La versione 2.25.16 aggiunge tassi anno per anno e calcolo automatico dell'importo netto a fine scadenza per Poste e BTP.
 
 La versione 2.25.15 separa i conti deposito da buoni e libretti postali nella scheda Poste e nella Panoramica e aggiunge il campo Importo a fine scadenza per buoni postali e conti deposito.
 
